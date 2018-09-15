@@ -1,0 +1,1106 @@
+
+1.密码验证操作
+
+06-23 11:35:10.613 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:10.613 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:10.613 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:10.683 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:10.693 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FunctionDeviceSupportData:
+06-23 11:35:10.693 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 功能列表{血压检测=SUPPORT, 饮酒检测=UNSUPPORT, 久坐提醒=SUPPORT, 心率警告=SUPPORT, 微信运动=SUPPORT, 摇一摇拍照=SUPPORT, 疲劳度检测=UNSUPPORT, 血氧检测=UNSUPPORT, 女性提醒=UNSUPPORT, 第2版本的路程/卡路里算法=SUPPORT,血压动态调整=UNSUPPORT, 倒计时=UNSUPPORT, 手表存储的数据天数=3, 第二版的闹钟=UNSUPPORT, 屏幕亮度调节=UNSUPPORT, 信息推送第一部分的长度=0, 信息推送总共的长度=4, 心率功能=SUPPORT}
+06-23 11:35:10.693 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:10.703 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:10.703 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FunctionSocailMsgData:
+06-23 11:35:10.703 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FunctionSocailMsgData{phone=SUPPORT_OPEN, msg=SUPPORT_OPEN, wechat=SUPPORT_OPEN, qq=SUPPORT_OPEN, sina=UNSUPPORT, facebook=SUPPORT_CLOSE, twitter=SUPPORT_OPEN, flickr=UNSUPPORT, Linkin=SUPPORT_CLOSE, whats=SUPPORT_OPEN, line=SUPPORT_CLOSE, instagram=SUPPORT_CLOSE, snapchat=SUPPORT_CLOSE, skype=SUPPORT_CLOSE, gmail=UNSUPPORT, other=SUPPORT_CLOSE}
+06-23 11:35:10.703 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:10.723 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:10.723 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ PwdData:
+06-23 11:35:10.723 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ PwdData{mStatus=CHECK_AND_TIME_SUCCESS, 设备编号=171, 设备版本='00.32.03', 设备测试版本='00.32.03', 是否有饮酒数据=false, 抬手亮屏=UNSUPPORT, 查找手机=UNSUPPORT,佩戴检测=SUPPORT_OPEN}
+06-23 11:35:10.723 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:11.003 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:11.003 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:11.003 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+2.密码修改操作
+
+06-23 11:35:11.063 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:11.073 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ PwdData:
+06-23 11:35:11.073 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ PwdData{mStatus=SETTING_SUCCESS, 设备编号=171, 设备版本='00.32.03', 设备测试版本='00.32.03', 是否有饮酒数据=false, 抬手亮屏=UNSUPPORT, 查找手机=UNSUPPORT,佩戴检测=SUPPORT_OPEN}
+06-23 11:35:11.073 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+3.测量心率[先点开始，后点结束]
+
+06-23 09:59:07.453 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:07.453 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 09:59:07.453 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:07.493 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:07.503 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:07.503 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=null, data=0}
+06-23 09:59:07.503 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:08.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:08.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:08.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=null, data=0}
+06-23 09:59:08.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:09.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:09.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:09.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=null, data=0}
+06-23 09:59:09.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:10.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:10.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:10.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=null, data=0}
+06-23 09:59:10.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:11.003 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:11.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:11.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=null, data=0}
+06-23 09:59:11.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:12.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:12.043 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:12.043 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=null, data=0}
+06-23 09:59:12.043 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:13.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:13.023 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:13.023 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=null, data=0}
+06-23 09:59:13.023 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:14.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:14.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:14.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=83}
+06-23 09:59:14.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:15.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:15.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:15.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=83}
+06-23 09:59:15.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:16.143 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:16.143 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:16.143 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=83}
+06-23 09:59:16.143 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:16.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:16.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:16.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=83}
+06-23 09:59:16.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:17.553 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:17.553 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:17.553 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=83}
+06-23 09:59:17.553 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:18.523 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:18.523 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:18.523 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=81}
+06-23 09:59:18.523 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:19.543 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:19.543 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:19.543 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=80}
+06-23 09:59:19.543 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:20.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:20.523 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:20.523 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=80}
+06-23 09:59:20.523 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:21.543 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:21.543 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:21.543 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=80}
+06-23 09:59:21.543 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:22.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:22.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:22.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=78}
+06-23 09:59:22.523 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:23.583 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:23.593 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:23.593 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=79}
+06-23 09:59:23.593 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:24.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:24.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:24.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=79}
+06-23 09:59:24.523 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:25.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:25.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:25.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=79}
+06-23 09:59:25.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:26.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:26.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:26.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=79}
+06-23 09:59:26.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:27.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:27.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:27.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=81}
+06-23 09:59:27.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:28.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:28.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:28.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=82}
+06-23 09:59:28.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:29.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:29.543 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:29.543 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=83}
+06-23 09:59:29.543 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:30.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:30.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:30.523 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=83}
+06-23 09:59:30.523 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:31.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:31.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:31.543 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=83}
+06-23 09:59:31.543 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:32.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:32.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:32.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=83}
+06-23 09:59:32.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:33.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:33.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:33.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=83}
+06-23 09:59:33.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:34.523 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:34.523 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:34.523 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=84}
+06-23 09:59:34.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:35.543 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:35.543 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:35.543 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=84}
+06-23 09:59:35.543 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:36.503 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:36.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:36.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=84}
+06-23 09:59:36.513 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:37.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:37.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:37.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_NORMAL, data=84}
+06-23 09:59:37.533 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:38.113 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:38.113 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 09:59:38.113 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:38.213 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:38.213 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:38.213 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_WEAR_ERROR, data=1}
+06-23 09:59:38.213 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:38.243 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 09:59:38.243 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 09:59:38.243 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=null, data=0}
+06-23 09:59:38.243 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+4.测量血压[先点开始，再点结束]
+
+
+06-23 10:02:25.763 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:25.763 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:25.763 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=0, highPressure=0, lowPressure=0}
+06-23 10:02:25.763 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:26.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:26.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:26.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=1, highPressure=0, lowPressure=0}
+06-23 10:02:26.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:27.043 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:27.043 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:27.043 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=1, highPressure=0, lowPressure=0}
+06-23 10:02:27.043 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:28.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:28.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:28.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=1, highPressure=0, lowPressure=0}
+06-23 10:02:28.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:29.043 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:29.043 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:29.053 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=1, highPressure=0, lowPressure=0}
+06-23 10:02:29.053 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:30.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:30.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:30.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=5, highPressure=0, lowPressure=0}
+06-23 10:02:30.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:31.053 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:31.053 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:31.053 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=10, highPressure=0, lowPressure=0}
+06-23 10:02:31.053 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:32.023 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:32.023 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:32.023 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=10, highPressure=0, lowPressure=0}
+06-23 10:02:32.023 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:33.133 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:33.143 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:33.143 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=15, highPressure=0, lowPressure=0}
+06-23 10:02:33.143 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:34.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:34.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:34.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=20, highPressure=0, lowPressure=0}
+06-23 10:02:34.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:35.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:35.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:35.043 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=26, highPressure=0, lowPressure=0}
+06-23 10:02:35.043 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:36.003 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:36.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:36.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=31, highPressure=0, lowPressure=0}
+06-23 10:02:36.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:37.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:37.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:37.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=31, highPressure=0, lowPressure=0}
+06-23 10:02:37.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:38.003 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:38.003 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:38.003 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=36, highPressure=0, lowPressure=0}
+06-23 10:02:38.003 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:39.083 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:39.093 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:39.093 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=41, highPressure=0, lowPressure=0}
+06-23 10:02:39.093 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:40.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:40.023 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:40.023 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=46, highPressure=0, lowPressure=0}
+06-23 10:02:40.023 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:41.033 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:41.043 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:41.043 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=46, highPressure=0, lowPressure=0}
+06-23 10:02:41.043 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:42.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:42.023 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:42.023 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=52, highPressure=0, lowPressure=0}
+06-23 10:02:42.023 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:43.043 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:43.053 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:43.053 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=57, highPressure=0, lowPressure=0}
+06-23 10:02:43.053 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:44.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:44.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:44.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=62, highPressure=0, lowPressure=0}
+06-23 10:02:44.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:45.043 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:45.053 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:45.053 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=62, highPressure=0, lowPressure=0}
+06-23 10:02:45.053 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:46.003 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:46.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:46.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=67, highPressure=0, lowPressure=0}
+06-23 10:02:46.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:47.063 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:47.063 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:47.063 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=72, highPressure=0, lowPressure=0}
+06-23 10:02:47.063 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:48.003 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:48.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:48.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=77, highPressure=0, lowPressure=0}
+06-23 10:02:48.013 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:49.053 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:49.063 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:49.063 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=82, highPressure=0, lowPressure=0}
+06-23 10:02:49.063 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:50.053 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:50.063 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:50.063 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=82, highPressure=0, lowPressure=0}
+06-23 10:02:50.063 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:51.043 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:51.053 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:51.053 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=88, highPressure=0, lowPressure=0}
+06-23 10:02:51.053 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:52.063 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:52.073 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:52.073 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=92, highPressure=0, lowPressure=0}
+06-23 10:02:52.073 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:53.083 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:53.103 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:53.103 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=100, highPressure=128, lowPressure=74}
+06-23 10:02:53.103 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:53.133 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:53.143 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 10:02:53.143 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_WEAR_ERROR, data=1}
+06-23 10:02:53.143 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:53.143 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:53.153 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:53.153 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=100, highPressure=30, lowPressure=20}
+06-23 10:02:53.153 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:53.153 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:53.163 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:53.163 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=100, highPressure=128, lowPressure=74}
+06-23 10:02:53.163 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:54.053 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:02:54.063 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData date statues:
+06-23 10:02:54.063 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ BpData{status=STATE_BP_NORMAL, progress=100, highPressure=128, lowPressure=74}
+06-23 10:02:54.063 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:03:00.273 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:03:00.273 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 10:03:00.273 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:03:00.363 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 10:03:00.363 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ heart:
+06-23 10:03:00.363 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ HeartData{heartStatus=STATE_HEART_WEAR_ERROR, data=1}
+06-23 10:03:00.363 30120-30120/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+5.血压的读取和设置
+
+06-23 11:35:12.823 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:12.823 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ BpSettingData:
+06-23 11:35:12.823 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ BpSettingData{status=SETTING_PRIVATE_SUCCESS, model=DETECT_MODEL_PRIVATE, highPressure=111, lowPressure=88, angioAdjusterProgress=0, isAngioAdjuster=false}
+06-23 11:35:12.823 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:13.003 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:13.003 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:13.003 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:13.093 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:13.103 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ BpSettingData:
+06-23 11:35:13.103 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ BpSettingData{status=READ_SUCCESS, model=DETECT_MODEL_PRIVATE, highPressure=111, lowPressure=88, angioAdjusterProgress=0, isAngioAdjuster=false}
+06-23 11:35:13.103 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:13.213 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:13.223 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:13.223 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:13.743 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:13.743 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:13.743 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:13.803 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:13.803 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ BpSettingData:
+06-23 11:35:13.803 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ BpSettingData{status=SETTING_NORMAL_SUCCESS, model=DETECT_MODEL_PUBLIC, highPressure=111, lowPressure=88, angioAdjusterProgress=0, isAngioAdjuster=false}
+06-23 11:35:13.803 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+6.当前计步的读取
+
+06-23 11:35:14.013 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:14.013 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:14.013 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:14.093 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:14.093 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 当前计步:
+06-23 11:35:14.093 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 4313
+06-23 11:35:14.103 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+7.个人信息的设置
+
+06-23 11:35:14.303 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:14.303 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:14.303 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:14.433 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:14.433 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 同步个人信息:
+06-23 11:35:14.433 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ OPRATE_SUCCESS
+06-23 11:35:14.443 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+8.摇一摇拍照[打开拍照，摇动手腕，结束拍照]
+
+06-23 11:35:14.853 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:14.853 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:14.853 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:14.913 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:14.913 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 打开拍照:
+06-23 11:35:14.913 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ OPEN_SUCCESS
+06-23 11:35:14.913 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:15.113 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:15.113 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:15.113 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:15.263 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:15.263 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 关闭拍照:
+06-23 11:35:15.263 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CLOSE_SUCCESS
+06-23 11:35:15.263 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:15.413 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:15.413 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:15.413 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+9.闹钟[设置，读取]
+
+06-23 11:35:15.503 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:15.513 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 设置闹钟:
+06-23 11:35:15.513 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ AlarmData{status=SETTING_SUCCESS, alarmSettingList=[AlarmSetting{alarmTime=14:10, isOpen=true}, AlarmSetting{alarmTime=15:20, isOpen=true}, AlarmSetting{alarmTime=16:30, isOpen=true}]}
+06-23 11:35:15.513 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:15.883 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:15.893 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:15.893 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:15.943 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:15.953 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 读取闹钟:
+06-23 11:35:15.953 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ AlarmData{status=READ_SUCCESS, alarmSettingList=[AlarmSetting{alarmTime=14:10, isOpen=true}, AlarmSetting{alarmTime=15:20, isOpen=true}, AlarmSetting{alarmTime=16:30, isOpen=true}]}
+06-23 11:35:15.953 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+10.久坐[打开，关闭，读取]
+
+06-23 11:35:16.263 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:16.263 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:16.263 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:17.653 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:17.653 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 设置久坐-打开:
+06-23 11:35:17.663 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ LongSeatData{status=OPEN_SUCCESS, startHour=10, startMinute=35, endHour=11, endMinute=45, threshold=60, isOpen=true}
+06-23 11:35:17.663 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:18.043 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:18.043 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:18.043 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:18.133 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:18.143 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 设置久坐-关闭:
+06-23 11:35:18.143 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ LongSeatData{status=CLOSE_SUCCESS, startHour=10, startMinute=40, endHour=12, endMinute=40, threshold=40, isOpen=false}
+06-23 11:35:18.143 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:18.383 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:18.383 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:18.383 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:18.483 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:18.483 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 设置久坐-读取:
+06-23 11:35:18.483 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ LongSeatData{status=READ_SUCCESS, startHour=10, startMinute=40, endHour=12, endMinute=40, threshold=40, isOpen=false}
+06-23 11:35:18.483 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+11.设置语言[中文，英文]
+
+06-23 11:35:18.653 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:18.653 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:18.653 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:18.723 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:18.723 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 设置语言(中文):
+06-23 11:35:18.723 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ LanguageData{stauts=OPRATE_SUCCESS, language=CHINA}
+06-23 11:35:18.733 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:19.103 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:19.103 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:19.103 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:19.163 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:19.163 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 设置语言(英文):
+06-23 11:35:19.163 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ LanguageData{stauts=OPRATE_SUCCESS, language=ENGLISH}
+06-23 11:35:19.163 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+12.读取电池等级
+
+06-23 11:35:19.333 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:19.333 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:19.333 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:19.403 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:19.403 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 电池等级:
+06-23 11:35:19.403 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 3
+06-23 11:35:19.403 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 电量:75%
+06-23 11:35:19.403 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+12.夜间转腕[打开，读取，关闭，自定义时间]
+
+
+06-23 11:35:19.583 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:19.583 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:19.583 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:19.653 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:19.653 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 夜间转腕-打开:
+06-23 11:35:19.653 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ NightTurnWristeData{OprateStauts=SUCCESS, nightTureWirsteStatusOpen=true, startTime=8:0, endTime=22:0}
+06-23 11:35:19.653 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:22.903 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:22.903 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:22.903 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:23.173 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:23.173 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:23.173 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:23.453 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:23.453 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:23.453 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:23.793 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:23.793 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 夜间转腕-true:
+06-23 11:35:23.793 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ NightTurnWristeData{OprateStauts=SUCCESS, nightTureWirsteStatusOpen=false, startTime=8:0, endTime=22:0}
+06-23 11:35:23.793 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:23.833 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:23.843 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 夜间转腕-true:
+06-23 11:35:23.843 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ NightTurnWristeData{OprateStauts=SUCCESS, nightTureWirsteStatusOpen=true, startTime=10:0, endTime=20:0}
+06-23 11:35:23.843 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:23.883 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:23.883 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 夜间转腕-true:
+06-23 11:35:23.883 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ NightTurnWristeData{OprateStauts=SUCCESS, nightTureWirsteStatusOpen=false, startTime=10:0, endTime=20:0}
+06-23 11:35:23.893 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:24.013 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:24.013 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:24.013 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚═══════════════════════════════════════════════════════════════════════════════════════
+
+13.个性化状态[读取，设置]
+
+06-23 11:35:24.323 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:24.323 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:24.323 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:24.433 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:24.443 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 个性化状态-公英制/时制(12/24)/5分钟测量开关(心率/血压)-读取:
+06-23 11:35:24.443 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CustomSettingData{status=READ_SUCCESS, isHaveMetricSystem=false, metricSystemValue=true, is24Hour=true, isOpenAutoHeartDetect=true, isOpenAutoBpDetect=false}
+06-23 11:35:24.443 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:24.653 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:24.653 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:24.653 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:24.723 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:24.723 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 个性化状态-公英制/时制(12/24)/5分钟测量开关(心率/血压)-设置:
+06-23 11:35:24.723 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CustomSettingData{status=SETTING_SUCCESS, isHaveMetricSystem=false, metricSystemValue=true, is24Hour=true, isOpenAutoHeartDetect=true, isOpenAutoBpDetect=true}
+06-23 11:35:24.723 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:25.473 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:25.473 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:25.473 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+14.佩戴检测[打开，关闭]
+
+06-23 11:35:25.543 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:25.543 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 佩戴检测-打开:
+06-23 11:35:25.553 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CheckWearData{checkWearState=OPEN_SUCCESS}
+06-23 11:35:25.553 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:25.803 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:25.803 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:25.803 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:25.893 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:25.893 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 佩戴检测-关闭:
+06-23 11:35:25.893 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CheckWearData{checkWearState=CLOSE_SUCCESS}
+06-23 11:35:25.893 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:27.383 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:27.393 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+15.社交信息[设置，读取，推送]
+
+06-23 11:35:27.443 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:27.443 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║  社交信息提醒-设置:
+06-23 11:35:27.453 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FunctionSocailMsgData{phone=SUPPORT_OPEN, msg=SUPPORT_OPEN, wechat=SUPPORT_OPEN, qq=SUPPORT_OPEN, sina=UNSUPPORT, facebook=SUPPORT_CLOSE, twitter=SUPPORT_OPEN, flickr=UNSUPPORT, Linkin=UNSUPPORT, whats=SUPPORT_OPEN, line=UNSUPPORT, instagram=UNSUPPORT, snapchat=UNSUPPORT, skype=UNSUPPORT, gmail=UNSUPPORT, other=UNSUPPORT}
+06-23 11:35:27.453 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:27.663 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:27.663 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:27.663 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:27.743 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:27.743 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║  社交信息提醒-读取:
+06-23 11:35:27.743 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FunctionSocailMsgData{phone=SUPPORT_OPEN, msg=SUPPORT_OPEN, wechat=SUPPORT_OPEN, qq=SUPPORT_OPEN, sina=UNSUPPORT, facebook=SUPPORT_CLOSE, twitter=SUPPORT_OPEN, flickr=UNSUPPORT, Linkin=SUPPORT_CLOSE, whats=SUPPORT_OPEN, line=SUPPORT_CLOSE, instagram=SUPPORT_CLOSE, snapchat=SUPPORT_CLOSE, skype=SUPPORT_CLOSE, gmail=UNSUPPORT, other=SUPPORT_CLOSE}
+06-23 11:35:27.743 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:27.993 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:28.003 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:28.003 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:28.013 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:28.023 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:28.023 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:28.043 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:28.043 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:28.043 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:28.073 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:28.073 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:28.073 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+16.心率报警[打开，关闭，读取]
+
+06-23 11:35:28.583 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:28.583 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:28.583 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:28.663 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:28.663 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 心率报警-读取:
+06-23 11:35:28.663 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ HeartWaringData{status=READ_SUCCESS, isOpen=false, heartHigh=120, heartLow=110}
+06-23 11:35:28.673 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:28.963 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:28.963 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:28.963 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:29.063 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:29.063 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 心率报警-打开:
+06-23 11:35:29.063 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ HeartWaringData{status=OPEN_SUCCESS, isOpen=true, heartHigh=120, heartLow=110}
+06-23 11:35:29.063 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:29.273 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:29.273 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 11:35:29.273 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:29.343 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 11:35:29.353 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 心率报警-关闭:
+06-23 11:35:29.353 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ HeartWaringData{status=CLOSE_SUCCESS, isOpen=false, heartHigh=120, heartLow=110}
+06-23 11:35:29.353 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+17.新闹钟[读取，添加，修改，删除]
+
+06-23 13:42:08.643 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:42:08.643 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 13:42:08.643 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:42:08.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:42:08.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 读取闹钟[新版]:
+06-23 13:42:08.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ AlarmData2{oprate=READ_SUCCESS_SAVE, alarm2SettingList=[
+06-23 13:42:08.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ MultiAlarmData{MAFlag='F6:99:B0:A4:6B:23-1', BluetoothAddress='F6:99:B0:A4:6B:23', alarmId=1, alarmHour=15, alarmMinute=49, repeatStatus='1111111', unRepeatDate='0000-00-00', scene=2, isOpen=false}, 
+06-23 13:42:08.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ MultiAlarmData{MAFlag='F6:99:B0:A4:6B:23-2', BluetoothAddress='F6:99:B0:A4:6B:23', alarmId=2, alarmHour=7, alarmMinute=15, repeatStatus='1111111', unRepeatDate='0000-00-00', scene=0, isOpen=true}, 
+06-23 13:42:08.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ MultiAlarmData{MAFlag='F6:99:B0:A4:6B:23-3', BluetoothAddress='F6:99:B0:A4:6B:23', alarmId=3, alarmHour=7, alarmMinute=22, repeatStatus='1111111', unRepeatDate='0000-00-00', scene=0, isOpen=true}]}
+06-23 13:42:08.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:42:16.083 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:42:16.083 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 13:42:16.083 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:42:16.173 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:42:16.173 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 添加闹钟[新版]:
+06-23 13:42:16.173 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ AlarmData2{oprate=SETTING_SUCCESS, alarm2SettingList=[
+06-23 13:42:16.173 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ MultiAlarmData{MAFlag='F6:99:B0:A4:6B:23-1', BluetoothAddress='F6:99:B0:A4:6B:23', alarmId=1, alarmHour=15, alarmMinute=49, repeatStatus='1111111', unRepeatDate='0000-00-00', scene=2, isOpen=false}, 
+06-23 13:42:16.173 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ MultiAlarmData{MAFlag='F6:99:B0:A4:6B:23-2', BluetoothAddress='F6:99:B0:A4:6B:23', alarmId=2, alarmHour=7, alarmMinute=15, repeatStatus='1111111', unRepeatDate='0000-00-00', scene=0, isOpen=true}, 
+06-23 13:42:16.173 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ MultiAlarmData{MAFlag='F6:99:B0:A4:6B:23-3', BluetoothAddress='F6:99:B0:A4:6B:23', alarmId=3, alarmHour=7, alarmMinute=22, repeatStatus='1111111', unRepeatDate='0000-00-00', scene=0, isOpen=true}, 
+06-23 13:42:16.173 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ MultiAlarmData{MAFlag='F6:99:B0:A4:6B:23-4', BluetoothAddress='F6:99:B0:A4:6B:23', alarmId=4, alarmHour=2, alarmMinute=0, repeatStatus='1000010', unRepeatDate='0000-00-00', scene=1, isOpen=true}]}
+06-23 13:42:16.173 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:43:28.823 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:43:28.823 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 13:43:28.823 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:43:28.953 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:43:28.953 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 删除闹钟[新版]:
+06-23 13:43:28.953 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ AlarmData2{oprate=CLEAR_SUCCESS, alarm2SettingList=[
+06-23 13:43:28.953 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ MultiAlarmData{MAFlag='F6:99:B0:A4:6B:23-2', BluetoothAddress='F6:99:B0:A4:6B:23', alarmId=2, alarmHour=7, alarmMinute=15, repeatStatus='1111111', unRepeatDate='0000-00-00', scene=0, isOpen=true}, 
+06-23 13:43:28.953 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ MultiAlarmData{MAFlag='F6:99:B0:A4:6B:23-3', BluetoothAddress='F6:99:B0:A4:6B:23', alarmId=3, alarmHour=7, alarmMinute=22, repeatStatus='1111111', unRepeatDate='0000-00-00', scene=0, isOpen=true}, 
+06-23 13:43:28.953 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ MultiAlarmData{MAFlag='F6:99:B0:A4:6B:23-4', BluetoothAddress='F6:99:B0:A4:6B:23', alarmId=4, alarmHour=2, alarmMinute=0, repeatStatus='1000010', unRepeatDate='0000-00-00', scene=1, isOpen=true}]}
+06-23 13:43:28.953 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:43:39.403 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:43:39.403 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 13:43:39.403 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:43:39.473 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:43:39.473 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 修改闹钟[新版]:
+06-23 13:43:39.473 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ AlarmData2{oprate=SETTING_SUCCESS, alarm2SettingList=[
+06-23 13:43:39.473 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ MultiAlarmData{MAFlag='F6:99:B0:A4:6B:23-2', BluetoothAddress='F6:99:B0:A4:6B:23', alarmId=2, alarmHour=10, alarmMinute=0, repeatStatus='1000010', unRepeatDate='0000-00-00', scene=1, isOpen=false}, 
+06-23 13:43:39.473 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ MultiAlarmData{MAFlag='F6:99:B0:A4:6B:23-3', BluetoothAddress='F6:99:B0:A4:6B:23', alarmId=3, alarmHour=7, alarmMinute=22, repeatStatus='1111111', unRepeatDate='0000-00-00', scene=0, isOpen=true}, 
+06-23 13:43:39.483 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ MultiAlarmData{MAFlag='F6:99:B0:A4:6B:23-4', BluetoothAddress='F6:99:B0:A4:6B:23', alarmId=4, alarmHour=2, alarmMinute=0, repeatStatus='1000010', unRepeatDate='0000-00-00', scene=1, isOpen=true}]}
+06-23 13:43:39.483 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:43:56.653 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:43:56.653 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 13:43:56.653 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+ 
+18.倒计时[App,Watch]
+
+06-23 13:48:22.003 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:22.003 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 13:48:22.003 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:22.093 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:22.103 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-App:
+06-23 13:48:22.103 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=11, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_SETTING}
+06-23 13:48:22.103 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:22.433 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:22.433 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-App:
+06-23 13:48:22.433 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=10, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_ING}
+06-23 13:48:22.433 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:23.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:23.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-App:
+06-23 13:48:23.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=9, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_ING}
+06-23 13:48:23.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:24.433 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:24.433 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-App:
+06-23 13:48:24.433 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=8, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_ING}
+06-23 13:48:24.433 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:25.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:25.463 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-App:
+06-23 13:48:25.463 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=7, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_ING}
+06-23 13:48:25.463 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:26.433 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:26.433 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-App:
+06-23 13:48:26.433 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=6, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_ING}
+06-23 13:48:26.433 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:27.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:27.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-App:
+06-23 13:48:27.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=5, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_ING}
+06-23 13:48:27.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:28.423 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:28.423 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-App:
+06-23 13:48:28.423 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=4, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_ING}
+06-23 13:48:28.423 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:29.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:29.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-App:
+06-23 13:48:29.463 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=3, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_ING}
+06-23 13:48:29.463 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:30.433 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:30.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-App:
+06-23 13:48:30.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=2, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_ING}
+06-23 13:48:30.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:31.443 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:31.443 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-App:
+06-23 13:48:31.443 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=1, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_ING}
+06-23 13:48:31.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:32.423 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:48:32.423 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-App:
+06-23 13:48:32.423 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=0, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_END}
+06-23 13:48:32.433 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+
+06-23 13:49:19.743 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:49:19.743 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 13:49:19.743 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:49:19.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:49:19.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-watch:
+06-23 13:49:19.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=7, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_SETTING}
+06-23 13:49:19.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:49:20.443 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:49:20.443 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-watch:
+06-23 13:49:20.443 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=6, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_ING}
+06-23 13:49:20.443 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:49:21.413 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:49:21.423 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-watch:
+06-23 13:49:21.423 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=5, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_ING}
+06-23 13:49:21.423 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:49:22.433 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:49:22.443 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-watch:
+06-23 13:49:22.443 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=4, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_ING}
+06-23 13:49:22.443 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:49:23.423 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:49:23.423 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-watch:
+06-23 13:49:23.423 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=3, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_ING}
+06-23 13:49:23.423 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:49:24.443 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:49:24.443 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-watch:
+06-23 13:49:24.443 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=2, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_ING}
+06-23 13:49:24.443 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:49:25.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:49:25.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-watch:
+06-23 13:49:25.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=1, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_ING}
+06-23 13:49:25.453 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:49:26.423 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:49:26.433 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 倒计时-watch:
+06-23 13:49:26.433 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ CountDownData{isOprateSuccess=true, countDownID=0, countDownSecondWatch=0, countDownSecondApp=0, isOpenWatchUI=false, isCountDownByWatch=false, status=COUNT_END}
+06-23 13:49:26.433 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+
+19.屏幕亮度调节
+
+06-23 13:54:00.283 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:54:00.283 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 13:54:00.283 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:54:00.353 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:54:00.353 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 屏幕调节数据-读取:ScreenLightData{status=READ_SUCCESS, screenSetting=ScreenSetting{startHour=22, startMinute=0, endHour=7, endMinute=0, level=2, otherLeverl=4}}
+06-23 13:54:00.353 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:54:03.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:54:03.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 13:54:03.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:54:03.863 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:54:03.863 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 屏幕调节数据-设置:ScreenLightData{status=SETTING_SUCCESS, screenSetting=ScreenSetting{startHour=22, startMinute=0, endHour=7, endMinute=0, level=2, otherLeverl=4}}
+06-23 13:54:03.863 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+20.疲劳度[开始，结束]
+
+06-23 13:54:47.033 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:54:47.033 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 13:54:47.033 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:54:47.043 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:54:47.053 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:54:47.053 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=0, value=0}
+06-23 13:54:47.053 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:54:52.323 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:54:52.323 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:54:52.323 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=2, value=0}
+06-23 13:54:52.323 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:54:58.123 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:54:58.133 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:54:58.133 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=4, value=0}
+06-23 13:54:58.133 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:54:59.143 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:54:59.143 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:54:59.153 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=5, value=0}
+06-23 13:54:59.153 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:03.723 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:03.733 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:03.733 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=6, value=0}
+06-23 13:55:03.733 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:04.753 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:04.753 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:04.753 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=8, value=0}
+06-23 13:55:04.753 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:05.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:05.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:05.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=10, value=0}
+06-23 13:55:05.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:06.753 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:06.753 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:06.753 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=12, value=0}
+06-23 13:55:06.753 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:07.723 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:07.723 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:07.733 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=14, value=0}
+06-23 13:55:07.733 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:08.803 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:08.803 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:08.803 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=15, value=0}
+06-23 13:55:08.803 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:09.773 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:09.773 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:09.773 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=16, value=0}
+06-23 13:55:09.773 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:10.843 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:10.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:10.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=18, value=0}
+06-23 13:55:10.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:11.773 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:11.773 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:11.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=20, value=0}
+06-23 13:55:11.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:12.753 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:12.753 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:12.753 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=22, value=0}
+06-23 13:55:12.753 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:13.773 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:13.773 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:13.773 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=24, value=0}
+06-23 13:55:13.773 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:14.743 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:14.743 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:14.753 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=25, value=0}
+06-23 13:55:14.753 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:15.823 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:15.823 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:15.823 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=26, value=0}
+06-23 13:55:15.823 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:16.793 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:16.793 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:16.793 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=28, value=0}
+06-23 13:55:16.793 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:17.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:17.823 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:17.823 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=30, value=0}
+06-23 13:55:17.823 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:18.793 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:18.793 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:18.793 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=32, value=0}
+06-23 13:55:18.793 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:19.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:19.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:19.823 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=34, value=0}
+06-23 13:55:19.823 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:20.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:20.793 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:20.793 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=35, value=0}
+06-23 13:55:20.793 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:21.763 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:21.763 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:21.763 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=36, value=0}
+06-23 13:55:21.763 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:22.793 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:22.793 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:22.793 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=38, value=0}
+06-23 13:55:22.793 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:23.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:23.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:23.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=40, value=0}
+06-23 13:55:23.823 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:24.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:24.843 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:24.843 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=42, value=0}
+06-23 13:55:24.843 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:25.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:25.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:25.823 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=44, value=0}
+06-23 13:55:25.823 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:26.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:26.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:26.793 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=45, value=0}
+06-23 13:55:26.793 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:27.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:27.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:27.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=46, value=0}
+06-23 13:55:27.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:28.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:28.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:28.783 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=48, value=0}
+06-23 13:55:28.793 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:29.863 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:29.863 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:29.873 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=50, value=0}
+06-23 13:55:29.873 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:30.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:30.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:30.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=52, value=0}
+06-23 13:55:30.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:31.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:31.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:31.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=54, value=0}
+06-23 13:55:31.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:32.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:32.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:32.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=55, value=0}
+06-23 13:55:32.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:33.803 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:33.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:33.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=56, value=0}
+06-23 13:55:33.813 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:34.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:34.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:34.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=58, value=0}
+06-23 13:55:34.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:35.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:35.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:35.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=60, value=0}
+06-23 13:55:35.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:36.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:36.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:36.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=62, value=0}
+06-23 13:55:36.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:37.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:37.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:37.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=64, value=0}
+06-23 13:55:37.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:38.823 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:38.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:38.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=65, value=0}
+06-23 13:55:38.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:39.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:39.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:39.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=66, value=0}
+06-23 13:55:39.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:40.823 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:40.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:40.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=68, value=0}
+06-23 13:55:40.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:41.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:41.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:41.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=70, value=0}
+06-23 13:55:41.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:42.873 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:42.873 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:42.883 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=72, value=0}
+06-23 13:55:42.883 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:43.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:43.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:43.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=74, value=0}
+06-23 13:55:43.853 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:44.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:44.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:44.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=75, value=0}
+06-23 13:55:44.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:45.873 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:45.883 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:45.883 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=76, value=0}
+06-23 13:55:45.883 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:46.873 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:46.873 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:46.873 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=78, value=0}
+06-23 13:55:46.873 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:47.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:47.903 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:47.903 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=80, value=0}
+06-23 13:55:47.903 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:48.873 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:48.873 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:48.873 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=82, value=0}
+06-23 13:55:48.873 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:49.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:49.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:49.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=84, value=0}
+06-23 13:55:49.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:50.873 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:50.873 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:50.883 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=85, value=0}
+06-23 13:55:50.883 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:51.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:51.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:51.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=86, value=0}
+06-23 13:55:51.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:52.863 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:52.873 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:52.873 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=88, value=0}
+06-23 13:55:52.873 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:53.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:53.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:53.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=90, value=0}
+06-23 13:55:53.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:54.913 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:54.913 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:54.913 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=92, value=0}
+06-23 13:55:54.923 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:55.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:55.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:55.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=94, value=0}
+06-23 13:55:55.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:56.913 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:56.913 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:56.913 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=95, value=0}
+06-23 13:55:56.913 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:57.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:57.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:57.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=96, value=0}
+06-23 13:55:57.893 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:58.913 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:58.913 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:58.913 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=98, value=0}
+06-23 13:55:58.913 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:59.933 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:55:59.933 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-开始:
+06-23 13:55:59.943 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=OPEN, deviceState=FREE, progress=100, value=3}
+06-23 13:55:59.943 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:56:05.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:56:05.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 13:56:05.833 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:56:05.963 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 13:56:05.963 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 疲劳度-结束:
+06-23 13:56:05.963 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ FatigueData{fatigueState=CLOSE, deviceState=FREE, progress=0, value=0}
+06-23 13:56:05.963 1016-1016/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+21.女性状态[读取，设置]
+
+06-23 14:02:29.213 18975-18975/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:02:29.213 18975-18975/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 14:02:29.213 18975-18975/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:02:29.253 18975-18975/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:02:29.263 18975-18975/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 女性状态-读取:
+06-23 14:02:29.263 18975-18975/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ WomenData{oprateStatus=READ_SUCCESS}
+06-23 14:02:29.263 18975-18975/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:02:33.963 18975-18975/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:02:33.963 18975-18975/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 14:02:33.963 18975-18975/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:02:34.033 18975-18975/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:02:34.033 18975-18975/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 女性状态-设置:
+06-23 14:02:34.033 18975-18975/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ WomenData{oprateStatus=SETTING_SUCCESS}
+06-23 14:02:34.033 18975-18975/com.timaimee.vpdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+22.血氧[开始，结束]
+
+06-23 14:29:48.903 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:29:48.903 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 14:29:48.903 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:10.953 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:10.953 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:10.953 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=78}
+06-23 14:30:10.953 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:12.033 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:12.043 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:12.043 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=79}
+06-23 14:30:12.043 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:13.023 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:13.023 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:13.033 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=81}
+06-23 14:30:13.033 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:13.983 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:13.983 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:13.983 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=82}
+06-23 14:30:13.983 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:15.003 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:15.013 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:15.013 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=84}
+06-23 14:30:15.013 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:16.023 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:16.033 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:16.033 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=88}
+06-23 14:30:16.033 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:16.993 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:17.003 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:17.003 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=92}
+06-23 14:30:17.003 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:18.063 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:18.063 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:18.063 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=96}
+06-23 14:30:18.063 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:18.953 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:18.953 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:18.953 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=99}
+06-23 14:30:18.953 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:19.973 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:19.973 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:19.973 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=97}
+06-23 14:30:19.973 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:20.993 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:21.003 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:21.003 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=94}
+06-23 14:30:21.003 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:21.973 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:21.973 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:21.973 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=90}
+06-23 14:30:21.983 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:22.943 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:22.943 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:22.953 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=84}
+06-23 14:30:22.953 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:23.983 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:23.983 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:23.983 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=78}
+06-23 14:30:23.983 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:25.073 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:25.073 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:25.073 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=74}
+06-23 14:30:25.073 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:25.993 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:26.013 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:26.013 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=71}
+06-23 14:30:26.013 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:26.943 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:26.943 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:26.943 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=71}
+06-23 14:30:26.943 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:27.993 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:27.993 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:28.003 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=74}
+06-23 14:30:28.003 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:28.943 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:28.943 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:28.943 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=77}
+06-23 14:30:28.943 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:30.013 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:30.013 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:30.013 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=81}
+06-23 14:30:30.013 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:31.023 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:31.023 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:31.023 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=85}
+06-23 14:30:31.023 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:32.013 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:32.013 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:32.013 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=88}
+06-23 14:30:32.013 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:32.943 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:32.943 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:32.943 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=89}
+06-23 14:30:32.943 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:34.013 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:34.013 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-开始:
+06-23 14:30:34.013 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=OPEN, deviceState=FREE, value=89}
+06-23 14:30:34.013 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:35.233 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:35.233 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ write cmd status:0
+06-23 14:30:35.233 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:35.323 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╔════════════════════════════════════════════════════════════════════════════════════════
+06-23 14:30:35.323 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ 血氧-结束:
+06-23 14:30:35.323 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ║ SPO2HData{spState=CLOSE, deviceState=FREE, value=0}
+06-23 14:30:35.323 5912-5912/com.timaimee.vpbluetoothsdkdemo I/timaimee-OperaterActivity: ╚════════════════════════════════════════════════════════════════════════════════════════
+
+

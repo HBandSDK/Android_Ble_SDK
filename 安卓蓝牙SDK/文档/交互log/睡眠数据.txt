@@ -1,0 +1,29 @@
+06-23 11:31:07.853 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:day=0,packagenumber=0
+06-23 11:31:07.863 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:progress=0.33333334
+06-23 11:31:07.993 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:day=1,packagenumber=5
+06-23 11:31:07.993 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:progress=0.33333334
+06-23 11:31:08.043 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:day=1,packagenumber=4
+06-23 11:31:08.043 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:progress=0.4
+06-23 11:31:08.093 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:day=1,packagenumber=3
+06-23 11:31:08.093 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:progress=0.46666667
+06-23 11:31:08.143 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:day=1,packagenumber=2
+06-23 11:31:08.143 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:progress=0.53333336
+06-23 11:31:08.193 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:day=1,packagenumber=1
+06-23 11:31:08.193 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:progress=0.6
+06-23 11:31:08.233 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:day=1,packagenumber=0
+06-23 11:31:08.233 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:progress=0.6666667
+06-23 11:31:08.433 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:day=2,packagenumber=5
+06-23 11:31:08.433 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:progress=0.6666667
+06-23 11:31:08.483 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:day=2,packagenumber=4
+06-23 11:31:08.483 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:progress=0.73333335
+06-23 11:31:08.533 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:day=2,packagenumber=3
+06-23 11:31:08.533 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:progress=0.8
+06-23 11:31:08.583 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:day=2,packagenumber=2
+06-23 11:31:08.583 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:progress=0.8666667
+06-23 11:31:08.633 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:day=2,packagenumber=1
+06-23 11:31:08.633 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:progress=0.9333334
+06-23 11:31:08.683 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:day=2,packagenumber=0
+06-23 11:31:08.713 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-读取进度:progress=1.0
+
+06-23 11:31:08.253 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-返回:SleepData{, date='2017-06-22', cali_flag=0, sleepQulity=2, wakeCount=4, deepSleepTime=85, lowSleepTime=310, allSleepTime=395, sleepLine='0020020002222202200000011011011000001111000000000011111000000000000110000000000', sleepDown=TimeData [2017-06-23-01:10], sleepUp=TimeData [2017-06-23-07:45]}
+06-23 11:31:08.703 13995-13995/com.timaimee.vpdemo I/timaimee-OperaterActivity: ║ 睡眠数据-返回:SleepData{, date='2017-06-21', cali_flag=0, sleepQulity=2, wakeCount=0, deepSleepTime=90, lowSleepTime=180, allSleepTime=270, sleepLine='000000000000000011000000110011110111111000000000000000', sleepDown=TimeData [2017-06-22-01:05], sleepUp=TimeData [2017-06-22-05:35]}
