@@ -4,7 +4,7 @@ Android_Ble_SDK是一个用于快速与蓝牙BLE交互的工具包，仅提供�
 
 README: English| [中文](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README.md)
 
-##必要条件
+## 必要条件
 
     * API>19&&BLE 4.0
     * vpbluetooth_x.x.x.jar
