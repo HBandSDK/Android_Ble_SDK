@@ -2,8 +2,6 @@
 Android_Ble_SDK是一个用于快速与蓝牙BLE交互的工具包，仅提供给我们合作的客户下载使用，方便提升客户的开发效率。
 
 
-[![version](https://img.shields.io/github/release/alibaba/fastjson.svg)](https://github.com/Coding/WebIDE/blob/master/LICENSE) 
-
 README: English| [中文](https://github.com/Coding/WebIDE/blob/master/README-zh.md)
 
 ##必要条件
@@ -14,12 +12,12 @@ README: English| [中文](https://github.com/Coding/WebIDE/blob/master/README-zh
 
 ## 如何使用
 
-###1. 配置 build.gradle
+### 1. 配置 build.gradle
 
     compile files('libs/vpbluetooth_x.x.x.jar')  
     compile files('libs/gson-x.x.x.jar') 或者 compile 'com.google.code.gson:gson:x.x.x'  
 
-###2. 配置 Androidmanifest.xml
+### 2. 配置 Androidmanifest.xml
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -34,7 +32,7 @@ README: English| [中文](https://github.com/Coding/WebIDE/blob/master/README-zh
     <!--固件升级功能相关-->
     <service android:name=".oad.service.DfuService" /> 
     <activity android:name=".oad.activity.NotificationActivity" />
-###3. 蓝牙通信连接
+### 3. 蓝牙通信连接
 
 
     操作说明:所有的操作都只是通过VPOperateManager;
@@ -61,7 +59,7 @@ README: English| [中文](https://github.com/Coding/WebIDE/blob/master/README-zh
     第一步要进行的交互是验证密码：confirmDevicePwd()
     第二步要进行的交互是同步个人信息：syncPersonInfo()
 
-###4. 蓝牙数据交互说明
+### 4. 蓝牙数据交互说明
 
     SDK在蓝牙数据的下发的设计是只需要调用方法,传入设置参数以及监听接口,当数据有返回时,接口会触发回调,以confirmDevicePwd为例
     
@@ -92,7 +90,7 @@ README: English| [中文](https://github.com/Coding/WebIDE/blob/master/README-zh
                  }
             }, pwdStr, is24Hourmodel);
             
-###5. 固件升级说明
+### 5. 固件升级说明
 
     固件升级的作用主要是针对设备的软件功能进行升级,此操作要求非常严谨，升级出错会给用户带来非常不好的体验。  
     请谨慎执行此操作，升级操作要求在有网络的条件下进行，包括以下3个步骤,请务必仔细核对。  
