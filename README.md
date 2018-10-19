@@ -126,7 +126,15 @@ README: English| [中文](https://github.com/HBandSDK/Android_Ble_SDK/blob/maste
 
 ## 商务合作
 
-请访问[官网](http://veepoo.org/lxwm/lx/index.html)
+我司是从事智能穿戴解决方案的公司,公司提供的方案主要分为以下几大系列：  
+
+    1.脉搏波健康手环系列：实现了实时的精准数据采集,包含计步、心率、睡眠、闹钟等功能;  
+    2.健康腕表系列:血压、血氧、PWV血流速度、体温、心率、脉率;  
+    3.女性专用系列：女性生理周期监测  
+    4.静脉识别技术系列  
+    5.其他系列  
+
+公司技术实力雄厚，提供全套个性化的解决方案,多医疗级别的健康监测算法，请移步[官网](http://veepoo.org/lxwm/lx/index.html)了解详情。
 
 ## 许可协议
 [Apache Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
