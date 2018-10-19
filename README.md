@@ -7,8 +7,8 @@ README: English| [中文](https://github.com/HBandSDK/Android_Ble_SDK/blob/maste
 ## 必要条件
 
     * API>19&&BLE 4.0
-    * vpbluetooth_x.x.x.jar
-    * gson-x.x.x.jar
+    * [vpbluetooth_x.x.x.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
+    * [gson-x.x.x.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
 
 ## 如何使用
 
