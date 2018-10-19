@@ -124,7 +124,7 @@ README: English| [中文](https://github.com/HBandSDK/Android_Ble_SDK/blob/maste
 * [BluetoothKit](https://github.com/dingjikerbo/BluetoothKit)  
 * [Gson](https://github.com/google/gson)  
 
-## 商务合作
+## 商务联系
 
 我司是从事智能穿戴解决方案的公司,公司提供的方案主要分为以下几大系列：  
 
