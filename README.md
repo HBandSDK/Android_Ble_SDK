@@ -124,6 +124,10 @@ README: English| [中文](https://github.com/HBandSDK/Android_Ble_SDK/blob/maste
 * [BluetoothKit](https://github.com/dingjikerbo/BluetoothKit)  
 * [Gson](https://github.com/google/gson)  
 
+## 商务合作
+
+请访问[官网](http://veepoo.org/lxwm/lx/index.html)
+
 ## 许可协议
 [Apache Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
 
