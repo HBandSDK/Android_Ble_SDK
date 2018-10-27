@@ -36,7 +36,7 @@ README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README
 
 ### 3. Bluetooth Communication Connection  
 
-    operating instructions：all operations use VPOperateManager Object
+    Operating instructions：all operations use VPOperateManager Object
     
     3.1 obtain VPOperateManager Object： VPOperateManager.getMangerInstance()
     3.2 scan Bluetooth devices: startScanDevice();
@@ -47,18 +47,18 @@ README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README
     3.7 synchronization the personal information：syncPersonInfo()
     3.8 other data interaction operation
     
-    remarks 1：
-    in order to avoid memory leak, please cautiously use context object, and we recommend to use getApplicationContext()
-    such as: example to obtain VPOperateManager object：VPOperateManager.getMangerInstance(getApplicationContext())；
+    Remarks 1：
+    In order to avoid memory leak, please cautiously use context object, and we recommend to use getApplicationContext()
+    Such as: example to obtain VPOperateManager object：VPOperateManager.getMangerInstance(getApplicationContext())；
     
-    remarks 2： 
-    such as call scan device:VPOperateManager.getMangerInstance().startScanDevice()；
-    above uniformly abbreviated as:startScanDevice();
+    Remarks 2： 
+    Such as call scan device:VPOperateManager.getMangerInstance().startScanDevice()；
+    Above uniformly abbreviated as:startScanDevice();
     
-    remarks 3:
-    after connected successfully
-    the first interation is code validation：confirmDevicePwd()
-    the second interation is personal information synchronization：syncPersonInfo()
+    Remarks 3:
+    After connected successfully
+    The first interation is code validation：confirmDevicePwd()
+    The second interation is personal information synchronization：syncPersonInfo()
 
 ### 4. Bluetooth Data Interaction Instrctions  
 
@@ -99,21 +99,21 @@ README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README
 		we have talked about its configuration stated above on configuration of Activity and Service, it mainly configure two files, service and activity,
 		developers can copy these two files under "VpBluetoothSDKDemo".
     
-    2.judgement before upgrade
+    2.Judgement before upgrade
         a.please verify device version and upgrade file before upgrade
         b.After both are verified, send the firmware upgrade command, and the device will enter the firmware upgrade mode
         c.Then the app scan the device under the firmware upgrade mode
         d.in the end, to call the official upgrade program
 
-        remarks：checkVersionAndFile() method has encapsulated all of the above steps, and the developer can calls this method directly.
+        Remarks：checkVersionAndFile() method has encapsulated all of the above steps, and the developer can calls this method directly.
             callback method1：onCheckSucces() means that both the device version and the upgrade file have been verified successfully)
             callback method2：findOadDevice() means that the device in firmware upgrade mode has been found and can call the official upgrade program
          
-		other conditions, The device version and upgrade file have been passed, and the file is correct, but the device in the firmware upgrade mode is not found
-		processing method, call findOadModelDevice() method, then call its official upgrade program on its callback method
-		of course, this rarely happens and we do not recommend developers call findOadModelDevice() individually
+		Other conditions, The device version and upgrade file have been passed, and the file is correct, but the device in the firmware upgrade mode is not found
+		Processing method, call findOadModelDevice() method, then call its official upgrade program on its callback method
+		Of course, this rarely happens and we do not recommend developers call findOadModelDevice() individually
     
-    3.calling official upgrade program
+    3.Calling official upgrade program
 		startOad() under OadActivity, usually called after the findOadDevice method callback of interface OnFindOadDeviceListener
 
 ## Thanks  
