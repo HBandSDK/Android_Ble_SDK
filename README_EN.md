@@ -94,7 +94,7 @@ README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README
 
 	Firmware upgrade is mainly to upgrade the software function of the device. This operation requires strict requirements, and the wrong upgrade will bring a very bad experience to customer
 	Please perform this operation carefully, and the upgrade operation requires network conditions, including the following 3 steps. Please check carefully
-    for specific upgrade example, please check the "com.timaimee.vpbluetoothsdkdemo.oad.Activity.OadActivity" of demo project "VpBluetoothSDKDemo" 
+    For specific upgrade example, please check the "com.timaimee.vpbluetoothsdkdemo.oad.Activity.OadActivity" of demo project "VpBluetoothSDKDemo" 
     1.The configuration of AndroidMainfest.xml	     
 		we have talked about its configuration stated above on configuration of Activity and Service, it mainly configure two files, service and activity,
 		developers can copy these two files under "VpBluetoothSDKDemo".
