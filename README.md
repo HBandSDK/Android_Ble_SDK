@@ -2,7 +2,8 @@
 Android_Ble_SDK是一个用于快速与蓝牙BLE交互的工具包，仅提供给我们合作的客户下载使用，方便提升客户的开发效率。
 
 
-README: English| [中文](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README.md)
+README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README_EN.md) | 
+        [中文](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README.md)
 
 ## 必要条件
 
@@ -123,6 +124,24 @@ README: English| [中文](https://github.com/HBandSDK/Android_Ble_SDK/blob/maste
 * [Android-DFU-Library](https://github.com/NordicSemiconductor/Android-DFU-Library)
 * [BluetoothKit](https://github.com/dingjikerbo/BluetoothKit)  
 * [Gson](https://github.com/google/gson)  
+
+
+
+## 许可协议
+[Apache Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
+
+    Copyright (C) 2010 Michael Pardo
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 
 
 
