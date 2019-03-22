@@ -10,7 +10,7 @@
 ## [vpsdk_1.2.1.apk](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/Demo/vpsdk_1.2.1.apk)  
 
 # 更新日志
-## [vpprotocol_2.1.1.15.jar](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/jar_core/vpprotocol_2.1.1.15.jar) 
+## [vpprotocol_2.1.2.15.jar](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/jar_core/vpprotocol_2.1.2.15.jar) 
 
 vpprotocol_2.0.4.3.jar
 >*添加了呼吸率检测功能
