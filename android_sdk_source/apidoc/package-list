@@ -2,7 +2,9 @@ com.veepoo.protocol
 com.veepoo.protocol.listener.base
 com.veepoo.protocol.listener.data
 com.veepoo.protocol.listener.oad
+com.veepoo.protocol.model
 com.veepoo.protocol.model.datas
+com.veepoo.protocol.model.datas.ecg
 com.veepoo.protocol.model.enums
 com.veepoo.protocol.model.settings
 com.veepoo.protocol.util
