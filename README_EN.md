@@ -60,6 +60,9 @@ README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README
     The first interation is code validation：confirmDevicePwd()
     The second interation is personal information synchronization：syncPersonInfo()
 
+    Remarks 4:
+    The device does not support asynchronous operations. data may be abnormal when multiple time-consuming operations are performed simultaneously.Therefore, when interacting with the device, please avoid multiple operations at the same time.
+
 ### 4. Bluetooth Data Interaction Instrctions  
 
     The design of SDK issue under bluetooth data only need call method, input setting data and monitor interface, When data returns, the interface triggers a callback, take confirmDevicePwd() for example

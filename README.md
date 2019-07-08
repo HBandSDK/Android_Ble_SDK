@@ -61,6 +61,9 @@ README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README
     第一步要进行的交互是验证密码：confirmDevicePwd()
     第二步要进行的交互是同步个人信息：syncPersonInfo()
 
+    备注4:
+    设备不支持异步操作,当多个耗时操作同时进行时,可能会导致数据异常;因此在与设备进行交互时,尽可能避免多个操作同时进行
+
 ### 4. 蓝牙数据交互说明
 
     SDK在蓝牙数据的下发的设计是只需要调用方法,传入设置参数以及监听接口,当数据有返回时,接口会触发回调,以confirmDevicePwd为例
