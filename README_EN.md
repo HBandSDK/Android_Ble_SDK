@@ -41,11 +41,11 @@ README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README
     3.1 obtain VPOperateManager Object： VPOperateManager.getMangerInstance()
     3.2 scan Bluetooth devices: startScanDevice();
     3.3 connect  devices: connectDevice();
+        3.3.1 confirm the password：confirmDevicePwd()
+        3.3.2 synchronization the personal information：syncPersonInfo()
     3.4 register connection status of the device to  listen）:registerConnectStatusListener(); //please use this method after the device is connected
     3.5 register switch status of the system bluetooth to listen:registerBluetoothStateListener(); //this method can be used under any of status
-    3.6 confirm the password：confirmDevicePwd()
-    3.7 synchronization the personal information：syncPersonInfo()
-    3.8 other data interaction operation
+    3.6 other data interaction operation
     
     Remarks 1：
     In order to avoid memory leak, please cautiously use context object, and we recommend to use getApplicationContext()
@@ -56,7 +56,7 @@ README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README
     Above uniformly abbreviated as:startScanDevice();
     
     Remarks 3:
-    After connected successfully
+    After call connectDevice, you must wait bleNotifyResponse() callback success,and then you can call confirmDevicePwd()
     The first interation is code validation：confirmDevicePwd()
     The second interation is personal information synchronization：syncPersonInfo()
 

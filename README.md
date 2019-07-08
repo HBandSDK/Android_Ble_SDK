@@ -42,11 +42,11 @@ README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README
     3.1 获取VPOperateManager实例： VPOperateManager.getMangerInstance()
     3.2 扫描蓝牙设备: startScanDevice();
     3.3 连接蓝牙设备: connectDevice();
+        3.3.1 调用密码密码：confirmDevicePwd()
+        3.3.2 调用个人信息设置：syncPersonInfo()
     3.4 设置连接设备的连接状态监听:registerConnectStatusListener(); //这个方法最好是在连接成功后设置
     3.5 设置系统蓝牙的开关状态监听:registerBluetoothStateListener(); //这个方法可以在任何状态下设置
-    3.6 调用密码密码：confirmDevicePwd()
-    3.7 调用个人信息设置：syncPersonInfo()
-    3.8 其他数据交互操作
+    3.6 其他数据交互操作
     
     备注1：
     为了避免内存泄漏的情况，请谨慎使用context,推荐使用getApplicationContext();
@@ -57,7 +57,7 @@ README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README
     以上统一简写为:startScanDevice();
     
     备注3:
-    连接成功后
+    调用connectDevice(),然后在bleNotifyResponse回调成功后,才可执行密码验证操作
     第一步要进行的交互是验证密码：confirmDevicePwd()
     第二步要进行的交互是同步个人信息：syncPersonInfo()
 
