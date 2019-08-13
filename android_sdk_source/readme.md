@@ -5,9 +5,6 @@
   * -jar_core    是使用此工程需要主要的引用包,此文件下会放置迭代的各个版本的jar包  
   * -jar_base    是使用此工程需要的基础包    
   * -sdkdoc      包含了此工程一些必要的说明  
-# 示例APK  
-
-## [vpsdk_1.2.1.apk](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/Demo/vpsdk_1.2.1.apk)  
 
 # 更新日志
 ## [vpprotocol_2.1.16.15.jar](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/jar_core) 
