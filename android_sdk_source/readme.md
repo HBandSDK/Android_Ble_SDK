@@ -8,16 +8,9 @@
   * -sdkdoc      包含了此工程一些必要的说明  
 
 # 更新日志
-## [vpprotocol_2.1.16.15.jar](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/jar_core) 
+## [vpprotocol_2.1.17.15.jar](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/jar_core) 
 
-vpprotocol_2.0.4.3.jar
->*添加了呼吸率检测功能
 
-vpprotocol_2.0.2.3.jar
->*修改了读取血氧的bug
-
-vpprotocol_2.0.1.3.jar
->*添加代码混淆
 
 ## 注意：由1.x.x.x升级到2.x.x.x，需要修改以下内容
 
