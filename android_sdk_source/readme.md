@@ -1,4 +1,7 @@
-﻿# 目录说明  
+# SDK 最新版本
+## [vpprotocol_2.1.17.15.jar](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/jar_core) 
+
+# 目录说明  
 
   * -apidoc      是javadoc的文档，从index.html进入主页  
   * -demo        是示例的代码工程  
@@ -6,11 +9,6 @@
   * -jar_base    是使用此工程需要的基础包    
   * -jniLibs     ECG功能需要用到JNI,具体配置参考demo工程
   * -sdkdoc      包含了此工程一些必要的说明  
-
-# 更新日志
-## [vpprotocol_2.1.17.15.jar](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/jar_core) 
-
-
 
 ## 注意：由1.x.x.x升级到2.x.x.x，需要修改以下内容
 
