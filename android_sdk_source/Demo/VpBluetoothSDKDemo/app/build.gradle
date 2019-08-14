@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 24
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
-        applicationId "com.timaimee.vpbluetoothsdkdemo"
+        applicationId "com.timaimee.vpdemo"
         minSdkVersion 19
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 122
         versionName "1.2.2"
     }
@@ -17,16 +17,23 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            aidl.srcDirs = ['src/main/aidl']
+        }
+    }
+}
+repositories {
+    flatDir {
+        dirs 'libs' //this way we can find the .aar file in libs folder
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.android.support:recyclerview-v7:25.2.0'
-    compile 'com.android.support:design:25.2.0'
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.android.support:recyclerview-v7:24.2.0'
+    compile 'com.android.support:design:24.2.0'
     compile 'com.orhanobut:logger:1.15'
-    compile files('libs/gson-2.2.4.jar')
-    compile files('libs/vpbluetooth_1.0.3.jar')
-    compile files('libs/vpprotocol_1.2.3.0.jar')
 }

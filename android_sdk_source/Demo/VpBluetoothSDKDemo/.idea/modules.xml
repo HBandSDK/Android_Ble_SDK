@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/VpBluetoothSDKDemo.iml" filepath="$PROJECT_DIR$/VpBluetoothSDKDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpbluetooth/vpbluetooth.iml" filepath="$PROJECT_DIR$/vpbluetooth/vpbluetooth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpprotocol/vpprotocol.iml" filepath="$PROJECT_DIR$/vpprotocol/vpprotocol.iml" />
     </modules>
   </component>
 </project>
