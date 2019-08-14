@@ -36,10 +36,3 @@
 | 12.血氧检测 | Spo2hDetectOperate.SPO2HStatus | ESPO2HStatus |
 | 13.女性 | WomenOperater.OperateStatus  | EWomenOprateStatus |
 
-vpprotocol_1.2.7.1.jar
->*更新了多国语言设置功能  
-
-
-vpprotocol_1.2.6.0.jar
->*修改了读取运动模式仅读取一次的bug  
->*修改了部分Api的doc描述  
