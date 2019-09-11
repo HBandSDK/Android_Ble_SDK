@@ -129,6 +129,7 @@ import com.veepoo.protocol.model.settings.WomenSetting;
 import com.veepoo.protocol.util.Spo2hOriginUtil;
 import com.veepoo.protocol.util.VPLogger;
 import com.veepoo.protocol.util.VpBleByteUtil;
+import com.vp.cso.hrvreport.JNIChange;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -285,6 +286,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         tv3 = (TextView) super.findViewById(R.id.tv3);
         initGridView();
 //        listenDeviceCallbackData();
+
     }
 
     private void initGridView() {
