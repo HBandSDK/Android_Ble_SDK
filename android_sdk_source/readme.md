@@ -1,5 +1,5 @@
 ﻿# SDK 最新版本
-## [vpprotocol_2.1.19.15.jar](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/jar_core) 
+## [version](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/jar_core) 
 
 # 目录说明  
 
