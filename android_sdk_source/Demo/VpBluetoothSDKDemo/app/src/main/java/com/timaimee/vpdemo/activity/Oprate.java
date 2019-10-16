@@ -89,8 +89,16 @@ public interface Oprate {
     public final static String HRV_ORIGIN_READ = "读取数据-HRV数据";
     public final static String CLEAR_DEVICE_DATA = "清除数据";
     public final static String DISCONNECT = "蓝牙连接-断开";
+    public final static String DETECT_PTT = "PTT";
     public final static String DETECT_START_ECG = "开始测量ECG";
     public final static String DETECT_STOP_ECG = "结束测量ECG";
+    public final static String LOW_POWER_READ = "低功耗-读取";
+    public final static String LOW_POWER_OPEN = "低功耗-开";
+    public final static String LOW_POWER_CLOSE = "低功耗-关";
+    public final static String S22_READ_DATA = "S22-数据读取";
+    public final static String S22_READ_STATE = "S22-状态读取";
+    public final static String S22_SETTING_STATE_OPEN = "S22-状态设置(开)";
+    public final static String S22_SETTING_STATE_CLOSE = "S22-状态设置(关)";
     public final static String NONE = "NONE";
     public final static String[] oprateStr = new String[]{
             PWD_COMFIRM, PERSONINFO_SYNC, SETTING_FIRST, PWD_MODIFY,
@@ -107,6 +115,6 @@ public interface Oprate {
             READ_HEALTH_SLEEP, READ_HEALTH_SLEEP_FROM, READ_HEALTH_SLEEP_SINGLEDAY, READ_HEALTH_DRINK, READ_HEALTH_ORIGINAL,
             READ_HEALTH_ORIGINAL_FROM, READ_HEALTH_ORIGINAL_SINGLEDAY, READ_HEALTH,
             OAD, SHOW_SP, SPORT_MODE_ORIGIN_READ, SPORT_MODE_ORIGIN_READSTAUTS, SPORT_MODE_ORIGIN_START, SPORT_MODE_ORIGIN_END, SPO2H_ORIGIN_READ, HRV_ORIGIN_READ, CLEAR_DEVICE_DATA, DISCONNECT
-            , DETECT_START_ECG, DETECT_STOP_ECG
+            , DETECT_START_ECG, DETECT_STOP_ECG, NONE, LOW_POWER_READ, LOW_POWER_OPEN, LOW_POWER_CLOSE,S22_READ_DATA,S22_READ_STATE,S22_SETTING_STATE_OPEN,S22_SETTING_STATE_CLOSE,DETECT_PTT
     };
 }

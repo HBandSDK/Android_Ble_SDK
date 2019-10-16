@@ -35,7 +35,7 @@
         <activity android:name=".activity.EcgDetectActivity" />
         <activity android:name=".oad.activity.OadActivity" />
         <activity android:name=".oad.activity.NotificationActivity" />
-
+        <activity android:name=".activity.PttActivity" />
         <service android:name="com.inuker.bluetooth.library.BluetoothService" />
         <service android:name=".oad.service.DfuService" />
 

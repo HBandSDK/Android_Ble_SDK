@@ -24,14 +24,16 @@ import com.veepoo.protocol.listener.data.IAlarm2DataListListener;
 import com.veepoo.protocol.listener.data.IAlarmDataListener;
 import com.veepoo.protocol.listener.data.IAllHealthDataListener;
 import com.veepoo.protocol.listener.data.IAllSetDataListener;
+import com.veepoo.protocol.listener.data.IAutoDetectOriginDataListener;
 import com.veepoo.protocol.listener.data.IBPDetectDataListener;
 import com.veepoo.protocol.listener.data.IBPSettingDataListener;
 import com.veepoo.protocol.listener.data.IBatteryDataListener;
 import com.veepoo.protocol.listener.data.ICameraDataListener;
 import com.veepoo.protocol.listener.data.ICheckWearDataListener;
 import com.veepoo.protocol.listener.data.ICountDownListener;
+import com.veepoo.protocol.listener.data.ICustomProtocolStateListener;
 import com.veepoo.protocol.listener.data.ICustomSettingDataListener;
-import com.veepoo.protocol.listener.data.IDeviceControlPhone;
+import com.veepoo.protocol.listener.data.IDeviceControlPhoneModelState;
 import com.veepoo.protocol.listener.data.IDeviceFuctionDataListener;
 import com.veepoo.protocol.listener.data.IDrinkDataListener;
 import com.veepoo.protocol.listener.data.IECGDetectListener;
@@ -44,6 +46,7 @@ import com.veepoo.protocol.listener.data.IHeartWaringDataListener;
 import com.veepoo.protocol.listener.data.ILanguageDataListener;
 import com.veepoo.protocol.listener.data.ILightDataCallBack;
 import com.veepoo.protocol.listener.data.ILongSeatDataListener;
+import com.veepoo.protocol.listener.data.ILowPowerListener;
 import com.veepoo.protocol.listener.data.INightTurnWristeDataListener;
 import com.veepoo.protocol.listener.data.IOriginData3Listener;
 import com.veepoo.protocol.listener.data.IOriginDataListener;
@@ -63,6 +66,8 @@ import com.veepoo.protocol.listener.data.IWomenDataListener;
 import com.veepoo.protocol.model.datas.AlarmData;
 import com.veepoo.protocol.model.datas.AlarmData2;
 import com.veepoo.protocol.model.datas.AllSetData;
+import com.veepoo.protocol.model.datas.AutoDetectOriginData;
+import com.veepoo.protocol.model.datas.AutoDetectStateData;
 import com.veepoo.protocol.model.datas.BatteryData;
 import com.veepoo.protocol.model.datas.BpData;
 import com.veepoo.protocol.model.datas.BpSettingData;
@@ -81,6 +86,7 @@ import com.veepoo.protocol.model.datas.HeartData;
 import com.veepoo.protocol.model.datas.HeartWaringData;
 import com.veepoo.protocol.model.datas.LanguageData;
 import com.veepoo.protocol.model.datas.LongSeatData;
+import com.veepoo.protocol.model.datas.LowPowerData;
 import com.veepoo.protocol.model.datas.NightTurnWristeData;
 import com.veepoo.protocol.model.datas.OriginData;
 import com.veepoo.protocol.model.datas.OriginData3;
@@ -112,6 +118,7 @@ import com.veepoo.protocol.model.enums.EWomenStatus;
 import com.veepoo.protocol.model.settings.Alarm2Setting;
 import com.veepoo.protocol.model.settings.AlarmSetting;
 import com.veepoo.protocol.model.settings.AllSetSetting;
+import com.veepoo.protocol.model.settings.AutoDetectStateSetting;
 import com.veepoo.protocol.model.settings.BpSetting;
 import com.veepoo.protocol.model.settings.CheckWearSetting;
 import com.veepoo.protocol.model.settings.ContentPhoneSetting;
@@ -160,6 +167,7 @@ import static com.timaimee.vpdemo.activity.Oprate.CLEAR_DEVICE_DATA;
 import static com.timaimee.vpdemo.activity.Oprate.COUNT_DOWN_APP;
 import static com.timaimee.vpdemo.activity.Oprate.COUNT_DOWN_APP_READ;
 import static com.timaimee.vpdemo.activity.Oprate.COUNT_DOWN_WATCH;
+import static com.timaimee.vpdemo.activity.Oprate.DETECT_PTT;
 import static com.timaimee.vpdemo.activity.Oprate.DETECT_START_ECG;
 import static com.timaimee.vpdemo.activity.Oprate.DETECT_STOP_ECG;
 import static com.timaimee.vpdemo.activity.Oprate.DEVICE_CONTROL_PHONE;
@@ -184,6 +192,9 @@ import static com.timaimee.vpdemo.activity.Oprate.LANGUAGE_ENGLISH;
 import static com.timaimee.vpdemo.activity.Oprate.LONGSEAT_READ;
 import static com.timaimee.vpdemo.activity.Oprate.LONGSEAT_SETTING_CLOSE;
 import static com.timaimee.vpdemo.activity.Oprate.LONGSEAT_SETTING_OPEN;
+import static com.timaimee.vpdemo.activity.Oprate.LOW_POWER_CLOSE;
+import static com.timaimee.vpdemo.activity.Oprate.LOW_POWER_OPEN;
+import static com.timaimee.vpdemo.activity.Oprate.LOW_POWER_READ;
 import static com.timaimee.vpdemo.activity.Oprate.NIGHT_TURN_WRIST_CLOSE;
 import static com.timaimee.vpdemo.activity.Oprate.NIGHT_TURN_WRIST_CUSTOM_TIME;
 import static com.timaimee.vpdemo.activity.Oprate.NIGHT_TURN_WRIST_CUSTOM_TIME_LEVEL;
@@ -201,6 +212,10 @@ import static com.timaimee.vpdemo.activity.Oprate.READ_HEALTH_ORIGINAL_SINGLEDAY
 import static com.timaimee.vpdemo.activity.Oprate.READ_HEALTH_SLEEP;
 import static com.timaimee.vpdemo.activity.Oprate.READ_HEALTH_SLEEP_FROM;
 import static com.timaimee.vpdemo.activity.Oprate.READ_HEALTH_SLEEP_SINGLEDAY;
+import static com.timaimee.vpdemo.activity.Oprate.S22_READ_DATA;
+import static com.timaimee.vpdemo.activity.Oprate.S22_READ_STATE;
+import static com.timaimee.vpdemo.activity.Oprate.S22_SETTING_STATE_CLOSE;
+import static com.timaimee.vpdemo.activity.Oprate.S22_SETTING_STATE_OPEN;
 import static com.timaimee.vpdemo.activity.Oprate.SCREEN_LIGHT_READ;
 import static com.timaimee.vpdemo.activity.Oprate.SCREEN_LIGHT_SETTING;
 import static com.timaimee.vpdemo.activity.Oprate.SCREEN_STYLE_READ;
@@ -225,6 +240,8 @@ import static com.timaimee.vpdemo.activity.Oprate.WOMEN_READ;
 import static com.timaimee.vpdemo.activity.Oprate.WOMEN_SETTING;
 import static com.timaimee.vpdemo.activity.Oprate.oprateStr;
 import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT;
+import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT_CLOSE;
+import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT_OPEN;
 
 /**
  * Created by timaimee on 2017/2/8.
@@ -244,7 +261,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             String s = msg.obj.toString();
-            Toast.makeText(mContext, s, Toast.LENGTH_LONG).show();
+//            Toast.makeText(mContext, s, Toast.LENGTH_LONG).show();
 
             switch (msg.what) {
                 case 1:
@@ -273,6 +290,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
     private String deviceTestVersion;
     boolean isOadModel = false;
     boolean isNewSportCalc = false;
+    boolean isInPttModel = false;
 
 
     @Override
@@ -285,8 +303,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         tv2 = (TextView) super.findViewById(R.id.tv2);
         tv3 = (TextView) super.findViewById(R.id.tv3);
         initGridView();
-//        listenDeviceCallbackData();
-
+        listenDeviceCallbackData();
     }
 
     private void initGridView() {
@@ -315,10 +332,41 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 @Override
                 public void onDataChange(HeartData heart) {
                     String message = "heart:\n" + heart.toString();
+
                     Logger.t(TAG).i(message);
                     sendMsg(message, 1);
                 }
             });
+        } else if (oprater.equals(LOW_POWER_READ)) {
+            VPOperateManager.getMangerInstance(mContext).readLowPower(writeResponse, new ILowPowerListener() {
+                @Override
+                public void onLowpowerDataDataChange(LowPowerData lowPowerData) {
+                    String message = "onLowpowerDataDataChange read:\n" + lowPowerData.toString();
+                    Logger.t(TAG).i(message);
+                }
+            });
+        } else if (oprater.equals(LOW_POWER_OPEN)) {
+            VPOperateManager.getMangerInstance(mContext).settingLowpower(writeResponse, new ILowPowerListener() {
+                @Override
+                public void onLowpowerDataDataChange(LowPowerData lowPowerData) {
+                    String message = "onLowpowerDataDataChange open:\n" + lowPowerData.toString();
+                    Logger.t(TAG).i(message);
+                }
+            }, true);
+        } else if (oprater.equals(LOW_POWER_CLOSE)) {
+            VPOperateManager.getMangerInstance(mContext).settingLowpower(writeResponse, new ILowPowerListener() {
+                @Override
+                public void onLowpowerDataDataChange(LowPowerData lowPowerData) {
+                    String message = "onLowpowerDataDataChange close:\n" + lowPowerData.toString();
+                    Logger.t(TAG).i(message);
+                }
+            }, false);
+        } else if (oprater.equals(DETECT_PTT)) {
+
+            Intent intent = new Intent(OperaterActivity.this, PttActivity.class);
+            intent.putExtra("inPttModel", isInPttModel);
+            startActivity(intent);
+
         } else if (oprater.equals(DETECT_START_ECG) || oprater.equals(DETECT_STOP_ECG)) {
             startActivity(new Intent(OperaterActivity.this, EcgDetectActivity.class));
         } else if (oprater.equals(HEART_DETECT_STOP)) {
@@ -419,7 +467,6 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     contactMsgLength = functionSupport.getContactMsgLength();
                     allMsgLenght = functionSupport.getAllMsgLength();
                     isSleepPrecision = functionSupport.getPrecisionSleep() == SUPPORT;
-                    VPLogger.i("数据读取处理，ORIGIN_DATA_DAY:" + watchDataDay);
                 }
             }, new ISocialMsgDataListener() {
                 @Override
@@ -699,6 +746,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             EFunctionStatus isOpenAutoInCall = EFunctionStatus.UNSUPPORT;
             EFunctionStatus isOpenAutoHRV = EFunctionStatus.UNSUPPORT;
             EFunctionStatus isOpenDisconnectRemind = EFunctionStatus.UNSUPPORT;
+            CustomSetting customSetting = new CustomSetting(isHaveMetricSystem, isMetric, is24Hour, isOpenAutoHeartDetect, isOpenAutoBpDetect
+                    , isOpenSportRemain, isOpenVoiceBpHeart, isOpenFindPhoneUI, isOpenStopWatch,
+                    isOpenSpo2hLowRemind, isOpenWearDetectSkin, isOpenAutoInCall, isOpenAutoHRV, isOpenDisconnectRemind
+            );
+            customSetting.setIsOpenLongClickLockScreen(SUPPORT_CLOSE);
             VPOperateManager.getMangerInstance(mContext).changeCustomSetting(writeResponse, new ICustomSettingDataListener() {
                 @Override
                 public void OnSettingDataChange(CustomSettingData customSettingData) {
@@ -706,10 +758,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     Logger.t(TAG).i(message);
                     sendMsg(message, 1);
                 }
-            }, new CustomSetting(isHaveMetricSystem, isMetric, is24Hour, isOpenAutoHeartDetect, isOpenAutoBpDetect
-                    , isOpenSportRemain, isOpenVoiceBpHeart, isOpenFindPhoneUI, isOpenStopWatch,
-                    isOpenSpo2hLowRemind, isOpenWearDetectSkin, isOpenAutoInCall, isOpenAutoHRV, isOpenDisconnectRemind
-            ));
+            }, customSetting);
         } else if (oprater.equals(CHECK_WEAR_SETING_OPEN)) {
             CheckWearSetting checkWearSetting = new CheckWearSetting();
             checkWearSetting.setOpen(true);
@@ -772,11 +821,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             FunctionSocailMsgData socailMsgData = new FunctionSocailMsgData();
             socailMsgData.setPhone(SUPPORT);
             socailMsgData.setMsg(SUPPORT);
-            socailMsgData.setWechat(EFunctionStatus.SUPPORT_OPEN);
-            socailMsgData.setQq(EFunctionStatus.SUPPORT_OPEN);
-            socailMsgData.setFacebook(EFunctionStatus.SUPPORT_CLOSE);
-            socailMsgData.setTwitter(EFunctionStatus.SUPPORT_OPEN);
-            socailMsgData.setWhats(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setWechat(SUPPORT_OPEN);
+            socailMsgData.setQq(SUPPORT_OPEN);
+            socailMsgData.setFacebook(SUPPORT_CLOSE);
+            socailMsgData.setTwitter(SUPPORT_OPEN);
+            socailMsgData.setWhats(SUPPORT_OPEN);
             socailMsgData.setSina(EFunctionStatus.UNSUPPORT);
             socailMsgData.setFlickr(EFunctionStatus.UNSUPPORT);
             socailMsgData.setLinkin(EFunctionStatus.UNSUPPORT);
@@ -809,55 +858,60 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         } else if (oprater.equals(SOCIAL_PHONE_IDLE_OR_OFFHOOK)) {
             VPOperateManager.getMangerInstance(mContext).offhookOrIdlePhone(writeResponse);
         } else if (oprater.equals(DEVICE_CONTROL_PHONE)) {
-            VPOperateManager.getMangerInstance(mContext).settingDeviceControlPhone(new IDeviceControlPhone() {
+            VPOperateManager.getMangerInstance(mContext).settingDeviceControlPhone(new IDeviceControlPhoneModelState() {
+                @Override
+                public void inPttModel() {
+                    String message = "手表提示:手表进入ptt模式\n";
+                    Logger.t(TAG).i(message);
+                }
+
+                @Override
+                public void outPttModel() {
+                    String message = "手表提示:手表退出ptt模式\n";
+                    Logger.t(TAG).i(message);
+                }
+
                 @Override
                 public void rejectPhone() {
-                    String message = "手表控制:请挂断来电\n";
+                    String message = "手表提示:请挂断来电\n";
                     Logger.t(TAG).i(message);
                     sendMsg(message, 1);
                 }
 
                 @Override
                 public void cliencePhone() {
-                    String message = "手表控制:请来电静音\n";
+                    String message = "手表提示:请来电静音\n";
                     Logger.t(TAG).i(message);
                     sendMsg(message, 1);
                 }
 
                 @Override
                 public void knocknotify(int type) {
-
+                    String message = "手表提示:敲击提醒，1表示单击，2表示双击\n";
+                    Logger.t(TAG).i(message);
                 }
 
                 @Override
                 public void sos() {
-
+                    String message = "手表提示:sos\n";
+                    Logger.t(TAG).i(message);
                 }
 
-                /**
-                 * 下一曲,请执行相关的操作
-                 */
                 public void nextMusic() {
+                    String message = "手表提示:下一曲\n";
+                    Logger.t(TAG).i(message);
                 }
-
-                ;
-
-                /**
-                 * 上一曲,请执行相关的操作
-                 */
 
                 public void previousMusic() {
+                    String message = "手表提示:上一曲\n";
+                    Logger.t(TAG).i(message);
                 }
 
-                ;
-
-                /**
-                 * 暂停和播放,请执行相关的操作
-                 */
                 public void pauseAndPlayMusic() {
+                    String message = "手表提示:暂停和播放\n";
+                    Logger.t(TAG).i(message);
                 }
 
-                ;
             });
         } else if (oprater.equals(CLEAR_DEVICE_DATA)) {
             VPOperateManager.getMangerInstance(mContext).clearDeviceData(writeResponse);
@@ -1169,12 +1223,29 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(READ_HEALTH_ORIGINAL)) {
-            VPOperateManager.getMangerInstance(mContext).readOriginData(writeResponse, new IOriginDataListener() {
+            VPOperateManager.getMangerInstance(mContext).readOriginData(writeResponse, new IOriginData3Listener() {
                 @Override
-                public void onOringinFiveMinuteDataChange(OriginData originData) {
-                    String message = "健康数据-返回:" + originData.toString();
+                public void onOriginFiveMinuteListDataChange(List<OriginData3> originDataList) {
+                    String message = "健康数据-返回:" + originDataList.toString();
                     Logger.t(TAG).i(message);
                 }
+
+                @Override
+                public void onOriginHalfHourDataChange(OriginHalfHourData originHalfHourDataList) {
+                    String message = "健康数据[30分钟]-返回:" + originHalfHourDataList.toString();
+                    Logger.t(TAG).i(message);
+                }
+
+                @Override
+                public void onOriginHRVOriginListDataChange(List<HRVOriginData> originHrvDataList) {
+
+                }
+
+                @Override
+                public void onOriginSpo2OriginListDataChange(List<Spo2hOriginData> originSpo2hDataList) {
+
+                }
+
 
                 @Override
                 public void onReadOriginProgress(float progress) {
@@ -1184,21 +1255,17 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
                 @Override
                 public void onReadOriginProgressDetail(int date, String dates, int all, int num) {
-
-                }
-
-                @Override
-                public void onOringinHalfHourDataChange(OriginHalfHourData originHalfHourData) {
-                    String message = "健康数据[30分钟]-返回:" + originHalfHourData.toString();
+                    String message = "健康数据[5分钟]-读取进度detail:" + date + ",dates=" + dates;
                     Logger.t(TAG).i(message);
                 }
+
 
                 @Override
                 public void onReadOriginComplete() {
                     String message = "健康数据-读取结束";
                     Logger.t(TAG).i(message);
                 }
-            }, watchDataDay);
+            }, 3);
         } else if (oprater.equals(READ_HEALTH_ORIGINAL_FROM)) {
             int yesterday = 1;
             VPOperateManager.getMangerInstance(mContext).readOriginDataFromDay(writeResponse, new IOriginDataListener() {
@@ -1295,12 +1362,12 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 @Override
                 public void onOriginSpo2OriginListDataChange(List<Spo2hOriginData> originSpo2hDataList) {
                     String message = "健康数据[Spo2h]-返回:" + originSpo2hDataList.size();
-                    Spo2hOriginUtil spo2hOriginUtil=new Spo2hOriginUtil(originSpo2hDataList);
+                    Spo2hOriginUtil spo2hOriginUtil = new Spo2hOriginUtil(originSpo2hDataList);
                     List<Map<String, Float>> tenMinuteData = spo2hOriginUtil.getTenMinuteData(ESpo2hDataType.TYPE_SLEEP);
-//                    for (int i = 0; i < originSpo2hDataList.size(); i++) {
-//                        String s = originSpo2hDataList.get(i).toString();
-//                        Logger.t(TAG).i(s);
-//                    }
+                    for (int i = 0; i < originSpo2hDataList.size(); i++) {
+                        String s = originSpo2hDataList.get(i).toString();
+                        Logger.t(TAG).i(s);
+                    }
                     Logger.t(TAG).i(message);
                 }
 
@@ -1477,26 +1544,65 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
                 }
             }, watchDataDay);
+        } else if (oprater.equals(S22_READ_DATA)) {
+            TimeData timeData = new TimeData(2017, 9, 11, 8, 13, 20);
+//            timeData.setCurrentTime();
+            Logger.t(TAG).i("timeData:" + timeData.toString());
+            VPOperateManager.getMangerInstance(mContext).readAutoDetectOriginDataFromS22(writeResponse, new IAutoDetectOriginDataListener() {
+
+                @Override
+                public void onAutoDetectOriginDataChangeListener(List<AutoDetectOriginData> autoDetectOriginDataList) {
+                    for (AutoDetectOriginData autoDetectOriginData : autoDetectOriginDataList) {
+                        Logger.t(TAG).i("autoDetectOriginData:" + autoDetectOriginData.toString());
+                    }
+                }
+            }, timeData);
+        } else if (oprater.equals(S22_READ_STATE)) {
+            VPOperateManager.getMangerInstance(mContext).readAutoDetectStateFromS22(writeResponse, new ICustomProtocolStateListener() {
+
+                @Override
+                public void onS22AutoDetectStateChangeListener(AutoDetectStateData autoDetectStateData) {
+                    Logger.t(TAG).i("autoDetectStateData:" + autoDetectStateData.toString());
+                }
+            });
+        } else if (oprater.equals(S22_SETTING_STATE_OPEN)) {
+            AutoDetectStateSetting autoDetectStateSetting = new AutoDetectStateSetting();
+            autoDetectStateSetting.setSpo2h24Hour(SUPPORT_OPEN);
+            VPOperateManager.getMangerInstance(mContext).setAutoDetectStateToS22(writeResponse, new ICustomProtocolStateListener() {
+                @Override
+                public void onS22AutoDetectStateChangeListener(AutoDetectStateData autoDetectStateData) {
+                    Logger.t(TAG).i("autoDetectStateData:" + autoDetectStateData.toString());
+                }
+            }, autoDetectStateSetting);
+        } else if (oprater.equals(S22_SETTING_STATE_CLOSE)) {
+            AutoDetectStateSetting autoDetectStateSetting = new AutoDetectStateSetting();
+            autoDetectStateSetting.setSpo2h24Hour(SUPPORT_CLOSE);
+            VPOperateManager.getMangerInstance(mContext).setAutoDetectStateToS22(writeResponse, new ICustomProtocolStateListener() {
+                @Override
+                public void onS22AutoDetectStateChangeListener(AutoDetectStateData autoDetectStateData) {
+                    Logger.t(TAG).i("autoDetectStateData:" + autoDetectStateData.toString());
+                }
+            }, autoDetectStateSetting);
         } else if (oprater.equals(SPO2H_ORIGIN_READ)) {
             VPOperateManager.getMangerInstance(mContext).readSpo2hOrigin(writeResponse, new ISpo2hOriginDataListener() {
                 @Override
                 public void onReadOriginProgress(float progress) {
-
+                    Logger.t(TAG).i("onReadOriginProgress:" + progress);
                 }
 
                 @Override
                 public void onReadOriginProgressDetail(int day, String date, int allPackage, int currentPackage) {
-
+                    Logger.t(TAG).i("onReadOriginProgressDetail:allPackage=" + allPackage + ",currentPackage=" + currentPackage);
                 }
 
                 @Override
                 public void onSpo2hOriginListener(Spo2hOriginData sportOriginData) {
-
+                    Logger.t(TAG).i("Spo2hOriginData:" + sportOriginData.toString());
                 }
 
                 @Override
                 public void onReadOriginComplete() {
-
+                    Logger.t(TAG).i("onReadOriginComplete");
                 }
             }, watchDataDay);
         }
@@ -1534,15 +1640,58 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
     }
 
     /**
-     * 返回设备的数据
+     *
+     * 	密码验证之前，要调用这个方法
+     * 	因为在密码验证之后，inPttModel/outPttModel其中一个会有回调
      */
     public void listenDeviceCallbackData() {
-        VPOperateManager.getMangerInstance(mContext).listenDeviceCallbackData(new IBleNotifyResponse() {
+        VPOperateManager.getMangerInstance(mContext).settingDeviceControlPhone(new IDeviceControlPhoneModelState() {
             @Override
-            public void onNotify(UUID service, UUID character, byte[] value) {
-                Logger.t(TAG).i("设备返回的数据：" + Arrays.toString(VpBleByteUtil.byte2HexToStrArr(value)));
+            public void knocknotify(int type) {
+
             }
 
+            @Override
+            public void nextMusic() {
+
+            }
+
+            @Override
+            public void previousMusic() {
+
+            }
+
+            @Override
+            public void pauseAndPlayMusic() {
+
+            }
+
+            @Override
+            public void rejectPhone() {
+
+            }
+
+            @Override
+            public void cliencePhone() {
+
+            }
+
+            @Override
+            public void inPttModel() {
+                Logger.t(TAG).i("inPttModel");
+                isInPttModel = true;
+            }
+
+            @Override
+            public void outPttModel() {
+                Logger.t(TAG).i("outPttModel");
+                isInPttModel = false;
+            }
+
+            @Override
+            public void sos() {
+
+            }
         });
     }
 }
