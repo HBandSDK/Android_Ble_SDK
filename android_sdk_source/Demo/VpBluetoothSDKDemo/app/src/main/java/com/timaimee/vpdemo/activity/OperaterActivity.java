@@ -1238,7 +1238,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
                 @Override
                 public void onOriginHRVOriginListDataChange(List<HRVOriginData> originHrvDataList) {
-
+                    String message = "健康数据[30分钟]-HRV:" + originHrvDataList.size();
+                    Logger.t(TAG).i(message);
                 }
 
                 @Override
