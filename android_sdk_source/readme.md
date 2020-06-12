@@ -1,5 +1,5 @@
 ﻿# SDK 最新版本
-## [Version:2.1.37.15](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/jar_core) 
+## [Version:2.1.38.15](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/jar_core) 
 
 # 目录说明  
 
@@ -9,7 +9,46 @@
   * -jar_base    是使用此工程需要的基础包    
   * -jniLibs     ECG功能需要用到JNI,具体配置参考demo工程
   * -sdkdoc      包含了此工程一些必要的说明  
+## 注意：当jar_core的版本大于等于2.1.38.15时,需要配置上kotlin编译环境
+项目中的部分代码使用Kotlin编译的，所以需要配置上kotlin环境,不然某些功能会报错Didn't find class "kotlin.jvm.internal.Intrinsics"。
+配置如下
 
+### project的bulid.gradle文件
+
+```java
+
+buildscript {
+      ext.kotlin_version = '1.3.61'
+      repositories {
+          google()
+          jcenter()
+          mavenCentral()
+      }
+      dependencies {
+          classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+      }
+  }
+allprojects {
+      repositories {
+          google()
+          jcenter()
+          mavenCentral()
+      }
+
+  }
+```
+
+### module的bulid.gradle文件
+
+ ```java
+ 
+  apply plugin: 'kotlin-android'
+  apply plugin: 'kotlin-android-extensions'
+  dependencies {
+      implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  }
+  
+ ```
 ## 注意：由1.x.x.x升级到2.x.x.x，需要修改以下内容
 
 
