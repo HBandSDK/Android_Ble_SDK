@@ -39,5 +39,5 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.2.0'
     implementation 'com.jakewharton:butterknife:8.2.0'
     implementation 'com.orhanobut:logger:1.15'
-    implementation files('libs/vpprotocol_2.1.27.15.jar')
+    implementation files('libs/vpprotocol_2.1.56.15.aar')
 }
