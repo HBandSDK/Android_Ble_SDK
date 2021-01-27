@@ -16,7 +16,7 @@ README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README
 
 ### 1. 配置 build.gradle
 
-    compile files('libs/vpbluetooth_x.x.x.jar')  
+    compile files('libs/vpbluetooth_x.x.x.aar')  
     compile files('libs/gson-x.x.x.jar') 或者 compile 'com.google.code.gson:gson:x.x.x'  
 
 ### 2. 配置 Androidmanifest.xml
