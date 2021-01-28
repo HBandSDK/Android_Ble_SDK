@@ -1,5 +1,5 @@
 ﻿# SDK 最新版本
-## [Version:2.1.56.15](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/jar_core) 
+## [Version:2.1.57.15](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/jar_core) 
 
 # 目录说明  
 
