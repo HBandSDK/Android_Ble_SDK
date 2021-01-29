@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
@@ -39,5 +41,6 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.2.0'
     implementation 'com.jakewharton:butterknife:8.2.0'
     implementation 'com.orhanobut:logger:1.15'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation files('libs/vpprotocol_2.1.56.15.aar')
 }
