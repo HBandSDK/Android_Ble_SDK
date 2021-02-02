@@ -122,6 +122,23 @@ README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README
     3.调用官方升级程序
         OadActivity下的startOad()，一般在接口OnFindOadDeviceListener的findOadDevice方法回调后被调用。
 
+### 6. 更换表盘说明（UI升级）
+	
+	设备现在进行更换表盘操作，设备的表盘分为三部分（默认自带的表盘（多个）+可以编辑的表盘（1个）+服务器的表盘（1个））
+
+	1.默认自带的表盘可直接通过settingScreenStyle方法设置
+	2.可以编辑的表盘，可以自选三种元素及三种元素的放置位置+自选背景图片，选择好的背景图片需要下发到设备
+	3.服务器的表盘，获取服务器的表盘列表，包含了预览图、文件以及其他一些必要的信息，然后下发到设备
+
+默认自带的表盘设置demo: VPOperateManager.getMangerInstance(mContext).settingScreenStyle();
+
+[可编辑表盘的下发demo](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/Demo/VpBluetoothSDKDemo/app/src/main/java/com/timaimee/vpdemo/activity/UiUpdateCustomActivity.java)
+
+[服务器表盘的下发demo](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/Demo/VpBluetoothSDKDemo/app/src/main/java/com/timaimee/vpdemo/activity/UiUpdateServerActivity.java)
+
+	
+	
+
 ## 鸣谢
 
 * [Android-DFU-Library](https://github.com/NordicSemiconductor/Android-DFU-Library)
