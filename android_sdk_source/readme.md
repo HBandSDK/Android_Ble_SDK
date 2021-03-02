@@ -50,7 +50,7 @@ allprojects {
   
 ```
 
-## 注意：由2.1.56.15及以上的版本，java_core的jar包文件变成了aar文件
+## 注意：由2.1.56.15及以上的版本，java_core的jar包文件变成了aar文件&&java_base的jar包升级到1.0.4了
 
 ## 注意：由1.x.x.x升级到2.x.x.x，需要修改以下内容
 
