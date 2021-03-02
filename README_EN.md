@@ -11,6 +11,13 @@ README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README
    * [vpbluetooth_x.x.x.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
    * [gson-x.x.x.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
 
+## Optional (If it is Goodix's chip, the upgrade will use the following packages)
+
+   * [libble-0.2.aar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
+   * [libcomx-0.2.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
+   * [libdfu-1.2.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
+   * [libfastdfu-0.2.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
+
 ## How to use
 
 ### 1. Configuration （build.gradle）
