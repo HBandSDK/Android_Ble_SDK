@@ -4,6 +4,9 @@ package com.timaimee.vpdemo.oad.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -15,14 +18,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.goodix.ble.gr.toolbox.app.libfastdfu.DfuProgressCallback;
+import com.goodix.ble.gr.toolbox.app.libfastdfu.EasyDfu2;
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.oad.service.DfuService;
 import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.oad.OnFindOadDeviceListener;
+import com.veepoo.protocol.model.enums.ECpuType;
 import com.veepoo.protocol.model.settings.OadSetting;
 import com.veepoo.protocol.err.OadErrorState;
 import com.veepoo.protocol.listener.oad.OnUpdateCheckListener;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import vpno.nordicsemi.android.dfu.DfuLogListener;
 import vpno.nordicsemi.android.dfu.DfuProgressListener;
@@ -34,7 +45,7 @@ import vpno.nordicsemi.android.dfu.DfuServiceListenerHelper;
 /**
  * Created by timaimee on 2016/8/17.
  */
-public class OadActivity extends Activity implements View.OnClickListener {
+public class OadActivity extends Activity implements View.OnClickListener, DfuProgressCallback {
     private Context mContext = null;
     private final static String TAG = OadActivity.class.getSimpleName();
 
@@ -115,9 +126,11 @@ public class OadActivity extends Activity implements View.OnClickListener {
 
 
     private void checkVersionAndFile() {
-        oadSetting.setDeviceVersion("00.23.00");
-        oadSetting.setDeviceTestVersion("00.23.00.00");
+//        oadSetting.setDeviceVersion("00.23.00");
+//        oadSetting.setDeviceTestVersion("00.23.00.00");
+//        oadSetting.setHostUrl("http://www.baidu.com");
         Logger.t(TAG).i("升级前：版本验证->文件验证->查找目标设备");
+        oadSetting.setDebug(true);
         VPOperateManager.getMangerInstance(mContext).checkVersionAndFile(oadSetting, new OnUpdateCheckListener() {
             @Override
             public void onNetVersionInfo(int deviceNumber, String deviceVersion, String des) {
@@ -163,31 +176,80 @@ public class OadActivity extends Activity implements View.OnClickListener {
             }
 
             @Override
-            public void findOadDevice(String oadAddress) {
-                Logger.t(TAG).i("找到OAD模式下的设备了");
+            public void findOadDevice(String oadAddress, final ECpuType eCpuType) {
+                Logger.t(TAG).i("找到OAD模式下的设备了:"+eCpuType);
                 mOadAddress = oadAddress;
                 if (!TextUtils.isEmpty(mOadAddress)) {
                     isFindOadDevice = true;
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            startOad();
+                            selectOad(eCpuType);
                         }
                     });
                 }
             }
-        });
-    }
 
-    private void findOadModelDevice() {
-        VPOperateManager.getMangerInstance(mContext).findOadModelDevice(oadSetting, new OnFindOadDeviceListener() {
             @Override
-            public void findOadDevice(String oadAddress) {
-                startOad();
+            public void unKnowCpu() {
+                Logger.t(TAG).i("不知道设备的CPU是什么类型");
             }
         });
     }
 
+
+
+    private void findOadModelDevice() {
+        VPOperateManager.getMangerInstance(mContext).findOadModelDevice(oadSetting, new OnFindOadDeviceListener() {
+            @Override
+            public void findOadDevice(String oadAddress, ECpuType eCpuType) {
+                selectOad(eCpuType);
+            }
+
+            @Override
+            public void unKnowCpu() {
+
+            }
+        });
+    }
+
+    private void selectOad(ECpuType eCpuType) {
+        switch (eCpuType) {
+            case NORIC:
+                startOad();
+                break;
+            case HUITOP:
+                enoadHuiDing();
+                break;
+        }
+    }
+    private void enoadHuiDing() {
+
+        BluetoothManager mBManager;
+        BluetoothAdapter mBAdapter = null;
+
+        mBManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        if (null != mBManager) {
+            mBAdapter = mBManager.getAdapter();
+            BluetoothDevice device = mBAdapter.getRemoteDevice(mOadAddress);
+            startDfu(device);
+        }
+    }
+    private void startDfu(BluetoothDevice bluetoothDevice) {
+        EasyDfu2 dfu = new EasyDfu2();
+        dfu.setListener(this);
+        dfu.setLogger(null);
+        File file = new File(mOadFileName);
+        Logger.t(TAG).i("fileName:" + mOadFileName);
+        InputStream targetStream = null;
+        try {
+            targetStream = new FileInputStream(file);
+            dfu.startDfu(mContext, bluetoothDevice, targetStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     private void startOad() {
         Logger.t(TAG).i("执行升级程序，最多尝试5次");
@@ -384,4 +446,32 @@ public class OadActivity extends Activity implements View.OnClickListener {
         oadFailDialog.setCanceledOnTouchOutside(false);
         oadFailDialog.show();
     }
+
+    @Override
+    public void onDfuStart() {
+        startdfuprogress();
+    }
+
+    @Override
+    public void onDfuProgress(int i) {
+        Logger.t(TAG).e("onDfuProgress:"+i);
+        textPercentTv.setText(i+"%");
+    }
+
+    @Override
+    public void onDfuComplete() {
+        Logger.t(TAG).e("onDfuCompleted");
+        textPercentTv.setText(getResources().getString(R.string.dfu_status_completed));
+        oadSuccess();
+    }
+
+    @Override
+    public void onDfuError(String s, Error error) {
+        Logger.t(TAG).e("onDfuError");
+    }
+    private void startdfuprogress() {
+        progressBar.setIndeterminate(true);
+        textPercentTv.setText(R.string.dfu_status_starting);
+    }
 }
+
