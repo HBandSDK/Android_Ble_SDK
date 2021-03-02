@@ -12,6 +12,13 @@ README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README
    * [vpbluetooth_x.x.x.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
    * [gson-x.x.x.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
 
+## 可选（如果是汇顶的芯片，升级会用到如下包）
+
+   * [libble-0.2.aar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
+   * [libcomx-0.2.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
+   * [libdfu-1.2.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
+   * [libfastdfu-0.2.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
+
 ## 如何使用
 
 ### 1. 配置 build.gradle
@@ -34,6 +41,7 @@ README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README
     <!--固件升级功能相关-->
     <service android:name=".oad.service.DfuService" /> 
     <activity android:name=".oad.activity.NotificationActivity" />
+    
 ### 3. 蓝牙通信连接
 
 
@@ -97,6 +105,7 @@ README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README
             
 ### 5. 固件升级说明
 
+    注意：已兼容noric的芯片以及汇顶的芯片
     固件升级的作用主要是针对设备的软件功能进行升级,此操作要求非常严谨，升级出错会给用户带来非常不好的体验。  
     请谨慎执行此操作，升级操作要求在有网络的条件下进行，包括以下3个步骤,请务必仔细核对。  
     具体的升级案例,可参考我司的运行demo工程VpBluetoothSDKDemo下的com.timaimee.vpbluetoothsdkdemo.oad.Activity.OadActivity
