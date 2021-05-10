@@ -14,10 +14,10 @@ README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README
 
 ## 可选（如果是汇顶的芯片，升级会用到如下包）
 
-   * [libble-0.2.aar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
-   * [libcomx-0.2.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
-   * [libdfu-1.2.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
-   * [libfastdfu-0.2.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
+   * [libble-0.x.aar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
+   * [libcomx-0.x.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
+   * [libdfu-1.x.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
+   * [libfastdfu-0.x.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
 
 ## 如何使用
 
