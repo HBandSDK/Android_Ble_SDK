@@ -5,6 +5,7 @@ com.veepoo.protocol.listener.oad
 com.veepoo.protocol.model
 com.veepoo.protocol.model.datas
 com.veepoo.protocol.model.datas.ecg
+com.veepoo.protocol.model.datas.weather
 com.veepoo.protocol.model.enums
 com.veepoo.protocol.model.settings
 com.veepoo.protocol.util
