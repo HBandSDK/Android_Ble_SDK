@@ -120,6 +120,8 @@
                 android:text="进度:0%"
                 android:textColor="@color/colorAccent"
                 android:textSize="8sp" />
+
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

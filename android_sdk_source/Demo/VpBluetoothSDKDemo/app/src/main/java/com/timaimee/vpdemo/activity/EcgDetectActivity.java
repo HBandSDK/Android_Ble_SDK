@@ -12,7 +12,6 @@ import com.timaimee.vpdemo.R;
 import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.data.IECGDetectListener;
-import com.veepoo.protocol.listener.data.ILightDataCallBack;
 import com.veepoo.protocol.model.datas.EcgDetectInfo;
 import com.veepoo.protocol.model.datas.EcgDetectResult;
 import com.veepoo.protocol.model.datas.EcgDetectState;
@@ -56,7 +55,7 @@ public class EcgDetectActivity extends Activity implements View.OnClickListener 
 
                     @Override
                     public void onEcgDetectStateChange(EcgDetectState ecgDetectState) {
-                        String message = "ecgDetectState-2:" + ecgDetectState.toString();
+                        String message = "ecgDetectResultState-2:" + ecgDetectState.toString();
                         Logger.t(TAG).i(message);
                     }
 

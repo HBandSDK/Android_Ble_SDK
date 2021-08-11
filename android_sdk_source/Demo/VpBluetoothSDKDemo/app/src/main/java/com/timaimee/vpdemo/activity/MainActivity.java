@@ -3,6 +3,7 @@ package com.timaimee.vpdemo.activity;
 import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.content.Context;
@@ -11,12 +12,15 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,9 +46,17 @@ import com.veepoo.protocol.listener.base.IConnectResponse;
 import com.veepoo.protocol.listener.base.INotifyResponse;
 import com.veepoo.protocol.util.VPLogger;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat;
+import no.nordicsemi.android.support.v18.scanner.ScanCallback;
+import no.nordicsemi.android.support.v18.scanner.ScanFilter;
+import no.nordicsemi.android.support.v18.scanner.ScanResult;
+import no.nordicsemi.android.support.v18.scanner.ScanSettings;
 
 public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener, OnRecycleViewClickCallback {
     private final static String TAG = MainActivity.class.getSimpleName();
@@ -55,7 +67,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
     List<String> mListAddress = new ArrayList<>();
     SwipeRefreshLayout mSwipeRefreshLayout;
     BleScanViewAdapter bleConnectAdatpter;
-
+    Handler mHandler = new Handler();
     private BluetoothManager mBManager;
     private BluetoothAdapter mBAdapter;
     private BluetoothLeScanner mBScanner;
@@ -64,7 +76,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
     TextView mTitleTextView;
     VPOperateManager mVpoperateManager;
     private boolean mIsOadModel;
-
+    BluetoothLeScannerCompat mScanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +85,28 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
         initLog();
         Logger.t(TAG).i("onSearchStarted");
         mVpoperateManager = mVpoperateManager.getMangerInstance(mContext.getApplicationContext());
+        mScanner = BluetoothLeScannerCompat.getScanner();
         VPLogger.setDebug(true);
         initRecyleView();
         checkPermission();
         registerBluetoothStateListener();
 
+        createFile();
+    }
+
+    private void createFile() {
+        String fileSDK = getExternalFilesDir(null) + File.separator + "LTEPH_GPS_1.rtcm";
+        File file = new File(fileSDK);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+                Logger.t(TAG).i("createNewFile");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else {
+                Logger.t(TAG).i("exist file");
+        }
     }
 
     public void onClick(View view) {
@@ -161,9 +190,9 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
 
     private void initLog() {
         Logger.init(YOUR_APPLICATION)
-                .methodCount(0)
-                .methodOffset(0)
-                .hideThreadInfo()
+//                .methodCount(0)
+//                .methodOffset(0)
+//                .hideThreadInfo()
                 .logLevel(LogLevel.FULL)
                 .logAdapter(new CustomLogAdapter());
     }
@@ -181,8 +210,73 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
             Toast.makeText(mContext, "蓝牙没有开启", Toast.LENGTH_SHORT).show();
             return true;
         }
+//        startScan();
         mVpoperateManager.startScanDevice(mSearchResponse);
         return false;
+    }
+
+
+    private void startScan() {
+        Logger.t(TAG).i("startScan");
+        //后台扫描跟前台扫描的方式不一样
+        ScanSettings settings = new ScanSettings.Builder()
+                .setLegacy(false)
+                .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+                .setReportDelay(1000)
+                .setUseHardwareBatchingIfSupported(false)//默认为true，表示如果他们支持硬件分流批处理的话，使用硬件分流批处理;false表示兼容机制
+                .build();
+        List<ScanFilter> filters = new ArrayList<>();
+        ScanFilter scanFilter;
+
+        ScanFilter.Builder scanFilterBuilder = new ScanFilter.Builder();
+        scanFilter = scanFilterBuilder.build();
+        filters.add(scanFilter);
+        final ScanCallback mScanCallback = new ScanCallback() {
+            @Override
+            public void onScanResult(int callbackType, ScanResult result) {
+                super.onScanResult(callbackType, result);
+
+            }
+
+            @Override
+            public void onBatchScanResults(final List<ScanResult> results) {
+                super.onBatchScanResults(results);
+                Logger.t(TAG).i("onBatchScanResults:" + results.size());
+                //Logger.t(TAG).i("address," + bluetoothDevice.getAddress());
+                //05,09,42,31,35,50|03,19,41,03|02,01,06|03,03,FF,FF|09,FF,F8,F8,CF,86,07,90,82,DD,
+                //flag 03后面是服务
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < results.size(); i++) {
+                            ScanResult scanResult = results.get(i);
+
+                            BluetoothDevice device = scanResult.getDevice();
+                            if (!mListAddress.contains(device.getAddress())) {
+                                mListData.add(new SearchResult(device, scanResult.getRssi(), scanResult.getScanRecord().getBytes()));
+                                mListAddress.add(device.getAddress());
+                            }
+                        }
+                        Collections.sort(mListData, new DeviceCompare());
+                        bleConnectAdatpter.notifyDataSetChanged();
+                    }
+                });
+            }
+
+            @Override
+            public void onScanFailed(int errorCode) {
+                super.onScanFailed(errorCode);
+                Log.i(TAG, "onScanFailed:" + errorCode);
+            }
+        };
+        mScanner.startScan(filters, settings, mScanCallback);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mScanner.stopScan(mScanCallback);
+                refreshStop();
+            }
+        }, 6 * 1000);
     }
 
 

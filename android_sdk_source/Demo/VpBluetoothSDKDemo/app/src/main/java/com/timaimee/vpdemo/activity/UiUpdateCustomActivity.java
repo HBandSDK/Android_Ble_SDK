@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
@@ -15,8 +14,10 @@ import android.widget.Toast;
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
 import com.veepoo.protocol.customui.Rect240240WatchUIType;
+import com.veepoo.protocol.customui.Rect240280QFNWatchUIType;
 import com.veepoo.protocol.customui.Rect240280WatchUIType;
 import com.veepoo.protocol.customui.Round240240WatchUIType;
+import com.veepoo.protocol.customui.Round360360QFNWatchUIType;
 import com.veepoo.protocol.customui.WatchUIType;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.data.IUIBaseInfoFormCustomListener;
@@ -31,8 +32,8 @@ import com.veepoo.protocol.model.enums.EWatchUIType;
 import com.veepoo.protocol.util.ColorUtil;
 import com.veepoo.protocol.util.UiUpdateUtil;
 
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Random;
@@ -175,6 +176,12 @@ public class UiUpdateCustomActivity extends Activity {
             case RECT_240_280:
                 customWatchUI = new Rect240280WatchUIType();
                 break;
+            case RECT_240_280_QFN:
+                customWatchUI = new Rect240280QFNWatchUIType();
+                break;
+            case ROUND_360_360_QFN:
+                customWatchUI = new Round360360QFNWatchUIType();
+                break;
             default:
                 customWatchUI = new Round240240WatchUIType();
         }
@@ -228,26 +235,49 @@ public class UiUpdateCustomActivity extends Activity {
         return color;
     }
 
+    private String getCustomBackgroundImage(){
+        String fileName = null;
+        EWatchUIType customUIType = mUIDataCustom.getCustomUIType();
+        switch (customUIType) {
+            case ROUND_240_240:
+                fileName = "custom_round_240_240_bg.png";
+                break;
+            case RECT_240_240:
+                fileName = "custom_rect_240_240_bg.png";
+                break;
+            case RECT_240_280:
+                break;
+            case RECT_240_280_QFN:
+                break;
+            case ROUND_360_360_QFN:
+                fileName = "custom_round_360_360_bg.png";
+                break;
+            default:
+                fileName = null;
+        }
+        return fileName;
+    }
+
 
     /**
      * 使用的是自选图片
      */
     @OnClick(R.id.ui_custom_change_img_set)
     public void changeImgToSet() {
-        Logger.t(TAG).i("changeImgToSet");
 
         //20210128143910.png是个240*240的bitmap
-        String filePath = getExternalFilesDir(null) + File.separator + "20210128143910.png";
-        File file = new File(filePath);
-        if (file.exists()) {
-            Uri mUritempFile = Uri.fromFile(file);
+//        String filePath = getExternalFilesDir(null) + File.separator + "20210522164329_52519.png";
+//        String filePath =  "file:///android_asset/custom_round_360_360_bg.png";
+//        File file = new File(filePath);
+        String fileName = getCustomBackgroundImage();
+        if(fileName!=null) {
             InputStream inputStream = null;
             try {
-                inputStream = mContext.getContentResolver().openInputStream(mUritempFile);
+                inputStream = getResources().getAssets().open(fileName);
                 Bitmap bmp = BitmapFactory.decodeStream(inputStream);//原图
                 Logger.t(TAG).i("get BitMap");
                 InputStream sendInputStream = mWatchUIType.getSendInputStream(mContext, bmp);
-                mUiUpdateUtil.startSetUiStream(EUIFromType.CUSTOM,sendInputStream, new IUiUpdateListener() {
+                mUiUpdateUtil.startSetUiStream(EUIFromType.CUSTOM, sendInputStream, new IUiUpdateListener() {
 
                     @Override
                     public void onUiUpdateStart() {
@@ -287,11 +317,11 @@ public class UiUpdateCustomActivity extends Activity {
                         Logger.t(TAG).i("onUiUpdateFail:" + eUiUpdateError);
                     }
                 });
-            } catch (FileNotFoundException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
-            Logger.t(TAG).i("can find bitmap");
+            Logger.t(TAG).i("can not find bitmap");
         }
     }
 }

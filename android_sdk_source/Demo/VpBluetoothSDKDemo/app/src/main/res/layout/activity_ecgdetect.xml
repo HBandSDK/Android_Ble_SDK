@@ -33,6 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginRight="20dp"
+        android:visibility="gone"
         android:text="监听绿光信号" />
 
     <Button

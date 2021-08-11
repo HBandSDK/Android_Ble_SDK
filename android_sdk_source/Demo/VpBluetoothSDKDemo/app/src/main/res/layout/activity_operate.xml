@@ -18,7 +18,16 @@
             android:textSize="20sp" />
     </RelativeLayout>
 
-
+<TextView
+    android:id="@+id/main_title_ble"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:textColor="@color/colorAccent"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:text="请执行密码验证操作以及同步个人信息操作"
+    />
     <GridView
         android:id="@+id/main_gridview"
         android:layout_width="match_parent"

@@ -18,7 +18,6 @@ import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.adapter.GridAdatper;
 import com.timaimee.vpdemo.oad.activity.OadActivity;
 import com.veepoo.protocol.VPOperateManager;
-import com.veepoo.protocol.listener.base.IBleNotifyResponse;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.data.IAlarm2DataListListener;
 import com.veepoo.protocol.listener.data.IAlarmDataListener;
@@ -26,9 +25,11 @@ import com.veepoo.protocol.listener.data.IAllHealthDataListener;
 import com.veepoo.protocol.listener.data.IAllSetDataListener;
 import com.veepoo.protocol.listener.data.IAutoDetectOriginDataListener;
 import com.veepoo.protocol.listener.data.IBPDetectDataListener;
+import com.veepoo.protocol.listener.data.IBPFunctionListener;
 import com.veepoo.protocol.listener.data.IBPSettingDataListener;
 import com.veepoo.protocol.listener.data.IBatteryDataListener;
 import com.veepoo.protocol.listener.data.ICameraDataListener;
+import com.veepoo.protocol.listener.data.IChantingDataListener;
 import com.veepoo.protocol.listener.data.ICheckWearDataListener;
 import com.veepoo.protocol.listener.data.ICountDownListener;
 import com.veepoo.protocol.listener.data.ICustomProtocolStateListener;
@@ -36,7 +37,6 @@ import com.veepoo.protocol.listener.data.ICustomSettingDataListener;
 import com.veepoo.protocol.listener.data.IDeviceControlPhoneModelState;
 import com.veepoo.protocol.listener.data.IDeviceFuctionDataListener;
 import com.veepoo.protocol.listener.data.IDrinkDataListener;
-import com.veepoo.protocol.listener.data.IECGDetectListener;
 import com.veepoo.protocol.listener.data.IFatigueDataListener;
 import com.veepoo.protocol.listener.data.IFindDeviceDatalistener;
 import com.veepoo.protocol.listener.data.IFindPhonelistener;
@@ -47,12 +47,15 @@ import com.veepoo.protocol.listener.data.ILanguageDataListener;
 import com.veepoo.protocol.listener.data.ILightDataCallBack;
 import com.veepoo.protocol.listener.data.ILongSeatDataListener;
 import com.veepoo.protocol.listener.data.ILowPowerListener;
+import com.veepoo.protocol.listener.data.IMusicControlListener;
 import com.veepoo.protocol.listener.data.INightTurnWristeDataListener;
 import com.veepoo.protocol.listener.data.IOriginData3Listener;
 import com.veepoo.protocol.listener.data.IOriginDataListener;
 import com.veepoo.protocol.listener.data.IOriginProgressListener;
 import com.veepoo.protocol.listener.data.IPersonInfoDataListener;
 import com.veepoo.protocol.listener.data.IPwdDataListener;
+import com.veepoo.protocol.listener.data.IResponseListener;
+import com.veepoo.protocol.listener.data.ISOSListener;
 import com.veepoo.protocol.listener.data.IScreenLightListener;
 import com.veepoo.protocol.listener.data.IScreenStyleListener;
 import com.veepoo.protocol.listener.data.ISleepDataListener;
@@ -62,6 +65,9 @@ import com.veepoo.protocol.listener.data.ISpo2hOriginDataListener;
 import com.veepoo.protocol.listener.data.ISportDataListener;
 import com.veepoo.protocol.listener.data.ISportModelOriginListener;
 import com.veepoo.protocol.listener.data.ISportModelStateListener;
+import com.veepoo.protocol.listener.data.ITemptureDataListener;
+import com.veepoo.protocol.listener.data.ITemptureDetectDataListener;
+import com.veepoo.protocol.listener.data.IWeatherStatusDataListener;
 import com.veepoo.protocol.listener.data.IWomenDataListener;
 import com.veepoo.protocol.model.datas.AlarmData;
 import com.veepoo.protocol.model.datas.AlarmData2;
@@ -70,13 +76,12 @@ import com.veepoo.protocol.model.datas.AutoDetectOriginData;
 import com.veepoo.protocol.model.datas.AutoDetectStateData;
 import com.veepoo.protocol.model.datas.BatteryData;
 import com.veepoo.protocol.model.datas.BpData;
+import com.veepoo.protocol.model.datas.BpFunctionData;
 import com.veepoo.protocol.model.datas.BpSettingData;
+import com.veepoo.protocol.model.datas.ChantingData;
 import com.veepoo.protocol.model.datas.CheckWearData;
 import com.veepoo.protocol.model.datas.CountDownData;
 import com.veepoo.protocol.model.datas.DrinkData;
-import com.veepoo.protocol.model.datas.EcgDetectInfo;
-import com.veepoo.protocol.model.datas.EcgDetectResult;
-import com.veepoo.protocol.model.datas.EcgDetectState;
 import com.veepoo.protocol.model.datas.FatigueData;
 import com.veepoo.protocol.model.datas.FindDeviceData;
 import com.veepoo.protocol.model.datas.FunctionDeviceSupportData;
@@ -87,6 +92,7 @@ import com.veepoo.protocol.model.datas.HeartWaringData;
 import com.veepoo.protocol.model.datas.LanguageData;
 import com.veepoo.protocol.model.datas.LongSeatData;
 import com.veepoo.protocol.model.datas.LowPowerData;
+import com.veepoo.protocol.model.datas.MusicData;
 import com.veepoo.protocol.model.datas.NightTurnWristeData;
 import com.veepoo.protocol.model.datas.OriginData;
 import com.veepoo.protocol.model.datas.OriginData3;
@@ -103,8 +109,15 @@ import com.veepoo.protocol.model.datas.SportData;
 import com.veepoo.protocol.model.datas.SportModelOriginHeadData;
 import com.veepoo.protocol.model.datas.SportModelOriginItemData;
 import com.veepoo.protocol.model.datas.SportModelStateData;
+import com.veepoo.protocol.model.datas.TemptureData;
+import com.veepoo.protocol.model.datas.TemptureDetectData;
 import com.veepoo.protocol.model.datas.TimeData;
+import com.veepoo.protocol.model.datas.WeatherStatusData;
 import com.veepoo.protocol.model.datas.WomenData;
+import com.veepoo.protocol.model.datas.weather.WeatherData;
+import com.veepoo.protocol.model.datas.WeatherData2;
+import com.veepoo.protocol.model.datas.weather.WeatherEvery3Hour;
+import com.veepoo.protocol.model.datas.weather.WeatherEveryDay;
 import com.veepoo.protocol.model.enums.EAllSetType;
 import com.veepoo.protocol.model.enums.EBPDetectModel;
 import com.veepoo.protocol.model.enums.ECameraStatus;
@@ -114,12 +127,16 @@ import com.veepoo.protocol.model.enums.EOprateStauts;
 import com.veepoo.protocol.model.enums.ESex;
 import com.veepoo.protocol.model.enums.ESocailMsg;
 import com.veepoo.protocol.model.enums.ESpo2hDataType;
+import com.veepoo.protocol.model.enums.ETemperatureUnit;
+import com.veepoo.protocol.model.enums.ETimeMode;
+import com.veepoo.protocol.model.enums.EWeatherType;
 import com.veepoo.protocol.model.enums.EWomenStatus;
 import com.veepoo.protocol.model.settings.Alarm2Setting;
 import com.veepoo.protocol.model.settings.AlarmSetting;
 import com.veepoo.protocol.model.settings.AllSetSetting;
 import com.veepoo.protocol.model.settings.AutoDetectStateSetting;
 import com.veepoo.protocol.model.settings.BpSetting;
+import com.veepoo.protocol.model.settings.ChantingSetting;
 import com.veepoo.protocol.model.settings.CheckWearSetting;
 import com.veepoo.protocol.model.settings.ContentPhoneSetting;
 import com.veepoo.protocol.model.settings.ContentSetting;
@@ -128,127 +145,37 @@ import com.veepoo.protocol.model.settings.ContentSocailSetting;
 import com.veepoo.protocol.model.settings.CountDownSetting;
 import com.veepoo.protocol.model.settings.CustomSetting;
 import com.veepoo.protocol.model.settings.CustomSettingData;
+import com.veepoo.protocol.model.settings.DeviceTimeSetting;
 import com.veepoo.protocol.model.settings.HeartWaringSetting;
 import com.veepoo.protocol.model.settings.LongSeatSetting;
 import com.veepoo.protocol.model.settings.NightTurnWristSetting;
+import com.veepoo.protocol.model.settings.ReadOriginSetting;
 import com.veepoo.protocol.model.settings.ScreenSetting;
+import com.veepoo.protocol.model.settings.SoldierContentSetting;
+import com.veepoo.protocol.model.settings.WeatherStatusSetting;
 import com.veepoo.protocol.model.settings.WomenSetting;
+import com.veepoo.protocol.shareprence.VpSpGetUtil;
 import com.veepoo.protocol.util.Spo2hOriginUtil;
-import com.veepoo.protocol.util.VPLogger;
-import com.veepoo.protocol.util.VpBleByteUtil;
-import com.vp.cso.hrvreport.JNIChange;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-import static com.timaimee.vpdemo.activity.Oprate.AIM_SPROT_CALC;
-import static com.timaimee.vpdemo.activity.Oprate.ALARM_NEW_ADD;
-import static com.timaimee.vpdemo.activity.Oprate.ALARM_NEW_DELETE;
-import static com.timaimee.vpdemo.activity.Oprate.ALARM_NEW_MODIFY;
-import static com.timaimee.vpdemo.activity.Oprate.ALARM_NEW_READ;
-import static com.timaimee.vpdemo.activity.Oprate.ALARM_READ;
-import static com.timaimee.vpdemo.activity.Oprate.ALARM_SETTING;
-import static com.timaimee.vpdemo.activity.Oprate.BATTERY;
-import static com.timaimee.vpdemo.activity.Oprate.BP_DETECTMODEL_READ;
-import static com.timaimee.vpdemo.activity.Oprate.BP_DETECTMODEL_SETTING;
-import static com.timaimee.vpdemo.activity.Oprate.BP_DETECTMODEL_SETTING_ADJUSTE;
-import static com.timaimee.vpdemo.activity.Oprate.BP_DETECTMODEL_SETTING_ADJUSTE_CANCEL;
-import static com.timaimee.vpdemo.activity.Oprate.BP_DETECT_START;
-import static com.timaimee.vpdemo.activity.Oprate.BP_DETECT_STOP;
-import static com.timaimee.vpdemo.activity.Oprate.CAMERA_START;
-import static com.timaimee.vpdemo.activity.Oprate.CAMERA_STOP;
-import static com.timaimee.vpdemo.activity.Oprate.CHECK_WEAR_SETING_CLOSE;
-import static com.timaimee.vpdemo.activity.Oprate.CHECK_WEAR_SETING_OPEN;
-import static com.timaimee.vpdemo.activity.Oprate.CLEAR_DEVICE_DATA;
-import static com.timaimee.vpdemo.activity.Oprate.COUNT_DOWN_APP;
-import static com.timaimee.vpdemo.activity.Oprate.COUNT_DOWN_APP_READ;
-import static com.timaimee.vpdemo.activity.Oprate.COUNT_DOWN_WATCH;
-import static com.timaimee.vpdemo.activity.Oprate.DETECT_PTT;
-import static com.timaimee.vpdemo.activity.Oprate.DETECT_START_ECG;
-import static com.timaimee.vpdemo.activity.Oprate.DETECT_STOP_ECG;
-import static com.timaimee.vpdemo.activity.Oprate.DEVICE_CONTROL_PHONE;
-import static com.timaimee.vpdemo.activity.Oprate.DEVICE_COUSTOM_READ;
-import static com.timaimee.vpdemo.activity.Oprate.DEVICE_COUSTOM_SETTING;
-import static com.timaimee.vpdemo.activity.Oprate.DISCONNECT;
-import static com.timaimee.vpdemo.activity.Oprate.FATIGUE_CLOSE;
-import static com.timaimee.vpdemo.activity.Oprate.FATIGUE_OPEN;
-import static com.timaimee.vpdemo.activity.Oprate.FINDDEVICE_READ;
-import static com.timaimee.vpdemo.activity.Oprate.FINDDEVICE_SETTING_CLOSE;
-import static com.timaimee.vpdemo.activity.Oprate.FINDDEVICE_SETTING_OPEN;
-import static com.timaimee.vpdemo.activity.Oprate.FINDPHONE;
-import static com.timaimee.vpdemo.activity.Oprate.HEARTWRING_CLOSE;
-import static com.timaimee.vpdemo.activity.Oprate.HEARTWRING_OPEN;
-import static com.timaimee.vpdemo.activity.Oprate.HEARTWRING_READ;
-import static com.timaimee.vpdemo.activity.Oprate.HEART_DETECT_START;
-import static com.timaimee.vpdemo.activity.Oprate.HEART_DETECT_STOP;
-import static com.timaimee.vpdemo.activity.Oprate.HRV_ORIGIN_READ;
-import static com.timaimee.vpdemo.activity.Oprate.INSTITUTION_TRANSLATION;
-import static com.timaimee.vpdemo.activity.Oprate.LANGUAGE_CHINESE;
-import static com.timaimee.vpdemo.activity.Oprate.LANGUAGE_ENGLISH;
-import static com.timaimee.vpdemo.activity.Oprate.LONGSEAT_READ;
-import static com.timaimee.vpdemo.activity.Oprate.LONGSEAT_SETTING_CLOSE;
-import static com.timaimee.vpdemo.activity.Oprate.LONGSEAT_SETTING_OPEN;
-import static com.timaimee.vpdemo.activity.Oprate.LOW_POWER_CLOSE;
-import static com.timaimee.vpdemo.activity.Oprate.LOW_POWER_OPEN;
-import static com.timaimee.vpdemo.activity.Oprate.LOW_POWER_READ;
-import static com.timaimee.vpdemo.activity.Oprate.NIGHT_TURN_WRIST_CLOSE;
-import static com.timaimee.vpdemo.activity.Oprate.NIGHT_TURN_WRIST_CUSTOM_TIME;
-import static com.timaimee.vpdemo.activity.Oprate.NIGHT_TURN_WRIST_CUSTOM_TIME_LEVEL;
-import static com.timaimee.vpdemo.activity.Oprate.NIGHT_TURN_WRIST_OPEN;
-import static com.timaimee.vpdemo.activity.Oprate.NIGHT_TURN_WRIST_READ;
-import static com.timaimee.vpdemo.activity.Oprate.OAD;
-import static com.timaimee.vpdemo.activity.Oprate.PERSONINFO_SYNC;
-import static com.timaimee.vpdemo.activity.Oprate.PWD_COMFIRM;
-import static com.timaimee.vpdemo.activity.Oprate.PWD_MODIFY;
-import static com.timaimee.vpdemo.activity.Oprate.READ_HEALTH;
-import static com.timaimee.vpdemo.activity.Oprate.READ_HEALTH_DRINK;
-import static com.timaimee.vpdemo.activity.Oprate.READ_HEALTH_ORIGINAL;
-import static com.timaimee.vpdemo.activity.Oprate.READ_HEALTH_ORIGINAL_FROM;
-import static com.timaimee.vpdemo.activity.Oprate.READ_HEALTH_ORIGINAL_SINGLEDAY;
-import static com.timaimee.vpdemo.activity.Oprate.READ_HEALTH_SLEEP;
-import static com.timaimee.vpdemo.activity.Oprate.READ_HEALTH_SLEEP_FROM;
-import static com.timaimee.vpdemo.activity.Oprate.READ_HEALTH_SLEEP_SINGLEDAY;
-import static com.timaimee.vpdemo.activity.Oprate.S22_READ_DATA;
-import static com.timaimee.vpdemo.activity.Oprate.S22_READ_STATE;
-import static com.timaimee.vpdemo.activity.Oprate.S22_SETTING_STATE_CLOSE;
-import static com.timaimee.vpdemo.activity.Oprate.S22_SETTING_STATE_OPEN;
-import static com.timaimee.vpdemo.activity.Oprate.SCREEN_LIGHT_READ;
-import static com.timaimee.vpdemo.activity.Oprate.SCREEN_LIGHT_SETTING;
-import static com.timaimee.vpdemo.activity.Oprate.SCREEN_STYLE_READ;
-import static com.timaimee.vpdemo.activity.Oprate.SCREEN_STYLE_SETTING;
-import static com.timaimee.vpdemo.activity.Oprate.SHOW_SP;
-import static com.timaimee.vpdemo.activity.Oprate.SOCIAL_MSG_READ;
-import static com.timaimee.vpdemo.activity.Oprate.SOCIAL_MSG_SEND;
-import static com.timaimee.vpdemo.activity.Oprate.SOCIAL_MSG_SETTING;
-import static com.timaimee.vpdemo.activity.Oprate.SOCIAL_PHONE_IDLE_OR_OFFHOOK;
-import static com.timaimee.vpdemo.activity.Oprate.SPO2H_AUTO_DETECT_CLOSE;
-import static com.timaimee.vpdemo.activity.Oprate.SPO2H_AUTO_DETECT_OPEN;
-import static com.timaimee.vpdemo.activity.Oprate.SPO2H_AUTO_DETECT_READ;
-import static com.timaimee.vpdemo.activity.Oprate.SPO2H_CLOSE;
-import static com.timaimee.vpdemo.activity.Oprate.SPO2H_OPEN;
-import static com.timaimee.vpdemo.activity.Oprate.SPO2H_ORIGIN_READ;
-import static com.timaimee.vpdemo.activity.Oprate.SPORT_CURRENT_READ;
-import static com.timaimee.vpdemo.activity.Oprate.SPORT_MODE_ORIGIN_END;
-import static com.timaimee.vpdemo.activity.Oprate.SPORT_MODE_ORIGIN_READ;
-import static com.timaimee.vpdemo.activity.Oprate.SPORT_MODE_ORIGIN_READSTAUTS;
-import static com.timaimee.vpdemo.activity.Oprate.SPORT_MODE_ORIGIN_START;
-import static com.timaimee.vpdemo.activity.Oprate.WOMEN_READ;
-import static com.timaimee.vpdemo.activity.Oprate.WOMEN_SETTING;
-import static com.timaimee.vpdemo.activity.Oprate.oprateStr;
+import static com.timaimee.vpdemo.activity.Oprate.*;
 import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT;
 import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT_CLOSE;
 import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT_OPEN;
+import static com.veepoo.protocol.model.enums.EFunctionStatus.UNSUPPORT;
 
 /**
  * Created by timaimee on 2017/2/8.
  */
 public class OperaterActivity extends Activity implements AdapterView.OnItemClickListener {
     private final static String TAG = OperaterActivity.class.getSimpleName();
-    TextView tv1, tv2, tv3;
+    TextView tv1, tv2, tv3, titleBleInfo;
     GridView mGridView;
     List<Map<String, String>> mGridData = new ArrayList<>();
     GridAdatper mGridAdapter;
@@ -261,7 +188,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             String s = msg.obj.toString();
-//            Toast.makeText(mContext, s, Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, s, Toast.LENGTH_LONG).show();
 
             switch (msg.what) {
                 case 1:
@@ -283,6 +210,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
      * 密码验证获取以下信息
      */
     int watchDataDay = 3;
+    int weatherStyle = 0;
     int contactMsgLength = 0;
     int allMsgLenght = 4;
     private int deviceNumber = -1;
@@ -291,7 +219,21 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
     boolean isOadModel = false;
     boolean isNewSportCalc = false;
     boolean isInPttModel = false;
+    ISocialMsgDataListener socialMsgDataListener = new ISocialMsgDataListener() {
+        @Override
+        public void onSocialMsgSupportDataChange(FunctionSocailMsgData socailMsgData) {
+            String message = "FunctionSocailMsgData:\n" + socailMsgData.toString();
+            Logger.t(TAG).i(message);
+            sendMsg(message, 3);
+        }
 
+        @Override
+        public void onSocialMsgSupportDataChange2(FunctionSocailMsgData socailMsgData) {
+            String message = "FunctionSocailMsgData2:\n" + socailMsgData.toString();
+            Logger.t(TAG).i(message);
+            sendMsg(message, 3);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -302,9 +244,13 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         tv1 = (TextView) super.findViewById(R.id.tv1);
         tv2 = (TextView) super.findViewById(R.id.tv2);
         tv3 = (TextView) super.findViewById(R.id.tv3);
+        titleBleInfo = (TextView) super.findViewById(R.id.main_title_ble);
         initGridView();
         listenDeviceCallbackData();
+        listenCamera();
+
     }
+
 
     private void initGridView() {
         mGridView = (GridView) findViewById(R.id.main_gridview);
@@ -327,16 +273,161 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         tv2.setText("");
         tv3.setText("");
         if (oprater.equals(HEART_DETECT_START)) {
+//            startListenADC();
             VPOperateManager.getMangerInstance(mContext).startDetectHeart(writeResponse, new IHeartDataListener() {
 
                 @Override
                 public void onDataChange(HeartData heart) {
                     String message = "heart:\n" + heart.toString();
-
                     Logger.t(TAG).i(message);
                     sendMsg(message, 1);
                 }
             });
+        } else if (oprater.equals(TEMPTURE_DETECT_START)) {
+            VPOperateManager.getMangerInstance(mContext).startDetectTempture(writeResponse, new ITemptureDetectDataListener() {
+                @Override
+                public void onDataChange(TemptureDetectData temptureDetectData) {
+                    String message = "startDetectTempture temptureDetectData:\n" + temptureDetectData.toString();
+                    Logger.t(TAG).i(message);
+//                    sendMsg(message, 1);
+                }
+            });
+        } else if (oprater.equals(TEMPTURE_DETECT_STOP)) {
+            VPOperateManager.getMangerInstance(mContext).stopDetectTempture(writeResponse, new ITemptureDetectDataListener() {
+                @Override
+                public void onDataChange(TemptureDetectData temptureDetectData) {
+                    String message = "stopDetectTempture temptureDetectData:\n" + temptureDetectData.toString();
+                    Logger.t(TAG).i(message);
+                    sendMsg(message, 1);
+                }
+            });
+
+        } else if (oprater.equals(SET_WATCH_TIME)) {
+            DeviceTimeSetting deviceTimeSetting = new DeviceTimeSetting(2020, 11, 6, 15, 30, 14, ETimeMode.MODE_12);
+            VPOperateManager.getMangerInstance(mContext).settingTime(writeResponse, new IResponseListener() {
+                @Override
+                public void response(int state) {
+                    String message = "settingTime response :\n" + state;
+                    Logger.t(TAG).i(message);
+                }
+            }, deviceTimeSetting);
+        } else if (oprater.equals(WEATHER_READ_STATUEINFO)) {
+            VPOperateManager.getMangerInstance(mContext).readWeatherStatusInfo(writeResponse, new IWeatherStatusDataListener() {
+                @Override
+                public void onWeatherDataChange(WeatherStatusData weatherStatusData) {
+                    String message = "readWeatherStatusInfo onWeatherDataChange read:\n" + weatherStatusData.toString();
+                    Logger.t(TAG).i(message);
+                }
+            });
+        } else if (oprater.equals(UI_UPDATE_AGPS)) {
+            int bigTranType = VpSpGetUtil.getVpSpVariInstance(mContext).getBigTranType();
+            boolean isSupportAgps = VpSpGetUtil.getVpSpVariInstance(mContext).isSupoortAGPS();
+            if (bigTranType == 2 && isSupportAgps) {
+                Intent intent = new Intent(OperaterActivity.this, UiUpdateAGPSActivity.class);
+                intent.putExtra("deviceNumber", String.valueOf(deviceNumber));
+                intent.putExtra("deviceVersion", deviceVersion);
+                intent.putExtra("deviceTestVersion", deviceTestVersion);
+                startActivity(intent);
+            } else {
+                Toast.makeText(mContext, "不支持自定义表盘", Toast.LENGTH_LONG).show();
+            }
+        } else if (oprater.equals(UI_UPDATE_CUSTOM)) {
+
+            int bigTranType = VpSpGetUtil.getVpSpVariInstance(mContext).getBigTranType();
+            int coustomUICount = VpSpGetUtil.getVpSpVariInstance(mContext).getWatchuiCoustom();
+            if (bigTranType == 2 && coustomUICount > 0) {
+                Intent intent = new Intent(OperaterActivity.this, UiUpdateCustomActivity.class);
+                intent.putExtra("deviceNumber", String.valueOf(deviceNumber));
+                intent.putExtra("deviceVersion", deviceVersion);
+                intent.putExtra("deviceTestVersion", deviceTestVersion);
+                startActivity(intent);
+            } else {
+                Toast.makeText(mContext, "不支持自定义表盘", Toast.LENGTH_LONG).show();
+            }
+
+        } else if (oprater.equals(SYNC_MUSIC_INFO)) {
+            int play = 1;//播放状态
+            int pause = 2;//暂停状态
+            MusicData musicData = new MusicData("周杰伦", "上海一九四三", "范特西", 80, play);
+            Logger.t(TAG).i("settingMusicData");
+            VPOperateManager.getMangerInstance(mContext).settingMusicData(writeResponse, musicData, new IMusicControlListener() {
+                @Override
+                public void oprateMusicSuccess() {
+                    Logger.t(TAG).i("oprateSuccess");
+                }
+
+                @Override
+                public void oprateMusicFail() {
+                    Logger.t(TAG).i("oprateFail");
+                }
+
+                @Override
+                public void nextMusic() {
+
+                }
+
+                @Override
+                public void previousMusic() {
+
+                }
+
+                @Override
+                public void pauseAndPlayMusic() {
+
+                }
+
+                @Override
+                public void pauseMusic() {
+
+                }
+
+                @Override
+                public void playMusic() {
+
+                }
+
+                @Override
+                public void voiceUp() {
+
+                }
+
+                @Override
+                public void voiceDown() {
+
+                }
+
+
+            });
+        } else if (oprater.equals(UI_UPDATE_SERVER)) {
+
+            int bigTranType = VpSpGetUtil.getVpSpVariInstance(mContext).getBigTranType();
+            int serverUICount = VpSpGetUtil.getVpSpVariInstance(mContext).getWatchuiServer();
+            if (bigTranType == 2 && serverUICount > 0) {
+                Intent intent = new Intent(OperaterActivity.this, UiUpdateServerActivity.class);
+                intent.putExtra("deviceNumber", String.valueOf(deviceNumber));
+                intent.putExtra("deviceVersion", deviceVersion);
+                intent.putExtra("deviceTestVersion", deviceTestVersion);
+                startActivity(intent);
+            } else {
+                Toast.makeText(mContext, "不支持服务器表盘", Toast.LENGTH_LONG).show();
+            }
+
+        } else if (oprater.equals(WEATHER_SETTING_STATUEINFO)) {
+            WeatherStatusSetting weatherStatusSetting = new WeatherStatusSetting(0, true, EWeatherType.C);
+            VPOperateManager.getMangerInstance(mContext).settingWeatherStatusInfo(writeResponse, weatherStatusSetting, new IWeatherStatusDataListener() {
+                @Override
+                public void onWeatherDataChange(WeatherStatusData weatherStatusData) {
+                    String message = "settingWeatherStatusInfo onWeatherDataChange read:\n" + weatherStatusData.toString();
+                    Logger.t(TAG).i(message);
+                }
+            });
+        } else if (oprater.equals(WEATHER_SETTING_DATA)) {
+            Logger.t(TAG).i("weatherStyle=" + weatherStyle);
+            if (weatherStyle == 2) {
+                setWeatherData2();
+            } else {
+                setWeatherData1();
+            }
         } else if (oprater.equals(LOW_POWER_READ)) {
             VPOperateManager.getMangerInstance(mContext).readLowPower(writeResponse, new ILowPowerListener() {
                 @Override
@@ -361,6 +452,22 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     Logger.t(TAG).i(message);
                 }
             }, false);
+        } else if (oprater.equals(BP_FUNCTION_READ)) {
+            VPOperateManager.getMangerInstance(mContext).readBpFunctionState(writeResponse, new IBPFunctionListener() {
+                @Override
+                public void onDataChange(BpFunctionData bpFunctionData) {
+                    String message = "readBpFunctionState close:\n" + bpFunctionData.toString();
+                    Logger.t(TAG).i(message);
+                }
+            });
+        } else if (oprater.equals(BP_FUNCTION_SETTING)) {
+            VPOperateManager.getMangerInstance(mContext).settingBpFunctionState(writeResponse, new IBPFunctionListener() {
+                @Override
+                public void onDataChange(BpFunctionData bpFunctionData) {
+                    String message = "settingBpFunctionState close:\n" + bpFunctionData.toString();
+                    Logger.t(TAG).i(message);
+                }
+            }, true);
         } else if (oprater.equals(DETECT_PTT)) {
 
             Intent intent = new Intent(OperaterActivity.this, PttActivity.class);
@@ -445,18 +552,19 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 public void onPwdDataChange(PwdData pwdData) {
                     String message = "PwdData:\n" + pwdData.toString();
                     Logger.t(TAG).i(message);
-                    sendMsg(message, 1);
+//                    sendMsg(message, 1);
 
                     deviceNumber = pwdData.getDeviceNumber();
                     deviceVersion = pwdData.getDeviceVersion();
                     deviceTestVersion = pwdData.getDeviceTestVersion();
+                    titleBleInfo.setText("设备号：" + deviceNumber + ",版本号：" + deviceVersion + ",\n测试版本号：" + deviceTestVersion);
                 }
             }, new IDeviceFuctionDataListener() {
                 @Override
                 public void onFunctionSupportDataChange(FunctionDeviceSupportData functionSupport) {
                     String message = "FunctionDeviceSupportData:\n" + functionSupport.toString();
                     Logger.t(TAG).i(message);
-                    sendMsg(message, 2);
+//                    sendMsg(message, 2);
                     EFunctionStatus newCalcSport = functionSupport.getNewCalcSport();
                     if (newCalcSport != null && newCalcSport.equals(SUPPORT)) {
                         isNewSportCalc = true;
@@ -464,23 +572,17 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                         isNewSportCalc = false;
                     }
                     watchDataDay = functionSupport.getWathcDay();
+                    weatherStyle = functionSupport.getWeatherStyle();
                     contactMsgLength = functionSupport.getContactMsgLength();
                     allMsgLenght = functionSupport.getAllMsgLength();
                     isSleepPrecision = functionSupport.getPrecisionSleep() == SUPPORT;
                 }
-            }, new ISocialMsgDataListener() {
-                @Override
-                public void onSocialMsgSupportDataChange(FunctionSocailMsgData socailMsgData) {
-                    String message = "FunctionSocailMsgData:\n" + socailMsgData.toString();
-                    Logger.t(TAG).i(message);
-                    sendMsg(message, 3);
-                }
-            }, new ICustomSettingDataListener() {
+            }, socialMsgDataListener, new ICustomSettingDataListener() {
                 @Override
                 public void OnSettingDataChange(CustomSettingData customSettingData) {
-                    String message = "FunctionCustomSettingData:\n" + customSettingData.toString();
+                    String message = "CustomSettingData:\n" + customSettingData.toString();
                     Logger.t(TAG).i(message);
-                    sendMsg(message, 4);
+//                    sendMsg(message, 4);
                 }
             }, "0000", is24Hourmodel);
 
@@ -737,20 +839,42 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             boolean is24Hour = true;
             boolean isOpenAutoHeartDetect = true;
             boolean isOpenAutoBpDetect = true;
-            EFunctionStatus isOpenSportRemain = EFunctionStatus.UNSUPPORT;
-            EFunctionStatus isOpenVoiceBpHeart = EFunctionStatus.UNSUPPORT;
-            EFunctionStatus isOpenFindPhoneUI = EFunctionStatus.UNSUPPORT;
-            EFunctionStatus isOpenStopWatch = EFunctionStatus.UNSUPPORT;
-            EFunctionStatus isOpenSpo2hLowRemind = EFunctionStatus.UNSUPPORT;
-            EFunctionStatus isOpenWearDetectSkin = EFunctionStatus.UNSUPPORT;
-            EFunctionStatus isOpenAutoInCall = EFunctionStatus.UNSUPPORT;
-            EFunctionStatus isOpenAutoHRV = EFunctionStatus.UNSUPPORT;
-            EFunctionStatus isOpenDisconnectRemind = EFunctionStatus.UNSUPPORT;
-            CustomSetting customSetting = new CustomSetting(isHaveMetricSystem, isMetric, is24Hour, isOpenAutoHeartDetect, isOpenAutoBpDetect
-                    , isOpenSportRemain, isOpenVoiceBpHeart, isOpenFindPhoneUI, isOpenStopWatch,
+            boolean isCelsius = true;
+            EFunctionStatus isOpenSportRemain = UNSUPPORT;
+            EFunctionStatus isOpenVoiceBpHeart = UNSUPPORT;
+            EFunctionStatus isOpenFindPhoneUI = UNSUPPORT;
+            EFunctionStatus isOpenStopWatch = UNSUPPORT;
+            EFunctionStatus isOpenSpo2hLowRemind = UNSUPPORT;
+            EFunctionStatus isOpenWearDetectSkin = UNSUPPORT;
+            EFunctionStatus isOpenAutoInCall = UNSUPPORT;
+            EFunctionStatus isOpenAutoHRV = UNSUPPORT;
+            EFunctionStatus isOpenDisconnectRemind = UNSUPPORT;
+            EFunctionStatus isAutoTemperatureDetect = UNSUPPORT;
+            boolean isSupportSettingsTemperatureUnit = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportSettingsTemperatureUnit();//是否支持温度单位设置
+
+            boolean isCanReadTempture = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportReadTempture();//是否支持读取温度
+            boolean isCanDetectTempByApp = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportCheckTemptureByApp();//是否可以通过app监测体温
+
+
+            Logger.t(TAG).i("是否可以读取体温：" + isCanReadTempture + " 是否可以通过app自动检测体温");
+
+            CustomSetting customSetting = new CustomSetting(isHaveMetricSystem, isMetric, is24Hour, isOpenAutoHeartDetect,
+                    isOpenAutoBpDetect, isOpenSportRemain, isOpenVoiceBpHeart, isOpenFindPhoneUI, isOpenStopWatch,
                     isOpenSpo2hLowRemind, isOpenWearDetectSkin, isOpenAutoInCall, isOpenAutoHRV, isOpenDisconnectRemind
             );
             customSetting.setIsOpenLongClickLockScreen(SUPPORT_CLOSE);
+            if (isSupportSettingsTemperatureUnit) {
+                customSetting.setTemperatureUnit(VpSpGetUtil.getVpSpVariInstance(mContext).getTemperatureUnit()
+                        == ETemperatureUnit.CELSIUS ? ETemperatureUnit.FAHRENHEIT : ETemperatureUnit.CELSIUS);
+            } else {
+                customSetting.setTemperatureUnit(ETemperatureUnit.NONE);
+            }
+            if (isCanDetectTempByApp) {
+                boolean isOpenTempDetect = VpSpGetUtil.getVpSpVariInstance(mContext).isOpenTemperatureDetectByApp();
+                customSetting.setIsOpenAutoTemperatureDetect(isOpenTempDetect ? SUPPORT_CLOSE : SUPPORT_OPEN);
+            } else {
+                customSetting.setIsOpenAutoTemperatureDetect(UNSUPPORT);
+            }
             VPOperateManager.getMangerInstance(mContext).changeCustomSetting(writeResponse, new ICustomSettingDataListener() {
                 @Override
                 public void OnSettingDataChange(CustomSettingData customSettingData) {
@@ -812,27 +936,42 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             VPOperateManager.getMangerInstance(mContext).readSocialMsg(writeResponse, new ISocialMsgDataListener() {
                 @Override
                 public void onSocialMsgSupportDataChange(FunctionSocailMsgData socailMsgData) {
-                    String message = " 社交信息提醒-读取:\n" + socailMsgData.toString();
+                    String message = " 社交信息提醒1-读取:\n" + socailMsgData.toString();
+                    Logger.t(TAG).i(message);
+                    sendMsg(message, 1);
+                }
+
+                @Override
+                public void onSocialMsgSupportDataChange2(FunctionSocailMsgData socailMsgData) {
+                    String message = " 社交信息提醒2-读取:\n" + socailMsgData.toString();
                     Logger.t(TAG).i(message);
                     sendMsg(message, 1);
                 }
             });
-        } else if (oprater.equals(SOCIAL_MSG_SETTING)) {
+        } else if (oprater.equals(SOCIAL_MSG_SETTING2)) {
             FunctionSocailMsgData socailMsgData = new FunctionSocailMsgData();
             socailMsgData.setPhone(SUPPORT);
             socailMsgData.setMsg(SUPPORT);
-            socailMsgData.setWechat(SUPPORT_OPEN);
-            socailMsgData.setQq(SUPPORT_OPEN);
-            socailMsgData.setFacebook(SUPPORT_CLOSE);
-            socailMsgData.setTwitter(SUPPORT_OPEN);
-            socailMsgData.setWhats(SUPPORT_OPEN);
-            socailMsgData.setSina(EFunctionStatus.UNSUPPORT);
-            socailMsgData.setFlickr(EFunctionStatus.UNSUPPORT);
-            socailMsgData.setLinkin(EFunctionStatus.UNSUPPORT);
-            socailMsgData.setLine(EFunctionStatus.UNSUPPORT);
-            socailMsgData.setInstagram(EFunctionStatus.UNSUPPORT);
-            socailMsgData.setSnapchat(EFunctionStatus.UNSUPPORT);
-            socailMsgData.setSkype(EFunctionStatus.UNSUPPORT);
+            socailMsgData.setWechat(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setQq(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setFacebook(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setTwitter(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setWhats(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setSina(UNSUPPORT);
+            socailMsgData.setFlickr(UNSUPPORT);
+            socailMsgData.setLinkin(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setLine(SUPPORT_OPEN);
+            socailMsgData.setInstagram(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setSnapchat(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setGmail(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setSkype(EFunctionStatus.SUPPORT_OPEN);
+
+            socailMsgData.setTiktok(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setTelegram(SUPPORT_OPEN);
+            socailMsgData.setConnected2_me(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setKakao_talk(EFunctionStatus.SUPPORT_CLOSE);
+
+
             VPOperateManager.getMangerInstance(mContext).settingSocialMsg(writeResponse, new ISocialMsgDataListener() {
                 @Override
                 public void onSocialMsgSupportDataChange(FunctionSocailMsgData socailMsgData) {
@@ -840,25 +979,123 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     Logger.t(TAG).i(message);
                     sendMsg(message, 1);
                 }
+
+                @Override
+                public void onSocialMsgSupportDataChange2(FunctionSocailMsgData socailMsgData) {
+                    String message = " 社交信息提醒-设置2:\n" + socailMsgData.toString();
+                    Logger.t(TAG).i(message);
+                    sendMsg(message, 1);
+                }
             }, socailMsgData);
+        } else if (oprater.equals(SOCIAL_MSG_SETTING)) {
+            FunctionSocailMsgData socailMsgData = new FunctionSocailMsgData();
+            socailMsgData.setPhone(SUPPORT);
+            socailMsgData.setMsg(SUPPORT);
+            socailMsgData.setWechat(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setQq(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setFacebook(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setTwitter(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setWhats(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setSina(UNSUPPORT);
+            socailMsgData.setFlickr(UNSUPPORT);
+            socailMsgData.setLinkin(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setLine(SUPPORT_OPEN);
+            socailMsgData.setInstagram(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setSnapchat(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setGmail(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setSkype(EFunctionStatus.SUPPORT_OPEN);
+
+            socailMsgData.setTiktok(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setTelegram(SUPPORT_OPEN);
+            socailMsgData.setConnected2_me(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setKakao_talk(EFunctionStatus.SUPPORT_OPEN);
+            VPOperateManager.getMangerInstance(mContext).settingSocialMsg(writeResponse, new ISocialMsgDataListener() {
+                @Override
+                public void onSocialMsgSupportDataChange(FunctionSocailMsgData socailMsgData) {
+                    String message = " 社交信息提醒-设置:\n" + socailMsgData.toString();
+                    Logger.t(TAG).i(message);
+                    sendMsg(message, 1);
+                }
+
+                @Override
+                public void onSocialMsgSupportDataChange2(FunctionSocailMsgData socailMsgData) {
+                    String message = " 社交信息提醒-设置2:\n" + socailMsgData.toString();
+                    Logger.t(TAG).i(message);
+                    sendMsg(message, 1);
+                }
+            }, socailMsgData);
+        } else if (oprater.equals(LIANSUO_SOS)) {
+            String message = " LIANSUO_SOS";
+            VPOperateManager.getMangerInstance(mContext).settingSOSListener(new ISOSListener() {
+                @Override
+                public void sos() {
+                    String liansuo_sos_call_back = "liansuo_sos call back";
+                    Logger.t(TAG).i(liansuo_sos_call_back);
+                    sendMsg(liansuo_sos_call_back, 1);
+                }
+            });
+        } else if (oprater.equals(LIANSUO_SEND_ORDER)) {
+            VPOperateManager.getMangerInstance(mContext).sendToSoldierCommand(writeResponse, new IResponseListener() {
+                @Override
+                public void response(int state) {
+                    String message = "liansuo send cmd call back:" + state;
+                    Logger.t(TAG).i(message);
+                    sendMsg(message, 1);
+                }
+            });
+        } else if (oprater.equals(LIANSUO_SEND_CONTENT)) {
+            VPOperateManager.getMangerInstance(mContext).sendToSoldierContent(writeResponse, new SoldierContentSetting("123123123123123123123123123123123"), new IResponseListener() {
+                @Override
+                public void response(int state) {
+                    String message = "liansuo send content call back:" + state;
+                    Logger.t(TAG).i(message);
+                    sendMsg(message, 1);
+                }
+            });
         } else if (oprater.equals(SOCIAL_MSG_SEND)) {
-            /**电话,可以只传电话号码**/
-            ContentSetting contentphoneSetting0 = new ContentPhoneSetting(ESocailMsg.PHONE, "0755-86562490");
-            /**电话,传联系人姓名以及电话号码，最终显示的联系人姓名**/
-            ContentSetting contentphoneSetting1 = new ContentPhoneSetting(ESocailMsg.PHONE, "深圳市维亿魄科技有限公司", "0755-86562490");
+//            /**电话,可以只传电话号码**/
+//            ContentSetting contentphoneSetting0 = new ContentPhoneSetting(ESocailMsg.PHONE, "010-6635214");
+//            /**电话,传联系人姓名以及电话号码，最终显示的联系人姓名**/
+//            ContentSetting contentphoneSetting1 = new ContentPhoneSetting(ESocailMsg.PHONE, "测试头", "010-6635214");
+//
+//            /**短信，可以只传电话号码**/
+//            ContentSetting contentsmsSetting2 = new ContentSmsSetting(ESocailMsg.SMS, "010-6635214", "测试反馈 SMS");
+//            /**短信，传联系人姓名以及电话号码，最终显示的联系人姓名**/
+//            ContentSetting contentsmsSetting3 = new ContentSmsSetting(ESocailMsg.SMS, "测试头", "010-6635214", "测试反馈 SMS");
+//
+//            /**第三方APP推送,发送前先通过密码验证获取FunctionSocailMsgData的状态**/
+//            ContentSetting contentsociaSetting4 = new ContentSocailSetting(ESocailMsg.WECHAT, "vepo", "测试反馈 WECHAT ");
+//            VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting4);
+//            mHandler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    ContentSetting contentsociaSetting5 = new ContentSocailSetting(ESocailMsg.TIKTOK, "vepo", "测试反馈 TIKTOK");
+//                    VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting5);
+//
+//                }
+//            }, 2000);
+//            mHandler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    ContentSetting contentsociaSetting6 = new ContentSocailSetting(ESocailMsg.TELEGRAM, "vepo", "测试反馈 TELEGRAM");
+//                    VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting6);
+//                }
+//            }, 4000);
+//            mHandler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    ContentSetting contentsociaSetting6 = new ContentSocailSetting(ESocailMsg.CONNECTED2_ME, "vepo", "测试反馈 CONNECTED2_ME");
+//                    VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting6);
+//                }
+//            }, 6000);
+            ContentSetting contentsociaSetting6 = new ContentSocailSetting(ESocailMsg.KAKAO_TALK, "vepo", "测试反馈 KAKAO_TALK");
+            VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting6);
 
-            /**短信，可以只传电话号码**/
-            ContentSetting contentsmsSetting2 = new ContentSmsSetting(ESocailMsg.SMS, "0755-86562490", "公司研发的项目主要在医疗健康智能穿戴、智能家居、新型智能交友产品、飞机航模、智能安全锁五个领域方面");
-            /**短信，传联系人姓名以及电话号码，最终显示的联系人姓名**/
-            ContentSetting contentsmsSetting3 = new ContentSmsSetting(ESocailMsg.SMS, "深圳市维亿魄科技有限公司", "0755-86562490", "公司研发的项目主要在医疗健康智能穿戴、智能家居、新型智能交友产品、飞机航模、智能安全锁五个领域方面");
-
-            /**第三方APP推送,发送前先通过密码验证获取FunctionSocailMsgData的状态**/
-            ContentSetting contentsociaSetting4 = new ContentSocailSetting(ESocailMsg.WECHAT, "veepoo", "公司研发的项目主要在医疗健康智能穿戴、智能家居、新型智能交友产品、飞机航模、智能安全锁五个领域方面");
-            VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentphoneSetting0);
         } else if (oprater.equals(SOCIAL_PHONE_IDLE_OR_OFFHOOK)) {
             VPOperateManager.getMangerInstance(mContext).offhookOrIdlePhone(writeResponse);
         } else if (oprater.equals(DEVICE_CONTROL_PHONE)) {
             VPOperateManager.getMangerInstance(mContext).settingDeviceControlPhone(new IDeviceControlPhoneModelState() {
+
                 @Override
                 public void inPttModel() {
                     String message = "手表提示:手表进入ptt模式\n";
@@ -912,6 +1149,41 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     Logger.t(TAG).i(message);
                 }
 
+                @Override
+                public void pauseMusic() {
+                    String message = "手表提示:暂停\n";
+                    Logger.t(TAG).i(message);
+                }
+
+                @Override
+                public void playMusic() {
+                    String message = "手表提示:播放\n";
+                    Logger.t(TAG).i(message);
+                }
+
+                @Override
+                public void voiceUp() {
+                    String message = "手表提示:调高音量\n";
+                    Logger.t(TAG).i(message);
+                }
+
+                @Override
+                public void voiceDown() {
+                    String message = "手表提示:调低音量\n";
+                    Logger.t(TAG).i(message);
+                }
+
+                @Override
+                public void oprateMusicSuccess() {
+
+                }
+
+                @Override
+                public void oprateMusicFail() {
+
+                }
+
+
             });
         } else if (oprater.equals(CLEAR_DEVICE_DATA)) {
             VPOperateManager.getMangerInstance(mContext).clearDeviceData(writeResponse);
@@ -944,6 +1216,10 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, new HeartWaringSetting(120, 110, false));
         } else if (oprater.equals(SPO2H_OPEN)) {
+            byte[] cmd = new byte[20];
+            cmd[0] = (byte) 0xf3;
+            cmd[1] = (byte) 0x08;
+//            VPOperateManager.getMangerInstance(mContext).sendOrder(writeResponse, cmd);
             VPOperateManager.getMangerInstance(mContext).startDetectSPO2H(writeResponse, new ISpo2hDataListener() {
                 @Override
                 public void onSpO2HADataChange(Spo2hData spo2HData) {
@@ -1034,10 +1310,10 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     sendMsg(message, 1);
                 }
             });
-        } else if (oprater.equals(COUNT_DOWN_WATCH)) {
-            int second = 7;
+        } else if (oprater.equals(COUNT_DOWN_WATCH_CLOSE_UI)) {
+            int second = 11;
             boolean isOpenWatchUI = false;
-            boolean isCountDownByWatch = false;
+            boolean isCountDownByWatch = true;
             CountDownSetting countDownSetting = new CountDownSetting(second, isOpenWatchUI, isCountDownByWatch);
             VPOperateManager.getMangerInstance(mContext).settingCountDown(writeResponse, countDownSetting, new ICountDownListener() {
                 @Override
@@ -1047,11 +1323,15 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     sendMsg(message, 1);
                 }
             });
-        } else if (oprater.equals(COUNT_DOWN_APP_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readCountDown(writeResponse, new ICountDownListener() {
+        } else if (oprater.equals(COUNT_DOWN_WATCH_OPEN_UI)) {
+            int second = 11;
+            boolean isOpenWatchUI = true;
+            boolean isCountDownByWatch = true;
+            CountDownSetting countDownSetting = new CountDownSetting(second, isOpenWatchUI, isCountDownByWatch);
+            VPOperateManager.getMangerInstance(mContext).settingCountDown(writeResponse, countDownSetting, new ICountDownListener() {
                 @Override
                 public void OnCountDownDataChange(CountDownData countDownData) {
-                    String message = "倒计时-读取:\n" + countDownData.toString();
+                    String message = "倒计时-App:\n" + countDownData.toString();
                     Logger.t(TAG).i(message);
                     sendMsg(message, 1);
                 }
@@ -1069,9 +1349,37 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     sendMsg(message, 1);
                 }
             });
+        } else if (oprater.equals(COUNT_DOWN_APP_READ)) {
+            VPOperateManager.getMangerInstance(mContext).readCountDown(writeResponse, new ICountDownListener() {
+                @Override
+                public void OnCountDownDataChange(CountDownData countDownData) {
+                    String message = "倒计时-读取:\n" + countDownData.toString();
+                    Logger.t(TAG).i(message);
+                    sendMsg(message, 1);
+                }
+            });
+
         } else if (oprater.equals(AIM_SPROT_CALC)) {
             Intent intent = new Intent(OperaterActivity.this, AimSportCalcActivity.class);
             intent.putExtra("isnewsportcalc", isNewSportCalc);
+            startActivity(intent);
+        } else if (oprater.equals(READ_CHANTING)) {
+
+            long timestamp = Calendar.getInstance().getTimeInMillis();
+            timestamp = 1616557585;
+            VPOperateManager.getMangerInstance(mContext).readChantingData(writeResponse, new ChantingSetting(timestamp), new IChantingDataListener() {
+                @Override
+                public void onChantingDataChange(ChantingData chantingData) {
+                    String message = "读取诵经计数:" + chantingData.toString();
+                    Logger.t(TAG).i(message);
+                    sendMsg(message, 1);
+                }
+            });
+        } else if (oprater.equals(GPS_REPORT_START)) {
+            Intent intent = new Intent(OperaterActivity.this, GpsReportActivity.class);
+            startActivity(intent);
+        } else if (oprater.equals(GPS_KAABA)) {
+            Intent intent = new Intent(OperaterActivity.this, GpsLatlonActivity.class);
             startActivity(intent);
         } else if (oprater.equals(SCREEN_LIGHT_SETTING)) {
             //默认的是【22:00-07:00】设置成2档，其他时间设置成4档，用户可以自定义
@@ -1115,6 +1423,33 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             Intent intent = new Intent(OperaterActivity.this, InstitutionActivity.class);
             startActivity(intent);
 
+        } else if (oprater.equals(READ_TEMPTURE_DATA)) {
+            ReadOriginSetting readOriginSetting = new ReadOriginSetting(0, 1, false, watchDataDay);
+            VPOperateManager.getMangerInstance(mContext).readTemptureDataBySetting(writeResponse, new ITemptureDataListener() {
+                @Override
+                public void onTemptureDataListDataChange(List<TemptureData> temptureDataList) {
+                    String message = "onTemptureDataListDataChange:" + temptureDataList.size();
+                    Logger.t(TAG).i(message);
+                }
+
+                @Override
+                public void onReadOriginProgressDetail(int day, String date, int allPackage, int currentPackage) {
+                    String message = "温度数据-读取进度:" + "day=" + day + ",currentPackage=" + currentPackage + ",allPackage=" + allPackage;
+                    Logger.t(TAG).i(message);
+                }
+
+                @Override
+                public void onReadOriginProgress(float progress) {
+                    String message = "onReadOriginProgress:" + progress;
+                    Logger.t(TAG).i(message);
+                }
+
+                @Override
+                public void onReadOriginComplete() {
+                    String message = "onReadOriginComplete";
+                    Logger.t(TAG).i(message);
+                }
+            }, readOriginSetting);
         } else if (oprater.equals(READ_HEALTH_SLEEP)) {
             VPOperateManager.getMangerInstance(mContext).readSleepData(writeResponse, new ISleepDataListener() {
                         @Override
@@ -1223,10 +1558,41 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(READ_HEALTH_ORIGINAL)) {
-            VPOperateManager.getMangerInstance(mContext).readOriginData(writeResponse, new IOriginData3Listener() {
+            IOriginProgressListener originDataListener = new IOriginDataListener() {
+
+
+                @Override
+                public void onReadOriginProgressDetail(int day, String date, int allPackage, int currentPackage) {
+                    String message = "健康数据[5分钟]-读取进度:currentPackage" + currentPackage + ",allPackage=" + allPackage + ",dates=" + date + ",day=" + day;
+                    Logger.t(TAG).i(message);
+                }
+
+                @Override
+                public void onReadOriginProgress(float progress) {
+
+                }
+
+                @Override
+                public void onReadOriginComplete() {
+
+                }
+
+                @Override
+                public void onOringinFiveMinuteDataChange(OriginData originData) {
+
+                }
+
+                @Override
+                public void onOringinHalfHourDataChange(OriginHalfHourData originHalfHourData) {
+
+                }
+            };
+            IOriginProgressListener originData3Listener = new IOriginData3Listener() {
                 @Override
                 public void onOriginFiveMinuteListDataChange(List<OriginData3> originDataList) {
                     String message = "健康数据-返回:" + originDataList.toString();
+
+
                     Logger.t(TAG).i(message);
                 }
 
@@ -1238,8 +1604,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
                 @Override
                 public void onOriginHRVOriginListDataChange(List<HRVOriginData> originHrvDataList) {
-                    String message = "健康数据[30分钟]-HRV:" + originHrvDataList.size();
-                    Logger.t(TAG).i(message);
+                    HRVOriginData hrvOriginData = originHrvDataList.get(0);
+                    String rate = hrvOriginData.getRate();
                 }
 
                 @Override
@@ -1255,8 +1621,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
 
                 @Override
-                public void onReadOriginProgressDetail(int date, String dates, int all, int num) {
-                    String message = "健康数据[5分钟]-读取进度detail:" + date + ",dates=" + dates;
+                public void onReadOriginProgressDetail(int day, String date, int allPackage, int currentPackage) {
+                    String message = "健康数据[5分钟]-读取进度:currentPackage=" + currentPackage + ",allPackage=" + allPackage + ",dates=" + date + ",day=" + day;
                     Logger.t(TAG).i(message);
                 }
 
@@ -1266,7 +1632,12 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     String message = "健康数据-读取结束";
                     Logger.t(TAG).i(message);
                 }
-            }, 3);
+            };
+            int protype = 3;
+            if (protype == 3) {
+                originDataListener = originData3Listener;
+            }
+            VPOperateManager.getMangerInstance(mContext).readOriginData(writeResponse, originDataListener, 3);
         } else if (oprater.equals(READ_HEALTH_ORIGINAL_FROM)) {
             int yesterday = 1;
             VPOperateManager.getMangerInstance(mContext).readOriginDataFromDay(writeResponse, new IOriginDataListener() {
@@ -1289,9 +1660,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
 
                 @Override
-                public void onReadOriginProgressDetail(int date, String dates, int all, int num) {
-
+                public void onReadOriginProgressDetail(int day, String date, int allPackage, int currentPackage) {
+                    String message = "健康数据[5分钟]-读取进度:currentPackage=" + currentPackage + ",allPackage=" + allPackage + ",dates=" + date + ",day=" + day;
+                    Logger.t(TAG).i(message);
                 }
+
 
                 @Override
                 public void onReadOriginComplete() {
@@ -1321,10 +1694,13 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     Logger.t(TAG).i(message);
                 }
 
-                @Override
-                public void onReadOriginProgressDetail(int date, String dates, int all, int num) {
 
+                @Override
+                public void onReadOriginProgressDetail(int day, String date, int allPackage, int currentPackage) {
+                    String message = "健康数据[5分钟]-读取进度:currentPackage=" + currentPackage + ",allPackage=" + allPackage + ",dates=" + date + ",day=" + day;
+                    Logger.t(TAG).i(message);
                 }
+
 
                 @Override
                 public void onReadOriginComplete() {
@@ -1364,17 +1740,20 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 public void onOriginSpo2OriginListDataChange(List<Spo2hOriginData> originSpo2hDataList) {
                     String message = "健康数据[Spo2h]-返回:" + originSpo2hDataList.size();
                     Spo2hOriginUtil spo2hOriginUtil = new Spo2hOriginUtil(originSpo2hDataList);
-                    List<Map<String, Float>> tenMinuteData = spo2hOriginUtil.getTenMinuteData(ESpo2hDataType.TYPE_SLEEP);
                     for (int i = 0; i < originSpo2hDataList.size(); i++) {
                         String s = originSpo2hDataList.get(i).toString();
                         Logger.t(TAG).i(s);
                     }
                     Logger.t(TAG).i(message);
+                    List<Map<String, Float>> tenMinuteData = spo2hOriginUtil.getTenMinuteData(ESpo2hDataType.TYPE_SPO2H_MIN);
+                    Logger.t(TAG).i(message);
                 }
+
 
                 @Override
                 public void onReadOriginProgressDetail(int day, String date, int allPackage, int currentPackage) {
-
+                    String message = "健康数据[5分钟]-读取进度:currentPackage=" + currentPackage + ",allPackage=" + allPackage + ",dates=" + date + ",day=" + day;
+                    Logger.t(TAG).i(message);
                 }
 
                 @Override
@@ -1610,6 +1989,68 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
     }
 
+
+    private void setWeatherData1() {
+        //CRC
+        int crc = 0;
+        //城市名称
+        String cityName = "深圳";
+        //数据来源
+        int sourcr = 0;
+        //最近更新时间
+        int year = TimeData.getSysYear();
+        int month = TimeData.getSysMonth();
+        int day = TimeData.getSysDay();
+        TimeData lasTimeUpdate = new TimeData(year, month, day, 12, 59, 23);
+        //天气列表（以小时为单位）
+        List<WeatherEvery3Hour> weatherEvery3HourList = new ArrayList<>();
+        TimeData every3Hour0 = new TimeData(year, month, day, 12, 59, 23);
+        TimeData every3Hour1 = new TimeData(year, month, day, 15, 59, 23);
+        TimeData every3Hour2 = new TimeData(year, month, day, 18, 59, 23);
+        TimeData every3Hour3 = new TimeData(year, month, day, 21, 59, 23);
+        WeatherEvery3Hour weatherEvery3Hour0 =
+                new WeatherEvery3Hour(every3Hour0, 60, -60, 6, 6, "3-4", 5.0);
+        WeatherEvery3Hour weatherEvery3Hour1 =
+                new WeatherEvery3Hour(every3Hour1, 70, -70, 7, 7, "10-12", 5.0);
+        WeatherEvery3Hour weatherEvery3Hour2 =
+                new WeatherEvery3Hour(every3Hour2, 80, -80, 8, 8, "10", 5.0);
+        WeatherEvery3Hour weatherEvery3Hour3 =
+                new WeatherEvery3Hour(every3Hour3, 90, -90, 9, 9, "15", 5.0);
+        weatherEvery3HourList.add(weatherEvery3Hour0);
+        weatherEvery3HourList.add(weatherEvery3Hour1);
+        weatherEvery3HourList.add(weatherEvery3Hour2);
+        weatherEvery3HourList.add(weatherEvery3Hour3);
+        //天气列表（以天为单位）
+        List<WeatherEveryDay> weatherEveryDayList = new ArrayList<>();
+        TimeData everyDay0 = new TimeData(year, month, day, 12, 59, 23);
+        WeatherEveryDay weatherEveryDay0 = new WeatherEveryDay(everyDay0, 80, -80, 60,
+                -60, 10, 5, 10, "10-12", 5.2);
+        weatherEveryDayList.add(weatherEveryDay0);
+        WeatherData weatherData = new WeatherData(crc, cityName, sourcr, lasTimeUpdate, weatherEvery3HourList, weatherEveryDayList);
+        VPOperateManager.getMangerInstance(mContext).settingWeatherData(writeResponse, weatherData, new IWeatherStatusDataListener() {
+            @Override
+            public void onWeatherDataChange(WeatherStatusData weatherStatusData) {
+                String message = "settingWeatherData onWeatherDataChange read:\n" + weatherStatusData.toString();
+                Logger.t(TAG).i(message);
+                sendMsg(message, 1);
+            }
+        });
+    }
+
+    private void setWeatherData2() {
+        List<WeatherData2> weatherData2 = new ArrayList<>();
+        WeatherData2 e = new WeatherData2(new TimeData(2020, 11, 16, 10, 0), 18, 28, 1, 1, 1);
+        weatherData2.add(e);
+        VPOperateManager.getMangerInstance(mContext).settingWeatherData2(writeResponse, weatherData2, new IWeatherStatusDataListener() {
+            @Override
+            public void onWeatherDataChange(WeatherStatusData weatherStatusData) {
+                String message = "settingWeatherData onWeatherDataChange read:\n" + weatherStatusData.toString();
+                Logger.t(TAG).i(message);
+                sendMsg(message, 1);
+            }
+        });
+    }
+
     @NonNull
     private Alarm2Setting getMultiAlarmSetting() {
         int hour = 16;
@@ -1641,58 +2082,151 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
     }
 
     /**
-     *
-     * 	密码验证之前，要调用这个方法
-     * 	因为在密码验证之后，inPttModel/outPttModel其中一个会有回调
+     * 密码验证之前，要调用这个方法
+     * 因为在密码验证之后，inPttModel/outPttModel其中一个会有回调
      */
     public void listenDeviceCallbackData() {
         VPOperateManager.getMangerInstance(mContext).settingDeviceControlPhone(new IDeviceControlPhoneModelState() {
-            @Override
-            public void knocknotify(int type) {
-
-            }
-
-            @Override
-            public void nextMusic() {
-
-            }
-
-            @Override
-            public void previousMusic() {
-
-            }
-
-            @Override
-            public void pauseAndPlayMusic() {
-
-            }
-
-            @Override
-            public void rejectPhone() {
-
-            }
-
-            @Override
-            public void cliencePhone() {
-
-            }
 
             @Override
             public void inPttModel() {
-                Logger.t(TAG).i("inPttModel");
+                String message = "手表提示:手表进入ptt模式\n";
                 isInPttModel = true;
+                Logger.t(TAG).i(message);
             }
 
             @Override
             public void outPttModel() {
-                Logger.t(TAG).i("outPttModel");
                 isInPttModel = false;
+                String message = "手表提示:手表退出ptt模式\n";
+                Logger.t(TAG).i(message);
+            }
+
+            @Override
+            public void rejectPhone() {
+                String message = "手表提示:请挂断来电\n";
+                Logger.t(TAG).i(message);
+                sendMsg(message, 1);
+            }
+
+            @Override
+            public void cliencePhone() {
+                String message = "手表提示:请来电静音\n";
+                Logger.t(TAG).i(message);
+                sendMsg(message, 1);
+            }
+
+            @Override
+            public void knocknotify(int type) {
+                String message = "手表提示:敲击提醒，1表示单击，2表示双击\n";
+                Logger.t(TAG).i(message);
             }
 
             @Override
             public void sos() {
+                String message = "手表提示:sos\n";
+                Logger.t(TAG).i(message);
+            }
 
+            public void nextMusic() {
+                String message = "手表提示:下一曲\n";
+                Logger.t(TAG).i(message);
+            }
+
+            public void previousMusic() {
+                String message = "手表提示:上一曲\n";
+                Logger.t(TAG).i(message);
+            }
+
+            public void pauseAndPlayMusic() {
+                String message = "手表提示:暂停和播放\n";
+                Logger.t(TAG).i(message);
+            }
+
+            @Override
+            public void pauseMusic() {
+                String message = "手表提示:暂停\n";
+                Logger.t(TAG).i(message);
+            }
+
+            @Override
+            public void playMusic() {
+                String message = "手表提示:播放\n";
+                Logger.t(TAG).i(message);
+            }
+
+            @Override
+            public void voiceUp() {
+                String message = "手表提示:调高音量\n";
+                Logger.t(TAG).i(message);
+            }
+
+            @Override
+            public void voiceDown() {
+                String message = "手表提示:调低音量\n";
+                Logger.t(TAG).i(message);
+            }
+
+            @Override
+            public void oprateMusicSuccess() {
+                String message = "手表提示:音乐相关的操作成功了\n";
+                Logger.t(TAG).i(message);
+            }
+
+            @Override
+            public void oprateMusicFail() {
+                String message = "手表提示:音乐相关的操作失败了\n";
+                Logger.t(TAG).i(message);
+            }
+
+        });
+    }
+
+    public void listenCamera() {
+        VPOperateManager.getMangerInstance(mContext).setCameraListener(new ICameraDataListener() {
+            @Override
+            public void OnCameraDataChange(ECameraStatus oprateStauts) {
+                Logger.t(TAG).i("Camera oprateStauts:" + oprateStauts);
             }
         });
+    }
+
+    public void startListenADC() {
+        Logger.t(TAG).i("开始监听光电信号");
+        byte[] cmd = new byte[20];
+        cmd[0] = (byte) 0xf3;
+        cmd[1] = (byte) 0x08;
+        VPOperateManager.getMangerInstance(mContext).sendOrder(writeResponse, cmd);
+        VPOperateManager.getMangerInstance(mContext).startDetectSPO2H(writeResponse, new ISpo2hDataListener() {
+            @Override
+            public void onSpO2HADataChange(Spo2hData spo2HData) {
+                //不用理会
+            }
+        }, new ILightDataCallBack() {
+            @Override
+            public void onGreenLightDataChange(int[] data) {
+                String message = "返回-光电信号:\n" + Arrays.toString(data);
+                Logger.t(TAG).i(message);
+            }
+        });
+        VPOperateManager.getMangerInstance(mContext).stopDetectSPO2H(writeResponse, new ISpo2hDataListener() {
+            @Override
+            public void onSpO2HADataChange(Spo2hData spo2HData) {
+                //不用理会
+            }
+        });
+
+        VPOperateManager.getMangerInstance(mContext).startDetectHeart(writeResponse, new IHeartDataListener() {
+            @Override
+            public void onDataChange(HeartData heartData) {
+                String message = "返回-心率值:" + heartData.toString();
+                Logger.t(TAG).i(message);
+            }
+        });
+    }
+
+    public void stopListenADC() {
+        Logger.t(TAG).i("停止监听光电信号");
+        VPOperateManager.getMangerInstance(mContext).stopDetectHeart(writeResponse);
     }
 }

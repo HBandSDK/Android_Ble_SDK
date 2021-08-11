@@ -114,12 +114,17 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
     @Override
     public void onClick(View v) {
         if (isCanEnterOadModel) {
+            //文件以及版本确定无误
             if (isFindOadDevice) {
-                startOad();
+                //如果当前是dfulang模式,直接进行升级
+                ECpuType cpuType = VPOperateManager.getMangerInstance(mContext).getCpuType();
+                selectOad(cpuType);
             } else {
+                //如果当前是正常模式,需要进入固件升级模式
                 findOadModelDevice();
             }
         } else {
+            //文件以及版本还没有确定
             checkVersionAndFile();
         }
     }
@@ -177,7 +182,7 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
 
             @Override
             public void findOadDevice(String oadAddress, final ECpuType eCpuType) {
-                Logger.t(TAG).i("找到OAD模式下的设备了:"+eCpuType);
+                Logger.t(TAG).i("找到OAD模式下的设备了:" + eCpuType);
                 mOadAddress = oadAddress;
                 if (!TextUtils.isEmpty(mOadAddress)) {
                     isFindOadDevice = true;
@@ -198,11 +203,13 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
     }
 
 
-
     private void findOadModelDevice() {
         VPOperateManager.getMangerInstance(mContext).findOadModelDevice(oadSetting, new OnFindOadDeviceListener() {
             @Override
             public void findOadDevice(String oadAddress, ECpuType eCpuType) {
+                Logger.t(TAG).i("findOadDevice:"+mOadAddress);
+                mOadAddress = oadAddress;
+                Logger.t(TAG).i("findOadDevice:"+mOadAddress);
                 selectOad(eCpuType);
             }
 
@@ -216,14 +223,15 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
     private void selectOad(ECpuType eCpuType) {
         switch (eCpuType) {
             case NORIC:
-                startOad();
+                startOadNoric();
                 break;
             case HUITOP:
-                enoadHuiDing();
+                startOadHuiDing();
                 break;
         }
     }
-    private void enoadHuiDing() {
+
+    private void startOadHuiDing() {
 
         BluetoothManager mBManager;
         BluetoothAdapter mBAdapter = null;
@@ -232,13 +240,15 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
         if (null != mBManager) {
             mBAdapter = mBManager.getAdapter();
             BluetoothDevice device = mBAdapter.getRemoteDevice(mOadAddress);
-            startDfu(device);
+            startEasyDfu(device);
         }
     }
-    private void startDfu(BluetoothDevice bluetoothDevice) {
+
+    private void startEasyDfu(BluetoothDevice bluetoothDevice) {
         EasyDfu2 dfu = new EasyDfu2();
         dfu.setListener(this);
         dfu.setLogger(null);
+        mOadFileName = getExternalFilesDir(null) + File.separator + "H88T_00880206_6092_fw_encryptandsign.bin";
         File file = new File(mOadFileName);
         Logger.t(TAG).i("fileName:" + mOadFileName);
         InputStream targetStream = null;
@@ -251,7 +261,7 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
 
     }
 
-    private void startOad() {
+    private void startOadNoric() {
         Logger.t(TAG).i("执行升级程序，最多尝试5次");
         showProgressBar();
         Boolean isBinder = false;
@@ -422,7 +432,7 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
         if (failCount < MAX_ALLOW_FAIL_COUNT) {
             Logger.t(TAG).e("再试一次=" + failCount);
             showProgressBar();
-            startOad();
+            startOadNoric();
         } else {
             showOadFailDialog();
         }
@@ -454,8 +464,8 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
 
     @Override
     public void onDfuProgress(int i) {
-        Logger.t(TAG).e("onDfuProgress:"+i);
-        textPercentTv.setText(i+"%");
+        Logger.t(TAG).e("onDfuProgress:" + i);
+        textPercentTv.setText(i + "%");
     }
 
     @Override
@@ -469,6 +479,7 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
     public void onDfuError(String s, Error error) {
         Logger.t(TAG).e("onDfuError");
     }
+
     private void startdfuprogress() {
         progressBar.setIndeterminate(true);
         textPercentTv.setText(R.string.dfu_status_starting);
