@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -106,7 +109,7 @@ public class UiUpdateServerActivity extends Activity {
 
 
     TUiTheme tUiThemeDown;
-
+    List<TUiTheme> themeInfoList;
     /**
      * demo为了方便，直接选中的是服务器第1个，
      */
@@ -118,7 +121,7 @@ public class UiUpdateServerActivity extends Activity {
 
                 String appPackName = "com.timaimee.watch";
                 String appVersion = "3.1.9";
-                List<TUiTheme> themeInfoList = uiUpdateCheckOprate.getThemeInfo(mUiDataServer, deviceNumber, deviceTestVersion, appPackName, appVersion);
+                themeInfoList = uiUpdateCheckOprate.getThemeInfo(mUiDataServer, deviceNumber, deviceTestVersion, appPackName, appVersion);
                 final StringBuffer stringBuffer = new StringBuffer();
                 for (TUiTheme tUiTheme : themeInfoList) {
                     Logger.t(TAG).i("tUiTheme item:" + tUiTheme.toString());
@@ -141,11 +144,17 @@ public class UiUpdateServerActivity extends Activity {
     File mUpdatefile;
 
 
+
+
     @OnClick(R.id.ui_server_down)
     public void onDownFile() {
-        if (tUiThemeDown == null) {
+        if(themeInfoList == null || themeInfoList.size() == 0) {
             return;
         }
+        int index = new Random().nextInt(themeInfoList.size());
+        tUiThemeDown = themeInfoList.get(index);
+
+
         String filePath = getExternalFilesDir(null) + File.separator;
         final String fileUrl = tUiThemeDown.getFileUrl();
         if (!TextUtils.isEmpty(fileUrl)) {
@@ -175,7 +184,12 @@ public class UiUpdateServerActivity extends Activity {
 
                             @Override
                             public void onFinish() {
-                                fileStateTv.setText("下载完成");
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        fileStateTv.setText("下载完成");
+                                    }
+                                });
                                 VPLogger.i("下载完成");
                                 mUpdatefile = new File(fileSave);
                             }
