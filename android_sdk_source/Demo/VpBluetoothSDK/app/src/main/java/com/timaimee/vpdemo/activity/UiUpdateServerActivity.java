@@ -66,7 +66,6 @@ public class UiUpdateServerActivity extends Activity {
 
     String deviceNumber, deviceVersion, deviceTestVersion;
     UiServerHttpUtil uiUpdateCheckOprate;
-    UiUpdateUtil mUiUpdateUtil;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,7 +73,7 @@ public class UiUpdateServerActivity extends Activity {
         setContentView(R.layout.activity_uiupdate_server);
         ButterKnife.bind(this);
         mContext = UiUpdateServerActivity.this;
-        mUiUpdateUtil = new UiUpdateUtil(mContext);
+        UiUpdateUtil.getInstance().init(this);
         uiUpdateCheckOprate = new UiServerHttpUtil();
         deviceNumber = getIntent().getStringExtra("deviceNumber");
         deviceVersion = getIntent().getStringExtra("deviceVersion");
@@ -84,9 +83,8 @@ public class UiUpdateServerActivity extends Activity {
 
     @OnClick(R.id.is_support_server_ui)
     public void isSupportServerUi() {
-        if (mUiUpdateUtil.isSupportChangeServerUi()) {
+        if (UiUpdateUtil.getInstance().isSupportChangeServerUi()) {
             mUiServerSupportTV.setText("1.支持服务器表盘");
-            mUiUpdateUtil.init();
         } else {
             mUiServerSupportTV.setText("1.不支持服务器表盘");
             Toast.makeText(mContext, "不支持服务器表盘", Toast.LENGTH_LONG).show();
@@ -97,7 +95,7 @@ public class UiUpdateServerActivity extends Activity {
 
     @OnClick(R.id.read_base_info)
     public void readBaseInfoFromServer() {
-        mUiUpdateUtil.getServerWatchUiInfo(new IUIBaseInfoFormServerListener() {
+        UiUpdateUtil.getInstance().getServerWatchUiInfo(new IUIBaseInfoFormServerListener() {
 
             @Override
             public void onBaseUiInfoFormServer(UIDataServer uiDataServer) {
@@ -224,7 +222,7 @@ public class UiUpdateServerActivity extends Activity {
             /**
              * 升级ui步骤：开始升级-清除缓存数据-发送UI数据-结束发送
              */
-            mUiUpdateUtil.startSetUiStream(EUIFromType.SERVER, inputStream, new IUiUpdateListener() {
+            UiUpdateUtil.getInstance().startSetUiStream(EUIFromType.SERVER, inputStream, new IUiUpdateListener() {
 
                 @Override
                 public void onUiUpdateStart() {

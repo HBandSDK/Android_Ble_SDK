@@ -49,7 +49,6 @@ public class UiUpdateAGPSActivity extends Activity {
     public TextView mSendProgressTv;
 
     WatchUIType mWatchUIType;
-    UiUpdateUtil mUiUpdateUtil;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,7 +56,7 @@ public class UiUpdateAGPSActivity extends Activity {
         setContentView(R.layout.activity_uiupdate_agps);
         ButterKnife.bind(this);
         mContext = UiUpdateAGPSActivity.this;
-        mUiUpdateUtil = new UiUpdateUtil(mContext);
+        UiUpdateUtil.getInstance().init(this);
 
     }
 
@@ -66,9 +65,8 @@ public class UiUpdateAGPSActivity extends Activity {
      */
     @OnClick(R.id.is_support_agps_ui)
     public void isSupport() {
-        if (mUiUpdateUtil.isSupportChangeCustomAGPS()) {
+        if (UiUpdateUtil.getInstance().isSupportChangeCustomAGPS()) {
             mUiAGPSSupportTV.setText("1.支持自定义AGPS");
-            mUiUpdateUtil.init();
         } else {
             mUiAGPSSupportTV.setText("1.不支持自定义AGPS");
             Toast.makeText(mContext, "不支持自定义AGPS", Toast.LENGTH_LONG).show();
@@ -83,7 +81,7 @@ public class UiUpdateAGPSActivity extends Activity {
 
     @OnClick(R.id.read_base_info_agps)
     public void readBaseInfo() {
-        mUiUpdateUtil.getAGPSWacthUiInfo(new IUIBaseInfoFormAGPSListener() {
+        UiUpdateUtil.getInstance().getAGPSWacthUiInfo(new IUIBaseInfoFormAGPSListener() {
             @Override
             public void onBaseUiInfoFormAgps(UIDataAGPS uiDataAGPS) {
                 Logger.t(TAG).i("2.自定义AGPS的基本信息 uiAGPS:" + uiDataAGPS.toString());
@@ -112,9 +110,9 @@ public class UiUpdateAGPSActivity extends Activity {
                 inputStream = mContext.getContentResolver().openInputStream(mUritempFile);
 
                 long timeStampAGPS=0;
-                mUiUpdateUtil.setAGPSTimeStamp(timeStampAGPS);
+                UiUpdateUtil.getInstance().setAGPSTimeStamp(timeStampAGPS);
 
-                mUiUpdateUtil.startSetUiStream(EUIFromType.A_GPS,inputStream, new IUiUpdateListener() {
+                UiUpdateUtil.getInstance().startSetUiStream(EUIFromType.A_GPS,inputStream, new IUiUpdateListener() {
 
                     @Override
                     public void onUiUpdateStart() {

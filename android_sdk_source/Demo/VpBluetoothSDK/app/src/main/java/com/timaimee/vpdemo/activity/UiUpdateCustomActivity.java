@@ -70,7 +70,6 @@ public class UiUpdateCustomActivity extends Activity {
     public TextView mSendProgressTv;
 
     WatchUIType mWatchUIType;
-    UiUpdateUtil mUiUpdateUtil;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,8 +77,7 @@ public class UiUpdateCustomActivity extends Activity {
         setContentView(R.layout.activity_uiupdate_custom);
         ButterKnife.bind(this);
         mContext = UiUpdateCustomActivity.this;
-        mUiUpdateUtil = new UiUpdateUtil(mContext);
-
+        UiUpdateUtil.getInstance().init(this);
     }
 
     /**
@@ -87,9 +85,8 @@ public class UiUpdateCustomActivity extends Activity {
      */
     @OnClick(R.id.is_support_custom_ui)
     public void isSupport() {
-        if (mUiUpdateUtil.isSupportChangeCustomUi()) {
+        if (UiUpdateUtil.getInstance().isSupportChangeCustomUi()) {
             mUiCustomSupportTV.setText("1.支持自定义表盘");
-            mUiUpdateUtil.init();
         } else {
             mUiCustomSupportTV.setText("1.不支持自定义表盘");
             Toast.makeText(mContext, "不支持自定义表盘", Toast.LENGTH_LONG).show();
@@ -104,7 +101,7 @@ public class UiUpdateCustomActivity extends Activity {
 
     @OnClick(R.id.read_base_info_custom)
     public void readBaseInfo() {
-        mUiUpdateUtil.getCustomWacthUiInfo(new IUIBaseInfoFormCustomListener() {
+        UiUpdateUtil.getInstance().getCustomWacthUiInfo(new IUIBaseInfoFormCustomListener() {
             @Override
             public void onBaseUiInfoFormCustom(UIDataCustom uiDataCustom) {
                 Logger.t(TAG).i("2.自定义表盘的基本信息 uiDataCustom:" + uiDataCustom.toString());
@@ -143,7 +140,7 @@ public class UiUpdateCustomActivity extends Activity {
         final int fontColor = getRandomColor();
         final UICustomSetData uiCustomSetData = new UICustomSetData(isDefalutUI, timePosition, upTimeType, downTimeType, fontColor);
         Logger.t(TAG).i("uiCustomSetData:" + uiCustomSetData.toString());
-        mUiUpdateUtil.setCustomWacthUi(uiCustomSetData, new IUIBaseInfoFormCustomListener() {
+        UiUpdateUtil.getInstance().setCustomWacthUi(uiCustomSetData, new IUIBaseInfoFormCustomListener() {
             @Override
             public void onBaseUiInfoFormCustom(UIDataCustom uiDataCustom) {
                 Logger.t(TAG).i("3.设置元素及其对应的位置 uiDataCustom:" + uiDataCustom.toString());
@@ -277,7 +274,7 @@ public class UiUpdateCustomActivity extends Activity {
                 Bitmap bmp = BitmapFactory.decodeStream(inputStream);//原图
                 Logger.t(TAG).i("get BitMap");
                 InputStream sendInputStream = mWatchUIType.getSendInputStream(mContext, bmp);
-                mUiUpdateUtil.startSetUiStream(EUIFromType.CUSTOM, sendInputStream, new IUiUpdateListener() {
+                UiUpdateUtil.getInstance().startSetUiStream(EUIFromType.CUSTOM, sendInputStream, new IUiUpdateListener() {
 
                     @Override
                     public void onUiUpdateStart() {
