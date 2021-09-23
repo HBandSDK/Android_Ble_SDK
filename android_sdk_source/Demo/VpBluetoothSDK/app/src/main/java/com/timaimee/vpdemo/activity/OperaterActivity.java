@@ -127,6 +127,7 @@ import com.veepoo.protocol.model.enums.EOprateStauts;
 import com.veepoo.protocol.model.enums.ESex;
 import com.veepoo.protocol.model.enums.ESocailMsg;
 import com.veepoo.protocol.model.enums.ESpo2hDataType;
+import com.veepoo.protocol.model.enums.ESportType;
 import com.veepoo.protocol.model.enums.ETemperatureUnit;
 import com.veepoo.protocol.model.enums.ETimeMode;
 import com.veepoo.protocol.model.enums.EWeatherType;
@@ -1833,12 +1834,30 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         } else if (oprater.equals(SHOW_SP)) {
             String shareperence = VPOperateManager.getMangerInstance(mContext).traversalShareperence();
             Logger.t(TAG).i(shareperence);
+        } else if (oprater.equals(SPORT_MODE_START_INDOOR)) {
+            VPOperateManager.getMangerInstance(mContext).startMultSportModel(writeResponse, new ISportModelStateListener() {
+                @Override
+                public void onSportModelStateChange(SportModelStateData sportModelStateData) {
+                    String message = "运动模式状态:" + sportModelStateData.toString();
+                    Logger.t(TAG).i(message);
+                }
+
+                @Override
+                public void onSportStopped() {
+                    Logger.t(TAG).i(SPORT_MODE_START_INDOOR + " 运动结束");
+                }
+            }, ESportType.INDOOR_WALK);
         } else if (oprater.equals(SPORT_MODE_ORIGIN_END)) {
             VPOperateManager.getMangerInstance(mContext).stopSportModel(writeResponse, new ISportModelStateListener() {
                 @Override
                 public void onSportModelStateChange(SportModelStateData sportModelStateData) {
                     String message = "运动模式状态:" + sportModelStateData.toString();
                     Logger.t(TAG).i(message);
+                }
+
+                @Override
+                public void onSportStopped() {
+                    Logger.t(TAG).i(SPORT_MODE_ORIGIN_END + " 运动结束");
                 }
             });
         } else if (oprater.equals(SPORT_MODE_ORIGIN_READSTAUTS)) {
@@ -1848,6 +1867,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     String message = "运动模式状态" + sportModelStateData.toString();
                     Logger.t(TAG).i(message);
                 }
+
+                @Override
+                public void onSportStopped() {
+                    Logger.t(TAG).i(SPORT_MODE_ORIGIN_READSTAUTS + " 运动结束");
+                }
             });
         } else if (oprater.equals(SPORT_MODE_ORIGIN_START)) {
             VPOperateManager.getMangerInstance(mContext).startSportModel(writeResponse, new ISportModelStateListener() {
@@ -1855,6 +1879,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 public void onSportModelStateChange(SportModelStateData sportModelStateData) {
                     String message = "运动模式状态" + sportModelStateData.toString();
                     Logger.t(TAG).i(message);
+                }
+
+                @Override
+                public void onSportStopped() {
+                    Logger.t(TAG).i(SPORT_MODE_ORIGIN_START + " 运动结束");
                 }
             });
         } else if (oprater.equals(SPORT_MODE_ORIGIN_READ)) {
