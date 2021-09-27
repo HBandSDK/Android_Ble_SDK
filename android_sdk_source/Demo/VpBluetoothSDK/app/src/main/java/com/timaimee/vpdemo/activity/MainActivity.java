@@ -78,6 +78,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
     VPOperateManager mVpoperateManager;
     private boolean mIsOadModel;
     BluetoothLeScannerCompat mScanner;
+    private boolean isStartConnecting = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,8 +106,8 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else {
-                Logger.t(TAG).i("exist file");
+        } else {
+            Logger.t(TAG).i("exist file");
         }
     }
 
@@ -294,8 +295,10 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
                     Logger.t(TAG).i("连接成功");
                     Logger.t(TAG).i("是否是固件升级模式=" + isoadModel);
                     mIsOadModel = isoadModel;
+                    isStartConnecting = true;
                 } else {
                     Logger.t(TAG).i("连接失败");
+                    isStartConnecting = false;
                 }
             }
         }, new INotifyResponse() {
@@ -304,13 +307,14 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
                 if (state == Code.REQUEST_SUCCESS) {
                     //蓝牙与设备的连接状态
                     Logger.t(TAG).i("监听成功-可进行其他操作");
-
+                    isStartConnecting = true;
                     Intent intent = new Intent(mContext, OperaterActivity.class);
                     intent.putExtra("isoadmodel", mIsOadModel);
                     intent.putExtra("deviceaddress", mac);
                     startActivity(intent);
                 } else {
                     Logger.t(TAG).i("监听失败，重新连接");
+                    isStartConnecting = false;
                 }
 
             }
@@ -450,6 +454,10 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void OnRecycleViewClick(int position) {
+        if (isStartConnecting) {
+            return;
+        }
+        isStartConnecting = true;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

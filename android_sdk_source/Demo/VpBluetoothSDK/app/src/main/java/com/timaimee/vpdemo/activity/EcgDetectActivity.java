@@ -69,7 +69,7 @@ public class EcgDetectActivity extends Activity implements View.OnClickListener 
                     public void onEcgADCChange(int[] ecgData) {
                         String message = "ecgDetectADC-0:" + Arrays.toString(ecgData);
                         Logger.t(TAG).i(message);
-                        mEcgHeartView.changeData(ecgData, 25);
+                        mEcgHeartView.changeData(ecgData, 20);
                     }
                 });
                 break;
