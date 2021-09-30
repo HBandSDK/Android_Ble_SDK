@@ -10,7 +10,7 @@ project.ext {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     buildToolsVersion '28.0.3'
 
     defaultConfig {
@@ -49,7 +49,7 @@ dependencies {
     implementation files('libs/libcomx-0.5.jar')
     implementation files('libs/vpbluetooth-release.aar')
     implementation files('libs/gson-2.2.4.jar')
-    implementation files('libs/vpprotocol-2.1.89.15.aar')
+    implementation files('libs/vpprotocol-2.1.90.15.aar')
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:appcompat-v7:28.0.0-alpha1'
     implementation 'com.android.support:recyclerview-v7:28.0.0-alpha1'
@@ -58,6 +58,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.2.0'
     implementation 'com.jakewharton:butterknife:8.2.0'
     implementation 'no.nordicsemi.android.support.v18:scanner:1.4.2'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
     implementation 'com.amap.api:3dmap:latest.integration'
     implementation 'com.amap.api:location:latest.integration'

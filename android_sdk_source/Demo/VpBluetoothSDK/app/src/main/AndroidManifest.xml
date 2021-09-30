@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.timaimee.vpdemo">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -58,6 +60,11 @@
         <service android:name=".oad.service.DfuService" />
         <!-- 高德地图定位 -->
         <service android:name="com.amap.api.location.APSService" />
+
+        <service
+            android:name=".MyService"
+            android:enabled="true"
+            android:foregroundServiceType="location" />
     </application>
 
 

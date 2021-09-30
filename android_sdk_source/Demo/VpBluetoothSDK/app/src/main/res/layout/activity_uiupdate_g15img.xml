@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+    <ImageView
+        android:id="@+id/ivRed"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#F830A0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/ivBlue"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#0FC2FF"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivRed" />
+
+
+    <ImageView
+        android:id="@+id/ivGreen"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#5F80FF"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivBlue" />
+
+    <Button
+        android:id="@+id/btnA3"
+        app:layout_constraintTop_toTopOf="@id/ivRed"
+        app:layout_constraintBottom_toBottomOf="@id/ivRed"
+        app:layout_constraintLeft_toRightOf="@id/ivRed"
+        android:layout_marginStart="20dp"
+        android:text="A3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnA4"
+        app:layout_constraintTop_toTopOf="@id/ivBlue"
+        app:layout_constraintBottom_toBottomOf="@id/ivBlue"
+        app:layout_constraintLeft_toRightOf="@id/ivBlue"
+        android:layout_marginStart="20dp"
+        android:text="A4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnA5"
+        app:layout_constraintTop_toTopOf="@id/ivGreen"
+        app:layout_constraintBottom_toBottomOf="@id/ivGreen"
+        app:layout_constraintLeft_toRightOf="@id/ivGreen"
+        android:layout_marginStart="20dp"
+        android:text="A5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

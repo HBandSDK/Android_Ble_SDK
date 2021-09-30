@@ -91,8 +91,8 @@ public interface Oprate {
     public final static String SHOW_SP = "显示sp";
     public final static String SPORT_MODE_ORIGIN_READ = "读取数据-运动模式";
     public final static String SPORT_MODE_ORIGIN_READSTAUTS = "读取状态-运动模式";
-    public final static String SPORT_MODE_START_INDOOR = "开启-室内步行";
     public final static String SPORT_MODE_ORIGIN_START = "开启-运动模式";
+    public final static String SPORT_MODE_START_INDOOR = "开启-室内步行";
     public final static String SPORT_MODE_ORIGIN_END = "结束-运动模式";
     public final static String SPO2H_ORIGIN_READ = "读取数据-血氧数据";
     public final static String HRV_ORIGIN_READ = "读取数据-HRV数据";
@@ -122,6 +122,11 @@ public interface Oprate {
     public final static String UI_UPDATE_CUSTOM = "UI升级-自定义表盘";
     public final static String UI_UPDATE_SERVER = "UI升级-服务器表盘";
     public final static String SYNC_MUSIC_INFO = "同步音乐信息";
+    public final static String UI_UPDATE_G15IMG = "UI升级-G15图片传输";
+    public final static String TEXT_ALARM_ADD = "文字闹钟添加";
+    public final static String TEXT_ALARM_MODIFY = "文字闹钟修改";
+    public final static String TEXT_ALARM_READ = "文字闹钟读取";
+    public final static String TEXT_ALARM_DELETE = "文字闹钟删除";
     public final static String NONE = "NONE";
     public final static String[] oprateStr = new String[]{
             PWD_COMFIRM, PERSONINFO_SYNC, SETTING_FIRST, PWD_MODIFY,
@@ -140,6 +145,6 @@ public interface Oprate {
             OAD, SHOW_SP, SPORT_MODE_ORIGIN_READ, SPORT_MODE_ORIGIN_READSTAUTS, SPORT_MODE_START_INDOOR, SPORT_MODE_ORIGIN_START, SPORT_MODE_ORIGIN_END, SPO2H_ORIGIN_READ, HRV_ORIGIN_READ, CLEAR_DEVICE_DATA, DISCONNECT
             , DETECT_START_ECG, DETECT_STOP_ECG, NONE, LOW_POWER_READ, LOW_POWER_OPEN, LOW_POWER_CLOSE, S22_READ_DATA, S22_READ_STATE, S22_SETTING_STATE_OPEN, S22_SETTING_STATE_CLOSE, DETECT_PTT, BP_FUNCTION_READ, BP_FUNCTION_SETTING
             , WEATHER_READ_STATUEINFO, WEATHER_SETTING_STATUEINFO, WEATHER_SETTING_DATA, LIANSUO_SOS, LIANSUO_SEND_ORDER, LIANSUO_SEND_CONTENT, UI_UPDATE_AGPS, UI_UPDATE_CUSTOM, UI_UPDATE_SERVER
-            , SYNC_MUSIC_INFO
+            , UI_UPDATE_G15IMG, SYNC_MUSIC_INFO,TEXT_ALARM_READ,TEXT_ALARM_ADD,TEXT_ALARM_MODIFY,TEXT_ALARM_DELETE
     };
 }

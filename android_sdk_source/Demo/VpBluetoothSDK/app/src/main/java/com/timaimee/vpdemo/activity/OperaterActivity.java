@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -40,6 +41,7 @@ import com.veepoo.protocol.listener.data.IDrinkDataListener;
 import com.veepoo.protocol.listener.data.IFatigueDataListener;
 import com.veepoo.protocol.listener.data.IFindDeviceDatalistener;
 import com.veepoo.protocol.listener.data.IFindPhonelistener;
+import com.veepoo.protocol.listener.data.IG15MessageListener;
 import com.veepoo.protocol.listener.data.IHRVOriginDataListener;
 import com.veepoo.protocol.listener.data.IHeartDataListener;
 import com.veepoo.protocol.listener.data.IHeartWaringDataListener;
@@ -47,6 +49,7 @@ import com.veepoo.protocol.listener.data.ILanguageDataListener;
 import com.veepoo.protocol.listener.data.ILightDataCallBack;
 import com.veepoo.protocol.listener.data.ILongSeatDataListener;
 import com.veepoo.protocol.listener.data.ILowPowerListener;
+import com.veepoo.protocol.listener.data.IMtuChangeListener;
 import com.veepoo.protocol.listener.data.IMusicControlListener;
 import com.veepoo.protocol.listener.data.INightTurnWristeDataListener;
 import com.veepoo.protocol.listener.data.IOriginData3Listener;
@@ -67,6 +70,7 @@ import com.veepoo.protocol.listener.data.ISportModelOriginListener;
 import com.veepoo.protocol.listener.data.ISportModelStateListener;
 import com.veepoo.protocol.listener.data.ITemptureDataListener;
 import com.veepoo.protocol.listener.data.ITemptureDetectDataListener;
+import com.veepoo.protocol.listener.data.ITextAlarmDataListener;
 import com.veepoo.protocol.listener.data.IWeatherStatusDataListener;
 import com.veepoo.protocol.listener.data.IWomenDataListener;
 import com.veepoo.protocol.model.datas.AlarmData;
@@ -111,11 +115,12 @@ import com.veepoo.protocol.model.datas.SportModelOriginItemData;
 import com.veepoo.protocol.model.datas.SportModelStateData;
 import com.veepoo.protocol.model.datas.TemptureData;
 import com.veepoo.protocol.model.datas.TemptureDetectData;
+import com.veepoo.protocol.model.datas.TextAlarmData;
 import com.veepoo.protocol.model.datas.TimeData;
+import com.veepoo.protocol.model.datas.WeatherData2;
 import com.veepoo.protocol.model.datas.WeatherStatusData;
 import com.veepoo.protocol.model.datas.WomenData;
 import com.veepoo.protocol.model.datas.weather.WeatherData;
-import com.veepoo.protocol.model.datas.WeatherData2;
 import com.veepoo.protocol.model.datas.weather.WeatherEvery3Hour;
 import com.veepoo.protocol.model.datas.weather.WeatherEveryDay;
 import com.veepoo.protocol.model.enums.EAllSetType;
@@ -123,6 +128,7 @@ import com.veepoo.protocol.model.enums.EBPDetectModel;
 import com.veepoo.protocol.model.enums.ECameraStatus;
 import com.veepoo.protocol.model.enums.EFunctionStatus;
 import com.veepoo.protocol.model.enums.ELanguage;
+import com.veepoo.protocol.model.enums.EMultiAlarmOprate;
 import com.veepoo.protocol.model.enums.EOprateStauts;
 import com.veepoo.protocol.model.enums.ESex;
 import com.veepoo.protocol.model.enums.ESocailMsg;
@@ -139,9 +145,7 @@ import com.veepoo.protocol.model.settings.AutoDetectStateSetting;
 import com.veepoo.protocol.model.settings.BpSetting;
 import com.veepoo.protocol.model.settings.ChantingSetting;
 import com.veepoo.protocol.model.settings.CheckWearSetting;
-import com.veepoo.protocol.model.settings.ContentPhoneSetting;
 import com.veepoo.protocol.model.settings.ContentSetting;
-import com.veepoo.protocol.model.settings.ContentSmsSetting;
 import com.veepoo.protocol.model.settings.ContentSocailSetting;
 import com.veepoo.protocol.model.settings.CountDownSetting;
 import com.veepoo.protocol.model.settings.CustomSetting;
@@ -153,6 +157,7 @@ import com.veepoo.protocol.model.settings.NightTurnWristSetting;
 import com.veepoo.protocol.model.settings.ReadOriginSetting;
 import com.veepoo.protocol.model.settings.ScreenSetting;
 import com.veepoo.protocol.model.settings.SoldierContentSetting;
+import com.veepoo.protocol.model.settings.TextAlarm2Setting;
 import com.veepoo.protocol.model.settings.WeatherStatusSetting;
 import com.veepoo.protocol.model.settings.WomenSetting;
 import com.veepoo.protocol.shareprence.VpSpGetUtil;
@@ -164,6 +169,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static com.timaimee.vpdemo.activity.Oprate.*;
 import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT;
@@ -184,7 +190,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
     private String deviceaddress;
     boolean isSleepPrecision = false;
     Message msg;
-    Handler mHandler = new Handler() {
+    Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -255,10 +261,13 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
     private void initGridView() {
         mGridView = (GridView) findViewById(R.id.main_gridview);
-        for (int i = 0; i < oprateStr.length; i++) {
+        int i = 0;
+        while (i < oprateStr.length) {
+            String s = oprateStr[i];
             Map<String, String> map = new HashMap<>();
-            map.put("str", oprateStr[i]);
+            map.put("str", s);
             mGridData.add(map);
+            i++;
         }
         mGridAdapter = new GridAdatper(this, mGridData);
         mGridView.setAdapter(mGridAdapter);
@@ -413,6 +422,17 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 Toast.makeText(mContext, "不支持服务器表盘", Toast.LENGTH_LONG).show();
             }
 
+        } else if (oprater.equals(UI_UPDATE_G15IMG)) {
+            int bigTranType = VpSpGetUtil.getVpSpVariInstance(mContext).getBigTranType();
+            if (bigTranType == 2) {
+                Intent intent = new Intent(OperaterActivity.this, UiUpdateG15ImgActivity.class);
+                intent.putExtra("deviceNumber", String.valueOf(deviceNumber));
+                intent.putExtra("deviceVersion", deviceVersion);
+                intent.putExtra("deviceTestVersion", deviceTestVersion);
+                startActivity(intent);
+            } else {
+                Toast.makeText(mContext, "不支持大数据传输", Toast.LENGTH_LONG).show();
+            }
         } else if (oprater.equals(WEATHER_SETTING_STATUEINFO)) {
             WeatherStatusSetting weatherStatusSetting = new WeatherStatusSetting(0, true, EWeatherType.C);
             VPOperateManager.getMangerInstance(mContext).settingWeatherStatusInfo(writeResponse, weatherStatusSetting, new IWeatherStatusDataListener() {
@@ -970,7 +990,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             socailMsgData.setTiktok(EFunctionStatus.SUPPORT_OPEN);
             socailMsgData.setTelegram(SUPPORT_OPEN);
             socailMsgData.setConnected2_me(EFunctionStatus.SUPPORT_OPEN);
-            socailMsgData.setKakao_talk(SUPPORT_CLOSE);
+
+
+            socailMsgData.setPhone(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setMsg(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setKakao_talk(EFunctionStatus.SUPPORT_OPEN);
 
 
             VPOperateManager.getMangerInstance(mContext).settingSocialMsg(writeResponse, new ISocialMsgDataListener() {
@@ -1009,7 +1033,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             socailMsgData.setTiktok(EFunctionStatus.SUPPORT_OPEN);
             socailMsgData.setTelegram(SUPPORT_OPEN);
             socailMsgData.setConnected2_me(EFunctionStatus.SUPPORT_OPEN);
-            socailMsgData.setKakao_talk(EFunctionStatus.SUPPORT_OPEN);
+
+            socailMsgData.setPhone(EFunctionStatus.SUPPORT_CLOSE);
+            socailMsgData.setMsg(EFunctionStatus.SUPPORT_CLOSE);
+            socailMsgData.setKakao_talk(SUPPORT_CLOSE);
+
             VPOperateManager.getMangerInstance(mContext).settingSocialMsg(writeResponse, new ISocialMsgDataListener() {
                 @Override
                 public void onSocialMsgSupportDataChange(FunctionSocailMsgData socailMsgData) {
@@ -1065,7 +1093,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 //            ContentSetting contentsmsSetting3 = new ContentSmsSetting(ESocailMsg.SMS, "测试头", "010-6635214", "测试反馈 SMS");
 //
 //            /**第三方APP推送,发送前先通过密码验证获取FunctionSocailMsgData的状态**/
-//            ContentSetting contentsociaSetting4 = new ContentSocailSetting(ESocailMsg.WECHAT, "vepo", "测试反馈 WECHAT ");
+//            ContentSetting contentsociaSetting4 = new ContentSocailSetting(ESocailMsg.KAKAO_TALK, "KAKAO", "测试反馈 KAKAO-Veepoo ");
 //            VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting4);
 //            mHandler.postDelayed(new Runnable() {
 //                @Override
@@ -1089,8 +1117,18 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 //                    VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting6);
 //                }
 //            }, 6000);
-            ContentSetting contentsociaSetting6 = new ContentSocailSetting(ESocailMsg.KAKAO_TALK, "vepo", "测试反馈 KAKAO_TALK");
-            VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting6);
+//            ContentSetting contentsociaSetting6 = new ContentSocailSetting(ESocailMsg.G15MSG, "G15", "ABCDEFG,今天是星期五，明天星期六");
+            VPOperateManager.getMangerInstance(mContext).sendG15MsgContent(writeResponse, "G15", "ABCDEFG,今天是星期五", new IG15MessageListener() {
+                @Override
+                public void onG15MessageSendSuccess() {
+                    Toast.makeText(mContext, "收到应答", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onG15MessageSendFailed() {
+                    Toast.makeText(mContext, "没有收到应答", Toast.LENGTH_SHORT).show();
+                }
+            });
 
         } else if (oprater.equals(SOCIAL_PHONE_IDLE_OR_OFFHOOK)) {
             VPOperateManager.getMangerInstance(mContext).offhookOrIdlePhone(writeResponse);
@@ -1834,19 +1872,6 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         } else if (oprater.equals(SHOW_SP)) {
             String shareperence = VPOperateManager.getMangerInstance(mContext).traversalShareperence();
             Logger.t(TAG).i(shareperence);
-        } else if (oprater.equals(SPORT_MODE_START_INDOOR)) {
-            VPOperateManager.getMangerInstance(mContext).startMultSportModel(writeResponse, new ISportModelStateListener() {
-                @Override
-                public void onSportModelStateChange(SportModelStateData sportModelStateData) {
-                    String message = "运动模式状态:" + sportModelStateData.toString();
-                    Logger.t(TAG).i(message);
-                }
-
-                @Override
-                public void onSportStopped() {
-                    Logger.t(TAG).i(SPORT_MODE_START_INDOOR + " 运动结束");
-                }
-            }, ESportType.INDOOR_WALK);
         } else if (oprater.equals(SPORT_MODE_ORIGIN_END)) {
             VPOperateManager.getMangerInstance(mContext).stopSportModel(writeResponse, new ISportModelStateListener() {
                 @Override
@@ -1857,7 +1882,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
                 @Override
                 public void onSportStopped() {
-                    Logger.t(TAG).i(SPORT_MODE_ORIGIN_END + " 运动结束");
+                    Logger.t(TAG).i(SPORT_MODE_ORIGIN_END + "================================运动结束 @_@");
                 }
             });
         } else if (oprater.equals(SPORT_MODE_ORIGIN_READSTAUTS)) {
@@ -1870,9 +1895,22 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
                 @Override
                 public void onSportStopped() {
-                    Logger.t(TAG).i(SPORT_MODE_ORIGIN_READSTAUTS + " 运动结束");
+                    Logger.t(TAG).i(SPORT_MODE_ORIGIN_READSTAUTS + "================================运动结束 @_@");
                 }
             });
+        } else if (oprater.equals(SPORT_MODE_START_INDOOR)) {
+            VPOperateManager.getMangerInstance(mContext).startMultSportModel(writeResponse, new ISportModelStateListener() {
+                @Override
+                public void onSportModelStateChange(SportModelStateData sportModelStateData) {
+                    String message = "室内步行" + sportModelStateData.toString();
+                    Logger.t(TAG).i(message);
+                }
+
+                @Override
+                public void onSportStopped() {
+                    Logger.t(TAG).i(SPORT_MODE_START_INDOOR + "================================运动结束 @_@");
+                }
+            }, ESportType.INDOOR_WALK);
         } else if (oprater.equals(SPORT_MODE_ORIGIN_START)) {
             VPOperateManager.getMangerInstance(mContext).startSportModel(writeResponse, new ISportModelStateListener() {
                 @Override
@@ -1883,7 +1921,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
                 @Override
                 public void onSportStopped() {
-                    Logger.t(TAG).i(SPORT_MODE_ORIGIN_START + " 运动结束");
+                    Logger.t(TAG).i(SPORT_MODE_ORIGIN_START + "================================运动结束 @_@");
                 }
             });
         } else if (oprater.equals(SPORT_MODE_ORIGIN_READ)) {
@@ -2014,8 +2052,94 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     Logger.t(TAG).i("onReadOriginComplete");
                 }
             }, watchDataDay);
+        } else if (oprater.equals(TEXT_ALARM_READ)) {
+            VPOperateManager.getMangerInstance(mContext).readTextAlarm(writeResponse, new ITextAlarmDataListener() {
+                @Override
+                public void onAlarmDataChangeListListener(TextAlarmData textAlarmData) {
+                    Logger.t(TAG).e("读闹钟数据 --》" + textAlarmData.toString());
+                    EMultiAlarmOprate OPT = textAlarmData.getOprate();
+                    boolean isOk = OPT == EMultiAlarmOprate.READ_SUCCESS ||
+                            OPT == EMultiAlarmOprate.READ_SUCCESS_SAME_CRC ||
+                            OPT == EMultiAlarmOprate.READ_SUCCESS_SAVE;
+                    showToast("读闹钟数据 --》" +
+                            (isOk ? ("成功,一共" + textAlarmData.getTextAlarm2SettingList().size() + "条=>" + textAlarmData.toString()) : "失败"));
+                }
+            });
+        } else if (oprater.equals(TEXT_ALARM_ADD)) {
+            TextAlarm2Setting setting = getTextAlarm2Setting();
+            VPOperateManager.getMangerInstance(mContext).addTextAlarm(writeResponse, new ITextAlarmDataListener() {
+                @Override
+                public void onAlarmDataChangeListListener(TextAlarmData textAlarmData) {
+                    Logger.t(TAG).e("添加闹钟 --》" + textAlarmData.toString());
+                    showToast("添加闹钟 --》" + (textAlarmData.getOprate() == EMultiAlarmOprate.SETTING_SUCCESS ? ("成功,一共" + textAlarmData.getTextAlarm2SettingList().size() + "条=>" + textAlarmData.toString()) : "失败"));
+                }
+            }, setting);
+        } else if (oprater.equals(TEXT_ALARM_MODIFY)) {
+            Random random = new Random();
+            int flag = random.nextInt(100);
+            List<TextAlarm2Setting> settings = VPOperateManager.getMangerInstance(mContext).getTextAlarmList();
+            if (settings == null || settings.size() == 0) {
+                showToast("闹钟列表为空，请先添加闹钟或，读取更新闹钟列表");
+                return;
+            }
+            final TextAlarm2Setting setting = settings.get(0);
+            setting.setOpen(false);
+            setting.setContent("西门官人[" + flag + "]大郎卖烧饼回来了");
+            VPOperateManager.getMangerInstance(mContext).modifyTextAlarm(writeResponse, new ITextAlarmDataListener() {
+                @Override
+                public void onAlarmDataChangeListListener(TextAlarmData textAlarmData) {
+                    Logger.t(TAG).e("修改闹钟 --》" + textAlarmData.toString());
+                    showToast("修改闹钟 --》" + (textAlarmData.getOprate() == EMultiAlarmOprate.SETTING_SUCCESS ? "成功 : " + setting.toString() : "失败"));
+
+                }
+            }, setting);
+        } else if (oprater.equals(TEXT_ALARM_DELETE)) {
+            List<TextAlarm2Setting> settings = VPOperateManager.getMangerInstance(mContext).getTextAlarmList();
+            if (settings != null && settings.size() > 0) {
+                final TextAlarm2Setting setting = settings.get(0);
+                for (TextAlarm2Setting s : settings) {
+                    Logger.t(TAG).e("存在的文字闹钟：" + s.toString());
+                }
+                Logger.t(TAG).e("要删除的文字闹钟：" + setting.toString());
+                VPOperateManager.getMangerInstance(mContext).deleteTextAlarm(writeResponse, new ITextAlarmDataListener() {
+                    @Override
+                    public void onAlarmDataChangeListListener(TextAlarmData textAlarmData) {
+                        Logger.t(TAG).e("删除闹钟 --》" + textAlarmData.toString());
+                        showToast("删除闹钟 --》" + (textAlarmData.getOprate() == EMultiAlarmOprate.CLEAR_SUCCESS ? "成功:" + setting.toString() : "失败"));
+                    }
+                }, setting);
+            } else {
+                Logger.t(TAG).e("暂无闹钟可以删除");
+                showToast("暂无闹钟可以删除");
+            }
         }
 
+    }
+
+    private void showToast(String msg) {
+        Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+    }
+
+    private TextAlarm2Setting getTextAlarm2Setting() {
+        TextAlarm2Setting setting = new TextAlarm2Setting();
+        setting.setOpen(true);
+        setting.setRepeatStatus("1000010");
+        setting.setUnRepeatDate("0000-00-00");
+        setting.setAlarmHour(16);
+        setting.setAlarmMinute(1);
+        setting.setContent("^_^大郎，该吃药了！");
+        return setting;
+    }
+
+    @NonNull
+    private Alarm2Setting getMultiAlarmSetting() {
+        int hour = 16;
+        int minute = 33;
+        int scene = 1;
+        boolean isOpen = true;
+        String repestStr = "1000010";
+        String unRepeatDdate = "0000-00-00";
+        return new Alarm2Setting(hour, minute, repestStr, scene, unRepeatDdate, isOpen);
     }
 
 
@@ -2080,17 +2204,6 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         });
     }
 
-    @NonNull
-    private Alarm2Setting getMultiAlarmSetting() {
-        int hour = 16;
-        int minute = 33;
-        int scene = 1;
-        boolean isOpen = true;
-        String repestStr = "1000010";
-        String unRepeatDdate = "0000-00-00";
-        return new Alarm2Setting(hour, minute, repestStr, scene, unRepeatDdate, isOpen);
-    }
-
     private void sendMsg(String message, int what) {
         msg = Message.obtain();
         msg.what = what;
@@ -2101,7 +2214,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
     /**
      * 写入的状态返回
      */
-    class WriteResponse implements IBleWriteResponse {
+    static class WriteResponse implements IBleWriteResponse {
 
         @Override
         public void onResponse(int code) {

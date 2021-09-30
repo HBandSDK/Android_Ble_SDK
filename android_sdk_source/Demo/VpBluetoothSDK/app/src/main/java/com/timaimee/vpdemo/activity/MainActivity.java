@@ -34,6 +34,7 @@ import com.inuker.bluetooth.library.utils.BluetoothUtils;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.DeviceCompare;
+import com.timaimee.vpdemo.MyService;
 import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.adapter.BleScanViewAdapter;
 import com.timaimee.vpdemo.adapter.CustomLogAdapter;
@@ -94,6 +95,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
         registerBluetoothStateListener();
 
         createFile();
+//        startService(new Intent(this, MyService.class));
     }
 
     private void createFile() {
