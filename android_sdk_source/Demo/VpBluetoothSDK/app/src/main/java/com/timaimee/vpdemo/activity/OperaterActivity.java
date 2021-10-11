@@ -145,6 +145,7 @@ import com.veepoo.protocol.model.settings.AutoDetectStateSetting;
 import com.veepoo.protocol.model.settings.BpSetting;
 import com.veepoo.protocol.model.settings.ChantingSetting;
 import com.veepoo.protocol.model.settings.CheckWearSetting;
+import com.veepoo.protocol.model.settings.ContentPhoneSetting;
 import com.veepoo.protocol.model.settings.ContentSetting;
 import com.veepoo.protocol.model.settings.ContentSocailSetting;
 import com.veepoo.protocol.model.settings.CountDownSetting;
@@ -172,6 +173,7 @@ import java.util.Map;
 import java.util.Random;
 
 import static com.timaimee.vpdemo.activity.Oprate.*;
+import static com.timaimee.vpdemo.activity.Oprate.TEXT_ALARM;
 import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT;
 import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT_CLOSE;
 import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT_OPEN;
@@ -1083,7 +1085,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             });
         } else if (oprater.equals(SOCIAL_MSG_SEND)) {
 //            /**电话,可以只传电话号码**/
-//            ContentSetting contentphoneSetting0 = new ContentPhoneSetting(ESocailMsg.PHONE, "010-6635214");
+            final ContentSetting contentphoneSetting0 = new ContentPhoneSetting(ESocailMsg.PHONE, "010-6635214");
 //            /**电话,传联系人姓名以及电话号码，最终显示的联系人姓名**/
 //            ContentSetting contentphoneSetting1 = new ContentPhoneSetting(ESocailMsg.PHONE, "测试头", "010-6635214");
 //
@@ -1093,23 +1095,23 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 //            ContentSetting contentsmsSetting3 = new ContentSmsSetting(ESocailMsg.SMS, "测试头", "010-6635214", "测试反馈 SMS");
 //
 //            /**第三方APP推送,发送前先通过密码验证获取FunctionSocailMsgData的状态**/
-//            ContentSetting contentsociaSetting4 = new ContentSocailSetting(ESocailMsg.KAKAO_TALK, "KAKAO", "测试反馈 KAKAO-Veepoo ");
-//            VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting4);
-//            mHandler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    ContentSetting contentsociaSetting5 = new ContentSocailSetting(ESocailMsg.TIKTOK, "vepo", "测试反馈 TIKTOK");
-//                    VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting5);
-//
-//                }
-//            }, 2000);
-//            mHandler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    ContentSetting contentsociaSetting6 = new ContentSocailSetting(ESocailMsg.TELEGRAM, "vepo", "测试反馈 TELEGRAM");
-//                    VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting6);
-//                }
-//            }, 4000);
+            ContentSetting contentsociaSetting4 = new ContentSocailSetting(ESocailMsg.KAKAO_TALK, "KAKAO", "测试反馈 KAKAO-Veepoo ");
+            VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting4);
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    ContentSetting contentsociaSetting5 = new ContentSocailSetting(ESocailMsg.MESSENGER, "vepo", "测试反馈 MESSENGER");
+                    VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting5);
+
+                }
+            }, 2000);
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    ContentSetting contentsociaSetting6 = new ContentSocailSetting(ESocailMsg.PHONE, "vepo", "测试反馈 PHONE");
+                    VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentphoneSetting0);
+                }
+            }, 4000);
 //            mHandler.postDelayed(new Runnable() {
 //                @Override
 //                public void run() {
@@ -1492,7 +1494,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         } else if (oprater.equals(READ_HEALTH_SLEEP)) {
             VPOperateManager.getMangerInstance(mContext).readSleepData(writeResponse, new ISleepDataListener() {
                         @Override
-                        public void onSleepDataChange(SleepData sleepData) {
+                        public void onSleepDataChange(String day, SleepData sleepData) {
                             String message = "";
                             if (sleepData instanceof SleepPrecisionData && isSleepPrecision) {
                                 SleepPrecisionData sleepPrecisionData = (SleepPrecisionData) sleepData;
@@ -1528,8 +1530,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             int beforeYesterday = 2;
             VPOperateManager.getMangerInstance(mContext).readSleepDataFromDay(writeResponse, new ISleepDataListener() {
                         @Override
-                        public void onSleepDataChange(SleepData sleepData) {
-                            String message = "睡眠数据-返回:" + sleepData.toString();
+                        public void onSleepDataChange(String day, SleepData sleepData) {
+                            String message = getDay(day) + "-睡眠数据-返回:" + sleepData.toString();
                             Logger.t(TAG).i(message);
                             sendMsg(message, 1);
                         }
@@ -1557,8 +1559,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             int yesterday = 1;
             VPOperateManager.getMangerInstance(mContext).readSleepDataSingleDay(writeResponse, new ISleepDataListener() {
                 @Override
-                public void onSleepDataChange(SleepData sleepData) {
-                    String message = "睡眠数据-返回:" + sleepData.toString();
+                public void onSleepDataChange(String day, SleepData sleepData) {
+                    String message = getDay(day) + "-睡眠数据-返回:" + sleepData.toString();
                     Logger.t(TAG).i(message);
                     sendMsg(message, 1);
                 }
@@ -1639,6 +1641,9 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 public void onOriginHalfHourDataChange(OriginHalfHourData originHalfHourDataList) {
                     String message = "健康数据[30分钟]-返回:" + originHalfHourDataList.toString();
                     Logger.t(TAG).i(message);
+                    Logger.t(TAG).i("健康数据[30分钟]-返回:30分钟的心率数据 size = " + originHalfHourDataList.getHalfHourRateDatas().size());
+                    Logger.t(TAG).i("健康数据[30分钟]-返回:30分钟的血压数据 size = " + originHalfHourDataList.getHalfHourBps().size());
+                    Logger.t(TAG).i("健康数据[30分钟]-返回:30分钟的运动数据 size = " + originHalfHourDataList.getHalfHourSportDatas().size());
                 }
 
                 @Override
@@ -1841,8 +1846,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
 
                 @Override
-                public void onSleepDataChange(SleepData sleepData) {
-                    String message = "onSleepDataChange:" + sleepData;
+                public void onSleepDataChange(String day, SleepData sleepData) {
+                    String message = getDay(day) + "-onSleepDataChange:" + sleepData;
                     Logger.t(TAG).i(message);
                 }
 
@@ -2112,6 +2117,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 Logger.t(TAG).e("暂无闹钟可以删除");
                 showToast("暂无闹钟可以删除");
             }
+        } else if (oprater.equals(TEXT_ALARM)) {
+            startActivity(new Intent(this, TextAlarmActivity.class));
         }
 
     }
@@ -2370,5 +2377,15 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
     public void stopListenADC() {
         Logger.t(TAG).i("停止监听光电信号");
         VPOperateManager.getMangerInstance(mContext).stopDetectHeart(writeResponse);
+    }
+
+    private String getDay(String day) {
+        if (day.equals("0")) {
+            return "今天";
+        } else if (day.equals("1")) {
+            return "昨天";
+        } else {
+            return "前天";
+        }
     }
 }

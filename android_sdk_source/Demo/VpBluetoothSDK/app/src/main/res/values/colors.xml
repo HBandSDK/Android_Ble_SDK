@@ -6,4 +6,5 @@
     <color name="ecg_line">#FC5F64</color>
     <color name="ecg_line_bg_bold">#66333333</color>
     <color name="ecg_line_bg_normal">#10666666</color>
+    <color name="divider_color">#B7B2B2</color>
 </resources>

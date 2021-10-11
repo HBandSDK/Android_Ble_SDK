@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff">
+
+    <com.yanzhenjie.recyclerview.SwipeRecyclerView
+        android:id="@+id/rvTextAlarm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="添加闹钟"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rvTextAlarm" />
+
+    <EditText
+        android:id="@+id/et_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="请输入闹钟文字"
+        android:text="大郎，该吃药了 @^_^@"
+        app:layout_constraintBottom_toBottomOf="@id/btn_add"
+        app:layout_constraintLeft_toRightOf="@id/btn_add"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btn_add" />
+
+    <EditText
+        android:id="@+id/et_hour"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="请输入小时"
+        android:textAlignment="textEnd"
+        app:layout_constraintBottom_toBottomOf="@id/tv_"
+        app:layout_constraintRight_toLeftOf="@id/tv_"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_" />
+
+    <TextView
+        android:id="@+id/tv_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=":"
+        android:textSize="30sp"
+        app:layout_constraintTop_toBottomOf="@id/et_content"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <EditText
+        android:id="@+id/et_minute"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="请输入分钟"
+        app:layout_constraintBottom_toBottomOf="@id/tv_"
+        app:layout_constraintLeft_toRightOf="@id/tv_"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_" />
+</androidx.constraintlayout.widget.ConstraintLayout>

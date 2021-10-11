@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp"
+    android:background="#ececec">
+
+    <TextView
+        android:id="@+id/tvAlarmId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:textColor="#000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvAlarmTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:layout_marginStart="20dp"
+        android:text="16:30"
+        app:layout_constraintLeft_toRightOf="@id/tvAlarmId"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/tvAlarmRepeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="#222"
+        android:layout_marginStart="20dp"
+        app:layout_constraintTop_toBottomOf="@id/tvAlarmTime"
+        android:text="1100110"
+        app:layout_constraintLeft_toRightOf="@id/tvAlarmId"/>
+
+    <TextView
+        android:id="@+id/tvAlarmContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="#222"
+        android:layout_marginStart="20dp"
+        app:layout_constraintTop_toBottomOf="@id/tvAlarmRepeat"
+        android:text="起床了，该上班了"
+        app:layout_goneMarginStart="20dp"
+        app:layout_constraintRight_toLeftOf="@+id/sv"
+        app:layout_constraintLeft_toRightOf="@id/tvAlarmId"/>
+
+    <com.github.iielse.switchbutton.SwitchView
+        android:id="@+id/sv"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
