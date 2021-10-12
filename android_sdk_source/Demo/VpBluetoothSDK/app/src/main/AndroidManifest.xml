@@ -55,6 +55,7 @@
         <activity android:name=".activity.UiUpdateServerActivity" />
         <activity android:name=".oad.activity.OadActivity" />
         <activity android:name=".oad.activity.NotificationActivity" />
+        <activity android:name=".activity.TextAlarmActivity"/>
 
         <service android:name="com.inuker.bluetooth.library.BluetoothService" />
         <service android:name=".oad.service.DfuService" />
