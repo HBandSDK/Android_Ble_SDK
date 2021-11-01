@@ -988,16 +988,13 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             socailMsgData.setSnapchat(EFunctionStatus.SUPPORT_OPEN);
             socailMsgData.setGmail(EFunctionStatus.SUPPORT_OPEN);
             socailMsgData.setSkype(EFunctionStatus.SUPPORT_OPEN);
-
-            socailMsgData.setTiktok(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setTikTok(EFunctionStatus.SUPPORT_OPEN);
             socailMsgData.setTelegram(SUPPORT_OPEN);
             socailMsgData.setConnected2_me(EFunctionStatus.SUPPORT_OPEN);
-
-
             socailMsgData.setPhone(EFunctionStatus.SUPPORT_OPEN);
             socailMsgData.setMsg(EFunctionStatus.SUPPORT_OPEN);
-            socailMsgData.setKakao_talk(EFunctionStatus.SUPPORT_OPEN);
-
+            socailMsgData.setKakaoTalk(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setShieldPolice(EFunctionStatus.SUPPORT_OPEN);
 
             VPOperateManager.getMangerInstance(mContext).settingSocialMsg(writeResponse, new ISocialMsgDataListener() {
                 @Override
@@ -1016,29 +1013,30 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             }, socailMsgData);
         } else if (oprater.equals(SOCIAL_MSG_SETTING)) {
             FunctionSocailMsgData socailMsgData = new FunctionSocailMsgData();
-            socailMsgData.setPhone(SUPPORT);
-            socailMsgData.setMsg(SUPPORT);
-            socailMsgData.setWechat(EFunctionStatus.SUPPORT_OPEN);
-            socailMsgData.setQq(EFunctionStatus.SUPPORT_OPEN);
-            socailMsgData.setFacebook(EFunctionStatus.SUPPORT_OPEN);
-            socailMsgData.setTwitter(EFunctionStatus.SUPPORT_OPEN);
-            socailMsgData.setWhats(EFunctionStatus.SUPPORT_OPEN);
-            socailMsgData.setSina(UNSUPPORT);
-            socailMsgData.setFlickr(UNSUPPORT);
-            socailMsgData.setLinkin(EFunctionStatus.SUPPORT_OPEN);
-            socailMsgData.setLine(SUPPORT_OPEN);
-            socailMsgData.setInstagram(EFunctionStatus.SUPPORT_OPEN);
-            socailMsgData.setSnapchat(EFunctionStatus.SUPPORT_OPEN);
-            socailMsgData.setGmail(EFunctionStatus.SUPPORT_OPEN);
-            socailMsgData.setSkype(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setPhone(SUPPORT_CLOSE);
+            socailMsgData.setMsg(SUPPORT_CLOSE);
+            socailMsgData.setWechat(EFunctionStatus.SUPPORT_CLOSE);
+            socailMsgData.setQq(EFunctionStatus.SUPPORT_CLOSE);
+            socailMsgData.setFacebook(EFunctionStatus.SUPPORT_CLOSE);
+            socailMsgData.setTwitter(EFunctionStatus.SUPPORT_CLOSE);
+            socailMsgData.setWhats(EFunctionStatus.SUPPORT_CLOSE);
+            socailMsgData.setSina(SUPPORT_CLOSE);
+            socailMsgData.setFlickr(SUPPORT_CLOSE);
+            socailMsgData.setLinkin(EFunctionStatus.SUPPORT_CLOSE);
+            socailMsgData.setLine(SUPPORT_CLOSE);
+            socailMsgData.setInstagram(EFunctionStatus.SUPPORT_CLOSE);
+            socailMsgData.setSnapchat(EFunctionStatus.SUPPORT_CLOSE);
+            socailMsgData.setGmail(EFunctionStatus.SUPPORT_CLOSE);
+            socailMsgData.setSkype(EFunctionStatus.SUPPORT_CLOSE);
 
-            socailMsgData.setTiktok(EFunctionStatus.SUPPORT_OPEN);
-            socailMsgData.setTelegram(SUPPORT_OPEN);
-            socailMsgData.setConnected2_me(EFunctionStatus.SUPPORT_OPEN);
+            socailMsgData.setTikTok(EFunctionStatus.SUPPORT_CLOSE);
+            socailMsgData.setTelegram(SUPPORT_CLOSE);
+            socailMsgData.setConnected2_me(EFunctionStatus.SUPPORT_CLOSE);
 
             socailMsgData.setPhone(EFunctionStatus.SUPPORT_CLOSE);
             socailMsgData.setMsg(EFunctionStatus.SUPPORT_CLOSE);
-            socailMsgData.setKakao_talk(SUPPORT_CLOSE);
+            socailMsgData.setKakaoTalk(SUPPORT_CLOSE);
+            socailMsgData.setShieldPolice(SUPPORT_CLOSE);
 
             VPOperateManager.getMangerInstance(mContext).settingSocialMsg(writeResponse, new ISocialMsgDataListener() {
                 @Override
@@ -1095,23 +1093,23 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 //            ContentSetting contentsmsSetting3 = new ContentSmsSetting(ESocailMsg.SMS, "测试头", "010-6635214", "测试反馈 SMS");
 //
 //            /**第三方APP推送,发送前先通过密码验证获取FunctionSocailMsgData的状态**/
-            ContentSetting contentsociaSetting4 = new ContentSocailSetting(ESocailMsg.KAKAO_TALK, "KAKAO", "测试反馈 KAKAO-Veepoo ");
-            VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting4);
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    ContentSetting contentsociaSetting5 = new ContentSocailSetting(ESocailMsg.MESSENGER, "vepo", "测试反馈 MESSENGER");
-                    VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting5);
-
-                }
-            }, 2000);
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    ContentSetting contentsociaSetting6 = new ContentSocailSetting(ESocailMsg.PHONE, "vepo", "测试反馈 PHONE");
-                    VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentphoneSetting0);
-                }
-            }, 4000);
+//            ContentSetting contentsociaSetting4 = new ContentSocailSetting(ESocailMsg.KAKAO_TALK, "KAKAO", "测试反馈 KAKAO-Veepoo ");
+//            VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting4);
+//            mHandler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    ContentSetting contentsociaSetting5 = new ContentSocailSetting(ESocailMsg.MESSENGER, "vepo", "测试反馈 MESSENGER");
+//                    VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting5);
+//
+//                }
+//            }, 2000);
+//            mHandler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    ContentSetting contentsociaSetting6 = new ContentSocailSetting(ESocailMsg.PHONE, "vepo", "测试反馈 PHONE");
+//                    VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentphoneSetting0);
+//                }
+//            }, 4000);
 //            mHandler.postDelayed(new Runnable() {
 //                @Override
 //                public void run() {
@@ -1120,17 +1118,20 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 //                }
 //            }, 6000);
 //            ContentSetting contentsociaSetting6 = new ContentSocailSetting(ESocailMsg.G15MSG, "G15", "ABCDEFG,今天是星期五，明天星期六");
-            VPOperateManager.getMangerInstance(mContext).sendG15MsgContent(writeResponse, "G15", "ABCDEFG,今天是星期五", new IG15MessageListener() {
-                @Override
-                public void onG15MessageSendSuccess() {
-                    Toast.makeText(mContext, "收到应答", Toast.LENGTH_SHORT).show();
-                }
+//            VPOperateManager.getMangerInstance(mContext).sendG15MsgContent(writeResponse, "G15", "ABCDEFG,今天是星期五", new IG15MessageListener() {
+//                @Override
+//                public void onG15MessageSendSuccess() {
+//                    Toast.makeText(mContext, "收到应答", Toast.LENGTH_SHORT).show();
+//                }
+//
+//                @Override
+//                public void onG15MessageSendFailed() {
+//                    Toast.makeText(mContext, "没有收到应答", Toast.LENGTH_SHORT).show();
+//                }
+//            });
 
-                @Override
-                public void onG15MessageSendFailed() {
-                    Toast.makeText(mContext, "没有收到应答", Toast.LENGTH_SHORT).show();
-                }
-            });
+            ContentSetting contentsociaSetting4 = new ContentSocailSetting(ESocailMsg.SHIELD_POLICE, "警右", "坦白从宽，牢底坐穿，抗拒从严，回家过年");
+            VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting4);
 
         } else if (oprater.equals(SOCIAL_PHONE_IDLE_OR_OFFHOOK)) {
             VPOperateManager.getMangerInstance(mContext).offhookOrIdlePhone(writeResponse);
