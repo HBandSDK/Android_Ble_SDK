@@ -14,6 +14,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.goodix.ble.gr.toolbox.app.libfastdfu.EasyDfu2;
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.adapter.GridAdatper;
@@ -1015,7 +1016,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             FunctionSocailMsgData socailMsgData = new FunctionSocailMsgData();
             socailMsgData.setPhone(SUPPORT_CLOSE);
             socailMsgData.setMsg(SUPPORT_CLOSE);
-            socailMsgData.setWechat(EFunctionStatus.SUPPORT_CLOSE);
+            socailMsgData.setWechat(SUPPORT_OPEN);
             socailMsgData.setQq(EFunctionStatus.SUPPORT_CLOSE);
             socailMsgData.setFacebook(EFunctionStatus.SUPPORT_CLOSE);
             socailMsgData.setTwitter(EFunctionStatus.SUPPORT_CLOSE);
@@ -1037,7 +1038,6 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             socailMsgData.setMsg(EFunctionStatus.SUPPORT_CLOSE);
             socailMsgData.setKakaoTalk(SUPPORT_CLOSE);
             socailMsgData.setShieldPolice(SUPPORT_CLOSE);
-
             VPOperateManager.getMangerInstance(mContext).settingSocialMsg(writeResponse, new ISocialMsgDataListener() {
                 @Override
                 public void onSocialMsgSupportDataChange(FunctionSocailMsgData socailMsgData) {
