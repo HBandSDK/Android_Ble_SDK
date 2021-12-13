@@ -33,12 +33,13 @@ public class UiUpdateG15ImgActivity extends Activity implements View.OnClickList
 
     UiUpdateUtil mUiUpdateUtil;
 
-    private UIDataG15Img mUIDataProfile, mUIDataQRCode1, mUIDataQRCode2;
+    private UIDataG15Img mUIDataProfile, mUIDataQRCode1, mUIDataQRCode2, mUIDataAppDownloadQRCode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_uiupdate_g15img);
+        findViewById(R.id.btnA2).setOnClickListener(this);
         findViewById(R.id.btnA3).setOnClickListener(this);
         findViewById(R.id.btnA4).setOnClickListener(this);
         findViewById(R.id.btnA5).setOnClickListener(this);
@@ -51,28 +52,55 @@ public class UiUpdateG15ImgActivity extends Activity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btnA2:
+                setG15ImgAppDownloadAppQRCode();
+                break;
             case R.id.btnA3:
                 setG15ImgProfile();
                 break;
             case R.id.btnA4:
-                setG15ImgQRCode1();
+                setG15ImgTheme1();
                 break;
             case R.id.btnA5:
-                setG15ImgQRCode2();
+                setG15ImgTheme2();
                 break;
         }
     }
 
+    /**
+     * 方便测试我们都是用纯色的图片
+     * 建议使用者定义的图片为黑色背景叠加白色二维码的图片
+     * @param color
+     * @return
+     */
     private Bitmap createBitmap(int color) {
         Bitmap bitmap = Bitmap.createBitmap(240, 240, Bitmap.Config.RGB_565);
         bitmap.eraseColor(color);
         return bitmap;
     }
 
+    private void setG15ImgAppDownloadAppQRCode() {
+        readAppDownloadQRCode();
+    }
+
+    private void readAppDownloadQRCode() {
+        mUiUpdateUtil.getG15ImgAppDownloadQRCode(new IUIBaseInfoFormG15ImgListener() {
+            @Override
+            public void onBaseUiInfoFormG15Img(UIDataG15Img uiDataG15Img) {
+                Logger.t(TAG).i("获取G15手表App下载二维码图片UI设置信息:" + uiDataG15Img.toString());
+                mUIDataAppDownloadQRCode = uiDataG15Img;
+                /*
+                 * 建议使用者定义的图片为黑色背景叠加白色二维码的图片。
+                 */
+                startTransmission(EUIFromType.G15_IMG_QR_CODE_APP_DOWNLOAD, createBitmap(Color.parseColor("#8F205F")));
+            }
+        });
+    }
+
     /**
      * 设置用户信息图片
      */
-    private void setG15ImgProfile(){
+    private void setG15ImgProfile() {
         //先读取手表关于用户信息图片设置的信息，读取成功后调用startTransmission设置图片
         readProfileInfo();
     }
@@ -89,37 +117,37 @@ public class UiUpdateG15ImgActivity extends Activity implements View.OnClickList
     }
 
     /**
-     * 设置病人腕带二维码图片
+     * 赛米加G15定制项目图片主题1
      */
-    private void setG15ImgQRCode1(){
-        readQRCode1Info();
+    private void setG15ImgTheme1() {
+        readTheme1Info();
     }
 
-    private void readQRCode1Info() {
-        mUiUpdateUtil.getG15ImgQRCode1Info(new IUIBaseInfoFormG15ImgListener() {
+    private void readTheme1Info() {
+        mUiUpdateUtil.getG15ImgTheme1Info(new IUIBaseInfoFormG15ImgListener() {
             @Override
             public void onBaseUiInfoFormG15Img(UIDataG15Img uiDataG15Img) {
-                Logger.t(TAG).i("获取G15手表病人腕带二维码图片UI设置信息:" + uiDataG15Img.toString());
+                Logger.t(TAG).i("获取G15手表赛米加G15定制项目图片主题1图片UI设置信息:" + uiDataG15Img.toString());
                 mUIDataQRCode1 = uiDataG15Img;
-                startTransmission(EUIFromType.G15_IMG_QR_CODE_1, createBitmap(Color.parseColor("#0FC2FF")));
+                startTransmission(EUIFromType.G15_IMG_THEME_1, createBitmap(Color.parseColor("#0FC2FF")));
             }
         });
     }
 
     /**
-     * 设置医院收款二维码图片
+     * 赛米加G15定制项目图片主题2
      */
-    private void setG15ImgQRCode2(){
-        readQRCode2Info();
+    private void setG15ImgTheme2() {
+        readTheme2Info();
     }
 
-    private void readQRCode2Info() {
-        mUiUpdateUtil.getG15ImgQRCode2Info(new IUIBaseInfoFormG15ImgListener() {
+    private void readTheme2Info() {
+        mUiUpdateUtil.getG15ImgTheme2Info(new IUIBaseInfoFormG15ImgListener() {
             @Override
             public void onBaseUiInfoFormG15Img(UIDataG15Img uiDataG15Img) {
-                Logger.t(TAG).i("获取G15手表医院收款二维码图片UI设置信息:" + uiDataG15Img.toString());
+                Logger.t(TAG).i("获取G15手表赛米加G15定制项目图片主题2图片UI设置信息:" + uiDataG15Img.toString());
                 mUIDataQRCode2 = uiDataG15Img;
-                startTransmission(EUIFromType.G15_IMG_QR_CODE_2, createBitmap(Color.parseColor("#5F80FF")));
+                startTransmission(EUIFromType.G15_IMG_THEME_2, createBitmap(Color.parseColor("#5F80FF")));
             }
         });
     }

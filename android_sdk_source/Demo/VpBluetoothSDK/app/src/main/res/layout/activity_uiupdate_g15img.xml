@@ -33,13 +33,22 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivBlue" />
 
+    <ImageView
+        android:id="@+id/ivPink"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#8F205F"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivGreen" />
+
     <Button
         android:id="@+id/btnA3"
         app:layout_constraintTop_toTopOf="@id/ivRed"
         app:layout_constraintBottom_toBottomOf="@id/ivRed"
         app:layout_constraintLeft_toRightOf="@id/ivRed"
         android:layout_marginStart="20dp"
-        android:text="A3"
+        android:text="赛米加G15定制项目个人信息"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -49,7 +58,7 @@
         app:layout_constraintBottom_toBottomOf="@id/ivBlue"
         app:layout_constraintLeft_toRightOf="@id/ivBlue"
         android:layout_marginStart="20dp"
-        android:text="A4"
+        android:text="赛米加G15定制项目图片主题1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -59,7 +68,17 @@
         app:layout_constraintBottom_toBottomOf="@id/ivGreen"
         app:layout_constraintLeft_toRightOf="@id/ivGreen"
         android:layout_marginStart="20dp"
-        android:text="A5"
+        android:text="图片主题2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnA2"
+        app:layout_constraintTop_toTopOf="@id/ivPink"
+        app:layout_constraintBottom_toBottomOf="@id/ivPink"
+        app:layout_constraintLeft_toRightOf="@id/ivPink"
+        android:layout_marginStart="20dp"
+        android:text="下载App二维码信息"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
