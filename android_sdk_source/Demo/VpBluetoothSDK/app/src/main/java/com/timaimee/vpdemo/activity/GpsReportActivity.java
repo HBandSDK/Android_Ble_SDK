@@ -190,14 +190,12 @@ public class GpsReportActivity extends Activity implements LocationSource, AMapL
             mlocationClient.stopLocation();
         mlocationClient = null;
         mListener = null;
-
     }
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         Logger.t(TAG).i("onPointerCaptureChanged");
     }
-
 
     @Override
     protected void onResume() {
