@@ -2,6 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:drawable="@drawable/login_button_press1" android:state_focused="false" android:state_pressed="true"/>
+    <item android:drawable="@color/support_recycler_color_text_gray" android:state_enabled="false"/>
     <item android:drawable="@drawable/login_button_normal"/>
 
 

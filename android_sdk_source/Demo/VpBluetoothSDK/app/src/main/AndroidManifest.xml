@@ -56,7 +56,8 @@
         <activity android:name=".oad.activity.OadActivity" />
         <activity android:name=".oad.activity.NotificationActivity" />
         <activity android:name=".activity.TextAlarmActivity"/>
-
+        <activity android:name=".activity.NotificationSettingsActivity"/>
+        <activity android:name=".activity.OriginalDataLogActivity"/>
         <service android:name="com.inuker.bluetooth.library.BluetoothService" />
         <service android:name=".oad.service.DfuService" />
         <!-- 高德地图定位 -->
