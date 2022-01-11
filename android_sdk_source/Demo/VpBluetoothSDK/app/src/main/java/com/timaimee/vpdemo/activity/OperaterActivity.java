@@ -698,6 +698,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
                 //String bluetoothAddress, int alarmId, int alarmHour, int alarmMinute, String repeatStatus, int scene, String unRepeatDate, boolean isOpen
             }, alarm2Setting);
+
         } else if(oprater.equals(ALARM_NEW_LISTENER)){
             VPOperateManager.getMangerInstance(mContext).setOnDeviceAlarm2ChangedListener(new OnDeviceAlarm2ChangedListener() {
                 @Override
