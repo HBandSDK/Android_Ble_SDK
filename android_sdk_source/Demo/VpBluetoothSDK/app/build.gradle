@@ -49,7 +49,7 @@ dependencies {
     implementation files('libs/libcomx-0.5.jar')
     implementation files('libs/vpbluetooth-release.aar')
     implementation files('libs/gson-2.2.4.jar')
-    implementation files('libs/vpprotocol-2.1.98.15.aar')
+    implementation files('libs/vpprotocol-2.2.00.15.aar')
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:appcompat-v7:28.0.0-alpha1'
     implementation 'com.android.support:recyclerview-v7:28.0.0-alpha1'
