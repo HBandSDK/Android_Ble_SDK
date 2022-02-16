@@ -157,6 +157,7 @@ import com.veepoo.protocol.model.settings.TextAlarm2Setting;
 import com.veepoo.protocol.model.settings.WeatherStatusSetting;
 import com.veepoo.protocol.model.settings.WomenSetting;
 import com.veepoo.protocol.shareprence.VpSpGetUtil;
+import com.veepoo.protocol.shareprence.VpSpSaveUtil;
 import com.veepoo.protocol.util.Spo2hOriginUtil;
 
 import java.util.ArrayList;
@@ -2062,6 +2063,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             }, watchDataDay);
         }  else if (oprater.equals(TEXT_ALARM)) {
             startActivity(new Intent(this, TextAlarmActivity.class));
+        } else if (oprater.equals(G15_QR_CODE)) {
+            startActivity(new Intent(this, G15QRCodeActivity.class));
         } else if (oprater.equals(ORIGIN_LOG)) {
             startActivity(new Intent(this, OriginalDataLogActivity.class));
         }

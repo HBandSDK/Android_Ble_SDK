@@ -172,8 +172,12 @@ public class GpsReportActivity extends Activity implements LocationSource, AMapL
         }
 
         if (mlocationClient == null) {
-            mlocationClient = new AMapLocationClient(this);
-            mlocationClient.setLocationListener(this);
+            try{
+                mlocationClient = new AMapLocationClient(this);
+                mlocationClient.setLocationListener(this);
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         AMapLocationClientOption mLocationOption = new AMapLocationClientOption();
         mLocationOption.setOnceLocation(true);

@@ -58,6 +58,8 @@
         <activity android:name=".activity.TextAlarmActivity"/>
         <activity android:name=".activity.NotificationSettingsActivity"/>
         <activity android:name=".activity.OriginalDataLogActivity"/>
+        <activity android:name=".activity.G15QRCodeActivity"/>
+
         <service android:name="com.inuker.bluetooth.library.BluetoothService" />
         <service android:name=".oad.service.DfuService" />
         <!-- 高德地图定位 -->
