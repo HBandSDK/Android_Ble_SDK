@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,9 +39,11 @@ import com.veepoo.protocol.listener.data.ICustomSettingDataListener;
 import com.veepoo.protocol.listener.data.IDeviceControlPhoneModelState;
 import com.veepoo.protocol.listener.data.IDeviceFuctionDataListener;
 import com.veepoo.protocol.listener.data.IDrinkDataListener;
+import com.veepoo.protocol.listener.data.IECGAutoReportListener;
 import com.veepoo.protocol.listener.data.IFatigueDataListener;
 import com.veepoo.protocol.listener.data.IFindDeviceDatalistener;
 import com.veepoo.protocol.listener.data.IFindPhonelistener;
+import com.veepoo.protocol.listener.data.IG15MessageListener;
 import com.veepoo.protocol.listener.data.IHRVOriginDataListener;
 import com.veepoo.protocol.listener.data.IHeartDataListener;
 import com.veepoo.protocol.listener.data.IHeartWaringDataListener;
@@ -48,6 +51,7 @@ import com.veepoo.protocol.listener.data.ILanguageDataListener;
 import com.veepoo.protocol.listener.data.ILightDataCallBack;
 import com.veepoo.protocol.listener.data.ILongSeatDataListener;
 import com.veepoo.protocol.listener.data.ILowPowerListener;
+import com.veepoo.protocol.listener.data.IMtuChangeListener;
 import com.veepoo.protocol.listener.data.IMusicControlListener;
 import com.veepoo.protocol.listener.data.INightTurnWristeDataListener;
 import com.veepoo.protocol.listener.data.IOriginData3Listener;
@@ -55,6 +59,7 @@ import com.veepoo.protocol.listener.data.IOriginDataListener;
 import com.veepoo.protocol.listener.data.IOriginProgressListener;
 import com.veepoo.protocol.listener.data.IPersonInfoDataListener;
 import com.veepoo.protocol.listener.data.IPwdDataListener;
+import com.veepoo.protocol.listener.data.IRRIntervalProgressListener;
 import com.veepoo.protocol.listener.data.IResponseListener;
 import com.veepoo.protocol.listener.data.ISOSListener;
 import com.veepoo.protocol.listener.data.IScreenLightListener;
@@ -72,6 +77,7 @@ import com.veepoo.protocol.listener.data.ITextAlarmDataListener;
 import com.veepoo.protocol.listener.data.IWeatherStatusDataListener;
 import com.veepoo.protocol.listener.data.IWomenDataListener;
 import com.veepoo.protocol.listener.data.OnDeviceAlarm2ChangedListener;
+import com.veepoo.protocol.model.DayState;
 import com.veepoo.protocol.model.datas.AlarmData;
 import com.veepoo.protocol.model.datas.AlarmData2;
 import com.veepoo.protocol.model.datas.AllSetData;
@@ -102,6 +108,7 @@ import com.veepoo.protocol.model.datas.OriginData3;
 import com.veepoo.protocol.model.datas.OriginHalfHourData;
 import com.veepoo.protocol.model.datas.PersonInfoData;
 import com.veepoo.protocol.model.datas.PwdData;
+import com.veepoo.protocol.model.datas.RRIntervalData;
 import com.veepoo.protocol.model.datas.ScreenLightData;
 import com.veepoo.protocol.model.datas.ScreenStyleData;
 import com.veepoo.protocol.model.datas.SleepData;
@@ -130,6 +137,7 @@ import com.veepoo.protocol.model.enums.ELanguage;
 import com.veepoo.protocol.model.enums.EMultiAlarmOprate;
 import com.veepoo.protocol.model.enums.EOprateStauts;
 import com.veepoo.protocol.model.enums.ESex;
+import com.veepoo.protocol.model.enums.ESocailMsg;
 import com.veepoo.protocol.model.enums.ESpo2hDataType;
 import com.veepoo.protocol.model.enums.ESportType;
 import com.veepoo.protocol.model.enums.ETemperatureUnit;
@@ -143,6 +151,9 @@ import com.veepoo.protocol.model.settings.AutoDetectStateSetting;
 import com.veepoo.protocol.model.settings.BpSetting;
 import com.veepoo.protocol.model.settings.ChantingSetting;
 import com.veepoo.protocol.model.settings.CheckWearSetting;
+import com.veepoo.protocol.model.settings.ContentPhoneSetting;
+import com.veepoo.protocol.model.settings.ContentSetting;
+import com.veepoo.protocol.model.settings.ContentSocailSetting;
 import com.veepoo.protocol.model.settings.CountDownSetting;
 import com.veepoo.protocol.model.settings.CustomSetting;
 import com.veepoo.protocol.model.settings.CustomSettingData;
@@ -157,8 +168,8 @@ import com.veepoo.protocol.model.settings.TextAlarm2Setting;
 import com.veepoo.protocol.model.settings.WeatherStatusSetting;
 import com.veepoo.protocol.model.settings.WomenSetting;
 import com.veepoo.protocol.shareprence.VpSpGetUtil;
-import com.veepoo.protocol.shareprence.VpSpSaveUtil;
 import com.veepoo.protocol.util.Spo2hOriginUtil;
+import com.veepoo.protocol.util.TextAlarmSp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -604,6 +615,14 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, "0000", is24Hourmodel);
 
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    readOriginData();
+//                }
+//            },1000);
+
+
         } else if (oprater.equals(PWD_MODIFY)) {
             VPOperateManager.getMangerInstance(mContext).modifyDevicePwd(writeResponse, new IPwdDataListener() {
                 @Override
@@ -699,8 +718,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
                 //String bluetoothAddress, int alarmId, int alarmHour, int alarmMinute, String repeatStatus, int scene, String unRepeatDate, boolean isOpen
             }, alarm2Setting);
-
-        } else if(oprater.equals(ALARM_NEW_LISTENER)){
+        } else if (oprater.equals(ALARM_NEW_LISTENER)) {
             VPOperateManager.getMangerInstance(mContext).setOnDeviceAlarm2ChangedListener(new OnDeviceAlarm2ChangedListener() {
                 @Override
                 public void onDeviceAlarm2Changed() {
@@ -878,6 +896,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             EFunctionStatus isOpenDisconnectRemind = UNSUPPORT;
             EFunctionStatus isAutoTemperatureDetect = UNSUPPORT;
             boolean isSupportSettingsTemperatureUnit = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportSettingsTemperatureUnit();//是否支持温度单位设置
+            boolean isSupportSleep = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportPreciseSleep();//是否支持精准睡眠
 
             boolean isCanReadTempture = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportReadTempture();//是否支持读取温度
             boolean isCanDetectTempByApp = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportCheckTemptureByApp();//是否可以通过app监测体温
@@ -902,6 +921,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             } else {
                 customSetting.setIsOpenAutoTemperatureDetect(UNSUPPORT);
             }
+
             VPOperateManager.getMangerInstance(mContext).changeCustomSetting(writeResponse, new ICustomSettingDataListener() {
                 @Override
                 public void OnSettingDataChange(CustomSettingData customSettingData) {
@@ -910,7 +930,122 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     sendMsg(message, 1);
                 }
             }, customSetting);
-        } else if (oprater.equals(CHECK_WEAR_SETING_OPEN)) {
+        }
+
+
+        else if(oprater.equals(DEVICE_ECG_ALWAYS_OPEN)) {
+            boolean isHaveMetricSystem = true;
+            boolean isMetric = true;
+            boolean is24Hour = true;
+            boolean isOpenAutoHeartDetect = true;
+            boolean isOpenAutoBpDetect = true;
+            boolean isCelsius = true;
+            EFunctionStatus isOpenSportRemain = UNSUPPORT;
+            EFunctionStatus isOpenVoiceBpHeart = UNSUPPORT;
+            EFunctionStatus isOpenFindPhoneUI = UNSUPPORT;
+            EFunctionStatus isOpenStopWatch = UNSUPPORT;
+            EFunctionStatus isOpenSpo2hLowRemind = UNSUPPORT;
+            EFunctionStatus isOpenWearDetectSkin = UNSUPPORT;
+            EFunctionStatus isOpenAutoInCall = UNSUPPORT;
+            EFunctionStatus isOpenAutoHRV = UNSUPPORT;
+            EFunctionStatus isOpenDisconnectRemind = UNSUPPORT;
+            EFunctionStatus isAutoTemperatureDetect = UNSUPPORT;
+            boolean isSupportSettingsTemperatureUnit = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportSettingsTemperatureUnit();//是否支持温度单位设置
+            boolean isSupportSleep = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportPreciseSleep();//是否支持精准睡眠
+
+            boolean isCanReadTempture = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportReadTempture();//是否支持读取温度
+            boolean isCanDetectTempByApp = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportCheckTemptureByApp();//是否可以通过app监测体温
+
+
+            Logger.t(TAG).i("是否可以读取体温：" + isCanReadTempture + " 是否可以通过app自动检测体温");
+
+            CustomSetting customSetting = new CustomSetting(isHaveMetricSystem, isMetric, is24Hour, isOpenAutoHeartDetect,
+                    isOpenAutoBpDetect, isOpenSportRemain, isOpenVoiceBpHeart, isOpenFindPhoneUI, isOpenStopWatch,
+                    isOpenSpo2hLowRemind, isOpenWearDetectSkin, isOpenAutoInCall, isOpenAutoHRV, isOpenDisconnectRemind
+            );
+            customSetting.setIsOpenLongClickLockScreen(SUPPORT_CLOSE);
+            if (isSupportSettingsTemperatureUnit) {
+                customSetting.setTemperatureUnit(VpSpGetUtil.getVpSpVariInstance(mContext).getTemperatureUnit()
+                        == ETemperatureUnit.CELSIUS ? ETemperatureUnit.FAHRENHEIT : ETemperatureUnit.CELSIUS);
+            } else {
+                customSetting.setTemperatureUnit(ETemperatureUnit.NONE);
+            }
+            if (isCanDetectTempByApp) {
+                boolean isOpenTempDetect = VpSpGetUtil.getVpSpVariInstance(mContext).isOpenTemperatureDetectByApp();
+                customSetting.setIsOpenAutoTemperatureDetect(isOpenTempDetect ? SUPPORT_CLOSE : SUPPORT_OPEN);
+            } else {
+                customSetting.setIsOpenAutoTemperatureDetect(UNSUPPORT);
+            }
+
+            customSetting.setEcgAlwaysOpen(SUPPORT_OPEN);
+            VPOperateManager.getMangerInstance(mContext).changeCustomSetting(writeResponse, new ICustomSettingDataListener() {
+                @Override
+                public void OnSettingDataChange(CustomSettingData customSettingData) {
+                    String message = "个性化状态--设置:\n" + customSettingData.toString();
+                    Logger.t(TAG).i(message);
+                    sendMsg(message, 1);
+                }
+            }, customSetting);
+        }
+
+
+        else if(oprater.equals(DEVICE_ECG_ALWAYS_CLOSE)) {
+            boolean isHaveMetricSystem = true;
+            boolean isMetric = true;
+            boolean is24Hour = true;
+            boolean isOpenAutoHeartDetect = true;
+            boolean isOpenAutoBpDetect = true;
+            boolean isCelsius = true;
+            EFunctionStatus isOpenSportRemain = UNSUPPORT;
+            EFunctionStatus isOpenVoiceBpHeart = UNSUPPORT;
+            EFunctionStatus isOpenFindPhoneUI = UNSUPPORT;
+            EFunctionStatus isOpenStopWatch = UNSUPPORT;
+            EFunctionStatus isOpenSpo2hLowRemind = UNSUPPORT;
+            EFunctionStatus isOpenWearDetectSkin = UNSUPPORT;
+            EFunctionStatus isOpenAutoInCall = UNSUPPORT;
+            EFunctionStatus isOpenAutoHRV = UNSUPPORT;
+            EFunctionStatus isOpenDisconnectRemind = UNSUPPORT;
+            EFunctionStatus isAutoTemperatureDetect = UNSUPPORT;
+            boolean isSupportSettingsTemperatureUnit = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportSettingsTemperatureUnit();//是否支持温度单位设置
+            boolean isSupportSleep = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportPreciseSleep();//是否支持精准睡眠
+
+            boolean isCanReadTempture = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportReadTempture();//是否支持读取温度
+            boolean isCanDetectTempByApp = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportCheckTemptureByApp();//是否可以通过app监测体温
+
+
+            Logger.t(TAG).i("是否可以读取体温：" + isCanReadTempture + " 是否可以通过app自动检测体温");
+
+            CustomSetting customSetting = new CustomSetting(isHaveMetricSystem, isMetric, is24Hour, isOpenAutoHeartDetect,
+                    isOpenAutoBpDetect, isOpenSportRemain, isOpenVoiceBpHeart, isOpenFindPhoneUI, isOpenStopWatch,
+                    isOpenSpo2hLowRemind, isOpenWearDetectSkin, isOpenAutoInCall, isOpenAutoHRV, isOpenDisconnectRemind
+            );
+            customSetting.setIsOpenLongClickLockScreen(SUPPORT_CLOSE);
+            if (isSupportSettingsTemperatureUnit) {
+                customSetting.setTemperatureUnit(VpSpGetUtil.getVpSpVariInstance(mContext).getTemperatureUnit()
+                        == ETemperatureUnit.CELSIUS ? ETemperatureUnit.FAHRENHEIT : ETemperatureUnit.CELSIUS);
+            } else {
+                customSetting.setTemperatureUnit(ETemperatureUnit.NONE);
+            }
+            if (isCanDetectTempByApp) {
+                boolean isOpenTempDetect = VpSpGetUtil.getVpSpVariInstance(mContext).isOpenTemperatureDetectByApp();
+                customSetting.setIsOpenAutoTemperatureDetect(isOpenTempDetect ? SUPPORT_CLOSE : SUPPORT_OPEN);
+            } else {
+                customSetting.setIsOpenAutoTemperatureDetect(UNSUPPORT);
+            }
+
+            customSetting.setEcgAlwaysOpen(SUPPORT_CLOSE);
+            VPOperateManager.getMangerInstance(mContext).changeCustomSetting(writeResponse, new ICustomSettingDataListener() {
+                @Override
+                public void OnSettingDataChange(CustomSettingData customSettingData) {
+                    String message = "个性化状态--设置:\n" + customSettingData.toString();
+                    Logger.t(TAG).i(message);
+                    sendMsg(message, 1);
+                }
+            }, customSetting);
+        }
+
+
+        else if (oprater.equals(CHECK_WEAR_SETING_OPEN)) {
             CheckWearSetting checkWearSetting = new CheckWearSetting();
             checkWearSetting.setOpen(true);
             VPOperateManager.getMangerInstance(mContext).setttingCheckWear(writeResponse, new ICheckWearDataListener() {
@@ -2061,14 +2196,120 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     Logger.t(TAG).i("onReadOriginComplete");
                 }
             }, watchDataDay);
-        }  else if (oprater.equals(TEXT_ALARM)) {
+        } else if (oprater.equals(TEXT_ALARM_READ)) {
+            VPOperateManager.getMangerInstance(mContext).readTextAlarm(writeResponse, new ITextAlarmDataListener() {
+                @Override
+                public void onAlarmDataChangeListListener(TextAlarmData textAlarmData) {
+                    Logger.t(TAG).e("读闹钟数据 --》" + textAlarmData.toString());
+                    EMultiAlarmOprate OPT = textAlarmData.getOprate();
+                    boolean isOk = OPT == EMultiAlarmOprate.READ_SUCCESS ||
+                            OPT == EMultiAlarmOprate.READ_SUCCESS_SAME_CRC ||
+                            OPT == EMultiAlarmOprate.READ_SUCCESS_SAVE;
+                    showToast("读闹钟数据 --》" +
+                            (isOk ? ("成功,一共" + textAlarmData.getTextAlarm2SettingList().size() + "条=>" + textAlarmData.toString()) : "失败"));
+                }
+            });
+        } else if (oprater.equals(TEXT_ALARM_ADD)) {
+            TextAlarm2Setting setting = getTextAlarm2Setting();
+            VPOperateManager.getMangerInstance(mContext).addTextAlarm(writeResponse, new ITextAlarmDataListener() {
+                @Override
+                public void onAlarmDataChangeListListener(TextAlarmData textAlarmData) {
+                    Logger.t(TAG).e("添加闹钟 --》" + textAlarmData.toString());
+                    showToast("添加闹钟 --》" + (textAlarmData.getOprate() == EMultiAlarmOprate.SETTING_SUCCESS ? ("成功,一共" + textAlarmData.getTextAlarm2SettingList().size() + "条=>" + textAlarmData.toString()) : "失败"));
+                }
+            }, setting);
+        } else if (oprater.equals(TEXT_ALARM_MODIFY)) {
+            Random random = new Random();
+            int flag = random.nextInt(100);
+            List<TextAlarm2Setting> settings = VPOperateManager.getMangerInstance(mContext).getTextAlarmList();
+            if (settings == null || settings.size() == 0) {
+                showToast("闹钟列表为空，请先添加闹钟或，读取更新闹钟列表");
+                return;
+            }
+            final TextAlarm2Setting setting = settings.get(0);
+            setting.setOpen(false);
+            setting.setContent("西门官人[" + flag + "]大郎卖烧饼回来了");
+            VPOperateManager.getMangerInstance(mContext).modifyTextAlarm(writeResponse, new ITextAlarmDataListener() {
+                @Override
+                public void onAlarmDataChangeListListener(TextAlarmData textAlarmData) {
+                    Logger.t(TAG).e("修改闹钟 --》" + textAlarmData.toString());
+                    showToast("修改闹钟 --》" + (textAlarmData.getOprate() == EMultiAlarmOprate.SETTING_SUCCESS ? "成功 : " + setting.toString() : "失败"));
+
+                }
+            }, setting);
+        } else if (oprater.equals(TEXT_ALARM_DELETE)) {
+            List<TextAlarm2Setting> settings = TextAlarmSp.getInstance(mContext).getTextAlarmSetting(deviceaddress);
+            if (settings != null && settings.size() > 0) {
+                final TextAlarm2Setting setting = settings.get(0);
+                for (TextAlarm2Setting s : settings) {
+                    Logger.t(TAG).e("存在的文字闹钟：" + s.toString());
+                }
+                Logger.t(TAG).e("要删除的文字闹钟：" + setting.toString());
+                VPOperateManager.getMangerInstance(mContext).deleteTextAlarm(writeResponse, new ITextAlarmDataListener() {
+                    @Override
+                    public void onAlarmDataChangeListListener(TextAlarmData textAlarmData) {
+                        Logger.t(TAG).e("删除闹钟 --》" + textAlarmData.toString());
+                        showToast("删除闹钟 --》" + (textAlarmData.getOprate() == EMultiAlarmOprate.CLEAR_SUCCESS ? "成功:" + setting.toString() : "失败"));
+                    }
+                }, setting);
+            } else {
+                Logger.t(TAG).e("暂无闹钟可以删除");
+                showToast("暂无闹钟可以删除");
+            }
+        } else if (oprater.equals(TEXT_ALARM)) {
             startActivity(new Intent(this, TextAlarmActivity.class));
-        } else if (oprater.equals(G15_QR_CODE)) {
-            startActivity(new Intent(this, G15QRCodeActivity.class));
         } else if (oprater.equals(ORIGIN_LOG)) {
             startActivity(new Intent(this, OriginalDataLogActivity.class));
+        } else if (oprater.equals(G15_QR_CODE)) {
+            startActivity(new Intent(this, G15QRCodeActivity.class));
+        } else if (oprater.equals(RR)) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    readRR(DayState.TODAY);
+                }
+            }).start();
+        } else if(oprater.equals(ECG_AUTO_REPORT_TEXT)) {
+            VPOperateManager.getMangerInstance(mContext).setECGAutoReportListener(new IECGAutoReportListener() {
+                @Override
+                public void onECGAutoReport(int ecgValue, TimeData date) {
+                    String info = "ECG = " + ecgValue + ", date = " + date.getDateAndClockForSleepSecond();
+                    Logger.t(TAG).e(info);
+                    Toast.makeText(mContext, info, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
+    }
+
+    private void readRR(final DayState dayState) {
+        Logger.t(TAG).e("读取RR逐跳帧数据 --》 Day = " + dayState);
+        VPOperateManager.getMangerInstance(mContext).readRRIntervalByDay(writeResponse, new IRRIntervalProgressListener() {
+
+            @Override
+            public void onReadRRIntervalProgressChanged(float progress, RRIntervalData rrIntervalData) {
+                Logger.t(TAG).e("onReadRRIntervalProgressChanged --》 " + dayState + ": progress = " + progress + " || -> " + rrIntervalData.toString());
+            }
+
+            @Override
+            public void onReadRRIntervalComplete(DayState dayState, List<RRIntervalData> rrIntervalData) {
+                Logger.t(TAG).e("onReadRRIntervalComplete --》 dayState = " + dayState + " || -> rrIntervalData size = " + rrIntervalData.size());
+//                for (RRIntervalData data : rrIntervalData) {
+//                    Logger.t(TAG).e("onReadRRIntervalComplete --》 data = " + data.toString());
+//                }
+                if (dayState == DayState.TODAY) {
+                    SystemClock.sleep(50);
+                    readRR(DayState.YESTERDAY);
+                } else if (dayState == DayState.YESTERDAY) {
+                    Logger.t(TAG).e("onReadRRIntervalComplete --》 2天数据已全部读取结束 ");
+                    SystemClock.sleep(50);
+                    readRR(DayState.BEFORE_YESTERDAY);
+                } else if (dayState == DayState.BEFORE_YESTERDAY) {
+                    Logger.t(TAG).e("onReadRRIntervalComplete --》 三天数据已全部读取结束 ");
+                }
+
+            }
+        }, dayState, 0);
     }
 
     private void showToast(String msg) {
@@ -2335,5 +2576,88 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         } else {
             return "前天";
         }
+    }
+
+    private void readOriginData() {
+        IOriginProgressListener originDataListener = new IOriginDataListener() {
+
+
+            @Override
+            public void onReadOriginProgressDetail(int day, String date, int allPackage, int currentPackage) {
+                String message = "健康数据[5分钟]-读取进度:currentPackage" + currentPackage + ",allPackage=" + allPackage + ",dates=" + date + ",day=" + day;
+                Logger.t(TAG).i(message);
+            }
+
+            @Override
+            public void onReadOriginProgress(float progress) {
+
+            }
+
+            @Override
+            public void onReadOriginComplete() {
+
+            }
+
+            @Override
+            public void onOringinFiveMinuteDataChange(OriginData originData) {
+
+            }
+
+            @Override
+            public void onOringinHalfHourDataChange(OriginHalfHourData originHalfHourData) {
+
+            }
+        };
+        IOriginProgressListener originData3Listener = new IOriginData3Listener() {
+            @Override
+            public void onOriginFiveMinuteListDataChange(List<OriginData3> originDataList) {
+                String message = "健康数据-返回:" + originDataList.toString();
+                Logger.t(TAG).i(message);
+            }
+
+            @Override
+            public void onOriginHalfHourDataChange(OriginHalfHourData originHalfHourDataList) {
+                String message = "健康数据[30分钟]-返回:" + originHalfHourDataList.toString();
+                Logger.t(TAG).i(message);
+                Logger.t(TAG).i("健康数据[30分钟]-返回:30分钟的心率数据 size = " + originHalfHourDataList.getHalfHourRateDatas().size());
+                Logger.t(TAG).i("健康数据[30分钟]-返回:30分钟的血压数据 size = " + originHalfHourDataList.getHalfHourBps().size());
+                Logger.t(TAG).i("健康数据[30分钟]-返回:30分钟的运动数据 size = " + originHalfHourDataList.getHalfHourSportDatas().size());
+            }
+
+            @Override
+            public void onOriginHRVOriginListDataChange(List<HRVOriginData> originHrvDataList) {
+                HRVOriginData hrvOriginData = originHrvDataList.get(0);
+                String rate = hrvOriginData.getRate();
+            }
+
+            @Override
+            public void onOriginSpo2OriginListDataChange(List<Spo2hOriginData> originSpo2hDataList) {
+
+            }
+
+            @Override
+            public void onReadOriginProgress(float progress) {
+                String message = "onReadOriginProgress 健康数据[5分钟]-读取进度:" + progress;
+                Logger.t(TAG).i(message);
+            }
+
+            @Override
+            public void onReadOriginProgressDetail(int day, String date, int allPackage, int currentPackage) {
+                String message = "onReadOriginProgressDetail 健康数据[5分钟]-读取进度:currentPackage=" + currentPackage + ",allPackage=" + allPackage + ",dates=" + date + ",day=" + day;
+                Logger.t(TAG).i(message);
+            }
+
+
+            @Override
+            public void onReadOriginComplete() {
+                String message = "健康数据-读取结束";
+                Logger.t(TAG).i(message);
+            }
+        };
+        int protype = 3;
+        if (protype == 3) {
+            originDataListener = originData3Listener;
+        }
+        VPOperateManager.getMangerInstance(mContext).readOriginData(writeResponse, originDataListener, 3);
     }
 }
