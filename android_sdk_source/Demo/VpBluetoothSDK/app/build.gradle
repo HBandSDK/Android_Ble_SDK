@@ -14,11 +14,11 @@ android {
     buildToolsVersion '28.0.3'
 
     defaultConfig {
-        applicationId "com.timaimee.vpdemo"
+        applicationId "com.timaimee.vpdemo"//com.timaimee.vpdemo //com.ecg.kg
         minSdkVersion 24
         targetSdkVersion 28
-        versionCode 127
-        versionName "1.2.7"
+        versionCode 132
+        versionName "1.3.2"
         ndk {
             //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86","x86_64"
@@ -49,7 +49,7 @@ dependencies {
     implementation files('libs/libcomx-0.5.jar')
     implementation files('libs/vpbluetooth-release.aar')
     implementation files('libs/gson-2.2.4.jar')
-    implementation files('libs/vpprotocol-2.2.04.15.aar')
+    implementation files('libs/vpprotocol-2.2.08.15.aar')
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:appcompat-v7:28.0.0-alpha1'
     implementation 'com.android.support:recyclerview-v7:28.0.0-alpha1'

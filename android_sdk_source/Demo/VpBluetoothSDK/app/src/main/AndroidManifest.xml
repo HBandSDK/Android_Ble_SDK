@@ -25,7 +25,7 @@
         android:required="true" />
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_d"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
@@ -60,6 +60,7 @@
         <activity android:name=".activity.OriginalDataLogActivity"/>
         <activity android:name=".activity.G15QRCodeActivity"/>
         <activity android:name=".activity.UiUpdateG15ImgActivity"/>
+        <activity android:name=".activity.ECGSwitchActivity"/>
 
         <service android:name="com.inuker.bluetooth.library.BluetoothService" />
         <service android:name=".oad.service.DfuService" />
