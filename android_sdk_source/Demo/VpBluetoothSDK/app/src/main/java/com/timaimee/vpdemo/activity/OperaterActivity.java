@@ -109,6 +109,7 @@ import com.veepoo.protocol.model.datas.OriginHalfHourData;
 import com.veepoo.protocol.model.datas.PersonInfoData;
 import com.veepoo.protocol.model.datas.PwdData;
 import com.veepoo.protocol.model.datas.RRIntervalData;
+import com.veepoo.protocol.model.datas.RRLorenzInfo;
 import com.veepoo.protocol.model.datas.ScreenLightData;
 import com.veepoo.protocol.model.datas.ScreenStyleData;
 import com.veepoo.protocol.model.datas.SleepData;
@@ -1957,6 +1958,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             } else {
                 originProgressListener = originDataListener;
             }
+            RRLorenzInfo
+            VPOperateManager.getMangerInstance(mContext).convertRRData2RRLorenzInfo()
             VPOperateManager.getMangerInstance(mContext).readOriginDataSingleDay(writeResponse, originProgressListener, today, 1, watchDataDay);
         } else if (oprater.equals(READ_HEALTH)) {
             VPOperateManager.getMangerInstance(mContext).readAllHealthData(new IAllHealthDataListener() {
