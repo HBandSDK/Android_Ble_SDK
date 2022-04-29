@@ -1900,6 +1900,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 //                        String s = originData3List.get(i).toString();
 //                        Logger.t(TAG).i(s);
 //                    }
+
                     Logger.t(TAG).i(message);
                 }
 
@@ -1958,8 +1959,6 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             } else {
                 originProgressListener = originDataListener;
             }
-            RRLorenzInfo
-            VPOperateManager.getMangerInstance(mContext).convertRRData2RRLorenzInfo()
             VPOperateManager.getMangerInstance(mContext).readOriginDataSingleDay(writeResponse, originProgressListener, today, 1, watchDataDay);
         } else if (oprater.equals(READ_HEALTH)) {
             VPOperateManager.getMangerInstance(mContext).readAllHealthData(new IAllHealthDataListener() {

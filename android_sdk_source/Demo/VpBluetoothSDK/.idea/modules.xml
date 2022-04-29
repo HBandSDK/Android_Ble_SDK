@@ -3,13 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Android_Ble_SDK-android_sdk_source-Demo-VpBluetoothSDK.iml" filepath="$PROJECT_DIR$/.idea/modules/Android_Ble_SDK-android_sdk_source-Demo-VpBluetoothSDK.iml" group="VpBluetoothSDK" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Demo-VpBluetoothSDK.iml" filepath="$PROJECT_DIR$/.idea/modules/Demo-VpBluetoothSDK.iml" group="VpBluetoothSDK" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Demo-VpBluetoothSDK-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Demo-VpBluetoothSDK-app.iml" group="VpBluetoothSDK/app" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/VpBluetoothSDK.iml" filepath="$PROJECT_DIR$/.idea/VpBluetoothSDK.iml" group="VpBluetoothSDK" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/VpBluetoothSDK-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/VpBluetoothSDK-app.iml" group="VpBluetoothSDK/app" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/android_sdk_source-Demo-VpBluetoothSDK.iml" filepath="$PROJECT_DIR$/.idea/modules/android_sdk_source-Demo-VpBluetoothSDK.iml" group="VpBluetoothSDK" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/android_sdk_source-Demo-VpBluetoothSDK-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/android_sdk_source-Demo-VpBluetoothSDK-app.iml" group="VpBluetoothSDK/app" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="VpBluetoothSDK/app" />
     </modules>
   </component>
 </project>
