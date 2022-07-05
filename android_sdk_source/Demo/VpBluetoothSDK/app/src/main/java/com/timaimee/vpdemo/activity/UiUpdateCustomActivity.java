@@ -13,11 +13,24 @@ import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
+import com.veepoo.protocol.customui.Rect135240WatchUIType;
+import com.veepoo.protocol.customui.Rect167240WatchUIType;
+import com.veepoo.protocol.customui.Rect172320WatchUIType;
+import com.veepoo.protocol.customui.Rect200320WatchUIType;
 import com.veepoo.protocol.customui.Rect240240WatchUIType;
+import com.veepoo.protocol.customui.Rect240280QFNBlackWatchUIType;
 import com.veepoo.protocol.customui.Rect240280QFNWatchUIType;
 import com.veepoo.protocol.customui.Rect240280WatchUIType;
+import com.veepoo.protocol.customui.Rect240284QFNWatchUIType;
+import com.veepoo.protocol.customui.Rect240286QFNWatchUIType;
+import com.veepoo.protocol.customui.Rect240295QFNWatchUIType;
+import com.veepoo.protocol.customui.Rect240295WatchUIType;
+import com.veepoo.protocol.customui.Rect320380QFNWatchUIType;
+import com.veepoo.protocol.customui.Rect80160QFNWatchUIType;
+import com.veepoo.protocol.customui.Round240240QFNWatchUIType;
 import com.veepoo.protocol.customui.Round240240WatchUIType;
 import com.veepoo.protocol.customui.Round360360QFNWatchUIType;
+import com.veepoo.protocol.customui.Round360360WatchUIType;
 import com.veepoo.protocol.customui.WatchUIType;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.data.IUIBaseInfoFormCustomListener;
@@ -70,6 +83,7 @@ public class UiUpdateCustomActivity extends Activity {
     public TextView mSendProgressTv;
 
     WatchUIType mWatchUIType;
+    UiUpdateUtil mUiUpdateUtil;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,7 +91,8 @@ public class UiUpdateCustomActivity extends Activity {
         setContentView(R.layout.activity_uiupdate_custom);
         ButterKnife.bind(this);
         mContext = UiUpdateCustomActivity.this;
-        UiUpdateUtil.getInstance().init(this);
+        mUiUpdateUtil = UiUpdateUtil.getInstance();
+
     }
 
     /**
@@ -85,8 +100,9 @@ public class UiUpdateCustomActivity extends Activity {
      */
     @OnClick(R.id.is_support_custom_ui)
     public void isSupport() {
-        if (UiUpdateUtil.getInstance().isSupportChangeCustomUi()) {
+        if (mUiUpdateUtil.isSupportChangeCustomUi()) {
             mUiCustomSupportTV.setText("1.支持自定义表盘");
+            mUiUpdateUtil.init(this);
         } else {
             mUiCustomSupportTV.setText("1.不支持自定义表盘");
             Toast.makeText(mContext, "不支持自定义表盘", Toast.LENGTH_LONG).show();
@@ -101,7 +117,7 @@ public class UiUpdateCustomActivity extends Activity {
 
     @OnClick(R.id.read_base_info_custom)
     public void readBaseInfo() {
-        UiUpdateUtil.getInstance().getCustomWacthUiInfo(new IUIBaseInfoFormCustomListener() {
+        mUiUpdateUtil.getCustomWatchUiInfo(new IUIBaseInfoFormCustomListener() {
             @Override
             public void onBaseUiInfoFormCustom(UIDataCustom uiDataCustom) {
                 Logger.t(TAG).i("2.自定义表盘的基本信息 uiDataCustom:" + uiDataCustom.toString());
@@ -140,7 +156,7 @@ public class UiUpdateCustomActivity extends Activity {
         final int fontColor = getRandomColor();
         final UICustomSetData uiCustomSetData = new UICustomSetData(isDefalutUI, timePosition, upTimeType, downTimeType, fontColor);
         Logger.t(TAG).i("uiCustomSetData:" + uiCustomSetData.toString());
-        UiUpdateUtil.getInstance().setCustomWacthUi(uiCustomSetData, new IUIBaseInfoFormCustomListener() {
+        mUiUpdateUtil.setCustomWacthUi(uiCustomSetData, new IUIBaseInfoFormCustomListener() {
             @Override
             public void onBaseUiInfoFormCustom(UIDataCustom uiDataCustom) {
                 Logger.t(TAG).i("3.设置元素及其对应的位置 uiDataCustom:" + uiDataCustom.toString());
@@ -164,23 +180,60 @@ public class UiUpdateCustomActivity extends Activity {
 
         WatchUIType customWatchUI = null;
         switch (customUIType) {
-            case ROUND_240_240:
-                customWatchUI = new Round240240WatchUIType();
+            case RECT_80_160:
+                customWatchUI = new Rect80160QFNWatchUIType();
+                break;
+            case RECT_135_240_QFN:
+                customWatchUI = new Rect135240WatchUIType();
+                break;
+            case RECT_167_240_QFN:
+                customWatchUI = new Rect167240WatchUIType();
+                break;
+            case RECT_172_320_QFN:
+                customWatchUI = new Rect172320WatchUIType();
+                break;
+            case RECT_200_320_QFN:
+                customWatchUI = new Rect200320WatchUIType();
                 break;
             case RECT_240_240:
                 customWatchUI = new Rect240240WatchUIType();
                 break;
+            case RECT_240_280_QFN:
+                customWatchUI = new Rect240280QFNWatchUIType();
+                break;
             case RECT_240_280:
                 customWatchUI = new Rect240280WatchUIType();
                 break;
-            case RECT_240_280_QFN:
-                customWatchUI = new Rect240280QFNWatchUIType();
+            case RECT_240_280_BLACK_QFN:
+                customWatchUI = new Rect240280QFNBlackWatchUIType();
+                break;
+            case RECT_240_284_QFN:
+                customWatchUI = new Rect240284QFNWatchUIType();
+                break;
+            case RECT_240_286_QFN:
+                customWatchUI = new Rect240286QFNWatchUIType();
+                break;
+            case RECT_240_295_QFN:
+                customWatchUI = new Rect240295QFNWatchUIType();
+                break;
+            case RECT_240_295:
+                customWatchUI = new Rect240295WatchUIType();
+                break;
+            case RECT_320_380_QFN:
+                customWatchUI = new Rect320380QFNWatchUIType();
+                break;
+            case ROUND_240_240:
+                customWatchUI = new Round240240WatchUIType();
+                break;
+            case ROUND_240_240_QFN:
+                customWatchUI = new Round240240QFNWatchUIType();
                 break;
             case ROUND_360_360_QFN:
                 customWatchUI = new Round360360QFNWatchUIType();
                 break;
-            default:
-                customWatchUI = new Round240240WatchUIType();
+            case ROUND_360_360:
+                customWatchUI = new Round360360WatchUIType();
+                break;
         }
         return customWatchUI;
     }
@@ -232,7 +285,7 @@ public class UiUpdateCustomActivity extends Activity {
         return color;
     }
 
-    private String getCustomBackgroundImage(){
+    private String getCustomBackgroundImage() {
         String fileName = null;
         EWatchUIType customUIType = mUIDataCustom.getCustomUIType();
         switch (customUIType) {
@@ -267,14 +320,14 @@ public class UiUpdateCustomActivity extends Activity {
 //        String filePath =  "file:///android_asset/custom_round_360_360_bg.png";
 //        File file = new File(filePath);
         String fileName = getCustomBackgroundImage();
-        if(fileName!=null) {
+        if (fileName != null) {
             InputStream inputStream = null;
             try {
                 inputStream = getResources().getAssets().open(fileName);
                 Bitmap bmp = BitmapFactory.decodeStream(inputStream);//原图
                 Logger.t(TAG).i("get BitMap");
                 InputStream sendInputStream = mWatchUIType.getSendInputStream(mContext, bmp);
-                UiUpdateUtil.getInstance().startSetUiStream(EUIFromType.CUSTOM, sendInputStream, new IUiUpdateListener() {
+                mUiUpdateUtil.startSetUiStream(EUIFromType.CUSTOM, sendInputStream, new IUiUpdateListener() {
 
                     @Override
                     public void onUiUpdateStart() {
