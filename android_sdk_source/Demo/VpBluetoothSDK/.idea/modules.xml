@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Android_Ble_SDK-android_sdk_source-Demo-VpBluetoothSDK.iml" filepath="$PROJECT_DIR$/.idea/modules/Android_Ble_SDK-android_sdk_source-Demo-VpBluetoothSDK.iml" group="VpBluetoothSDK" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/android_sdk_source-Demo-VpBluetoothSDK-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/android_sdk_source-Demo-VpBluetoothSDK-app.iml" group="VpBluetoothSDK/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/VpBluetoothSDK.iml" filepath="$PROJECT_DIR$/.idea/modules/VpBluetoothSDK.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/VpBluetoothSDK.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/VpBluetoothSDK.app.iml" />
     </modules>
   </component>
 </project>

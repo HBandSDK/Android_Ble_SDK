@@ -131,6 +131,7 @@ public class UiUpdateCustomActivity extends Activity {
 
                 mWatchUIType = getCustomWatchUI(customUIType);
                 int defaultImg = mWatchUIType.getDefaultImg();
+                Logger.t(TAG).e("-----------------------defaultImg = " + defaultImg);
                 int imgTime = mWatchUIType.getElementImg(EWatchUIElementType.TIME, timePosition);
                 int imgDownTime = mWatchUIType.getElementImg(downTimeType, timePosition);
                 int imgUpTime = mWatchUIType.getElementImg(upTimeType, timePosition);
