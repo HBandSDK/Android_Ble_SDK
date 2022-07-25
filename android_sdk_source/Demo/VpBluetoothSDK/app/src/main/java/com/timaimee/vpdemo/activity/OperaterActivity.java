@@ -43,7 +43,6 @@ import com.veepoo.protocol.listener.data.IECGAutoReportListener;
 import com.veepoo.protocol.listener.data.IFatigueDataListener;
 import com.veepoo.protocol.listener.data.IFindDeviceDatalistener;
 import com.veepoo.protocol.listener.data.IFindPhonelistener;
-import com.veepoo.protocol.listener.data.IG15MessageListener;
 import com.veepoo.protocol.listener.data.IHRVOriginDataListener;
 import com.veepoo.protocol.listener.data.IHeartDataListener;
 import com.veepoo.protocol.listener.data.IHeartWaringDataListener;
@@ -51,7 +50,6 @@ import com.veepoo.protocol.listener.data.ILanguageDataListener;
 import com.veepoo.protocol.listener.data.ILightDataCallBack;
 import com.veepoo.protocol.listener.data.ILongSeatDataListener;
 import com.veepoo.protocol.listener.data.ILowPowerListener;
-import com.veepoo.protocol.listener.data.IMtuChangeListener;
 import com.veepoo.protocol.listener.data.IMusicControlListener;
 import com.veepoo.protocol.listener.data.INightTurnWristeDataListener;
 import com.veepoo.protocol.listener.data.IOriginData3Listener;
@@ -2279,6 +2277,12 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     Logger.t(TAG).e(info);
                     Toast.makeText(mContext, info, Toast.LENGTH_SHORT).show();
                 }
+
+                @Override
+                public void onECGDataReport(int[] ints) {
+
+                }
+
             });
         }
 
