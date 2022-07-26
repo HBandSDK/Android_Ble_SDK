@@ -2280,9 +2280,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
                 @Override
                 public void onECGDataReport(int[] ints) {
-
+                    Logger.t(TAG).e("---onECGDataReport => " + Arrays.toString(ints));
                 }
-
             });
         }
 
