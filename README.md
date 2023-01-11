@@ -142,14 +142,9 @@ README: [English](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/README
 
 默认自带的表盘设置demo: VPOperateManager.getMangerInstance(mContext).settingScreenStyle();
 
-[可编辑表盘的下发demo]
-(https://github.com/HBandSDK/Android_Ble_SDK/blob/caff11a10f493ac8c6e8471708984fd8e6a15a86/android_sdk_source/Demo/VpBluetoothSDK/app/src/main/java/com/timaimee/vpdemo/activity/UiUpdateCustomActivity.java)
-
 [可编辑表盘的下发demo](https://github.com/HBandSDK/Android_Ble_SDK/blob/caff11a10f493ac8c6e8471708984fd8e6a15a86/android_sdk_source/Demo/VpBluetoothSDK/app/src/main/java/com/timaimee/vpdemo/activity/UiUpdateCustomActivity.java)
 
 [服务器表盘的下发demo](https://github.com/HBandSDK/Android_Ble_SDK/blob/caff11a10f493ac8c6e8471708984fd8e6a15a86/android_sdk_source/Demo/VpBluetoothSDK/app/src/main/java/com/timaimee/vpdemo/activity/UiUpdateServerActivity.java)
-
-[服务器表盘的下发demo](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/Demo/VpBluetoothSDKDemo/app/src/main/java/com/timaimee/vpdemo/activity/UiUpdateServerActivity.java)
 
 	
 	
