@@ -20,6 +20,7 @@ import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.adapter.GridAdatper;
 import com.timaimee.vpdemo.oad.activity.OadActivity;
 import com.veepoo.protocol.VPOperateManager;
+import com.veepoo.protocol.listener.IBloodGlucoseChangeListener;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.data.IAlarm2DataListListener;
 import com.veepoo.protocol.listener.data.IAlarmDataListener;
@@ -130,6 +131,7 @@ import com.veepoo.protocol.model.datas.weather.WeatherEvery3Hour;
 import com.veepoo.protocol.model.datas.weather.WeatherEveryDay;
 import com.veepoo.protocol.model.enums.EAllSetType;
 import com.veepoo.protocol.model.enums.EBPDetectModel;
+import com.veepoo.protocol.model.enums.EBloodGlucoseStatus;
 import com.veepoo.protocol.model.enums.ECameraStatus;
 import com.veepoo.protocol.model.enums.EFunctionStatus;
 import com.veepoo.protocol.model.enums.ELanguage;
@@ -306,6 +308,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 public void onDataChange(TemptureDetectData temptureDetectData) {
                     String message = "startDetectTempture temptureDetectData:\n" + temptureDetectData.toString();
                     Logger.t(TAG).i(message);
+
 //                    sendMsg(message, 1);
                 }
             });
@@ -899,7 +902,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
             boolean isCanReadTempture = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportReadTempture();//是否支持读取温度
             boolean isCanDetectTempByApp = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportCheckTemptureByApp();//是否可以通过app监测体温
-
+            boolean isCanDetectBloodGlucoseByApp = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportBloodGlucoseDetect();//是否可以通过app监测血糖
 
             Logger.t(TAG).i("是否可以读取体温：" + isCanReadTempture + " 是否可以通过app自动检测体温");
 
@@ -920,7 +923,12 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             } else {
                 customSetting.setIsOpenAutoTemperatureDetect(UNSUPPORT);
             }
-
+            if(isCanDetectBloodGlucoseByApp) {
+                boolean isOpenTempDetect = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportBloodGlucoseDetect();
+                customSetting.setIsOpenAutoTemperatureDetect(isOpenTempDetect ? SUPPORT_CLOSE : SUPPORT_OPEN);
+            } else {
+                customSetting.setIsOpenAutoTemperatureDetect(UNSUPPORT);
+            }
             VPOperateManager.getMangerInstance(mContext).changeCustomSetting(writeResponse, new ICustomSettingDataListener() {
                 @Override
                 public void OnSettingDataChange(CustomSettingData customSettingData) {
@@ -2281,6 +2289,60 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 @Override
                 public void onECGDataReport(int[] ints) {
                     Logger.t(TAG).e("---onECGDataReport => " + Arrays.toString(ints));
+                }
+            });
+        } else if (oprater.equals(START_BLOOD_GLUCOSE)) {
+            VPOperateManager.getMangerInstance(mContext).startBloodGlucoseDetect(writeResponse, new IBloodGlucoseChangeListener() {
+                @Override
+                public void onDetectError(int opt, EBloodGlucoseStatus status) {
+                    showToast("[onDetectError: opt = " + opt + ", status=" + status + "]");
+                }
+
+                @Override
+                public void onBloodGlucoseDetect(int progress, int bloodGlucose) {
+                    showToast("[progress:" + progress + " bloodGlucose: " + bloodGlucose + "]");
+                }
+
+                @Override
+                public void onBloodGlucoseStopDetect() {
+                    showToast("Stop Blood Glucose Detect");
+                }
+
+                @Override
+                public void onBloodGlucoseAdjustingSettingSuccess(boolean isOpen, float adjustingValue) {
+
+                }
+
+                @Override
+                public void onBloodGlucoseAdjustingSettingFailed() {
+
+                }
+            });
+        } else if (oprater.equals(STOP_BLOOD_GLUCOSE)) {
+            VPOperateManager.getMangerInstance(mContext).stopBloodGlucoseDetect(writeResponse, new IBloodGlucoseChangeListener() {
+                @Override
+                public void onDetectError(int opt, EBloodGlucoseStatus status) {
+                    showToast("[onDetectError: opt = " + opt + ", status=" + status + "]");
+                }
+
+                @Override
+                public void onBloodGlucoseDetect(int progress, int bloodGlucose) {
+                    showToast("[progress:" + progress + " bloodGlucose: " + bloodGlucose + "]");
+                }
+
+                @Override
+                public void onBloodGlucoseStopDetect() {
+                    showToast("Stop Blood Glucose Detect");
+                }
+
+                @Override
+                public void onBloodGlucoseAdjustingSettingSuccess(boolean isOpen, float adjustingValue) {
+
+                }
+
+                @Override
+                public void onBloodGlucoseAdjustingSettingFailed() {
+
                 }
             });
         }
