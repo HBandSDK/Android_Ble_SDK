@@ -106,7 +106,6 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
         initRecyleView();
         checkPermission();
         registerBluetoothStateListener();
-
         createFile();
 //        startService(new Intent(this, MyService.class));
     }
@@ -540,6 +539,23 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
         });
         SearchResult searchResult = mListData.get(position);
         connectDevice(searchResult.getAddress(), searchResult.getName());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isStartConnecting = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        VPOperateManager.getMangerInstance(this).disconnectWatch(new IBleWriteResponse() {
+            @Override
+            public void onResponse(int i) {
+
+            }
+        });
     }
 
     public String getAppVersion(Context context) {

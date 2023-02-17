@@ -264,9 +264,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         initGridView();
         listenDeviceCallbackData();
         listenCamera();
-
     }
-
 
     private void initGridView() {
         mGridView = (GridView) findViewById(R.id.main_gridview);
@@ -2726,5 +2724,16 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             originDataListener = originData3Listener;
         }
         VPOperateManager.getMangerInstance(mContext).readOriginData(writeResponse, originDataListener, 3);
+    }
+
+    @Override
+    protected void onDestroy() {
+        VPOperateManager.getMangerInstance(this).disconnectWatch(new IBleWriteResponse() {
+            @Override
+            public void onResponse(int i) {
+
+            }
+        });
+        super.onDestroy();
     }
 }

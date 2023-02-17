@@ -286,11 +286,15 @@ public class UiUpdateCustomActivity extends Activity {
         return color;
     }
 
+    int i = 0;
+
     private String getCustomBackgroundImage() {
+        i++;
         String fileName = null;
         EWatchUIType customUIType = mUIDataCustom.getCustomUIType();
         switch (customUIType) {
             case ROUND_240_240:
+            case ROUND_240_240_QFN:
                 fileName = "custom_round_240_240_bg.png";
                 break;
             case RECT_240_240:
@@ -303,12 +307,23 @@ public class UiUpdateCustomActivity extends Activity {
             case ROUND_360_360_QFN:
                 fileName = "custom_round_360_360_bg.png";
                 break;
+            case RECT_172_320_QFN:
+                if (i % 2 == 0) {
+                    fileName = "20230217103821.png_31140.png";
+                } else {
+                    fileName = "20230217104452.png_16165.png";
+                }
+                break;
             default:
                 fileName = null;
         }
         return fileName;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     /**
      * 使用的是自选图片
