@@ -39,6 +39,7 @@ import com.veepoo.protocol.listener.data.ICustomProtocolStateListener;
 import com.veepoo.protocol.listener.data.ICustomSettingDataListener;
 import com.veepoo.protocol.listener.data.IDeviceControlPhoneModelState;
 import com.veepoo.protocol.listener.data.IDeviceFuctionDataListener;
+import com.veepoo.protocol.listener.data.IDeviceRenameListener;
 import com.veepoo.protocol.listener.data.IDrinkDataListener;
 import com.veepoo.protocol.listener.data.IECGAutoReportListener;
 import com.veepoo.protocol.listener.data.IFatigueDataListener;
@@ -138,7 +139,7 @@ import com.veepoo.protocol.model.enums.ELanguage;
 import com.veepoo.protocol.model.enums.EMultiAlarmOprate;
 import com.veepoo.protocol.model.enums.EOprateStauts;
 import com.veepoo.protocol.model.enums.ESex;
-import com.veepoo.protocol.model.enums.ESocailMsg;
+import com.veepoo.protocol.model.enums.ERenameError;
 import com.veepoo.protocol.model.enums.ESpo2hDataType;
 import com.veepoo.protocol.model.enums.ESportType;
 import com.veepoo.protocol.model.enums.ETemperatureUnit;
@@ -185,6 +186,8 @@ import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT;
 import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT_CLOSE;
 import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT_OPEN;
 import static com.veepoo.protocol.model.enums.EFunctionStatus.UNSUPPORT;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by timaimee on 2017/2/8.
@@ -2343,6 +2346,30 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
                 }
             });
+        } else if(oprater.equals(BLE_RENAME)) {
+            VPOperateManager.getMangerInstance(mContext).bleDeviceRename("abcdefghijk", new IDeviceRenameListener() {
+                @Override
+                public void onDeviceRenameSuccess(@NotNull String s) {
+                    showToast("rename success " + s);
+                }
+
+                @Override
+                public void onDeviceRenameFail(ERenameError error, @NotNull String s) {
+                    showToast(error.getDes() + " s = " +s);
+                }
+            }, writeResponse);
+        } else if(oprater.equals(BT_RENAME)) {
+            VPOperateManager.getMangerInstance(mContext).bleDeviceRename("YWX", new IDeviceRenameListener() {
+                @Override
+                public void onDeviceRenameSuccess(@NotNull String s) {
+                    showToast("rename success " + s);
+                }
+
+                @Override
+                public void onDeviceRenameFail(ERenameError error, @NotNull String s) {
+                    showToast(error.getDes() + " s = " +s);
+                }
+            },writeResponse);
         }
 
     }

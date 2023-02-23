@@ -103,6 +103,7 @@ public class UiUpdateCustomActivity extends Activity {
         if (mUiUpdateUtil.isSupportChangeCustomUi()) {
             mUiCustomSupportTV.setText("1.支持自定义表盘");
             mUiUpdateUtil.init(this);
+            mUiUpdateUtil.init(this);
         } else {
             mUiCustomSupportTV.setText("1.不支持自定义表盘");
             Toast.makeText(mContext, "不支持自定义表盘", Toast.LENGTH_LONG).show();
@@ -308,10 +309,15 @@ public class UiUpdateCustomActivity extends Activity {
                 fileName = "custom_round_360_360_bg.png";
                 break;
             case RECT_172_320_QFN:
-                if (i % 2 == 0) {
+                if (i % 3 == 1) {
                     fileName = "20230217103821.png_31140.png";
-                } else {
+                    Toast.makeText(this, "彩花壁纸", Toast.LENGTH_SHORT).show();
+                } else if (i % 3 == 2) {
                     fileName = "20230217104452.png_16165.png";
+                    Toast.makeText(this, "超人壁纸", Toast.LENGTH_SHORT).show();
+                } else if (i % 3 == 0) {
+                    fileName = "20230217112135.png_41670.png";
+                    Toast.makeText(this, "裁剪照片", Toast.LENGTH_SHORT).show();
                 }
                 break;
             default:
