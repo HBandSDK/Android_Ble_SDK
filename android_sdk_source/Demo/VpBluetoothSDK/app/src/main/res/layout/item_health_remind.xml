@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="#ececec"
+    android:paddingStart="10dp"
+    android:paddingTop="2dp"
+    android:paddingEnd="10dp"
+    android:paddingBottom="2dp">
+
+    <TextView
+        android:id="@+id/tvAlarmId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvHealthInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="久坐提醒 间隔（分钟） 30"
+        android:textColor="#000"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toRightOf="@id/tvAlarmId"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvAlarmRepeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="1100110"
+        android:textColor="#222"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@id/tvAlarmId"
+        app:layout_constraintTop_toBottomOf="@id/tvHealthInfo" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="时间范围：09:00-18:00"
+        android:textColor="#222"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toRightOf="@id/tvAlarmId"
+        app:layout_constraintRight_toLeftOf="@+id/sv"
+        app:layout_constraintTop_toBottomOf="@id/tvAlarmRepeat"
+        app:layout_goneMarginStart="20dp" />
+
+    <com.github.iielse.switchbutton.SwitchView
+        android:id="@+id/sv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

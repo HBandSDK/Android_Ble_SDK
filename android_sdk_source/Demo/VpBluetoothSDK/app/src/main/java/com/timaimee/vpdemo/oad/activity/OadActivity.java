@@ -25,6 +25,7 @@ import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.oad.service.DfuService;
 import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.oad.OnFindOadDeviceListener;
+import com.veepoo.protocol.model.enums.ECPUPlatform;
 import com.veepoo.protocol.model.enums.ECpuType;
 import com.veepoo.protocol.model.settings.OadSetting;
 import com.veepoo.protocol.err.OadErrorState;
@@ -196,6 +197,11 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
             }
 
             @Override
+            public void findOadDevice(String s, ECPUPlatform ecpuPlatform) {
+
+            }
+
+            @Override
             public void unKnowCpu() {
                 Logger.t(TAG).i("不知道设备的CPU是什么类型");
             }
@@ -211,6 +217,11 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
                 mOadAddress = oadAddress;
                 Logger.t(TAG).i("findOadDevice:"+mOadAddress);
                 selectOad(eCpuType);
+            }
+
+            @Override
+            public void findOadDevice(String s, ECPUPlatform ecpuPlatform) {
+
             }
 
             @Override

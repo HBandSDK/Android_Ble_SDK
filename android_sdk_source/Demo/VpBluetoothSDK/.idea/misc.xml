@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/VPSDK-GIT/Android_Ble_SDK/android_sdk_source/Demo/VpBluetoothSDK/app/src/main/res/layout/activity_health_remind.xml" value="0.25" />
+        <entry key="..\:/VPSDK-GIT/Android_Ble_SDK/android_sdk_source/Demo/VpBluetoothSDK/app/src/main/res/layout/activity_text_alarm.xml" value="0.21014492753623187" />
         <entry key="..\:/VeepooAndroidSdk/Android_Ble_SDK/android_sdk_source/Demo/VpBluetoothSDK/app/src/main/res/layout/activity_uiupdate_custom.xml" value="0.15989583333333332" />
       </map>
     </option>

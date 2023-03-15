@@ -61,6 +61,7 @@
         <activity android:name=".activity.G15QRCodeActivity"/>
         <activity android:name=".activity.UiUpdateG15ImgActivity"/>
         <activity android:name=".activity.ECGSwitchActivity"/>
+        <activity android:name=".activity.HealthRemindActivity"/>
 
         <service android:name="com.inuker.bluetooth.library.BluetoothService" />
         <service android:name=".oad.service.DfuService" />

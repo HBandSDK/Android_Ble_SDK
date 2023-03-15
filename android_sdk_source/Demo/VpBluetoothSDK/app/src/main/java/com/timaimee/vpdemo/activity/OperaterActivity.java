@@ -37,6 +37,8 @@ import com.veepoo.protocol.listener.data.ICheckWearDataListener;
 import com.veepoo.protocol.listener.data.ICountDownListener;
 import com.veepoo.protocol.listener.data.ICustomProtocolStateListener;
 import com.veepoo.protocol.listener.data.ICustomSettingDataListener;
+import com.veepoo.protocol.listener.data.IDeviceBTConnectionListener;
+import com.veepoo.protocol.listener.data.IDeviceBTInfoListener;
 import com.veepoo.protocol.listener.data.IDeviceControlPhoneModelState;
 import com.veepoo.protocol.listener.data.IDeviceFuctionDataListener;
 import com.veepoo.protocol.listener.data.IDeviceRenameListener;
@@ -83,6 +85,7 @@ import com.veepoo.protocol.model.datas.AlarmData2;
 import com.veepoo.protocol.model.datas.AllSetData;
 import com.veepoo.protocol.model.datas.AutoDetectOriginData;
 import com.veepoo.protocol.model.datas.AutoDetectStateData;
+import com.veepoo.protocol.model.datas.BTInfo;
 import com.veepoo.protocol.model.datas.BatteryData;
 import com.veepoo.protocol.model.datas.BpData;
 import com.veepoo.protocol.model.datas.BpFunctionData;
@@ -267,6 +270,75 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         initGridView();
         listenDeviceCallbackData();
         listenCamera();
+        VPOperateManager.getInstance().init(this);
+        VPOperateManager.getInstance().registerBTInfoListener(new IDeviceBTInfoListener() {
+            @Override
+            public void onDeviceBTFunctionNotSupport() {
+                Logger.t("【BT】-").d("【BT】- ---> 不支持BT功能");
+                showToast("不支持BT功能");
+            }
+
+            @Override
+            public void onDeviceBTInfoSettingSuccess(@NotNull BTInfo btInfo) {
+                Logger.t("【BT】-").d("【BT】- ---> btInfo : " + btInfo.toString());
+                showToast("【BT】- ---> btInfo : " + btInfo.toString());
+            }
+
+            @Override
+            public void onDeviceBTInfoSettingFailed() {
+                Logger.t("【BT】-").d("【BT】- ---> BT设置失败");
+                showToast("【BT】- ---> BT设置失败");
+            }
+
+            @Override
+            public void onDeviceBTInfoReadSuccess(@NotNull BTInfo btInfo) {
+                Logger.t("【BT】-").d("【BT】- ---> BT读取成功, btInfo : " + btInfo.toString());
+                showToast("【BT】- ---> BT读取成功, btInfo : " + btInfo.toString());
+            }
+
+            @Override
+            public void onDeviceBTInfoReadFailed() {
+                Logger.t("【BT】-").d("【BT】- ---> BT读取失败");
+                showToast("【BT】- ---> BT读取失败");
+            }
+
+            @Override
+            public void onDeviceBTInfoReport(@NotNull BTInfo btInfo) {
+                Logger.t("【BT】-").d("【BT】- ---> BT上报，btInfo = " + btInfo.toString());
+                showToast("【BT】- ---> BT上报，btInfo = " + btInfo.toString());
+            }
+        });
+        VPOperateManager.getInstance().registerBTConnectionListener(new IDeviceBTConnectionListener() {
+            @Override
+            public void onDeviceBTConnecting() {
+                Logger.t("【BT】-").d("BT设备连接中");
+                showToast("BT设备连接中");
+            }
+
+            @Override
+            public void onDeviceBTConnected() {
+                Logger.t("【BT】-").d("BT设备已连接");
+                showToast("BT设备已连接");
+            }
+
+            @Override
+            public void onDeviceBTDisconnected() {
+                Logger.t("【BT】-").d("BT设备已断开");
+                showToast("BT设备已断开");
+//                VPOperateManager.getInstance().setBTStatus(false, true, true, false, new IBleWriteResponse() {
+//                    @Override
+//                    public void onResponse(int code) {
+//
+//                    }
+//                });
+            }
+
+            @Override
+            public void onDeviceBTConnectTimeout() {
+                Logger.t("【BT】-").d("BT连接超时");
+                showToast("BT连接超时");
+            }
+        });
     }
 
     private void initGridView() {
@@ -294,7 +366,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         tv3.setText("");
         if (oprater.equals(HEART_DETECT_START)) {
 //            startListenADC();
-            VPOperateManager.getMangerInstance(mContext).startDetectHeart(writeResponse, new IHeartDataListener() {
+            VPOperateManager.getInstance().startDetectHeart(writeResponse, new IHeartDataListener() {
 
                 @Override
                 public void onDataChange(HeartData heart) {
@@ -304,7 +376,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(TEMPTURE_DETECT_START)) {
-            VPOperateManager.getMangerInstance(mContext).startDetectTempture(writeResponse, new ITemptureDetectDataListener() {
+            VPOperateManager.getInstance().startDetectTempture(writeResponse, new ITemptureDetectDataListener() {
                 @Override
                 public void onDataChange(TemptureDetectData temptureDetectData) {
                     String message = "startDetectTempture temptureDetectData:\n" + temptureDetectData.toString();
@@ -314,7 +386,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(TEMPTURE_DETECT_STOP)) {
-            VPOperateManager.getMangerInstance(mContext).stopDetectTempture(writeResponse, new ITemptureDetectDataListener() {
+            VPOperateManager.getInstance().stopDetectTempture(writeResponse, new ITemptureDetectDataListener() {
                 @Override
                 public void onDataChange(TemptureDetectData temptureDetectData) {
                     String message = "stopDetectTempture temptureDetectData:\n" + temptureDetectData.toString();
@@ -325,7 +397,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
         } else if (oprater.equals(SET_WATCH_TIME)) {
             DeviceTimeSetting deviceTimeSetting = new DeviceTimeSetting(2020, 11, 6, 15, 30, 14, ETimeMode.MODE_12);
-            VPOperateManager.getMangerInstance(mContext).settingTime(writeResponse, new IResponseListener() {
+            VPOperateManager.getInstance().settingTime(writeResponse, new IResponseListener() {
                 @Override
                 public void response(int state) {
                     String message = "settingTime response :\n" + state;
@@ -333,7 +405,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, deviceTimeSetting);
         } else if (oprater.equals(WEATHER_READ_STATUEINFO)) {
-            VPOperateManager.getMangerInstance(mContext).readWeatherStatusInfo(writeResponse, new IWeatherStatusDataListener() {
+            VPOperateManager.getInstance().readWeatherStatusInfo(writeResponse, new IWeatherStatusDataListener() {
                 @Override
                 public void onWeatherDataChange(WeatherStatusData weatherStatusData) {
                     String message = "readWeatherStatusInfo onWeatherDataChange read:\n" + weatherStatusData.toString();
@@ -371,7 +443,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             int pause = 2;//暂停状态
             MusicData musicData = new MusicData("周杰伦", "上海一九四三", "范特西", 80, play);
             Logger.t(TAG).i("settingMusicData");
-            VPOperateManager.getMangerInstance(mContext).settingMusicData(writeResponse, musicData, new IMusicControlListener() {
+            VPOperateManager.getInstance().settingMusicData(writeResponse, musicData, new IMusicControlListener() {
                 @Override
                 public void oprateMusicSuccess() {
                     Logger.t(TAG).i("oprateSuccess");
@@ -446,7 +518,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             }
         } else if (oprater.equals(WEATHER_SETTING_STATUEINFO)) {
             WeatherStatusSetting weatherStatusSetting = new WeatherStatusSetting(0, true, EWeatherType.C);
-            VPOperateManager.getMangerInstance(mContext).settingWeatherStatusInfo(writeResponse, weatherStatusSetting, new IWeatherStatusDataListener() {
+            VPOperateManager.getInstance().settingWeatherStatusInfo(writeResponse, weatherStatusSetting, new IWeatherStatusDataListener() {
                 @Override
                 public void onWeatherDataChange(WeatherStatusData weatherStatusData) {
                     String message = "settingWeatherStatusInfo onWeatherDataChange read:\n" + weatherStatusData.toString();
@@ -461,7 +533,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 setWeatherData1();
             }
         } else if (oprater.equals(LOW_POWER_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readLowPower(writeResponse, new ILowPowerListener() {
+            VPOperateManager.getInstance().readLowPower(writeResponse, new ILowPowerListener() {
                 @Override
                 public void onLowpowerDataDataChange(LowPowerData lowPowerData) {
                     String message = "onLowpowerDataDataChange read:\n" + lowPowerData.toString();
@@ -469,7 +541,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(LOW_POWER_OPEN)) {
-            VPOperateManager.getMangerInstance(mContext).settingLowpower(writeResponse, new ILowPowerListener() {
+            VPOperateManager.getInstance().settingLowpower(writeResponse, new ILowPowerListener() {
                 @Override
                 public void onLowpowerDataDataChange(LowPowerData lowPowerData) {
                     String message = "onLowpowerDataDataChange open:\n" + lowPowerData.toString();
@@ -477,7 +549,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, true);
         } else if (oprater.equals(LOW_POWER_CLOSE)) {
-            VPOperateManager.getMangerInstance(mContext).settingLowpower(writeResponse, new ILowPowerListener() {
+            VPOperateManager.getInstance().settingLowpower(writeResponse, new ILowPowerListener() {
                 @Override
                 public void onLowpowerDataDataChange(LowPowerData lowPowerData) {
                     String message = "onLowpowerDataDataChange close:\n" + lowPowerData.toString();
@@ -485,7 +557,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, false);
         } else if (oprater.equals(BP_FUNCTION_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readBpFunctionState(writeResponse, new IBPFunctionListener() {
+            VPOperateManager.getInstance().readBpFunctionState(writeResponse, new IBPFunctionListener() {
                 @Override
                 public void onDataChange(BpFunctionData bpFunctionData) {
                     String message = "readBpFunctionState close:\n" + bpFunctionData.toString();
@@ -493,7 +565,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(BP_FUNCTION_SETTING)) {
-            VPOperateManager.getMangerInstance(mContext).settingBpFunctionState(writeResponse, new IBPFunctionListener() {
+            VPOperateManager.getInstance().settingBpFunctionState(writeResponse, new IBPFunctionListener() {
                 @Override
                 public void onDataChange(BpFunctionData bpFunctionData) {
                     String message = "settingBpFunctionState close:\n" + bpFunctionData.toString();
@@ -510,10 +582,10 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             startActivity(new Intent(OperaterActivity.this, EcgDetectActivity.class));
         } else if (oprater.equals(HEART_DETECT_STOP)) {
             Logger.t(TAG).i("HEART_DETECT_STOP");
-            VPOperateManager.getMangerInstance(mContext).stopDetectHeart(writeResponse);
+            VPOperateManager.getInstance().stopDetectHeart(writeResponse);
         } else if (oprater.equals(BP_DETECT_START)) {
             tv1.setText(BP_DETECT_START + ",等待50s...");
-            VPOperateManager.getMangerInstance(mContext).startDetectBP(writeResponse, new IBPDetectDataListener() {
+            VPOperateManager.getInstance().startDetectBP(writeResponse, new IBPDetectDataListener() {
                 @Override
                 public void onDataChange(BpData bpData) {
                     String message = "BpData date statues:\n" + bpData.toString();
@@ -523,14 +595,14 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             }, EBPDetectModel.DETECT_MODEL_PUBLIC);
         } else if (oprater.equals(BP_DETECT_STOP)) {
             tv1.setText(BP_DETECT_STOP);
-            VPOperateManager.getMangerInstance(mContext).stopDetectBP(writeResponse, EBPDetectModel.DETECT_MODEL_PUBLIC);
+            VPOperateManager.getInstance().stopDetectBP(writeResponse, EBPDetectModel.DETECT_MODEL_PUBLIC);
         } else if (oprater.equals(BP_DETECTMODEL_SETTING)) {
             boolean isOpenPrivateModel = true;
             boolean isAngioAdjuste = false;
             BpSetting bpSetting = new BpSetting(isOpenPrivateModel, 111, 88);
             //是否开启动态血压调整模式，功能标志位在密码验证的返回
             bpSetting.setAngioAdjuste(isAngioAdjuste);
-            VPOperateManager.getMangerInstance(mContext).settingDetectBP(writeResponse, new IBPSettingDataListener() {
+            VPOperateManager.getInstance().settingDetectBP(writeResponse, new IBPSettingDataListener() {
                 @Override
                 public void onDataChange(BpSettingData bpSettingData) {
                     String message = "BpSettingData:\n" + bpSettingData.toString();
@@ -539,7 +611,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, bpSetting);
         } else if (oprater.equals(BP_DETECTMODEL_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readDetectBP(writeResponse, new IBPSettingDataListener() {
+            VPOperateManager.getInstance().readDetectBP(writeResponse, new IBPSettingDataListener() {
                 @Override
                 public void onDataChange(BpSettingData bpSettingData) {
 
@@ -555,7 +627,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             BpSetting bpSetting = new BpSetting(isOpenPrivateModel, 111, 88);
             //是否开启动态血压调整模式，功能标志位在密码验证的返回
             bpSetting.setAngioAdjuste(isAngioAdjuste);
-            VPOperateManager.getMangerInstance(mContext).settingDetectBP(writeResponse, new IBPSettingDataListener() {
+            VPOperateManager.getInstance().settingDetectBP(writeResponse, new IBPSettingDataListener() {
                 @Override
                 public void onDataChange(BpSettingData bpSettingData) {
                     String message = "BpSettingData:\n" + bpSettingData.toString();
@@ -569,7 +641,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             BpSetting bpSetting = new BpSetting(isOpenPrivateModel, 111, 88);
             //是否开启动态血压调整模式，功能标志位在密码验证的返回
             bpSetting.setAngioAdjuste(isAngioAdjuste);
-            VPOperateManager.getMangerInstance(mContext).cancelAngioAdjust(writeResponse, new IBPSettingDataListener() {
+            VPOperateManager.getInstance().cancelAngioAdjust(writeResponse, new IBPSettingDataListener() {
                 @Override
                 public void onDataChange(BpSettingData bpSettingData) {
                     String message = "BpSettingData:\n" + bpSettingData.toString();
@@ -579,7 +651,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             }, bpSetting);
         } else if (oprater.equals(PWD_COMFIRM)) {
             boolean is24Hourmodel = false;
-            VPOperateManager.getMangerInstance(mContext).confirmDevicePwd(writeResponse, new IPwdDataListener() {
+            VPOperateManager.getInstance().confirmDevicePwd(writeResponse, new IPwdDataListener() {
                 @Override
                 public void onPwdDataChange(PwdData pwdData) {
                     String message = "PwdData:\n" + pwdData.toString();
@@ -627,7 +699,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
 
         } else if (oprater.equals(PWD_MODIFY)) {
-            VPOperateManager.getMangerInstance(mContext).modifyDevicePwd(writeResponse, new IPwdDataListener() {
+            VPOperateManager.getInstance().modifyDevicePwd(writeResponse, new IPwdDataListener() {
                 @Override
                 public void onPwdDataChange(PwdData pwd) {
                     String message = "PwdData:\n" + pwd.toString();
@@ -636,7 +708,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, "0000");
         } else if (oprater.equals(SPORT_CURRENT_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readSportStep(writeResponse, new ISportDataListener() {
+            VPOperateManager.getInstance().readSportStep(writeResponse, new ISportDataListener() {
                 @Override
                 public void onSportDataChange(SportData sportData) {
                     String message = "当前计步:\n" + sportData.toString();
@@ -645,7 +717,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(PERSONINFO_SYNC)) {
-            VPOperateManager.getMangerInstance(mContext).syncPersonInfo(writeResponse, new IPersonInfoDataListener() {
+            VPOperateManager.getInstance().syncPersonInfo(writeResponse, new IPersonInfoDataListener() {
                 @Override
                 public void OnPersoninfoDataChange(EOprateStauts EOprateStauts) {
                     String message = "同步个人信息:\n" + EOprateStauts.toString();
@@ -654,7 +726,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, new PersonInfoData(ESex.MAN, 178, 60, 20, 8000));
         } else if (oprater.equals(CAMERA_START)) {
-            VPOperateManager.getMangerInstance(mContext).startCamera(writeResponse, new ICameraDataListener() {
+            VPOperateManager.getInstance().startCamera(writeResponse, new ICameraDataListener() {
                 @Override
                 public void OnCameraDataChange(ECameraStatus oprateStauts) {
 
@@ -663,7 +735,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
             });
         } else if (oprater.equals(CAMERA_STOP)) {
-            VPOperateManager.getMangerInstance(mContext).stopCamera(writeResponse, new ICameraDataListener() {
+            VPOperateManager.getInstance().stopCamera(writeResponse, new ICameraDataListener() {
                 @Override
                 public void OnCameraDataChange(ECameraStatus oprateStauts) {
 
@@ -682,7 +754,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             alarmSettingList.add(alarmSetting2);
             alarmSettingList.add(alarmSetting3);
 
-            VPOperateManager.getMangerInstance(mContext).settingAlarm(writeResponse, new IAlarmDataListener() {
+            VPOperateManager.getInstance().settingAlarm(writeResponse, new IAlarmDataListener() {
                 @Override
                 public void onAlarmDataChangeListener(AlarmData alarmData) {
                     String message = "设置闹钟:\n" + alarmData.toString();
@@ -691,7 +763,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, alarmSettingList);
         } else if (oprater.equals(ALARM_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readAlarm(writeResponse, new IAlarmDataListener() {
+            VPOperateManager.getInstance().readAlarm(writeResponse, new IAlarmDataListener() {
                 @Override
                 public void onAlarmDataChangeListener(AlarmData alarmData) {
                     String message = "读取闹钟:\n" + alarmData.toString();
@@ -700,7 +772,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(ALARM_NEW_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readAlarm2(writeResponse, new IAlarm2DataListListener() {
+            VPOperateManager.getInstance().readAlarm2(writeResponse, new IAlarm2DataListListener() {
                 @Override
                 public void onAlarmDataChangeListListener(AlarmData2 alarmData2) {
                     String message = "读取闹钟[新版]:\n" + alarmData2.toString();
@@ -712,7 +784,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             int deleteID = 1;
             Alarm2Setting alarm2Setting = getMultiAlarmSetting();
             alarm2Setting.setAlarmId(deleteID);
-            VPOperateManager.getMangerInstance(mContext).deleteAlarm2(writeResponse, new IAlarm2DataListListener() {
+            VPOperateManager.getInstance().deleteAlarm2(writeResponse, new IAlarm2DataListListener() {
                 @Override
                 public void onAlarmDataChangeListListener(AlarmData2 alarmData2) {
                     String message = "删除闹钟[新版]:\n" + alarmData2.toString();
@@ -722,7 +794,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 //String bluetoothAddress, int alarmId, int alarmHour, int alarmMinute, String repeatStatus, int scene, String unRepeatDate, boolean isOpen
             }, alarm2Setting);
         } else if (oprater.equals(ALARM_NEW_LISTENER)) {
-            VPOperateManager.getMangerInstance(mContext).setOnDeviceAlarm2ChangedListener(new OnDeviceAlarm2ChangedListener() {
+            VPOperateManager.getInstance().setOnDeviceAlarm2ChangedListener(new OnDeviceAlarm2ChangedListener() {
                 @Override
                 public void onDeviceAlarm2Changed() {
                     sendMsg("设备端闹钟状态改变了，请调用[readAlarm2更新闹钟列表]", 1);
@@ -731,7 +803,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
         } else if (oprater.equals(ALARM_NEW_ADD)) {
             Alarm2Setting alarm2Setting = getMultiAlarmSetting();
-            VPOperateManager.getMangerInstance(mContext).addAlarm2(writeResponse, new IAlarm2DataListListener() {
+            VPOperateManager.getInstance().addAlarm2(writeResponse, new IAlarm2DataListListener() {
                 @Override
                 public void onAlarmDataChangeListListener(AlarmData2 alarmData2) {
                     String message = "添加闹钟[新版]:\n" + alarmData2.toString();
@@ -745,7 +817,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             alarm2Setting.setAlarmId(modifyID);
             alarm2Setting.setAlarmHour(10);
             alarm2Setting.setOpen(false);
-            VPOperateManager.getMangerInstance(mContext).modifyAlarm2(writeResponse, new IAlarm2DataListListener() {
+            VPOperateManager.getInstance().modifyAlarm2(writeResponse, new IAlarm2DataListListener() {
                 @Override
                 public void onAlarmDataChangeListListener(AlarmData2 alarmData2) {
                     String message = "修改闹钟[新版]:\n" + alarmData2.toString();
@@ -754,7 +826,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, alarm2Setting);
         } else if (oprater.equals(LONGSEAT_SETTING_OPEN)) {
-            VPOperateManager.getMangerInstance(mContext).settingLongSeat(writeResponse, new LongSeatSetting(10, 35, 11, 45, 60, true), new ILongSeatDataListener() {
+            VPOperateManager.getInstance().settingLongSeat(writeResponse, new LongSeatSetting(10, 35, 11, 45, 60, true), new ILongSeatDataListener() {
                 @Override
                 public void onLongSeatDataChange(LongSeatData longSeat) {
                     String message = "设置久坐-打开:\n" + longSeat.toString();
@@ -763,7 +835,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(LONGSEAT_SETTING_CLOSE)) {
-            VPOperateManager.getMangerInstance(mContext).settingLongSeat(writeResponse, new LongSeatSetting(10, 40, 12, 40, 40, false), new ILongSeatDataListener() {
+            VPOperateManager.getInstance().settingLongSeat(writeResponse, new LongSeatSetting(10, 40, 12, 40, 40, false), new ILongSeatDataListener() {
 
                 @Override
                 public void onLongSeatDataChange(LongSeatData longSeat) {
@@ -773,7 +845,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(LONGSEAT_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readLongSeat(writeResponse, new ILongSeatDataListener() {
+            VPOperateManager.getInstance().readLongSeat(writeResponse, new ILongSeatDataListener() {
                 @Override
                 public void onLongSeatDataChange(LongSeatData longSeat) {
                     String message = "设置久坐-读取:\n" + longSeat.toString();
@@ -782,7 +854,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(LANGUAGE_CHINESE)) {
-            VPOperateManager.getMangerInstance(mContext).settingDeviceLanguage(writeResponse, new ILanguageDataListener() {
+            VPOperateManager.getInstance().settingDeviceLanguage(writeResponse, new ILanguageDataListener() {
                 @Override
                 public void onLanguageDataChange(LanguageData languageData) {
                     String message = "设置语言(中文):\n" + languageData.toString();
@@ -791,7 +863,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, ELanguage.CHINA);
         } else if (oprater.equals(LANGUAGE_ENGLISH)) {
-            VPOperateManager.getMangerInstance(mContext).settingDeviceLanguage(writeResponse, new ILanguageDataListener() {
+            VPOperateManager.getInstance().settingDeviceLanguage(writeResponse, new ILanguageDataListener() {
                 @Override
                 public void onLanguageDataChange(LanguageData languageData) {
                     String message = "设置语言(英文):\n" + languageData.toString();
@@ -800,7 +872,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, ELanguage.ENGLISH);
         } else if (oprater.equals(BATTERY)) {
-            VPOperateManager.getMangerInstance(mContext).readBattery(writeResponse, new IBatteryDataListener() {
+            VPOperateManager.getInstance().readBattery(writeResponse, new IBatteryDataListener() {
                 @Override
                 public void onDataChange(BatteryData batteryData) {
                     String message = "电池等级:\n" + batteryData.getBatteryLevel() + "\n" + "电量:" + batteryData.getBatteryLevel() * 25 + "%";
@@ -809,7 +881,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(NIGHT_TURN_WRIST_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readNightTurnWriste(writeResponse, new INightTurnWristeDataListener() {
+            VPOperateManager.getInstance().readNightTurnWriste(writeResponse, new INightTurnWristeDataListener() {
                 @Override
                 public void onNightTurnWristeDataChange(NightTurnWristeData nightTurnWristeData) {
                     String message = "夜间转腕-读取:\n" + nightTurnWristeData.toString();
@@ -818,7 +890,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(NIGHT_TURN_WRIST_OPEN)) {
-            VPOperateManager.getMangerInstance(mContext).settingNightTurnWriste(writeResponse, new INightTurnWristeDataListener() {
+            VPOperateManager.getInstance().settingNightTurnWriste(writeResponse, new INightTurnWristeDataListener() {
                 @Override
                 public void onNightTurnWristeDataChange(NightTurnWristeData nightTurnWristeData) {
                     String message = "夜间转腕-打开:\n" + nightTurnWristeData.toString();
@@ -827,7 +899,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, true);
         } else if (oprater.equals(NIGHT_TURN_WRIST_CLOSE)) {
-            VPOperateManager.getMangerInstance(mContext).settingNightTurnWriste(writeResponse, new INightTurnWristeDataListener() {
+            VPOperateManager.getInstance().settingNightTurnWriste(writeResponse, new INightTurnWristeDataListener() {
                 @Override
                 public void onNightTurnWristeDataChange(NightTurnWristeData nightTurnWristeData) {
                     String message = "夜间转腕-关闭:\n" + nightTurnWristeData.toString();
@@ -839,7 +911,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             final boolean isOpen = true;
             TimeData startTime = new TimeData(10, 0);
             TimeData endTime = new TimeData(20, 0);
-            VPOperateManager.getMangerInstance(mContext).settingNightTurnWriste(writeResponse, new INightTurnWristeDataListener() {
+            VPOperateManager.getInstance().settingNightTurnWriste(writeResponse, new INightTurnWristeDataListener() {
                 @Override
                 public void onNightTurnWristeDataChange(NightTurnWristeData nightTurnWristeData) {
                     String message = "夜间转腕-" + isOpen + ":\n" + nightTurnWristeData.toString();
@@ -852,7 +924,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             TimeData startTime = new TimeData(10, 0);
             TimeData endTime = new TimeData(20, 0);
             int level = 2;
-            VPOperateManager.getMangerInstance(mContext).settingNightTurnWriste(writeResponse, new INightTurnWristeDataListener() {
+            VPOperateManager.getInstance().settingNightTurnWriste(writeResponse, new INightTurnWristeDataListener() {
                 @Override
                 public void onNightTurnWristeDataChange(NightTurnWristeData nightTurnWristeData) {
                     String message = "夜间转腕-" + isOpen + ":\n" + nightTurnWristeData.toString();
@@ -861,10 +933,10 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, new NightTurnWristSetting(isOpen, startTime, endTime, level));
         } else if (oprater.equals(DISCONNECT)) {
-            VPOperateManager.getMangerInstance(mContext).disconnectWatch(writeResponse);
+            VPOperateManager.getInstance().disconnectWatch(writeResponse);
             finish();
         } else if (oprater.equals(FINDPHONE)) {
-            VPOperateManager.getMangerInstance(mContext).settingFindPhoneListener(new IFindPhonelistener() {
+            VPOperateManager.getInstance().settingFindPhoneListener(new IFindPhonelistener() {
                 @Override
                 public void findPhone() {
                     String message = "(监听到手环要查找手机)-where is the phone,make some noise!";
@@ -873,7 +945,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(DEVICE_COUSTOM_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readCustomSetting(writeResponse, new ICustomSettingDataListener() {
+            VPOperateManager.getInstance().readCustomSetting(writeResponse, new ICustomSettingDataListener() {
                 @Override
                 public void OnSettingDataChange(CustomSettingData customSettingData) {
                     String message = "个性化状态-公英制/时制(12/24)/5分钟测量开关(心率/血压)-读取:\n" + customSettingData.toString();
@@ -924,13 +996,13 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             } else {
                 customSetting.setIsOpenAutoTemperatureDetect(UNSUPPORT);
             }
-            if(isCanDetectBloodGlucoseByApp) {
+            if (isCanDetectBloodGlucoseByApp) {
                 boolean isOpenTempDetect = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportBloodGlucoseDetect();
                 customSetting.setIsOpenAutoTemperatureDetect(isOpenTempDetect ? SUPPORT_CLOSE : SUPPORT_OPEN);
             } else {
                 customSetting.setIsOpenAutoTemperatureDetect(UNSUPPORT);
             }
-            VPOperateManager.getMangerInstance(mContext).changeCustomSetting(writeResponse, new ICustomSettingDataListener() {
+            VPOperateManager.getInstance().changeCustomSetting(writeResponse, new ICustomSettingDataListener() {
                 @Override
                 public void OnSettingDataChange(CustomSettingData customSettingData) {
                     String message = "个性化状态-公英制/时制(12/24)/5分钟测量开关(心率/血压)-设置:\n" + customSettingData.toString();
@@ -938,10 +1010,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     sendMsg(message, 1);
                 }
             }, customSetting);
-        }
-
-
-        else if(oprater.equals(DEVICE_ECG_ALWAYS_OPEN)) {
+        } else if (oprater.equals(DEVICE_ECG_ALWAYS_OPEN)) {
             boolean isHaveMetricSystem = true;
             boolean isMetric = true;
             boolean is24Hour = true;
@@ -986,7 +1055,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             }
 
             customSetting.setEcgAlwaysOpen(SUPPORT_OPEN);
-            VPOperateManager.getMangerInstance(mContext).changeCustomSetting(writeResponse, new ICustomSettingDataListener() {
+            VPOperateManager.getInstance().changeCustomSetting(writeResponse, new ICustomSettingDataListener() {
                 @Override
                 public void OnSettingDataChange(CustomSettingData customSettingData) {
                     String message = "个性化状态--设置:\n" + customSettingData.toString();
@@ -994,10 +1063,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     sendMsg(message, 1);
                 }
             }, customSetting);
-        }
-
-
-        else if(oprater.equals(DEVICE_ECG_ALWAYS_CLOSE)) {
+        } else if (oprater.equals(DEVICE_ECG_ALWAYS_CLOSE)) {
             boolean isHaveMetricSystem = true;
             boolean isMetric = true;
             boolean is24Hour = true;
@@ -1042,7 +1108,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             }
 
             customSetting.setEcgAlwaysOpen(SUPPORT_CLOSE);
-            VPOperateManager.getMangerInstance(mContext).changeCustomSetting(writeResponse, new ICustomSettingDataListener() {
+            VPOperateManager.getInstance().changeCustomSetting(writeResponse, new ICustomSettingDataListener() {
                 @Override
                 public void OnSettingDataChange(CustomSettingData customSettingData) {
                     String message = "个性化状态--设置:\n" + customSettingData.toString();
@@ -1050,13 +1116,10 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     sendMsg(message, 1);
                 }
             }, customSetting);
-        }
-
-
-        else if (oprater.equals(CHECK_WEAR_SETING_OPEN)) {
+        } else if (oprater.equals(CHECK_WEAR_SETING_OPEN)) {
             CheckWearSetting checkWearSetting = new CheckWearSetting();
             checkWearSetting.setOpen(true);
-            VPOperateManager.getMangerInstance(mContext).setttingCheckWear(writeResponse, new ICheckWearDataListener() {
+            VPOperateManager.getInstance().setttingCheckWear(writeResponse, new ICheckWearDataListener() {
                 @Override
                 public void onCheckWearDataChange(CheckWearData checkWearData) {
                     String message = "佩戴检测-打开:\n" + checkWearData.toString();
@@ -1067,7 +1130,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         } else if (oprater.equals(CHECK_WEAR_SETING_CLOSE)) {
             CheckWearSetting checkWearSetting = new CheckWearSetting();
             checkWearSetting.setOpen(false);
-            VPOperateManager.getMangerInstance(mContext).setttingCheckWear(writeResponse, new ICheckWearDataListener() {
+            VPOperateManager.getInstance().setttingCheckWear(writeResponse, new ICheckWearDataListener() {
                 @Override
                 public void onCheckWearDataChange(CheckWearData checkWearData) {
                     String message = "佩戴检测-关闭:\n" + checkWearData.toString();
@@ -1076,7 +1139,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, checkWearSetting);
         } else if (oprater.equals(FINDDEVICE_SETTING_OPEN)) {
-            VPOperateManager.getMangerInstance(mContext).settingFindDevice(writeResponse, new IFindDeviceDatalistener() {
+            VPOperateManager.getInstance().settingFindDevice(writeResponse, new IFindDeviceDatalistener() {
                 @Override
                 public void onFindDevice(FindDeviceData findDeviceData) {
                     String message = "防丢-打开:\n" + findDeviceData.toString();
@@ -1085,7 +1148,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, true);
         } else if (oprater.equals(FINDDEVICE_SETTING_CLOSE)) {
-            VPOperateManager.getMangerInstance(mContext).settingFindDevice(writeResponse, new IFindDeviceDatalistener() {
+            VPOperateManager.getInstance().settingFindDevice(writeResponse, new IFindDeviceDatalistener() {
                 @Override
                 public void onFindDevice(FindDeviceData findDeviceData) {
                     String message = "防丢-关闭:\n" + findDeviceData.toString();
@@ -1094,7 +1157,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, false);
         } else if (oprater.equals(FINDDEVICE_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readFindDevice(writeResponse, new IFindDeviceDatalistener() {
+            VPOperateManager.getInstance().readFindDevice(writeResponse, new IFindDeviceDatalistener() {
                 @Override
                 public void onFindDevice(FindDeviceData findDeviceData) {
                     String message = "防丢-读取:\n" + findDeviceData.toString();
@@ -1103,7 +1166,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(SOCIAL_MSG_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readSocialMsg(writeResponse, new ISocialMsgDataListener() {
+            VPOperateManager.getInstance().readSocialMsg(writeResponse, new ISocialMsgDataListener() {
                 @Override
                 public void onSocialMsgSupportDataChange(FunctionSocailMsgData socailMsgData) {
                     String message = " 社交信息提醒1-读取:\n" + socailMsgData.toString();
@@ -1147,7 +1210,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             socailMsgData.setShieldPolice(SUPPORT_OPEN);
 
 
-            VPOperateManager.getMangerInstance(mContext).settingSocialMsg(writeResponse, new ISocialMsgDataListener() {
+            VPOperateManager.getInstance().settingSocialMsg(writeResponse, new ISocialMsgDataListener() {
                 @Override
                 public void onSocialMsgSupportDataChange(FunctionSocailMsgData socailMsgData) {
                     String message = " 社交信息提醒-设置:\n" + socailMsgData.toString();
@@ -1189,7 +1252,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             socailMsgData.setKakaoTalk(SUPPORT_CLOSE);
             socailMsgData.setShieldPolice(SUPPORT_CLOSE);
 
-            VPOperateManager.getMangerInstance(mContext).settingSocialMsg(writeResponse, new ISocialMsgDataListener() {
+            VPOperateManager.getInstance().settingSocialMsg(writeResponse, new ISocialMsgDataListener() {
                 @Override
                 public void onSocialMsgSupportDataChange(FunctionSocailMsgData socailMsgData) {
                     String message = " 社交信息提醒-设置:\n" + socailMsgData.toString();
@@ -1206,7 +1269,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             }, socailMsgData);
         } else if (oprater.equals(LIANSUO_SOS)) {
             String message = " LIANSUO_SOS";
-            VPOperateManager.getMangerInstance(mContext).settingSOSListener(new ISOSListener() {
+            VPOperateManager.getInstance().settingSOSListener(new ISOSListener() {
                 @Override
                 public void sos() {
                     String liansuo_sos_call_back = "liansuo_sos call back";
@@ -1215,7 +1278,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(LIANSUO_SEND_ORDER)) {
-            VPOperateManager.getMangerInstance(mContext).sendToSoldierCommand(writeResponse, new IResponseListener() {
+            VPOperateManager.getInstance().sendToSoldierCommand(writeResponse, new IResponseListener() {
                 @Override
                 public void response(int state) {
                     String message = "liansuo send cmd call back:" + state;
@@ -1224,7 +1287,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(LIANSUO_SEND_CONTENT)) {
-            VPOperateManager.getMangerInstance(mContext).sendToSoldierContent(writeResponse, new SoldierContentSetting("123123123123123123123123123123123"), new IResponseListener() {
+            VPOperateManager.getInstance().sendToSoldierContent(writeResponse, new SoldierContentSetting("123123123123123123123123123123123"), new IResponseListener() {
                 @Override
                 public void response(int state) {
                     String message = "liansuo send content call back:" + state;
@@ -1246,12 +1309,12 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 //
 //            /**第三方APP推送,发送前先通过密码验证获取FunctionSocailMsgData的状态**/
 //            ContentSetting contentsociaSetting4 = new ContentSocailSetting(ESocailMsg.SHIELD_POLICE, "警右", "坦白从宽，牢底坐穿，抗拒从严，回家过年");
-//            VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting4);
+//            VPOperateManager.getInstance().sendSocialMsgContent(writeResponse, contentsociaSetting4);
 //            mHandler.postDelayed(new Runnable() {
 //                @Override
 //                public void run() {
 //                    ContentSetting contentsociaSetting5 = new ContentSocailSetting(ESocailMsg.MESSENGER, "vepo", "测试反馈 MESSENGER");
-//                    VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting5);
+//                    VPOperateManager.getInstance().sendSocialMsgContent(writeResponse, contentsociaSetting5);
 //
 //                }
 //            }, 2000);
@@ -1259,18 +1322,18 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 //                @Override
 //                public void run() {
 //                    ContentSetting contentsociaSetting6 = new ContentSocailSetting(ESocailMsg.PHONE, "vepo", "测试反馈 PHONE");
-//                    VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentphoneSetting0);
+//                    VPOperateManager.getInstance().sendSocialMsgContent(writeResponse, contentphoneSetting0);
 //                }
 //            }, 4000);
 //            mHandler.postDelayed(new Runnable() {
 //                @Override
 //                public void run() {
 //                    ContentSetting contentsociaSetting6 = new ContentSocailSetting(ESocailMsg.CONNECTED2_ME, "vepo", "测试反馈 CONNECTED2_ME");
-//                    VPOperateManager.getMangerInstance(mContext).sendSocialMsgContent(writeResponse, contentsociaSetting6);
+//                    VPOperateManager.getInstance().sendSocialMsgContent(writeResponse, contentsociaSetting6);
 //                }
 //            }, 6000);
 //            ContentSetting contentsociaSetting6 = new ContentSocailSetting(ESocailMsg.G15MSG, "G15", "ABCDEFG,今天是星期五，明天星期六");
-//            VPOperateManager.getMangerInstance(mContext).sendG15MsgContent(writeResponse, "G15", "ABCDEFG,今天是星期五,敬挽发大水发大水发放大范德萨", new IG15MessageListener() {
+//            VPOperateManager.getInstance().sendG15MsgContent(writeResponse, "G15", "ABCDEFG,今天是星期五,敬挽发大水发大水发放大范德萨", new IG15MessageListener() {
 //                @Override
 //                public void onG15MessageSendSuccess() {
 //                    Toast.makeText(mContext, "收到应答", Toast.LENGTH_SHORT).show();
@@ -1283,9 +1346,9 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 //            });
 
         } else if (oprater.equals(SOCIAL_PHONE_IDLE_OR_OFFHOOK)) {
-            VPOperateManager.getMangerInstance(mContext).offhookOrIdlePhone(writeResponse);
+            VPOperateManager.getInstance().offhookOrIdlePhone(writeResponse);
         } else if (oprater.equals(DEVICE_CONTROL_PHONE)) {
-            VPOperateManager.getMangerInstance(mContext).settingDeviceControlPhone(new IDeviceControlPhoneModelState() {
+            VPOperateManager.getInstance().settingDeviceControlPhone(new IDeviceControlPhoneModelState() {
 
                 @Override
                 public void inPttModel() {
@@ -1377,10 +1440,10 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
             });
         } else if (oprater.equals(CLEAR_DEVICE_DATA)) {
-            VPOperateManager.getMangerInstance(mContext).clearDeviceData(writeResponse);
+            VPOperateManager.getInstance().clearDeviceData(writeResponse);
             finish();
         } else if (oprater.equals(HEARTWRING_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readHeartWarning(writeResponse, new IHeartWaringDataListener() {
+            VPOperateManager.getInstance().readHeartWarning(writeResponse, new IHeartWaringDataListener() {
                 @Override
                 public void onHeartWaringDataChange(HeartWaringData heartWaringData) {
                     String message = "心率报警-读取:\n" + heartWaringData.toString();
@@ -1389,7 +1452,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(HEARTWRING_OPEN)) {
-            VPOperateManager.getMangerInstance(mContext).settingHeartWarning(writeResponse, new IHeartWaringDataListener() {
+            VPOperateManager.getInstance().settingHeartWarning(writeResponse, new IHeartWaringDataListener() {
                 @Override
                 public void onHeartWaringDataChange(HeartWaringData heartWaringData) {
                     String message = "心率报警-打开:\n" + heartWaringData.toString();
@@ -1398,7 +1461,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, new HeartWaringSetting(120, 110, true));
         } else if (oprater.equals(HEARTWRING_CLOSE)) {
-            VPOperateManager.getMangerInstance(mContext).settingHeartWarning(writeResponse, new IHeartWaringDataListener() {
+            VPOperateManager.getInstance().settingHeartWarning(writeResponse, new IHeartWaringDataListener() {
                 @Override
                 public void onHeartWaringDataChange(HeartWaringData heartWaringData) {
                     String message = "心率报警-关闭:\n" + heartWaringData.toString();
@@ -1410,8 +1473,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             byte[] cmd = new byte[20];
             cmd[0] = (byte) 0xf3;
             cmd[1] = (byte) 0x08;
-//            VPOperateManager.getMangerInstance(mContext).sendOrder(writeResponse, cmd);
-            VPOperateManager.getMangerInstance(mContext).startDetectSPO2H(writeResponse, new ISpo2hDataListener() {
+//            VPOperateManager.getInstance().sendOrder(writeResponse, cmd);
+            VPOperateManager.getInstance().startDetectSPO2H(writeResponse, new ISpo2hDataListener() {
                 @Override
                 public void onSpO2HADataChange(Spo2hData spo2HData) {
                     String message = "血氧-开始:\n" + spo2HData.toString();
@@ -1426,7 +1489,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(SPO2H_CLOSE)) {
-            VPOperateManager.getMangerInstance(mContext).stopDetectSPO2H(writeResponse, new ISpo2hDataListener() {
+            VPOperateManager.getInstance().stopDetectSPO2H(writeResponse, new ISpo2hDataListener() {
                 @Override
                 public void onSpO2HADataChange(Spo2hData spo2HData) {
                     String message = "血氧-结束:\n" + spo2HData.toString();
@@ -1435,7 +1498,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(SPO2H_AUTO_DETECT_READ))
-            VPOperateManager.getMangerInstance(mContext).readSpo2hAutoDetect(writeResponse, new IAllSetDataListener() {
+            VPOperateManager.getInstance().readSpo2hAutoDetect(writeResponse, new IAllSetDataListener() {
                 @Override
                 public void onAllSetDataChangeListener(AllSetData allSetData) {
                     String message = "血氧自动检测-读取\n" + allSetData.toString();
@@ -1446,7 +1509,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         else if (oprater.equals(SPO2H_AUTO_DETECT_OPEN)) {
             int setting = 0, open = 1;
             AllSetSetting mAlarmSetting = new AllSetSetting(EAllSetType.SPO2H_NIGHT_AUTO_DETECT, 22, 0, 8, 0, setting, open);
-            VPOperateManager.getMangerInstance(mContext).settingSpo2hAutoDetect(writeResponse, new IAllSetDataListener() {
+            VPOperateManager.getInstance().settingSpo2hAutoDetect(writeResponse, new IAllSetDataListener() {
                 @Override
                 public void onAllSetDataChangeListener(AllSetData allSetData) {
                     String message = "血氧自动检测-打开\n" + allSetData.toString();
@@ -1457,7 +1520,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         } else if (oprater.equals(SPO2H_AUTO_DETECT_CLOSE)) {
             int setting = 0, colse = 0;
             AllSetSetting mAlarmSetting = new AllSetSetting(EAllSetType.SPO2H_NIGHT_AUTO_DETECT, 22, 0, 8, 0, setting, colse);
-            VPOperateManager.getMangerInstance(mContext).settingSpo2hAutoDetect(writeResponse, new IAllSetDataListener() {
+            VPOperateManager.getInstance().settingSpo2hAutoDetect(writeResponse, new IAllSetDataListener() {
                 @Override
                 public void onAllSetDataChangeListener(AllSetData allSetData) {
                     String message = "血氧自动检测-打开\n" + allSetData.toString();
@@ -1466,7 +1529,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, mAlarmSetting);
         } else if (oprater.equals(FATIGUE_OPEN)) {
-            VPOperateManager.getMangerInstance(mContext).startDetectFatigue(writeResponse, new IFatigueDataListener() {
+            VPOperateManager.getInstance().startDetectFatigue(writeResponse, new IFatigueDataListener() {
                 @Override
                 public void onFatigueDataListener(FatigueData fatigueData) {
                     String message = "疲劳度-开始:\n" + fatigueData.toString();
@@ -1475,7 +1538,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(FATIGUE_CLOSE)) {
-            VPOperateManager.getMangerInstance(mContext).stopDetectFatigue(writeResponse, new IFatigueDataListener() {
+            VPOperateManager.getInstance().stopDetectFatigue(writeResponse, new IFatigueDataListener() {
                 @Override
                 public void onFatigueDataListener(FatigueData fatigueData) {
                     String message = "疲劳度-结束:\n" + fatigueData.toString();
@@ -1484,7 +1547,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(WOMEN_SETTING)) {
-            VPOperateManager.getMangerInstance(mContext).settingWomenState(writeResponse, new IWomenDataListener() {
+            VPOperateManager.getInstance().settingWomenState(writeResponse, new IWomenDataListener() {
                 @Override
                 public void onWomenDataChange(WomenData womenData) {
                     String message = "女性状态-设置:\n" + womenData.toString();
@@ -1493,7 +1556,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, new WomenSetting(EWomenStatus.PREING, new TimeData(2016, 3, 1), new TimeData(2017, 1, 14)));
         } else if (oprater.equals(WOMEN_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readWomenState(writeResponse, new IWomenDataListener() {
+            VPOperateManager.getInstance().readWomenState(writeResponse, new IWomenDataListener() {
                 @Override
                 public void onWomenDataChange(WomenData womenData) {
                     String message = "女性状态-读取:\n" + womenData.toString();
@@ -1506,7 +1569,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             boolean isOpenWatchUI = false;
             boolean isCountDownByWatch = true;
             CountDownSetting countDownSetting = new CountDownSetting(second, isOpenWatchUI, isCountDownByWatch);
-            VPOperateManager.getMangerInstance(mContext).settingCountDown(writeResponse, countDownSetting, new ICountDownListener() {
+            VPOperateManager.getInstance().settingCountDown(writeResponse, countDownSetting, new ICountDownListener() {
                 @Override
                 public void OnCountDownDataChange(CountDownData countDownData) {
                     String message = "倒计时-watch:\n" + countDownData.toString();
@@ -1519,7 +1582,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             boolean isOpenWatchUI = true;
             boolean isCountDownByWatch = true;
             CountDownSetting countDownSetting = new CountDownSetting(second, isOpenWatchUI, isCountDownByWatch);
-            VPOperateManager.getMangerInstance(mContext).settingCountDown(writeResponse, countDownSetting, new ICountDownListener() {
+            VPOperateManager.getInstance().settingCountDown(writeResponse, countDownSetting, new ICountDownListener() {
                 @Override
                 public void OnCountDownDataChange(CountDownData countDownData) {
                     String message = "倒计时-App:\n" + countDownData.toString();
@@ -1532,7 +1595,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             boolean isOpenWatchUI = true;
             boolean isCountDownByWatch = false;
             CountDownSetting countDownSetting = new CountDownSetting(second, isOpenWatchUI, isCountDownByWatch);
-            VPOperateManager.getMangerInstance(mContext).settingCountDown(writeResponse, countDownSetting, new ICountDownListener() {
+            VPOperateManager.getInstance().settingCountDown(writeResponse, countDownSetting, new ICountDownListener() {
                 @Override
                 public void OnCountDownDataChange(CountDownData countDownData) {
                     String message = "倒计时-App:\n" + countDownData.toString();
@@ -1541,7 +1604,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(COUNT_DOWN_APP_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readCountDown(writeResponse, new ICountDownListener() {
+            VPOperateManager.getInstance().readCountDown(writeResponse, new ICountDownListener() {
                 @Override
                 public void OnCountDownDataChange(CountDownData countDownData) {
                     String message = "倒计时-读取:\n" + countDownData.toString();
@@ -1558,7 +1621,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
             long timestamp = Calendar.getInstance().getTimeInMillis();
             timestamp = 1616557585;
-            VPOperateManager.getMangerInstance(mContext).readChantingData(writeResponse, new ChantingSetting(timestamp), new IChantingDataListener() {
+            VPOperateManager.getInstance().readChantingData(writeResponse, new ChantingSetting(timestamp), new IChantingDataListener() {
                 @Override
                 public void onChantingDataChange(ChantingData chantingData) {
                     String message = "读取诵经计数:" + chantingData.toString();
@@ -1574,7 +1637,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             startActivity(intent);
         } else if (oprater.equals(SCREEN_LIGHT_SETTING)) {
             //默认的是【22:00-07:00】设置成2档，其他时间设置成4档，用户可以自定义
-            VPOperateManager.getMangerInstance(mContext).settingScreenLight(writeResponse, new IScreenLightListener() {
+            VPOperateManager.getInstance().settingScreenLight(writeResponse, new IScreenLightListener() {
                 @Override
                 public void onScreenLightDataChange(ScreenLightData screenLightData) {
                     String message = "屏幕调节数据-设置:" + screenLightData.toString();
@@ -1583,7 +1646,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, new ScreenSetting(22, 0, 7, 0, 2, 4));
         } else if (oprater.equals(SCREEN_LIGHT_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readScreenLight(writeResponse, new IScreenLightListener() {
+            VPOperateManager.getInstance().readScreenLight(writeResponse, new IScreenLightListener() {
                 @Override
                 public void onScreenLightDataChange(ScreenLightData screenLightData) {
                     String message = "屏幕调节数据-读取:" + screenLightData.toString();
@@ -1592,7 +1655,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(SCREEN_STYLE_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readScreenStyle(writeResponse, new IScreenStyleListener() {
+            VPOperateManager.getInstance().readScreenStyle(writeResponse, new IScreenStyleListener() {
                 @Override
                 public void onScreenStyleDataChange(ScreenStyleData screenLightData) {
                     String message = "屏幕样式-读取:" + screenLightData.toString();
@@ -1602,7 +1665,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             });
         } else if (oprater.equals(SCREEN_STYLE_SETTING)) {
             int screenstyle = 2;
-            VPOperateManager.getMangerInstance(mContext).settingScreenStyle(writeResponse, new IScreenStyleListener() {
+            VPOperateManager.getInstance().settingScreenStyle(writeResponse, new IScreenStyleListener() {
                 @Override
                 public void onScreenStyleDataChange(ScreenStyleData screenLightData) {
                     String message = "屏幕样式-设置:" + screenLightData.toString();
@@ -1616,7 +1679,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
         } else if (oprater.equals(READ_TEMPTURE_DATA)) {
             ReadOriginSetting readOriginSetting = new ReadOriginSetting(0, 1, false, watchDataDay);
-            VPOperateManager.getMangerInstance(mContext).readTemptureDataBySetting(writeResponse, new ITemptureDataListener() {
+            VPOperateManager.getInstance().readTemptureDataBySetting(writeResponse, new ITemptureDataListener() {
                 @Override
                 public void onTemptureDataListDataChange(List<TemptureData> temptureDataList) {
                     String message = "onTemptureDataListDataChange:" + temptureDataList.size();
@@ -1642,7 +1705,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, readOriginSetting);
         } else if (oprater.equals(READ_HEALTH_SLEEP)) {
-            VPOperateManager.getMangerInstance(mContext).readSleepData(writeResponse, new ISleepDataListener() {
+            VPOperateManager.getInstance().readSleepData(writeResponse, new ISleepDataListener() {
                         @Override
                         public void onSleepDataChange(String day, SleepData sleepData) {
                             String message = "";
@@ -1678,7 +1741,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             );
         } else if (oprater.equals(READ_HEALTH_SLEEP_FROM)) {
             int beforeYesterday = 2;
-            VPOperateManager.getMangerInstance(mContext).readSleepDataFromDay(writeResponse, new ISleepDataListener() {
+            VPOperateManager.getInstance().readSleepDataFromDay(writeResponse, new ISleepDataListener() {
                         @Override
                         public void onSleepDataChange(String day, SleepData sleepData) {
                             String message = getDay(day) + "-睡眠数据-返回:" + sleepData.toString();
@@ -1707,7 +1770,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     , beforeYesterday, watchDataDay);
         } else if (oprater.equals(READ_HEALTH_SLEEP_SINGLEDAY)) {
             int yesterday = 1;
-            VPOperateManager.getMangerInstance(mContext).readSleepDataSingleDay(writeResponse, new ISleepDataListener() {
+            VPOperateManager.getInstance().readSleepDataSingleDay(writeResponse, new ISleepDataListener() {
                 @Override
                 public void onSleepDataChange(String day, SleepData sleepData) {
                     String message = getDay(day) + "-睡眠数据-返回:" + sleepData.toString();
@@ -1734,7 +1797,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, yesterday, watchDataDay);
         } else if (oprater.equals(READ_HEALTH_DRINK)) {
-            VPOperateManager.getMangerInstance(mContext).readDrinkData(writeResponse, new IDrinkDataListener() {
+            VPOperateManager.getInstance().readDrinkData(writeResponse, new IDrinkDataListener() {
                 @Override
                 public void onDrinkDataChange(int packagenumber, DrinkData drinkdata) {
                     String message = "饮酒数据-返回:" + drinkdata.toString();
@@ -1828,10 +1891,10 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             if (protype == 3) {
                 originDataListener = originData3Listener;
             }
-            VPOperateManager.getMangerInstance(mContext).readOriginData(writeResponse, originDataListener, 3);
+            VPOperateManager.getInstance().readOriginData(writeResponse, originDataListener, 3);
         } else if (oprater.equals(READ_HEALTH_ORIGINAL_FROM)) {
             int yesterday = 1;
-            VPOperateManager.getMangerInstance(mContext).readOriginDataFromDay(writeResponse, new IOriginDataListener() {
+            VPOperateManager.getInstance().readOriginDataFromDay(writeResponse, new IOriginDataListener() {
                 @Override
                 public void onOringinFiveMinuteDataChange(OriginData originData) {
                     String message = "健康数据[5分钟]-返回:" + originData.toString();
@@ -1966,9 +2029,9 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             } else {
                 originProgressListener = originDataListener;
             }
-            VPOperateManager.getMangerInstance(mContext).readOriginDataSingleDay(writeResponse, originProgressListener, today, 1, watchDataDay);
+            VPOperateManager.getInstance().readOriginDataSingleDay(writeResponse, originProgressListener, today, 1, watchDataDay);
         } else if (oprater.equals(READ_HEALTH)) {
-            VPOperateManager.getMangerInstance(mContext).readAllHealthData(new IAllHealthDataListener() {
+            VPOperateManager.getInstance().readAllHealthData(new IAllHealthDataListener() {
                 @Override
                 public void onProgress(float progress) {
                     String message = "onAllProgress:" + progress;
@@ -2023,10 +2086,10 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             startActivity(intent);
 
         } else if (oprater.equals(SHOW_SP)) {
-            String shareperence = VPOperateManager.getMangerInstance(mContext).traversalShareperence();
+            String shareperence = VPOperateManager.getInstance().traversalShareperence();
             Logger.t(TAG).i(shareperence);
         } else if (oprater.equals(SPORT_MODE_ORIGIN_END)) {
-            VPOperateManager.getMangerInstance(mContext).stopSportModel(writeResponse, new ISportModelStateListener() {
+            VPOperateManager.getInstance().stopSportModel(writeResponse, new ISportModelStateListener() {
                 @Override
                 public void onSportModelStateChange(SportModelStateData sportModelStateData) {
                     String message = "运动模式状态:" + sportModelStateData.toString();
@@ -2039,7 +2102,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(SPORT_MODE_ORIGIN_READSTAUTS)) {
-            VPOperateManager.getMangerInstance(mContext).readSportModelState(writeResponse, new ISportModelStateListener() {
+            VPOperateManager.getInstance().readSportModelState(writeResponse, new ISportModelStateListener() {
                 @Override
                 public void onSportModelStateChange(SportModelStateData sportModelStateData) {
                     String message = "运动模式状态" + sportModelStateData.toString();
@@ -2052,7 +2115,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(SPORT_MODE_START_INDOOR)) {
-            VPOperateManager.getMangerInstance(mContext).startMultSportModel(writeResponse, new ISportModelStateListener() {
+            VPOperateManager.getInstance().startMultSportModel(writeResponse, new ISportModelStateListener() {
                 @Override
                 public void onSportModelStateChange(SportModelStateData sportModelStateData) {
                     String message = "室内步行" + sportModelStateData.toString();
@@ -2065,7 +2128,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, ESportType.INDOOR_WALK);
         } else if (oprater.equals(SPORT_MODE_ORIGIN_START)) {
-            VPOperateManager.getMangerInstance(mContext).startSportModel(writeResponse, new ISportModelStateListener() {
+            VPOperateManager.getInstance().startSportModel(writeResponse, new ISportModelStateListener() {
                 @Override
                 public void onSportModelStateChange(SportModelStateData sportModelStateData) {
                     String message = "运动模式状态" + sportModelStateData.toString();
@@ -2078,7 +2141,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(SPORT_MODE_ORIGIN_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readSportModelOrigin(writeResponse, new ISportModelOriginListener() {
+            VPOperateManager.getInstance().readSportModelOrigin(writeResponse, new ISportModelOriginListener() {
                 @Override
                 public void onReadOriginProgress(float progress) {
                     String message = "运动模式数据[读取进度]:" + progress;
@@ -2117,7 +2180,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(HRV_ORIGIN_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readHRVOrigin(writeResponse, new IHRVOriginDataListener() {
+            VPOperateManager.getInstance().readHRVOrigin(writeResponse, new IHRVOriginDataListener() {
                 @Override
                 public void onReadOriginProgress(float progress) {
                     Logger.t(TAG).i("onReadOriginProgress=" + progress);
@@ -2148,7 +2211,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             TimeData timeData = new TimeData(2017, 9, 11, 8, 13, 20);
 //            timeData.setCurrentTime();
             Logger.t(TAG).i("timeData:" + timeData.toString());
-            VPOperateManager.getMangerInstance(mContext).readAutoDetectOriginDataFromS22(writeResponse, new IAutoDetectOriginDataListener() {
+            VPOperateManager.getInstance().readAutoDetectOriginDataFromS22(writeResponse, new IAutoDetectOriginDataListener() {
 
                 @Override
                 public void onAutoDetectOriginDataChangeListener(List<AutoDetectOriginData> autoDetectOriginDataList) {
@@ -2158,7 +2221,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, timeData);
         } else if (oprater.equals(S22_READ_STATE)) {
-            VPOperateManager.getMangerInstance(mContext).readAutoDetectStateFromS22(writeResponse, new ICustomProtocolStateListener() {
+            VPOperateManager.getInstance().readAutoDetectStateFromS22(writeResponse, new ICustomProtocolStateListener() {
 
                 @Override
                 public void onS22AutoDetectStateChangeListener(AutoDetectStateData autoDetectStateData) {
@@ -2168,7 +2231,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         } else if (oprater.equals(S22_SETTING_STATE_OPEN)) {
             AutoDetectStateSetting autoDetectStateSetting = new AutoDetectStateSetting();
             autoDetectStateSetting.setSpo2h24Hour(SUPPORT_OPEN);
-            VPOperateManager.getMangerInstance(mContext).setAutoDetectStateToS22(writeResponse, new ICustomProtocolStateListener() {
+            VPOperateManager.getInstance().setAutoDetectStateToS22(writeResponse, new ICustomProtocolStateListener() {
                 @Override
                 public void onS22AutoDetectStateChangeListener(AutoDetectStateData autoDetectStateData) {
                     Logger.t(TAG).i("autoDetectStateData:" + autoDetectStateData.toString());
@@ -2177,14 +2240,14 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         } else if (oprater.equals(S22_SETTING_STATE_CLOSE)) {
             AutoDetectStateSetting autoDetectStateSetting = new AutoDetectStateSetting();
             autoDetectStateSetting.setSpo2h24Hour(SUPPORT_CLOSE);
-            VPOperateManager.getMangerInstance(mContext).setAutoDetectStateToS22(writeResponse, new ICustomProtocolStateListener() {
+            VPOperateManager.getInstance().setAutoDetectStateToS22(writeResponse, new ICustomProtocolStateListener() {
                 @Override
                 public void onS22AutoDetectStateChangeListener(AutoDetectStateData autoDetectStateData) {
                     Logger.t(TAG).i("autoDetectStateData:" + autoDetectStateData.toString());
                 }
             }, autoDetectStateSetting);
         } else if (oprater.equals(SPO2H_ORIGIN_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readSpo2hOrigin(writeResponse, new ISpo2hOriginDataListener() {
+            VPOperateManager.getInstance().readSpo2hOrigin(writeResponse, new ISpo2hOriginDataListener() {
                 @Override
                 public void onReadOriginProgress(float progress) {
                     Logger.t(TAG).i("onReadOriginProgress:" + progress);
@@ -2206,7 +2269,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, watchDataDay);
         } else if (oprater.equals(TEXT_ALARM_READ)) {
-            VPOperateManager.getMangerInstance(mContext).readTextAlarm(writeResponse, new ITextAlarmDataListener() {
+            VPOperateManager.getInstance().readTextAlarm(writeResponse, new ITextAlarmDataListener() {
                 @Override
                 public void onAlarmDataChangeListListener(TextAlarmData textAlarmData) {
                     Logger.t(TAG).e("读闹钟数据 --》" + textAlarmData.toString());
@@ -2220,7 +2283,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             });
         } else if (oprater.equals(TEXT_ALARM_ADD)) {
             TextAlarm2Setting setting = getTextAlarm2Setting();
-            VPOperateManager.getMangerInstance(mContext).addTextAlarm(writeResponse, new ITextAlarmDataListener() {
+            VPOperateManager.getInstance().addTextAlarm(writeResponse, new ITextAlarmDataListener() {
                 @Override
                 public void onAlarmDataChangeListListener(TextAlarmData textAlarmData) {
                     Logger.t(TAG).e("添加闹钟 --》" + textAlarmData.toString());
@@ -2230,7 +2293,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         } else if (oprater.equals(TEXT_ALARM_MODIFY)) {
             Random random = new Random();
             int flag = random.nextInt(100);
-            List<TextAlarm2Setting> settings = VPOperateManager.getMangerInstance(mContext).getTextAlarmList();
+            List<TextAlarm2Setting> settings = VPOperateManager.getInstance().getTextAlarmList();
             if (settings == null || settings.size() == 0) {
                 showToast("闹钟列表为空，请先添加闹钟或，读取更新闹钟列表");
                 return;
@@ -2238,7 +2301,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             final TextAlarm2Setting setting = settings.get(0);
             setting.setOpen(false);
             setting.setContent("西门官人[" + flag + "]大郎卖烧饼回来了");
-            VPOperateManager.getMangerInstance(mContext).modifyTextAlarm(writeResponse, new ITextAlarmDataListener() {
+            VPOperateManager.getInstance().modifyTextAlarm(writeResponse, new ITextAlarmDataListener() {
                 @Override
                 public void onAlarmDataChangeListListener(TextAlarmData textAlarmData) {
                     Logger.t(TAG).e("修改闹钟 --》" + textAlarmData.toString());
@@ -2254,7 +2317,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     Logger.t(TAG).e("存在的文字闹钟：" + s.toString());
                 }
                 Logger.t(TAG).e("要删除的文字闹钟：" + setting.toString());
-                VPOperateManager.getMangerInstance(mContext).deleteTextAlarm(writeResponse, new ITextAlarmDataListener() {
+                VPOperateManager.getInstance().deleteTextAlarm(writeResponse, new ITextAlarmDataListener() {
                     @Override
                     public void onAlarmDataChangeListListener(TextAlarmData textAlarmData) {
                         Logger.t(TAG).e("删除闹钟 --》" + textAlarmData.toString());
@@ -2278,8 +2341,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     readRR(DayState.TODAY);
                 }
             }).start();
-        } else if(oprater.equals(ECG_AUTO_REPORT_TEXT)) {
-            VPOperateManager.getMangerInstance(mContext).setECGAutoReportListener(new IECGAutoReportListener() {
+        } else if (oprater.equals(ECG_AUTO_REPORT_TEXT)) {
+            VPOperateManager.getInstance().setECGAutoReportListener(new IECGAutoReportListener() {
                 @Override
                 public void onECGAutoReport(int ecgValue, TimeData date) {
                     String info = "ECG = " + ecgValue + ", date = " + date.getDateAndClockForSleepSecond();
@@ -2293,7 +2356,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(START_BLOOD_GLUCOSE)) {
-            VPOperateManager.getMangerInstance(mContext).startBloodGlucoseDetect(writeResponse, new IBloodGlucoseChangeListener() {
+            VPOperateManager.getInstance().startBloodGlucoseDetect(writeResponse, new IBloodGlucoseChangeListener() {
                 @Override
                 public void onDetectError(int opt, EBloodGlucoseStatus status) {
                     showToast("[onDetectError: opt = " + opt + ", status=" + status + "]");
@@ -2320,7 +2383,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(STOP_BLOOD_GLUCOSE)) {
-            VPOperateManager.getMangerInstance(mContext).stopBloodGlucoseDetect(writeResponse, new IBloodGlucoseChangeListener() {
+            VPOperateManager.getInstance().stopBloodGlucoseDetect(writeResponse, new IBloodGlucoseChangeListener() {
                 @Override
                 public void onDetectError(int opt, EBloodGlucoseStatus status) {
                     showToast("[onDetectError: opt = " + opt + ", status=" + status + "]");
@@ -2346,8 +2409,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
                 }
             });
-        } else if(oprater.equals(BLE_RENAME)) {
-            VPOperateManager.getMangerInstance(mContext).bleDeviceRename("abcdefghijk", new IDeviceRenameListener() {
+        } else if (oprater.equals(BLE_RENAME)) {
+            VPOperateManager.getInstance().bleDeviceRename("abcdefghijk", new IDeviceRenameListener() {
                 @Override
                 public void onDeviceRenameSuccess(@NotNull String s) {
                     showToast("rename success " + s);
@@ -2355,11 +2418,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
                 @Override
                 public void onDeviceRenameFail(ERenameError error, @NotNull String s) {
-                    showToast(error.getDes() + " s = " +s);
+                    showToast(error.getDes() + " s = " + s);
                 }
             }, writeResponse);
-        } else if(oprater.equals(BT_RENAME)) {
-            VPOperateManager.getMangerInstance(mContext).bleDeviceRename("YWX", new IDeviceRenameListener() {
+        } else if (oprater.equals(BT_RENAME)) {
+            VPOperateManager.getInstance().bleDeviceRename("YWX", new IDeviceRenameListener() {
                 @Override
                 public void onDeviceRenameSuccess(@NotNull String s) {
                     showToast("rename success " + s);
@@ -2367,16 +2430,22 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
                 @Override
                 public void onDeviceRenameFail(ERenameError error, @NotNull String s) {
-                    showToast(error.getDes() + " s = " +s);
+                    showToast(error.getDes() + " s = " + s);
                 }
-            },writeResponse);
+            }, writeResponse);
+        } else if (oprater.equals(BT_CONNECT)) {
+
+        } else if (oprater.equals(BT_CLOSE)) {
+
+        } else if (oprater.equals(HEALTH_REMIND)) {
+            startActivity(new Intent(this, HealthRemindActivity.class));
         }
 
     }
 
     private void readRR(final DayState dayState) {
         Logger.t(TAG).e("读取RR逐跳帧数据 --》 Day = " + dayState);
-        VPOperateManager.getMangerInstance(mContext).readRRIntervalByDay(writeResponse, new IRRIntervalProgressListener() {
+        VPOperateManager.getInstance().readRRIntervalByDay(writeResponse, new IRRIntervalProgressListener() {
 
             @Override
             public void onReadRRIntervalProgressChanged(float progress, RRIntervalData rrIntervalData) {
@@ -2468,7 +2537,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 -60, 10, 5, 10, "10-12", 5.2);
         weatherEveryDayList.add(weatherEveryDay0);
         WeatherData weatherData = new WeatherData(crc, cityName, sourcr, lasTimeUpdate, weatherEvery3HourList, weatherEveryDayList);
-        VPOperateManager.getMangerInstance(mContext).settingWeatherData(writeResponse, weatherData, new IWeatherStatusDataListener() {
+        VPOperateManager.getInstance().settingWeatherData(writeResponse, weatherData, new IWeatherStatusDataListener() {
             @Override
             public void onWeatherDataChange(WeatherStatusData weatherStatusData) {
                 String message = "settingWeatherData onWeatherDataChange read:\n" + weatherStatusData.toString();
@@ -2482,7 +2551,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         List<WeatherData2> weatherData2 = new ArrayList<>();
         WeatherData2 e = new WeatherData2(new TimeData(2020, 11, 16, 10, 0), 18, 28, 1, 1, 1);
         weatherData2.add(e);
-        VPOperateManager.getMangerInstance(mContext).settingWeatherData2(writeResponse, weatherData2, new IWeatherStatusDataListener() {
+        VPOperateManager.getInstance().settingWeatherData2(writeResponse, weatherData2, new IWeatherStatusDataListener() {
             @Override
             public void onWeatherDataChange(WeatherStatusData weatherStatusData) {
                 String message = "settingWeatherData onWeatherDataChange read:\n" + weatherStatusData.toString();
@@ -2516,7 +2585,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
      * 因为在密码验证之后，inPttModel/outPttModel其中一个会有回调
      */
     public void listenDeviceCallbackData() {
-        VPOperateManager.getMangerInstance(mContext).settingDeviceControlPhone(new IDeviceControlPhoneModelState() {
+        VPOperateManager.getInstance().settingDeviceControlPhone(new IDeviceControlPhoneModelState() {
 
             @Override
             public void inPttModel() {
@@ -2613,7 +2682,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
     }
 
     public void listenCamera() {
-        VPOperateManager.getMangerInstance(mContext).setCameraListener(new ICameraDataListener() {
+        VPOperateManager.getInstance().setCameraListener(new ICameraDataListener() {
             @Override
             public void OnCameraDataChange(ECameraStatus oprateStauts) {
                 Logger.t(TAG).i("Camera oprateStauts:" + oprateStauts);
@@ -2626,8 +2695,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         byte[] cmd = new byte[20];
         cmd[0] = (byte) 0xf3;
         cmd[1] = (byte) 0x08;
-        VPOperateManager.getMangerInstance(mContext).sendOrder(writeResponse, cmd);
-        VPOperateManager.getMangerInstance(mContext).startDetectSPO2H(writeResponse, new ISpo2hDataListener() {
+        VPOperateManager.getInstance().sendOrder(writeResponse, cmd);
+        VPOperateManager.getInstance().startDetectSPO2H(writeResponse, new ISpo2hDataListener() {
             @Override
             public void onSpO2HADataChange(Spo2hData spo2HData) {
                 //不用理会
@@ -2639,14 +2708,14 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 Logger.t(TAG).i(message);
             }
         });
-        VPOperateManager.getMangerInstance(mContext).stopDetectSPO2H(writeResponse, new ISpo2hDataListener() {
+        VPOperateManager.getInstance().stopDetectSPO2H(writeResponse, new ISpo2hDataListener() {
             @Override
             public void onSpO2HADataChange(Spo2hData spo2HData) {
                 //不用理会
             }
         });
 
-        VPOperateManager.getMangerInstance(mContext).startDetectHeart(writeResponse, new IHeartDataListener() {
+        VPOperateManager.getInstance().startDetectHeart(writeResponse, new IHeartDataListener() {
             @Override
             public void onDataChange(HeartData heartData) {
                 String message = "返回-心率值:" + heartData.toString();
@@ -2657,7 +2726,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
     public void stopListenADC() {
         Logger.t(TAG).i("停止监听光电信号");
-        VPOperateManager.getMangerInstance(mContext).stopDetectHeart(writeResponse);
+        VPOperateManager.getInstance().stopDetectHeart(writeResponse);
     }
 
     private String getDay(String day) {
@@ -2750,7 +2819,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         if (protype == 3) {
             originDataListener = originData3Listener;
         }
-        VPOperateManager.getMangerInstance(mContext).readOriginData(writeResponse, originDataListener, 3);
+        VPOperateManager.getInstance().readOriginData(writeResponse, originDataListener, 3);
     }
 
     @Override

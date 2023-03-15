@@ -89,7 +89,6 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
     final static int MY_PERMISSIONS_REQUEST_BLUETOOTH = 0x55;
     RecyclerView mRecyclerView;
     TextView mTitleTextView;
-    VPOperateManager mVpoperateManager;
     private boolean mIsOadModel;
     BluetoothLeScannerCompat mScanner;
     private boolean isStartConnecting = false;
@@ -99,8 +98,8 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initLog();
+        VPOperateManager.getInstance().init(this);
         Logger.t(TAG).i("onSearchStarted");
-        mVpoperateManager = mVpoperateManager.getMangerInstance(mContext.getApplicationContext());
         mScanner = BluetoothLeScannerCompat.getScanner();
         VPLogger.setDebug(true);
         initRecyleView();
@@ -227,7 +226,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
             return true;
         }
 //        startScan();
-        mVpoperateManager.startScanDevice(mSearchResponse);
+        VPOperateManager.getInstance().startScanDevice(mSearchResponse);
         return false;
     }
 
@@ -298,9 +297,9 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
 
     private void connectDevice(final String mac, final String deviceName) {
 
-        mVpoperateManager.registerConnectStatusListener(mac, mBleConnectStatusListener);
+        VPOperateManager.getInstance().registerConnectStatusListener(mac, mBleConnectStatusListener);
 
-        mVpoperateManager.connectDevice(mac, deviceName, new IConnectResponse() {
+        VPOperateManager.getInstance().connectDevice(mac, deviceName, new IConnectResponse() {
 
             @Override
             public void connectState(int code, BleGattProfile profile, boolean isoadModel) {
@@ -399,7 +398,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
      * 蓝牙打开or关闭状态
      */
     private void registerBluetoothStateListener() {
-        mVpoperateManager.registerBluetoothStateListener(mBluetoothStateListener);
+        VPOperateManager.getInstance().registerBluetoothStateListener(mBluetoothStateListener);
     }
 
 

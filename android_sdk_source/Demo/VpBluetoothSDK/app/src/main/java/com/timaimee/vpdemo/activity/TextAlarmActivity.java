@@ -158,7 +158,6 @@ public class TextAlarmActivity extends Activity implements TextAlarmAdapter.OnTe
         return setting;
     }
 
-
     private void initTextAlarmListView() {
         mSettings.clear();
         mRecyclerView = findViewById(R.id.rvTextAlarm);
