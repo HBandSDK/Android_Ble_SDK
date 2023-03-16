@@ -3,8 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/VPSDK-GIT/Android_Ble_SDK/android_sdk_source/Demo/VpBluetoothSDK/app/src/main/res/layout/activity_g15_qrcode.xml" value="0.23333333333333334" />
+        <entry key="..\:/VPSDK-GIT/Android_Ble_SDK/android_sdk_source/Demo/VpBluetoothSDK/app/src/main/res/layout/activity_gps_report.xml" value="0.234375" />
         <entry key="..\:/VPSDK-GIT/Android_Ble_SDK/android_sdk_source/Demo/VpBluetoothSDK/app/src/main/res/layout/activity_health_remind.xml" value="0.25" />
+        <entry key="..\:/VPSDK-GIT/Android_Ble_SDK/android_sdk_source/Demo/VpBluetoothSDK/app/src/main/res/layout/activity_ptt.xml" value="0.2441123188405797" />
         <entry key="..\:/VPSDK-GIT/Android_Ble_SDK/android_sdk_source/Demo/VpBluetoothSDK/app/src/main/res/layout/activity_text_alarm.xml" value="0.21014492753623187" />
+        <entry key="..\:/VPSDK-GIT/Android_Ble_SDK/android_sdk_source/Demo/VpBluetoothSDK/app/src/main/res/layout/activity_uiupdate_agps.xml" value="0.23333333333333334" />
+        <entry key="..\:/VPSDK-GIT/Android_Ble_SDK/android_sdk_source/Demo/VpBluetoothSDK/app/src/main/res/layout/activity_uiupdate_custom.xml" value="0.23333333333333334" />
+        <entry key="..\:/VPSDK-GIT/Android_Ble_SDK/android_sdk_source/Demo/VpBluetoothSDK/app/src/main/res/layout/activity_uiupdate_server.xml" value="0.23333333333333334" />
         <entry key="..\:/VeepooAndroidSdk/Android_Ble_SDK/android_sdk_source/Demo/VpBluetoothSDK/app/src/main/res/layout/activity_uiupdate_custom.xml" value="0.15989583333333332" />
       </map>
     </option>

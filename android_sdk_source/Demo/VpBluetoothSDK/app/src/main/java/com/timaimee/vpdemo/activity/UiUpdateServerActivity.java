@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,10 +32,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Random;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 /**
  * 设置来自服务器表盘UI的步骤，如下：
  * 第1步.判断是否支持表盘设置
@@ -53,15 +50,10 @@ public class UiUpdateServerActivity extends Activity {
         }
     };
 
-    @BindView(R.id.ui_issupport)
     public TextView mUiServerSupportTV;
-    @BindView(R.id.ui_baseinfo)
     public TextView mUiServerBaseInfoTV;
-    @BindView(R.id.ui_downlist)
     public TextView downListTv;
-    @BindView(R.id.ui_file_state)
     public TextView fileStateTv;
-    @BindView(R.id.ui_send_progress)
     public TextView sendProgressTv;
 
     String deviceNumber, deviceVersion, deviceTestVersion;
@@ -71,7 +63,13 @@ public class UiUpdateServerActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_uiupdate_server);
-        ButterKnife.bind(this);
+        {
+            mUiServerSupportTV = findViewById(R.id.ui_issupport);
+            mUiServerBaseInfoTV = findViewById(R.id.ui_baseinfo);
+            downListTv = findViewById(R.id.ui_downlist);
+            fileStateTv = findViewById(R.id.ui_file_state);
+            sendProgressTv = findViewById(R.id.ui_send_progress);
+        }
         mContext = UiUpdateServerActivity.this;
         UiUpdateUtil.getInstance().init(this);
         uiUpdateCheckOprate = new UiServerHttpUtil();
@@ -81,8 +79,7 @@ public class UiUpdateServerActivity extends Activity {
     }
 
 
-    @OnClick(R.id.is_support_server_ui)
-    public void isSupportServerUi() {
+    public void isSupportServerUi(View view) {
         if (UiUpdateUtil.getInstance().isSupportChangeServerUi()) {
             mUiServerSupportTV.setText("1.支持服务器表盘");
         } else {
@@ -93,8 +90,7 @@ public class UiUpdateServerActivity extends Activity {
 
     UIDataServer mUiDataServer;
 
-    @OnClick(R.id.read_base_info)
-    public void readBaseInfoFromServer() {
+    public void readBaseInfoFromServer(View view) {
         UiUpdateUtil.getInstance().getServerWatchUiInfo(new IUIBaseInfoFormServerListener() {
 
             @Override
@@ -111,8 +107,7 @@ public class UiUpdateServerActivity extends Activity {
     /**
      * demo为了方便，直接选中的是服务器第1个，
      */
-    @OnClick(R.id.ui_server_get)
-    public void serverUI() {
+    public void serverUI(View view) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -140,12 +135,7 @@ public class UiUpdateServerActivity extends Activity {
     }
 
     File mUpdatefile;
-
-
-
-
-    @OnClick(R.id.ui_server_down)
-    public void onDownFile() {
+    public void onDownFile(View view) {
         if(themeInfoList == null || themeInfoList.size() == 0) {
             return;
         }
@@ -207,9 +197,7 @@ public class UiUpdateServerActivity extends Activity {
         return "ui.bin";
     }
 
-
-    @OnClick(R.id.ui_server_set)
-    public void onServerSet() {
+    public void onServerSet(View view) {
         if (mUpdatefile == null || !mUpdatefile.exists()) {
             Logger.t(TAG).i("文件不存在");
             return;

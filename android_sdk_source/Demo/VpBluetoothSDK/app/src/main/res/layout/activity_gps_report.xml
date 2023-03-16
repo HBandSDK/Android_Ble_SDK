@@ -37,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_margin="10dp"
+            android:onClick="startReport"
             android:layout_weight="1"
             android:text="Open GPS" />
 
@@ -45,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_margin="10dp"
+            android:onClick="stopReport"
             android:layout_weight="1"
             android:text="Close GPS" />
     </LinearLayout>

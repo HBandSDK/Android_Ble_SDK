@@ -35,6 +35,7 @@
                 android:id="@+id/is_support_custom_ui"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="isSupport"
                 android:layout_centerInParent="true"
                 android:layout_margin="10dp"
                 android:text="1.是否支持表盘市场"
@@ -54,6 +55,7 @@
                 android:id="@+id/read_base_info_custom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="readBaseInfo"
                 android:layout_centerInParent="true"
                 android:layout_margin="10dp"
                 android:text="2.读取基本信息"
@@ -81,6 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:onClick="setCostomUi"
                 android:text="3 选中元素及元素对应的方位(背景使用默认图片)"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp" />
@@ -102,6 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="4 背景使用自选图片"
+                android:onClick="changeImgToSet"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp" />
 

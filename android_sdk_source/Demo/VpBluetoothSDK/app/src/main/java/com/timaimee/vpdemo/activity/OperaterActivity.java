@@ -1348,7 +1348,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         } else if (oprater.equals(SOCIAL_PHONE_IDLE_OR_OFFHOOK)) {
             VPOperateManager.getInstance().offhookOrIdlePhone(writeResponse);
         } else if (oprater.equals(DEVICE_CONTROL_PHONE)) {
-            VPOperateManager.getInstance().settingDeviceControlPhone(new IDeviceControlPhoneModelState() {
+            VPOperateManager.getInstance().settingDeviceControlPhone(new IDeviceControlPhoneModelState(){
 
                 @Override
                 public void inPttModel() {
@@ -1372,6 +1372,13 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 @Override
                 public void cliencePhone() {
                     String message = "手表提示:请来电静音\n";
+                    Logger.t(TAG).i(message);
+                    sendMsg(message, 1);
+                }
+
+                @Override
+                public void appAnswerCall() {
+                    String message = "手表提示:app处理接听来电\n";
                     Logger.t(TAG).i(message);
                     sendMsg(message, 1);
                 }
@@ -2611,6 +2618,13 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             @Override
             public void cliencePhone() {
                 String message = "手表提示:请来电静音\n";
+                Logger.t(TAG).i(message);
+                sendMsg(message, 1);
+            }
+
+            @Override
+            public void appAnswerCall() {
+                String message = "手表提示:app处理接听来电\n";
                 Logger.t(TAG).i(message);
                 sendMsg(message, 1);
             }

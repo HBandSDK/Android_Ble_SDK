@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
@@ -31,10 +32,6 @@ import com.veepoo.protocol.model.datas.ReportGpsLatLongData;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 /**
  * Created by timaimee on 2017/4/24.
  */
@@ -48,7 +45,6 @@ public class GpsReportActivity extends Activity implements LocationSource, AMapL
     OnLocationChangedListener mListener;
     AMapLocationClient mlocationClient;
 
-    @BindView(R.id.result)
     TextView mResultTv;
 
     /**
@@ -59,16 +55,14 @@ public class GpsReportActivity extends Activity implements LocationSource, AMapL
         @Override
         public void onResponse(int code) {
             Logger.t(TAG).i("write cmd status:" + code);
-
         }
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps_report);
-        ButterKnife.bind(this);
+        mResultTv = findViewById(R.id.result);
         mContext = getApplicationContext();
 
         //获取地图控件引用
@@ -88,8 +82,7 @@ public class GpsReportActivity extends Activity implements LocationSource, AMapL
     List<LatLng> mLatLngsPointList = new ArrayList<>();
     List<String> mPointStrList = new ArrayList<>();
 
-    @OnClick(R.id.open_gps_report)
-    public void startReport() {
+    public void startReport(View view) {
         mLatLngsPointList.clear();
 
         VPOperateManager.getMangerInstance(mContext).setReportGps(writeResponse, true, new IReportGpsDataListener() {
@@ -103,8 +96,7 @@ public class GpsReportActivity extends Activity implements LocationSource, AMapL
         });
     }
 
-    @OnClick(R.id.close_gps_report)
-    public void stopReport() {
+    public void stopReport(View view) {
         VPOperateManager.getMangerInstance(mContext).setReportGps(writeResponse, false, new IReportGpsDataListener() {
             @Override
             public void onReportGpsDataDataChange(ReportGpsLatLongData reportGpsLatLongData) {

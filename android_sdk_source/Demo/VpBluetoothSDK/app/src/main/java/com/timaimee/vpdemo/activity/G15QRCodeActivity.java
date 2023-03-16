@@ -2,6 +2,7 @@ package com.timaimee.vpdemo.activity;
 
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -14,10 +15,6 @@ import com.veepoo.protocol.listener.data.IG15QRCodeSendListener;
 import com.veepoo.protocol.model.G15QRCode;
 import com.veepoo.protocol.util.VPLogger;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 /**
  * Author: YWX
  * Date: 2022/2/15 10:06
@@ -27,15 +24,10 @@ public class G15QRCodeActivity extends AppCompatActivity {
 
     public static final String TAG = G15QRCodeActivity.class.getSimpleName();
 
-    @BindView(R.id.etContent)
     EditText etContent;
-    @BindView(R.id.etName)
     EditText etName;
-    @BindView(R.id.etNumber)
     EditText etNumber;
-    @BindView(R.id.etGroup)
     EditText etGroup;
-    @BindView(R.id.rgQRCode)
     RadioGroup rgType;
 
     private int checkType = 0x00;
@@ -44,7 +36,13 @@ public class G15QRCodeActivity extends AppCompatActivity {
     protected void onCreate(@Nullable android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_g15_qrcode);
-        ButterKnife.bind(this);
+        {
+            etContent = findViewById(R.id.etContent);
+            etName = findViewById(R.id.etName);
+            etNumber = findViewById(R.id.etNumber);
+            etGroup = findViewById(R.id.etGroup);
+            rgType = findViewById(R.id.rgQRCode);
+        }
         rgType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -57,8 +55,7 @@ public class G15QRCodeActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick(R.id.btnSend)
-    public void sendQRCode(android.view.View view) {
+    public void sendQRCode(View view) {
         G15QRCode qrCode = getG15QRCode();
         if (qrCode == null) return;
         try {

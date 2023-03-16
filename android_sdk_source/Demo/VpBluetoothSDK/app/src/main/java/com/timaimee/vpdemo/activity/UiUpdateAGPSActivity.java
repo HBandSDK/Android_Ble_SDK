@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,10 +24,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 public class UiUpdateAGPSActivity extends Activity {
     private final static String TAG = UiUpdateAGPSActivity.class.getSimpleName();
     Context mContext;
@@ -37,15 +34,8 @@ public class UiUpdateAGPSActivity extends Activity {
         }
     };
 
-    @BindView(R.id.ui_issupport_agps)
     public TextView mUiAGPSSupportTV;
-
-    @BindView(R.id.ui_baseinfo_agps)
     public TextView mUiAGPSBaseInfoTV;
-
-
-
-    @BindView(R.id.ui_agps_progress)
     public TextView mSendProgressTv;
 
     WatchUIType mWatchUIType;
@@ -54,7 +44,11 @@ public class UiUpdateAGPSActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_uiupdate_agps);
-        ButterKnife.bind(this);
+        {
+            mUiAGPSSupportTV = findViewById(R.id.ui_issupport_agps);
+            mUiAGPSBaseInfoTV = findViewById(R.id.ui_baseinfo_agps);
+            mSendProgressTv = findViewById(R.id.ui_agps_progress);
+        }
         mContext = UiUpdateAGPSActivity.this;
         UiUpdateUtil.getInstance().init(this);
 
@@ -63,8 +57,7 @@ public class UiUpdateAGPSActivity extends Activity {
     /**
      * 是否支持
      */
-    @OnClick(R.id.is_support_agps_ui)
-    public void isSupport() {
+    public void isSupport(View view) {
         if (UiUpdateUtil.getInstance().isSupportChangeCustomAGPS()) {
             mUiAGPSSupportTV.setText("1.支持自定义AGPS");
         } else {
@@ -78,9 +71,7 @@ public class UiUpdateAGPSActivity extends Activity {
     /**
      * 读取基本的信息(自定义表盘)
      */
-
-    @OnClick(R.id.read_base_info_agps)
-    public void readBaseInfo() {
+    public void readBaseInfo(View view) {
         UiUpdateUtil.getInstance().getAGPSWacthUiInfo(new IUIBaseInfoFormAGPSListener() {
             @Override
             public void onBaseUiInfoFormAgps(UIDataAGPS uiDataAGPS) {
@@ -97,8 +88,7 @@ public class UiUpdateAGPSActivity extends Activity {
     /**
      * 使用的是apgs
      */
-    @OnClick(R.id.ui_agps_change_img_set)
-    public void setAgps(){
+    public void setAgps(View view){
 
         //LTEPH_GPS_1.rtcm
         String fileRtcm = getExternalFilesDir(null) + File.separator + "LTEPH_GPS_1.rtcm";

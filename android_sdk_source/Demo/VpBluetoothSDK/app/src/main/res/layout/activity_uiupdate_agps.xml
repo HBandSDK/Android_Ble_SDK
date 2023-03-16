@@ -38,6 +38,7 @@
                 android:layout_centerInParent="true"
                 android:layout_margin="10dp"
                 android:text="1.是否支持AGPS"
+                android:onClick="isSupport"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp" />
 
@@ -57,6 +58,7 @@
                 android:layout_centerInParent="true"
                 android:layout_margin="10dp"
                 android:text="2.读取基本信息"
+                android:onClick="readBaseInfo"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp" />
 
@@ -83,11 +85,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:onClick="setAgps"
                 android:text="3.设置AGPS"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp" />
-
-
 
             <TextView
                 android:id="@+id/ui_agps_progress"

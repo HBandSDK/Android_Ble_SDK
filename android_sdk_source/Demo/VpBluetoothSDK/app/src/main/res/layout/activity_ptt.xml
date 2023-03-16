@@ -43,11 +43,13 @@
         android:id="@+id/ptt_sign_open"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="enter"
         android:layout_gravity="center"
         android:text="读取ptt信号" />
 
     <Button
         android:id="@+id/ptt_sign_close"
+        android:onClick="exitModel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

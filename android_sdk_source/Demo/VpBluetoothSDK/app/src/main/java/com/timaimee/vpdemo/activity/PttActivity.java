@@ -3,6 +3,7 @@ package com.timaimee.vpdemo.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
@@ -16,16 +17,10 @@ import com.veepoo.protocol.model.datas.EcgDetectState;
 
 import java.util.Arrays;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 public class PttActivity extends Activity {
     private final static String TAG = PttActivity.class.getSimpleName();
     WriteResponse writeResponse = new WriteResponse();
-    @BindView(R.id.ptt_model)
     TextView mPttModelTv;
-    @BindView(R.id.ptt_real_view)
     EcgHeartRealthView ecgHeartRealthView;
 
     IPttDetectListener iPttDetectListener = new IPttDetectListener() {
@@ -79,7 +74,8 @@ public class PttActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ptt);
-        ButterKnife.bind(this);
+        mPttModelTv = findViewById(R.id.ptt_model);
+        ecgHeartRealthView = findViewById(R.id.ptt_real_view);
         boolean inPttModel = getIntent().getBooleanExtra("inPttModel", false);
         String ptStr = inPttModel ? "手表显示在PTT模式内" : "手表显示退出PTT模式";
         mPttModelTv.setText(ptStr);
@@ -90,15 +86,13 @@ public class PttActivity extends Activity {
         VPOperateManager.getMangerInstance(getApplicationContext()).settingPttModelListener(iPttDetectListener);
     }
 
-    @OnClick(R.id.ptt_sign_open)
-    public void enter() {
+    public void enter(View view) {
         ecgHeartRealthView.clearData();
         Logger.t(TAG).i("读取ptt信号");
         VPOperateManager.getMangerInstance(getApplicationContext()).startReadPttSignData(writeResponse, true, iPttDetectListener);
     }
 
-    @OnClick(R.id.ptt_sign_close)
-    public void exitModel() {
+    public void exitModel(View view) {
         Logger.t(TAG).i("关闭ptt信号");
         VPOperateManager.getMangerInstance(getApplicationContext()).stopReadPttSignData(writeResponse, false, iPttDetectListener);
     }

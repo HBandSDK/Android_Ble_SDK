@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,15 +46,10 @@ import com.veepoo.protocol.model.enums.EWatchUIType;
 import com.veepoo.protocol.util.ColorUtil;
 import com.veepoo.protocol.util.UiUpdateUtil;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Random;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class UiUpdateCustomActivity extends Activity {
     private final static String TAG = UiUpdateCustomActivity.class.getSimpleName();
@@ -65,21 +61,11 @@ public class UiUpdateCustomActivity extends Activity {
         }
     };
 
-    @BindView(R.id.ui_issupport_custom)
     public TextView mUiCustomSupportTV;
-
-    @BindView(R.id.ui_baseinfo_custom)
     public TextView mUiCustomBaseInfoTV;
-
-    @BindView(R.id.custom_use_us)
     public ImageView mImgUseUs;
-
-    @BindView(R.id.defalut_img_bg)
     public ImageView mImgViewBg;
-
-    @BindView(R.id.ui_custom_set_callback)
     public TextView mUiCustomSetCallbackTV;
-    @BindView(R.id.ui_custom_progress)
     public TextView mSendProgressTv;
 
     WatchUIType mWatchUIType;
@@ -89,7 +75,14 @@ public class UiUpdateCustomActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_uiupdate_custom);
-        ButterKnife.bind(this);
+        {
+            mUiCustomSupportTV = findViewById(R.id.ui_issupport_custom);
+            mUiCustomBaseInfoTV = findViewById(R.id.ui_baseinfo_custom);
+            mImgUseUs = findViewById(R.id.custom_use_us);
+            mImgViewBg = findViewById(R.id.defalut_img_bg);
+            mUiCustomSetCallbackTV = findViewById(R.id.ui_custom_set_callback);
+            mSendProgressTv = findViewById(R.id.ui_custom_progress);
+        }
         mContext = UiUpdateCustomActivity.this;
         mUiUpdateUtil = UiUpdateUtil.getInstance();
 
@@ -98,8 +91,7 @@ public class UiUpdateCustomActivity extends Activity {
     /**
      * 是否支持
      */
-    @OnClick(R.id.is_support_custom_ui)
-    public void isSupport() {
+    public void isSupport(View view) {
         if (mUiUpdateUtil.isSupportChangeCustomUi()) {
             mUiCustomSupportTV.setText("1.支持自定义表盘");
             mUiUpdateUtil.init(this);
@@ -115,9 +107,7 @@ public class UiUpdateCustomActivity extends Activity {
     /**
      * 读取基本的信息(自定义表盘)
      */
-
-    @OnClick(R.id.read_base_info_custom)
-    public void readBaseInfo() {
+    public void readBaseInfo(View view) {
         mUiUpdateUtil.getCustomWatchUiInfo(new IUIBaseInfoFormCustomListener() {
             @Override
             public void onBaseUiInfoFormCustom(UIDataCustom uiDataCustom) {
@@ -145,8 +135,7 @@ public class UiUpdateCustomActivity extends Activity {
     /**
      * 设置自定义表盘（自选位置以及自选元素），使用的是默认背景，可参考H Band的自定义ui界面去理解
      */
-    @OnClick(R.id.ui_custom_set)
-    public void setCostomUi() {
+    public void setCostomUi(View view) {
         if (mWatchUIType == null) {
             return;
         }
@@ -334,8 +323,7 @@ public class UiUpdateCustomActivity extends Activity {
     /**
      * 使用的是自选图片
      */
-    @OnClick(R.id.ui_custom_change_img_set)
-    public void changeImgToSet() {
+    public void changeImgToSet(View view) {
 
         //20210128143910.png是个240*240的bitmap
 //        String filePath = getExternalFilesDir(null) + File.separator + "20210522164329_52519.png";
