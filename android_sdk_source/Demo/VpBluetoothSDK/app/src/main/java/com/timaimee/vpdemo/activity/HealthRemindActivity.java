@@ -92,4 +92,14 @@ public class HealthRemindActivity extends AppCompatActivity implements HealthRem
     public void showMsg(String msg) {
         Toast.makeText(HealthRemindActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onHealthRemindReport(@NotNull HealthRemind healthRemind) {
+        showMsg("健康提醒上报:" + healthRemind.toString());
+    }
+
+    @Override
+    public void onHealthRemindReportFailed() {
+        showMsg("健康提醒上报:failed" );
+    }
 }
