@@ -46,6 +46,7 @@ import com.veepoo.protocol.listener.data.IDrinkDataListener;
 import com.veepoo.protocol.listener.data.IECGAutoReportListener;
 import com.veepoo.protocol.listener.data.IFatigueDataListener;
 import com.veepoo.protocol.listener.data.IFindDeviceDatalistener;
+import com.veepoo.protocol.listener.data.IFindDevicelistener;
 import com.veepoo.protocol.listener.data.IFindPhonelistener;
 import com.veepoo.protocol.listener.data.IHRVOriginDataListener;
 import com.veepoo.protocol.listener.data.IHeartDataListener;
@@ -2446,6 +2447,33 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
         } else if (oprater.equals(HEALTH_REMIND)) {
             startActivity(new Intent(this, HealthRemindActivity.class));
+        } else if (oprater.equals(FIND_DEVICE)) {
+            VPOperateManager.getInstance().startFindDeviceByPhone(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            }, new IFindDevicelistener() {
+                @Override
+                public void unSupportFindDeviceByPhone() {
+                    Logger.t(TAG).e("unSupportFindDeviceByPhone--->");
+                }
+
+                @Override
+                public void findedDevice() {
+                    Logger.t(TAG).e("findedDevice--->");
+                }
+
+                @Override
+                public void unFindDevice() {
+                    Logger.t(TAG).e("unFindDevice--->");
+                }
+
+                @Override
+                public void findingDevice() {
+                    Logger.t(TAG).e("findingDevice--->");
+                }
+            });
         }
 
     }

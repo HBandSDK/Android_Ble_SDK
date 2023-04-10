@@ -4,6 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/VpBluetoothSDK.iml" filepath="$PROJECT_DIR$/.idea/modules/VpBluetoothSDK.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/VpBluetoothSDK.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/VpBluetoothSDK.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/VpBluetoothSDK.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/VpBluetoothSDK.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/VpBluetoothSDK.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/VpBluetoothSDK.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/VpBluetoothSDK.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/VpBluetoothSDK.app.unitTest.iml" />
     </modules>
   </component>
 </project>
