@@ -15,6 +15,7 @@ import com.veepoo.protocol.listener.data.IECGDetectListener;
 import com.veepoo.protocol.model.datas.EcgDetectInfo;
 import com.veepoo.protocol.model.datas.EcgDetectResult;
 import com.veepoo.protocol.model.datas.EcgDetectState;
+import com.veepoo.protocol.shareprence.VpSpGetUtil;
 
 import java.util.Arrays;
 
