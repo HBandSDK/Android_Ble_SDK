@@ -16,6 +16,7 @@ import com.veepoo.protocol.model.datas.EcgDetectInfo;
 import com.veepoo.protocol.model.datas.EcgDetectResult;
 import com.veepoo.protocol.model.datas.EcgDetectState;
 import com.veepoo.protocol.shareprence.VpSpGetUtil;
+import com.veepoo.protocol.util.EcgUtil;
 
 import java.util.Arrays;
 
