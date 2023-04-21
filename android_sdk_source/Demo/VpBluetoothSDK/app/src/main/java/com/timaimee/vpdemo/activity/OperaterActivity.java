@@ -20,8 +20,8 @@ import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.adapter.GridAdatper;
 import com.timaimee.vpdemo.oad.activity.OadActivity;
 import com.veepoo.protocol.VPOperateManager;
-import com.veepoo.protocol.listener.IBloodGlucoseChangeListener;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
+import com.veepoo.protocol.listener.data.AbsBloodGlucoseChangeListener;
 import com.veepoo.protocol.listener.data.IAlarm2DataListListener;
 import com.veepoo.protocol.listener.data.IAlarmDataListener;
 import com.veepoo.protocol.listener.data.IAllHealthDataListener;
@@ -1349,7 +1349,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         } else if (oprater.equals(SOCIAL_PHONE_IDLE_OR_OFFHOOK)) {
             VPOperateManager.getInstance().offhookOrIdlePhone(writeResponse);
         } else if (oprater.equals(DEVICE_CONTROL_PHONE)) {
-            VPOperateManager.getInstance().settingDeviceControlPhone(new IDeviceControlPhoneModelState(){
+            VPOperateManager.getInstance().settingDeviceControlPhone(new IDeviceControlPhoneModelState() {
 
                 @Override
                 public void inPttModel() {
@@ -2364,14 +2364,14 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             });
         } else if (oprater.equals(START_BLOOD_GLUCOSE)) {
-            VPOperateManager.getInstance().startBloodGlucoseDetect(writeResponse, new IBloodGlucoseChangeListener() {
+            VPOperateManager.getInstance().startBloodGlucoseDetect(writeResponse, new AbsBloodGlucoseChangeListener() {
                 @Override
                 public void onDetectError(int opt, EBloodGlucoseStatus status) {
                     showToast("[onDetectError: opt = " + opt + ", status=" + status + "]");
                 }
 
                 @Override
-                public void onBloodGlucoseDetect(int progress, int bloodGlucose) {
+                public void onBloodGlucoseDetect(int progress, float bloodGlucose) {
                     showToast("[progress:" + progress + " bloodGlucose: " + bloodGlucose + "]");
                 }
 
@@ -2380,25 +2380,16 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     showToast("Stop Blood Glucose Detect");
                 }
 
-                @Override
-                public void onBloodGlucoseAdjustingSettingSuccess(boolean isOpen, float adjustingValue) {
-
-                }
-
-                @Override
-                public void onBloodGlucoseAdjustingSettingFailed() {
-
-                }
             });
         } else if (oprater.equals(STOP_BLOOD_GLUCOSE)) {
-            VPOperateManager.getInstance().stopBloodGlucoseDetect(writeResponse, new IBloodGlucoseChangeListener() {
+            VPOperateManager.getInstance().stopBloodGlucoseDetect(writeResponse, new AbsBloodGlucoseChangeListener() {
                 @Override
                 public void onDetectError(int opt, EBloodGlucoseStatus status) {
                     showToast("[onDetectError: opt = " + opt + ", status=" + status + "]");
                 }
 
                 @Override
-                public void onBloodGlucoseDetect(int progress, int bloodGlucose) {
+                public void onBloodGlucoseDetect(int progress, float bloodGlucose) {
                     showToast("[progress:" + progress + " bloodGlucose: " + bloodGlucose + "]");
                 }
 
@@ -2407,14 +2398,31 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     showToast("Stop Blood Glucose Detect");
                 }
 
+            });
+        } else if (oprater.equals(BLOOD_GLUCOSE_P_READ)) {
+            VPOperateManager.getInstance().readBloodGlucoseAdjustingData(writeResponse, new AbsBloodGlucoseChangeListener() {
+
+                @Override
+                public void onBloodGlucoseAdjustingReadSuccess(boolean isOpen, float adjustingValue) {
+                    showToast("血糖私人模式读取成功：isOpen " + isOpen + " value = " + adjustingValue);
+                }
+
+                @Override
+                public void onBloodGlucoseAdjustingReadFailed() {
+                    showToast("血糖私人模式读取失败");
+                }
+            });
+        } else if (oprater.equals(BLOOD_GLUCOSE_P_SETTING)) {
+            VPOperateManager.getInstance().setBloodGlucoseAdjustingData(6.78f, true, writeResponse, new AbsBloodGlucoseChangeListener() {
+
                 @Override
                 public void onBloodGlucoseAdjustingSettingSuccess(boolean isOpen, float adjustingValue) {
-
+                    showToast("血糖私人模式设置成功：isOpen " + isOpen + " value = " + adjustingValue);
                 }
 
                 @Override
                 public void onBloodGlucoseAdjustingSettingFailed() {
-
+                    showToast("血糖私人模式设置失败");
                 }
             });
         } else if (oprater.equals(BLE_RENAME)) {
