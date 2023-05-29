@@ -14,8 +14,10 @@ import com.veepoo.protocol.listener.data.IPttDetectListener;
 import com.veepoo.protocol.model.datas.EcgDetectInfo;
 import com.veepoo.protocol.model.datas.EcgDetectResult;
 import com.veepoo.protocol.model.datas.EcgDetectState;
+import com.veepoo.protocol.model.datas.EcgDiagnosis;
 
 import java.util.Arrays;
+
 
 public class PttActivity extends Activity {
     private final static String TAG = PttActivity.class.getSimpleName();
@@ -43,6 +45,11 @@ public class PttActivity extends Activity {
             Logger.t(TAG).i("ptt出值包(ECG测量的最终结果,在PTT模式下，只是异常时（即存在疾病）,才会出值)");
 
 
+        }
+
+        @Override
+        public void onEcgDetectDiagnosisChange(EcgDiagnosis ecgDiagnosis) {
+            Logger.t(TAG).i("====>>>onEcgDetectDiagnosisChange" + ecgDiagnosis.toString());
         }
 
         @Override
@@ -89,12 +96,12 @@ public class PttActivity extends Activity {
     public void enter(View view) {
         ecgHeartRealthView.clearData();
         Logger.t(TAG).i("读取ptt信号");
-        VPOperateManager.getMangerInstance(getApplicationContext()).startReadPttSignData(writeResponse, true, iPttDetectListener);
+        VPOperateManager.getInstance().startReadPttSignData(writeResponse, true, iPttDetectListener);
     }
 
     public void exitModel(View view) {
         Logger.t(TAG).i("关闭ptt信号");
-        VPOperateManager.getMangerInstance(getApplicationContext()).stopReadPttSignData(writeResponse, false, iPttDetectListener);
+        VPOperateManager.getInstance().stopReadPttSignData(writeResponse, false, iPttDetectListener);
     }
 
     /**

@@ -62,8 +62,12 @@
         <activity android:name=".activity.UiUpdateG15ImgActivity"/>
         <activity android:name=".activity.ECGSwitchActivity"/>
         <activity android:name=".activity.HealthRemindActivity"/>
+        <activity android:name=".activity.JLDeviceOPTActivity"/>
+        <service
+            android:name="com.inuker.bluetooth.library.BluetoothService"
+            android:enabled="true"
+            android:foregroundServiceType="location" />
 
-        <service android:name="com.inuker.bluetooth.library.BluetoothService" />
         <service android:name=".oad.service.DfuService" />
         <!-- 高德地图定位 -->
         <service android:name="com.amap.api.location.APSService" />

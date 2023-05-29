@@ -5,9 +5,6 @@ com.veepoo.protocol.jl.classic.impl
 com.veepoo.protocol.jl.classic.interfaces
 com.veepoo.protocol.jl.classic.interfaces.listener
 com.veepoo.protocol.jl.classic.tool
-com.veepoo.protocol.jl.dial
-com.veepoo.protocol.jl.dial.fattask
-com.veepoo.protocol.jl.ota
 com.veepoo.protocol.jl.send
 com.veepoo.protocol.listener
 com.veepoo.protocol.listener.base

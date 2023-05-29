@@ -15,6 +15,7 @@ import com.veepoo.protocol.listener.data.IECGDetectListener;
 import com.veepoo.protocol.model.datas.EcgDetectInfo;
 import com.veepoo.protocol.model.datas.EcgDetectResult;
 import com.veepoo.protocol.model.datas.EcgDetectState;
+import com.veepoo.protocol.model.datas.EcgDiagnosis;
 import com.veepoo.protocol.shareprence.VpSpGetUtil;
 import com.veepoo.protocol.util.EcgUtil;
 
@@ -65,6 +66,11 @@ public class EcgDetectActivity extends Activity implements View.OnClickListener 
                     public void onEcgDetectResultChange(EcgDetectResult ecgDetectResult) {
                         String message = "ecgDetectResult-3:" + ecgDetectResult.toString();
                         Logger.t(TAG).i(message);
+                    }
+
+                    @Override
+                    public void onEcgDetectDiagnosisChange(EcgDiagnosis ecgDiagnosis) {
+
                     }
 
                     @Override

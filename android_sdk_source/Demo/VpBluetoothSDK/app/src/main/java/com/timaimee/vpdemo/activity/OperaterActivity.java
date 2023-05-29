@@ -193,6 +193,8 @@ import static com.veepoo.protocol.model.enums.EFunctionStatus.UNSUPPORT;
 
 import org.jetbrains.annotations.NotNull;
 
+import tech.gujin.toast.ToastUtil;
+
 /**
  * Created by timaimee on 2017/2/8.
  */
@@ -2482,6 +2484,12 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     Logger.t(TAG).e("findingDevice--->");
                 }
             });
+        } else if (oprater.equals(JL_DEVICE)) {
+            if (VPOperateManager.getInstance().isJLDevice()) {
+                startActivity(new Intent(this, JLDeviceOPTActivity.class));
+            } else {
+                ToastUtil.show("当前设备非杰理芯片");
+            }
         }
 
     }
