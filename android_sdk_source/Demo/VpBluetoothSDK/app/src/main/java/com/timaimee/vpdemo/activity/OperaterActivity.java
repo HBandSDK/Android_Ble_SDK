@@ -342,6 +342,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 showToast("BT连接超时");
             }
         });
+        ToastUtil.initialize(this);
     }
 
     private void initGridView() {
