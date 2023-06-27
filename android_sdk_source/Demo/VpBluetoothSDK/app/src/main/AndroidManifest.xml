@@ -63,6 +63,8 @@
         <activity android:name=".activity.ECGSwitchActivity"/>
         <activity android:name=".activity.HealthRemindActivity"/>
         <activity android:name=".activity.JLDeviceOPTActivity"/>
+        <activity android:name=".activity.ContactActivity"/>
+        <activity android:name=".activity.AddContactActivity"/>
         <service
             android:name="com.inuker.bluetooth.library.BluetoothService"
             android:enabled="true"

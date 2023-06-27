@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.github.iielse.switchbutton.SwitchView;
 import com.timaimee.vpdemo.R;
+import com.timaimee.vpdemo.activity.SwitchView;
 import com.veepoo.protocol.model.settings.TextAlarm2Setting;
 
 import java.util.List;
@@ -58,7 +58,6 @@ public class TextAlarmAdapter extends RecyclerView.Adapter<TextAlarmAdapter.View
             tvAlarmTime = itemView.findViewById(R.id.tvAlarmTime);
             sv = itemView.findViewById(R.id.sv);
         }
-
         public void updateUI(final TextAlarm2Setting setting, final OnTextAlarmToggleChangeListener listener) {
             tvAlarmID.setText("" + setting.getAlarmId());
             tvAlarmContent.setText(setting.getContent());

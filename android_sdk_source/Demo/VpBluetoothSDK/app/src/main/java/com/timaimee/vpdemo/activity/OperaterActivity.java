@@ -2491,6 +2491,13 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             } else {
                 ToastUtil.show("当前设备非杰理芯片");
             }
+        } else if (oprater.equals(CONTACT)) {
+            boolean isHaveContactFunction = VpSpGetUtil.getVpSpVariInstance(this).isSupportContactFunction();
+            if (isHaveContactFunction) {
+                startActivity(new Intent(OperaterActivity.this, ContactActivity.class));
+            } else {
+                ToastUtil.show("当前设备无联系人功能");
+            }
         }
 
     }

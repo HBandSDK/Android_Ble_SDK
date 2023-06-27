@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.github.iielse.switchbutton.SwitchView;
 import com.timaimee.vpdemo.R;
+import com.timaimee.vpdemo.activity.SwitchView;
 import com.veepoo.protocol.model.datas.HealthRemind;
 
 import java.util.List;

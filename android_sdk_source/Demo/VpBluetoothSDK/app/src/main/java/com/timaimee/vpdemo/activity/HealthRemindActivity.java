@@ -102,4 +102,9 @@ public class HealthRemindActivity extends AppCompatActivity implements HealthRem
     public void onHealthRemindReportFailed() {
         showMsg("健康提醒上报:failed" );
     }
+
+    @Override
+    public void onHealthRemindReadingComplete() {
+
+    }
 }

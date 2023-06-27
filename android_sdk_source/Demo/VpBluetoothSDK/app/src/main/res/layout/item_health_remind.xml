@@ -58,7 +58,7 @@
         app:layout_constraintTop_toBottomOf="@id/tvAlarmRepeat"
         app:layout_goneMarginStart="20dp" />
 
-    <com.github.iielse.switchbutton.SwitchView
+    <com.timaimee.vpdemo.activity.SwitchView
         android:id="@+id/sv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
