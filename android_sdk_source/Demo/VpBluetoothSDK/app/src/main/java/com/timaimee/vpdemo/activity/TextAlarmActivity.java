@@ -55,7 +55,7 @@ public class TextAlarmActivity extends Activity implements TextAlarmAdapter.OnTe
             @Override
             public void onClick(View v) {
                 TextAlarm2Setting setting = getTextAlarm2Setting();
-                VPOperateManager.getMangerInstance(TextAlarmActivity.this).addTextAlarm(writeResponse, new ITextAlarmDataListener() {
+                VPOperateManager.getInstance().addTextAlarm(writeResponse, new ITextAlarmDataListener() {
                     @Override
                     public void onAlarmDataChangeListListener(TextAlarmData textAlarmData) {
                         Logger.t(TAG).e("添加闹钟 --》" + textAlarmData.toString());
@@ -79,7 +79,6 @@ public class TextAlarmActivity extends Activity implements TextAlarmAdapter.OnTe
         etHour = findViewById(R.id.et_hour);
         etMinute = findViewById(R.id.et_minute);
     }
-
 
     /**
      * 菜单创建器，在Item要创建菜单的时候调用。
@@ -122,7 +121,7 @@ public class TextAlarmActivity extends Activity implements TextAlarmAdapter.OnTe
             if (direction == SwipeRecyclerView.RIGHT_DIRECTION) {
                 Toast.makeText(TextAlarmActivity.this, "list第" + position + "; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT)
                         .show();
-                VPOperateManager.getMangerInstance(TextAlarmActivity.this).deleteTextAlarm(writeResponse, new ITextAlarmDataListener() {
+                VPOperateManager.getInstance().deleteTextAlarm(writeResponse, new ITextAlarmDataListener() {
                     @Override
                     public void onAlarmDataChangeListListener(TextAlarmData textAlarmData) {
                         EMultiAlarmOprate OPT =  textAlarmData.getOprate();
@@ -158,6 +157,7 @@ public class TextAlarmActivity extends Activity implements TextAlarmAdapter.OnTe
         return setting;
     }
 
+
     private void initTextAlarmListView() {
         mSettings.clear();
         mRecyclerView = findViewById(R.id.rvTextAlarm);
@@ -174,7 +174,7 @@ public class TextAlarmActivity extends Activity implements TextAlarmAdapter.OnTe
     }
 
     private void readTextAlarm() {
-        VPOperateManager.getMangerInstance(this).readTextAlarm(writeResponse, new ITextAlarmDataListener() {
+        VPOperateManager.getInstance().readTextAlarm(writeResponse, new ITextAlarmDataListener() {
             @Override
             public void onAlarmDataChangeListListener(TextAlarmData textAlarmData) {
                 EMultiAlarmOprate OPT = textAlarmData.getOprate();
@@ -204,7 +204,7 @@ public class TextAlarmActivity extends Activity implements TextAlarmAdapter.OnTe
 
     @Override
     public void onToggleChanged(TextAlarm2Setting setting) {
-        VPOperateManager.getMangerInstance(this).modifyTextAlarm(writeResponse, new ITextAlarmDataListener() {
+        VPOperateManager.getInstance().modifyTextAlarm(writeResponse, new ITextAlarmDataListener() {
             @Override
             public void onAlarmDataChangeListListener(TextAlarmData textAlarmData) {
                 showMsg("修改闹钟 --》" + (textAlarmData.getOprate() == EMultiAlarmOprate.SETTING_SUCCESS ? "成功" : "失败"));

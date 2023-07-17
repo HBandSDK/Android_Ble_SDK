@@ -21,7 +21,12 @@ import com.jieli.jl_rcsp.model.base.BaseError;
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
 import com.veepoo.protocol.VPOperateManager;
+import com.veepoo.protocol.listener.data.IContactOptListener;
 import com.veepoo.protocol.listener.data.IMtuChangeListener;
+import com.veepoo.protocol.model.datas.Contact;
+import com.veepoo.protocol.model.enums.EContactOpt;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
@@ -231,7 +236,7 @@ public class JLDeviceOPTActivity extends Activity implements View.OnClickListene
                 for (FatFile serverFatFile : serverFatFiles) {
                     Logger.t(TAG).e("服务器表盘--->" + serverFatFile.toString());
                 }
-                Logger.t(TAG).e("照片表盘--->" + picFatFile.toString());
+                Logger.t(TAG).e("照片表盘--->" + (picFatFile == null ? "NULL" : picFatFile.getPath()));
                 loadingDialog.disMissDialog();
             }
 
