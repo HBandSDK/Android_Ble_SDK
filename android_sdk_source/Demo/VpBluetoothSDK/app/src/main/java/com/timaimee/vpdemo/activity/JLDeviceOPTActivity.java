@@ -365,6 +365,16 @@ public class JLDeviceOPTActivity extends Activity implements View.OnClickListene
             }
 
             @Override
+            public void onDFULangConnectSuccess(String dfuLangAddress) {
+                tvOTAInfo.setText("DFULang设备连接成功->设备内部升级");
+            }
+
+            @Override
+            public void onDFULangConnectFailed(String dfuLangAddress) {
+                tvOTAInfo.setText("【错误】DFULang设备连接失败，请手动连接DFULang设备重新升级");
+            }
+
+            @Override
             public void onOTASuccess() {
                 Logger.t(TAG).e("【杰理OTA】--->OTA升级【成功】");
                 tvOTAInfo.setText("OTA升级成功");
