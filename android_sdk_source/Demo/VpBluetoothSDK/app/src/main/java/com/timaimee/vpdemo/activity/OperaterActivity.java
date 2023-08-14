@@ -534,7 +534,12 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             if (weatherStyle == 2) {
                 setWeatherData2();
             } else {
-                setWeatherData1();
+                count++;
+                if (count % 2 == 0) {
+                    setWeatherData1();
+                } else {
+                    setWeatherData11();
+                }
             }
         } else if (oprater.equals(LOW_POWER_READ)) {
             VPOperateManager.getInstance().readLowPower(writeResponse, new ILowPowerListener() {
@@ -2570,31 +2575,118 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         int year = TimeData.getSysYear();
         int month = TimeData.getSysMonth();
         int day = TimeData.getSysDay();
-        TimeData lasTimeUpdate = new TimeData(year, month, day, 12, 59, 23);
+        TimeData lasTimeUpdate = new TimeData(year, month, day, 6, 59, 23);
         //天气列表（以小时为单位）
         List<WeatherEvery3Hour> weatherEvery3HourList = new ArrayList<>();
-        TimeData every3Hour0 = new TimeData(year, month, day, 12, 59, 23);
-        TimeData every3Hour1 = new TimeData(year, month, day, 15, 59, 23);
-        TimeData every3Hour2 = new TimeData(year, month, day, 18, 59, 23);
-        TimeData every3Hour3 = new TimeData(year, month, day, 21, 59, 23);
+        TimeData every3Hour0 = new TimeData(year, month, day, 6, 59, 23);
+        TimeData every3Hour1 = new TimeData(year, month, day, 9, 59, 23);
+        TimeData every3Hour2 = new TimeData(year, month, day, 12, 59, 23);
+        TimeData every3Hour3 = new TimeData(year, month, day, 15, 59, 23);
+        TimeData every3Hour4 = new TimeData(year, month, day, 18, 59, 23);
+        TimeData every3Hour5 = new TimeData(year, month, day, 21, 59, 23);
+
+        TimeData every3Hour01 = new TimeData(year, month, day + 1, 6, 59, 23);
+        TimeData every3Hour11 = new TimeData(year, month, day + 1, 9, 59, 23);
+        TimeData every3Hour21 = new TimeData(year, month, day + 1, 12, 59, 23);
+        TimeData every3Hour31 = new TimeData(year, month, day + 1, 15, 59, 23);
+        TimeData every3Hour41 = new TimeData(year, month, day + 1, 18, 59, 23);
+        TimeData every3Hour51 = new TimeData(year, month, day + 1, 21, 59, 23);
+
+        TimeData every3Hour02 = new TimeData(year, month, day + 2, 6, 59, 23);
+        TimeData every3Hour12 = new TimeData(year, month, day + 2, 9, 59, 23);
+        TimeData every3Hour22 = new TimeData(year, month, day + 2, 12, 59, 23);
+        TimeData every3Hour32 = new TimeData(year, month, day + 2, 15, 59, 23);
+        TimeData every3Hour42 = new TimeData(year, month, day + 2, 18, 59, 23);
+        TimeData every3Hour52 = new TimeData(year, month, day + 2, 21, 59, 23);
+        /**
+         * 天气状态
+         * 0-4	晴
+         * 5-12	晴转多云
+         * 13-16	阴天
+         * 17-20	阵雨
+         * 21-24	雷阵雨
+         * 25-32	冰雹
+         * 33-40	小雨
+         * 41-48	中雨
+         * 49-56	大雨
+         * 57-72	暴雨
+         * 73-84	小雪
+         * 85-100	大雪
+         * 101-155	多云
+         */
         WeatherEvery3Hour weatherEvery3Hour0 =
-                new WeatherEvery3Hour(every3Hour0, 60, -60, 6, 6, "3-4", 5.0);
+                new WeatherEvery3Hour(every3Hour0, 60, 29, 6, 3, "3-4", 15.0);
         WeatherEvery3Hour weatherEvery3Hour1 =
-                new WeatherEvery3Hour(every3Hour1, 70, -70, 7, 7, "10-12", 5.0);
+                new WeatherEvery3Hour(every3Hour1, 70, 30, 7, 27, "10-12", 5.0);
         WeatherEvery3Hour weatherEvery3Hour2 =
-                new WeatherEvery3Hour(every3Hour2, 80, -80, 8, 8, "10", 5.0);
+                new WeatherEvery3Hour(every3Hour2, 80, 38, 8, 22, "10", 5.0);
         WeatherEvery3Hour weatherEvery3Hour3 =
-                new WeatherEvery3Hour(every3Hour3, 90, -90, 9, 9, "15", 5.0);
+                new WeatherEvery3Hour(every3Hour3, 90, 39, 9, 33, "15", 6.0);
+        WeatherEvery3Hour weatherEvery3Hour4 =
+                new WeatherEvery3Hour(every3Hour4, 90, 32, 2, 22, "3", 8.0);
+        WeatherEvery3Hour weatherEvery3Hour5 =
+                new WeatherEvery3Hour(every3Hour5, 90, 7, 4, 88, "11", 1.0);
         weatherEvery3HourList.add(weatherEvery3Hour0);
         weatherEvery3HourList.add(weatherEvery3Hour1);
         weatherEvery3HourList.add(weatherEvery3Hour2);
         weatherEvery3HourList.add(weatherEvery3Hour3);
+        weatherEvery3HourList.add(weatherEvery3Hour4);
+        weatherEvery3HourList.add(weatherEvery3Hour5);
+
+        WeatherEvery3Hour weatherEvery3Hour01 =
+                new WeatherEvery3Hour(every3Hour01, 60, 12, 6, 31, "3-4", 15.0);
+        WeatherEvery3Hour weatherEvery3Hour11 =
+                new WeatherEvery3Hour(every3Hour11, 70, 23, 7, 47, "10-12", 5.0);
+        WeatherEvery3Hour weatherEvery3Hour21 =
+                new WeatherEvery3Hour(every3Hour21, 80, 25, 8, 52, "10", 5.0);
+        WeatherEvery3Hour weatherEvery3Hour31 =
+                new WeatherEvery3Hour(every3Hour31, 90, 18, 9, 83, "15", 6.0);
+        WeatherEvery3Hour weatherEvery3Hour41 =
+                new WeatherEvery3Hour(every3Hour41, 90, 22, 2, 62, "3", 8.0);
+        WeatherEvery3Hour weatherEvery3Hour51 =
+                new WeatherEvery3Hour(every3Hour51, 90, 9, 4, 118, "11", 1.0);
+        weatherEvery3HourList.add(weatherEvery3Hour01);
+        weatherEvery3HourList.add(weatherEvery3Hour11);
+        weatherEvery3HourList.add(weatherEvery3Hour21);
+        weatherEvery3HourList.add(weatherEvery3Hour31);
+        weatherEvery3HourList.add(weatherEvery3Hour41);
+        weatherEvery3HourList.add(weatherEvery3Hour51);
+
+        WeatherEvery3Hour weatherEvery3Hour02 =
+                new WeatherEvery3Hour(every3Hour02, 50, 42, 6, 11, "3-4", 15.0);
+        WeatherEvery3Hour weatherEvery3Hour12 =
+                new WeatherEvery3Hour(every3Hour12, 40, 53, 7, 32, "10-12", 5.0);
+        WeatherEvery3Hour weatherEvery3Hour22 =
+                new WeatherEvery3Hour(every3Hour22, 30, 35, 8, 72, "10", 5.0);
+        WeatherEvery3Hour weatherEvery3Hour32 =
+                new WeatherEvery3Hour(every3Hour32, 20, 38, 9, 63, "15", 6.0);
+        WeatherEvery3Hour weatherEvery3Hour42 =
+                new WeatherEvery3Hour(every3Hour42, 60, 32, 2, 22, "3", 8.0);
+        WeatherEvery3Hour weatherEvery3Hour52 =
+                new WeatherEvery3Hour(every3Hour52, 70, 29, 4, 88, "11", 1.0);
+        weatherEvery3HourList.add(weatherEvery3Hour02);
+        weatherEvery3HourList.add(weatherEvery3Hour12);
+        weatherEvery3HourList.add(weatherEvery3Hour22);
+        weatherEvery3HourList.add(weatherEvery3Hour32);
+        weatherEvery3HourList.add(weatherEvery3Hour42);
+        weatherEvery3HourList.add(weatherEvery3Hour52);
+
         //天气列表（以天为单位）
         List<WeatherEveryDay> weatherEveryDayList = new ArrayList<>();
         TimeData everyDay0 = new TimeData(year, month, day, 12, 59, 23);
-        WeatherEveryDay weatherEveryDay0 = new WeatherEveryDay(everyDay0, 80, -80, 60,
-                -60, 10, 5, 10, "10-12", 5.2);
+        TimeData everyDay1 = new TimeData(year, month, day + 1, 12, 59, 23);
+        TimeData everyDay2 = new TimeData(year, month, day + 2, 12, 59, 23);
+        WeatherEveryDay weatherEveryDay0 = new WeatherEveryDay(everyDay0, 80, -80, 34,
+                27, 10, 38, 10, "10-12", 5.2);
+
+        WeatherEveryDay weatherEveryDay1 = new WeatherEveryDay(everyDay1, 80, -80, 23,
+                9, 10, 68, 22, "10-12", 5.2);
+
+        WeatherEveryDay weatherEveryDay2 = new WeatherEveryDay(everyDay2, 80, -80, 53,
+                29, 10, 88, 63, "10-12", 5.2);
         weatherEveryDayList.add(weatherEveryDay0);
+        weatherEveryDayList.add(weatherEveryDay1);
+        weatherEveryDayList.add(weatherEveryDay2);
         WeatherData weatherData = new WeatherData(crc, cityName, sourcr, lasTimeUpdate, weatherEvery3HourList, weatherEveryDayList);
         VPOperateManager.getInstance().settingWeatherData(writeResponse, weatherData, new IWeatherStatusDataListener() {
             @Override
@@ -2605,6 +2697,168 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             }
         });
     }
+
+    private int TR() {
+        Random random = new Random();
+        return random.nextInt(60);
+    }
+
+    private int WR() {
+        Random random = new Random();
+        return random.nextInt(155);
+    }
+
+    int count = 0;
+
+    private void setWeatherData11() {
+        //CRC
+        int crc = 0;
+        //城市名称
+        String cityName = "南山";
+        //数据来源
+        int sourcr = 0;
+        //最近更新时间
+        int year = TimeData.getSysYear();
+        int month = TimeData.getSysMonth();
+        int day = TimeData.getSysDay();
+        TimeData lasTimeUpdate = new TimeData(year, month, day, 6, 59, 23);
+        //天气列表（以小时为单位）
+        List<WeatherEvery3Hour> weatherEvery3HourList = new ArrayList<>();
+        TimeData every3Hour0 = new TimeData(year, month, day, 6, 59, 23);
+        TimeData every3Hour1 = new TimeData(year, month, day, 9, 59, 23);
+        TimeData every3Hour2 = new TimeData(year, month, day, 12, 59, 23);
+        TimeData every3Hour3 = new TimeData(year, month, day, 15, 59, 23);
+        TimeData every3Hour4 = new TimeData(year, month, day, 18, 59, 23);
+        TimeData every3Hour5 = new TimeData(year, month, day, 21, 59, 23);
+        TimeData every3Hour6 = new TimeData(year, month, day, 24, 0, 0);
+
+        TimeData every3Hour01 = new TimeData(year, month, day + 1, 6, 59, 23);
+        TimeData every3Hour11 = new TimeData(year, month, day + 1, 9, 59, 23);
+        TimeData every3Hour21 = new TimeData(year, month, day + 1, 12, 59, 23);
+        TimeData every3Hour31 = new TimeData(year, month, day + 1, 15, 59, 23);
+        TimeData every3Hour41 = new TimeData(year, month, day + 1, 18, 59, 23);
+        TimeData every3Hour51 = new TimeData(year, month, day + 1, 21, 59, 23);
+        TimeData every3Hour61 = new TimeData(year, month, day + 1, 24, 0, 0);
+
+        TimeData every3Hour02 = new TimeData(year, month, day + 2, 6, 59, 23);
+        TimeData every3Hour12 = new TimeData(year, month, day + 2, 9, 59, 23);
+        TimeData every3Hour22 = new TimeData(year, month, day + 2, 12, 59, 23);
+        TimeData every3Hour32 = new TimeData(year, month, day + 2, 15, 59, 23);
+        TimeData every3Hour42 = new TimeData(year, month, day + 2, 18, 59, 23);
+        TimeData every3Hour52 = new TimeData(year, month, day + 2, 21, 59, 23);
+        TimeData every3Hour62 = new TimeData(year, month, day + 2, 24, 0, 0);
+        /**
+         * 天气状态
+         * 0-4	晴
+         * 5-12	晴转多云
+         * 13-16	阴天
+         * 17-20	阵雨
+         * 21-24	雷阵雨
+         * 25-32	冰雹
+         * 33-40	小雨
+         * 41-48	中雨
+         * 49-56	大雨
+         * 57-72	暴雨
+         * 73-84	小雪
+         * 85-100	大雪
+         * 101-155	多云
+         */
+        WeatherEvery3Hour weatherEvery3Hour0 =
+                new WeatherEvery3Hour(every3Hour0, 60, TR(), 6, WR(), "3-4", 15.0);
+        WeatherEvery3Hour weatherEvery3Hour1 =
+                new WeatherEvery3Hour(every3Hour1, 70, TR(), 7, WR(), "10-12", 5.0);
+        WeatherEvery3Hour weatherEvery3Hour2 =
+                new WeatherEvery3Hour(every3Hour2, 80, TR(), 8, WR(), "10", 5.0);
+        WeatherEvery3Hour weatherEvery3Hour3 =
+                new WeatherEvery3Hour(every3Hour3, 90, TR(), 9, WR(), "15", 6.0);
+        WeatherEvery3Hour weatherEvery3Hour4 =
+                new WeatherEvery3Hour(every3Hour4, 90, TR(), 2, WR(), "3", 8.0);
+        WeatherEvery3Hour weatherEvery3Hour5 =
+                new WeatherEvery3Hour(every3Hour5, 90, TR(), 4, WR(), "11", 1.0);
+        WeatherEvery3Hour weatherEvery3Hour6 =
+                new WeatherEvery3Hour(every3Hour6, 90, TR(), 4, WR(), "11", 1.0);
+        weatherEvery3HourList.add(weatherEvery3Hour0);
+        weatherEvery3HourList.add(weatherEvery3Hour1);
+        weatherEvery3HourList.add(weatherEvery3Hour2);
+        weatherEvery3HourList.add(weatherEvery3Hour3);
+        weatherEvery3HourList.add(weatherEvery3Hour4);
+        weatherEvery3HourList.add(weatherEvery3Hour5);
+        weatherEvery3HourList.add(weatherEvery3Hour6);
+
+        WeatherEvery3Hour weatherEvery3Hour01 =
+                new WeatherEvery3Hour(every3Hour01, 60, TR(), 6, WR(), "3-4", 15.0);
+        WeatherEvery3Hour weatherEvery3Hour11 =
+                new WeatherEvery3Hour(every3Hour11, 70, TR(), 7, WR(), "10-12", 5.0);
+        WeatherEvery3Hour weatherEvery3Hour21 =
+                new WeatherEvery3Hour(every3Hour21, 80, TR(), 8, WR(), "10", 5.0);
+        WeatherEvery3Hour weatherEvery3Hour31 =
+                new WeatherEvery3Hour(every3Hour31, 90, TR(), 9, WR(), "15", 6.0);
+        WeatherEvery3Hour weatherEvery3Hour41 =
+                new WeatherEvery3Hour(every3Hour41, 90, TR(), 2, WR(), "3", 8.0);
+        WeatherEvery3Hour weatherEvery3Hour51 =
+                new WeatherEvery3Hour(every3Hour51, 90, TR(), 4, WR(), "11", 1.0);
+        WeatherEvery3Hour weatherEvery3Hour61 =
+                new WeatherEvery3Hour(every3Hour61, 90, TR(), 4, WR(), "11", 1.0);
+        weatherEvery3HourList.add(weatherEvery3Hour01);
+        weatherEvery3HourList.add(weatherEvery3Hour11);
+        weatherEvery3HourList.add(weatherEvery3Hour21);
+        weatherEvery3HourList.add(weatherEvery3Hour31);
+        weatherEvery3HourList.add(weatherEvery3Hour41);
+        weatherEvery3HourList.add(weatherEvery3Hour51);
+        weatherEvery3HourList.add(weatherEvery3Hour61);
+
+        WeatherEvery3Hour weatherEvery3Hour02 =
+                new WeatherEvery3Hour(every3Hour02, 50, TR(), 6, WR(), "3-4", 15.0);
+        WeatherEvery3Hour weatherEvery3Hour12 =
+                new WeatherEvery3Hour(every3Hour12, 40, TR(), 7, WR(), "10-12", 5.0);
+        WeatherEvery3Hour weatherEvery3Hour22 =
+                new WeatherEvery3Hour(every3Hour22, 30, TR(), 8, WR(), "10", 5.0);
+        WeatherEvery3Hour weatherEvery3Hour32 =
+                new WeatherEvery3Hour(every3Hour32, 20, TR(), 9, WR(), "15", 6.0);
+        WeatherEvery3Hour weatherEvery3Hour42 =
+                new WeatherEvery3Hour(every3Hour42, 60, TR(), 2, WR(), "3", 8.0);
+        WeatherEvery3Hour weatherEvery3Hour52 =
+                new WeatherEvery3Hour(every3Hour52, 70, TR(), 4, WR(), "11", 1.0);
+        WeatherEvery3Hour weatherEvery3Hour62 =
+                new WeatherEvery3Hour(every3Hour62, 70, TR(), 4, WR(), "11", 1.0);
+        weatherEvery3HourList.add(weatherEvery3Hour02);
+        weatherEvery3HourList.add(weatherEvery3Hour12);
+        weatherEvery3HourList.add(weatherEvery3Hour22);
+        weatherEvery3HourList.add(weatherEvery3Hour32);
+        weatherEvery3HourList.add(weatherEvery3Hour42);
+        weatherEvery3HourList.add(weatherEvery3Hour52);
+        weatherEvery3HourList.add(weatherEvery3Hour62);
+
+        //天气列表（以天为单位）
+        List<WeatherEveryDay> weatherEveryDayList = new ArrayList<>();
+        int t1 = TR();
+        int t2 = TR();
+        int t3 = TR();
+        TimeData everyDay0 = new TimeData(year, month, day, 12, 59, 23);
+        TimeData everyDay1 = new TimeData(year, month, day + 1, 12, 59, 23);
+        TimeData everyDay2 = new TimeData(year, month, day + 2, 12, 59, 23);
+        WeatherEveryDay weatherEveryDay0 = new WeatherEveryDay(everyDay0, 80, -80, t1 + 10,
+                t1, 10, 38, 10, "10-12", 5.2);
+
+        WeatherEveryDay weatherEveryDay1 = new WeatherEveryDay(everyDay1, 80, -80, t2 + 10,
+                t2, 10, WR(), WR(), "10-12", 5.2);
+
+        WeatherEveryDay weatherEveryDay2 = new WeatherEveryDay(everyDay2, 80, -80, t3 + 10,
+                t3, 10, WR(), WR(), "10-12", 5.2);
+        weatherEveryDayList.add(weatherEveryDay0);
+        weatherEveryDayList.add(weatherEveryDay1);
+        weatherEveryDayList.add(weatherEveryDay2);
+        WeatherData weatherData = new WeatherData(crc, cityName, sourcr, lasTimeUpdate, weatherEvery3HourList, weatherEveryDayList);
+        VPOperateManager.getInstance().settingWeatherData(writeResponse, weatherData, new IWeatherStatusDataListener() {
+            @Override
+            public void onWeatherDataChange(WeatherStatusData weatherStatusData) {
+                String message = "settingWeatherData onWeatherDataChange read:\n" + weatherStatusData.toString();
+                Logger.t(TAG).i(message);
+                sendMsg(message, 1);
+            }
+        });
+    }
+
 
     private void setWeatherData2() {
         List<WeatherData2> weatherData2 = new ArrayList<>();
