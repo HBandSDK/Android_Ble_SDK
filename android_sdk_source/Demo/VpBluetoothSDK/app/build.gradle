@@ -11,7 +11,14 @@ project.ext {
 android {
     compileSdkVersion 29
     buildToolsVersion '29.0.2'
-
+    signingConfigs {
+        release {
+            keyAlias 'zhongxin'
+            keyPassword 'veepooandroid'
+            storeFile file('F:\\ExportProject\\zhongxin003.keystore')
+            storePassword 'veepooandroid'
+        }
+    }
     defaultConfig {
         applicationId "com.timaimee.vpdemo"//com.timaimee.vpdemo //com.ecg.kg
         minSdkVersion 24
@@ -25,9 +32,18 @@ android {
     }
     buildTypes {
         release {
+            buildConfigField("boolean", "IS_DEBUG", "false")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
+        debug {
+            buildConfigField("boolean", "IS_DEBUG", "true")
+        }
+//        release {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//        }
     }
     sourceSets {
         main {
@@ -54,7 +70,7 @@ dependencies {
     implementation files('libs/libcomx-0.5.jar')
     implementation files('libs/gson-2.2.4.jar')
     implementation files('libs/vpbluetooth-1.5.aar')
-    implementation files('libs/vpprotocol-2.2.60.15.aar')
+    implementation files('libs/vpprotocol-2.2.62.15.aar')
 
     implementation files('libs/JL_Watch_V1.7.1-release.aar')
     implementation files('libs/jl_rcsp_V0.2.7-release.aar')

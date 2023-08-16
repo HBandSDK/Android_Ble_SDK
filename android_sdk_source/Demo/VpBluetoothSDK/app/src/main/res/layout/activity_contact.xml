@@ -17,6 +17,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/tvRefresh"
+        android:layout_width="80dp"
+        android:layout_height="48dp"
+        android:background="#F3a"
+        android:gravity="center"
+        android:text="刷新"
+        android:textColor="#fff"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvContact"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
@@ -46,6 +58,20 @@
         android:layout_margin="20dp"
         android:background="@drawable/login_button"
         android:text="添加"
+        android:textColor="#Fff"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/btnAddAll"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnAddAll"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/login_button"
+        android:text="添加剩余"
         android:textColor="#Fff"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@id/btnSOSSettings"

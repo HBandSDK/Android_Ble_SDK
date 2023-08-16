@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import tech.gujin.toast.ToastUtil;
+
 public class ContactActivity extends AppCompatActivity implements IContactOptListener, OnRecycleViewClickCallback {
 
     private static final String TAG = "ContactActivity";
@@ -44,6 +46,8 @@ public class ContactActivity extends AppCompatActivity implements IContactOptLis
 
     private int contactType = 1;
     private boolean isSupportSOSContact = false;
+
+    private boolean isHasRead = false;
 
     private final OperaterActivity.WriteResponse response = new OperaterActivity.WriteResponse();
 
@@ -73,6 +77,36 @@ public class ContactActivity extends AppCompatActivity implements IContactOptLis
                 Intent intent = new Intent(ContactActivity.this, AddContactActivity.class);
                 intent.putExtra("_isAdd", false);
                 startActivityForResult(intent, 16);
+            }
+        });
+
+        findViewById(R.id.btnAddAll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isHasRead) {
+                    ToastUtil.show("请先读取更新联系人");
+                    return;
+                }
+                int canAddSize = 10 - mListData.size();
+                int idValue = mListData.size() + 1;
+                if (canAddSize > 0) {
+                    List<Contact> canAddList = new ArrayList<>();
+                    for (int i = 0; i < canAddSize; i++) {
+                        Contact contact = new Contact(idValue + i, "批量添加" + i, "110" + i, false, contactType == 2);
+                        canAddList.add(contact);
+                    }
+                    VPOperateManager.getInstance().addContactList(canAddList, ContactActivity.this, response);
+                } else {
+                    ToastUtil.show("联系人已加满");
+                }
+            }
+        });
+
+        findViewById(R.id.tvRefresh).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastUtil.show("刷新");
+                VPOperateManager.getInstance().readContact(-1, ContactActivity.this, response);
             }
         });
         initListData();
@@ -127,6 +161,9 @@ public class ContactActivity extends AppCompatActivity implements IContactOptLis
             }
             mLastAdapterPosition = targetAdapterPosition;
             Collections.swap(mListData, adapterPosition, targetAdapterPosition);
+            for (int i = 0; i < mListData.size(); i++) {
+                mListData.get(i).setContactID(i + 1);
+            }
             mAdapter.notifyItemMoved(adapterPosition, targetAdapterPosition);
             return false;
         }
@@ -152,15 +189,20 @@ public class ContactActivity extends AppCompatActivity implements IContactOptLis
 
     @Override
     public void onContactOptSuccess(@NotNull EContactOpt opt, int crc) {
+        Logger.t(TAG).e("联系人操作成功：" + opt + " crc = " + crc);
         showMsg("联系人操作成功：" + opt + " crc = " + crc);
+//        VPOperateManager.getInstance().readContact(-1, this, response);
     }
 
     @Override
     public void onContactOptFailed(@NotNull EContactOpt opt) {
+        Logger.t(TAG).e("联系人操作失败：" + opt);
+//        VPOperateManager.getInstance().readContact(-1, this, response);
     }
 
     @Override
     public void onContactReadSuccess(@NotNull List<Contact> contactList) {
+        isHasRead = true;
         if (mListData == null) {
             mListData = new ArrayList<>();
         }
@@ -205,6 +247,10 @@ public class ContactActivity extends AppCompatActivity implements IContactOptLis
             //saveContact();
             mAdapter.notifyDataSetChanged();
 //            ContactHandler.Companion.getInstance().deleteContactList(position + 1);
+            /**
+             * 删除联系人建议删除的时候 弹出加载框，成功或失败的时候再关闭加载框。防止多次快速去点击删除 导致删除失败
+             */
+            ToastUtil.show("删除联系人建议删除的时候 弹出加载框，成功或失败的时候再关闭加载框。防止多次快速去点击删除 导致删除失败。 删除id = " + contact.getContactID());
             VPOperateManager.getInstance().deleteContact(contact, this, response);
         }
     }
