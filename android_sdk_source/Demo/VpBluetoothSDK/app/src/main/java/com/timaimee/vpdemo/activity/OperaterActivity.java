@@ -2456,6 +2456,20 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             } else {
                 ToastUtil.show("当前设备无联系人功能");
             }
+        } else if(oprater.equals(CY_FIND_PHONE)) {
+            VPOperateManager.getInstance().settingFindPhoneListener(new IFindPhonelistener() {
+                @Override
+                public void findPhone() {
+
+                }
+
+                @Override
+                public void deviceFindingCYPhone() {
+                    //传音KH70定制需求，设备端进入查找手机模式，只需一次上报;
+                }
+            });
+            //传音KH70定制需求，APP控制设备退出查找手机模式；
+            VPOperateManager.getInstance().stopFindCYPhoneByDevice(writeResponse);
         }
 
     }

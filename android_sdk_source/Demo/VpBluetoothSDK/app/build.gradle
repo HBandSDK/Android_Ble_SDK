@@ -70,7 +70,7 @@ dependencies {
     implementation files('libs/libcomx-0.5.jar')
     implementation files('libs/gson-2.2.4.jar')
     implementation files('libs/vpbluetooth-1.6.aar')
-    implementation files('libs/vpprotocol-2.2.63.15.aar')
+    implementation files('libs/vpprotocol-2.2.64.15.aar')
 
     implementation files('libs/JL_Watch_V1.7.1-release.aar')
     implementation files('libs/jl_rcsp_V0.2.7-release.aar')
