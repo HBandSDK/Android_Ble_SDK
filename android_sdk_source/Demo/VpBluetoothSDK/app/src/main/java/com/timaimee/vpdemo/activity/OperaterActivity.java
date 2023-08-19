@@ -442,59 +442,12 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 Toast.makeText(mContext, "不支持自定义表盘", Toast.LENGTH_LONG).show();
             }
 
-        } else if (oprater.equals(SYNC_MUSIC_INFO)) {
-            int play = 1;//播放状态
-            int pause = 2;//暂停状态
-            MusicData musicData = new MusicData("周杰伦", "上海一九四三", "范特西", 80, play);
-            Logger.t(TAG).i("settingMusicData");
-            VPOperateManager.getInstance().settingMusicData(writeResponse, musicData, new IMusicControlListener() {
-                @Override
-                public void oprateMusicSuccess() {
-                    Logger.t(TAG).i("oprateSuccess");
-                }
-
-                @Override
-                public void oprateMusicFail() {
-                    Logger.t(TAG).i("oprateFail");
-                }
-
-                @Override
-                public void nextMusic() {
-
-                }
-
-                @Override
-                public void previousMusic() {
-
-                }
-
-                @Override
-                public void pauseAndPlayMusic() {
-
-                }
-
-                @Override
-                public void pauseMusic() {
-
-                }
-
-                @Override
-                public void playMusic() {
-
-                }
-
-                @Override
-                public void voiceUp() {
-
-                }
-
-                @Override
-                public void voiceDown() {
-
-                }
-
-
-            });
+        } else if (oprater.equals(SYNC_MUSIC_INFO_PLAY)) {
+            controlMusic(true);
+        } else if (oprater.equals(SYNC_MUSIC_INFO_PAUSE)) {
+            controlMusic(false);
+        } else if (oprater.equals(VOLUME)) {
+            controlVolume();
         } else if (oprater.equals(UI_UPDATE_SERVER)) {
 
             int bigTranType = VpSpGetUtil.getVpSpVariInstance(mContext).getBigTranType();
@@ -3151,5 +3104,112 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             }
         });
         super.onDestroy();
+    }
+
+    private void controlVolume() {
+        Random random = new Random();
+        int volume = random.nextInt(100);
+        Toast.makeText(mContext, "设置音量：" + volume, Toast.LENGTH_SHORT).show();
+        VPOperateManager.getInstance().settingVolume(volume, writeResponse, new IMusicControlListener() {
+            @Override
+            public void oprateMusicSuccess() {
+                Logger.t(TAG).i("Music-oprateMusicSuccess");
+            }
+
+            @Override
+            public void oprateMusicFail() {
+                Logger.t(TAG).i("Music-oprateMusicFail");
+            }
+
+            @Override
+            public void nextMusic() {
+                Logger.t(TAG).i("Music-nextMusic");
+            }
+
+            @Override
+            public void previousMusic() {
+                Logger.t(TAG).i("Music-previousMusic");
+            }
+
+            @Override
+            public void pauseAndPlayMusic() {
+                Logger.t(TAG).i("Music-pauseAndPlayMusic");
+            }
+
+            @Override
+            public void pauseMusic() {
+                Logger.t(TAG).i("Music-pauseMusic");
+            }
+
+            @Override
+            public void playMusic() {
+                Logger.t(TAG).i("Music-playMusic");
+            }
+
+            @Override
+            public void voiceUp() {
+                Logger.t(TAG).i("Music-voiceUp");
+            }
+
+            @Override
+            public void voiceDown() {
+                Logger.t(TAG).i("Music-voiceDown");
+            }
+        });
+    }
+
+    private void controlMusic(boolean isPlay) {
+        int play = 1;//播放状态
+        int pause = 2;//暂停状态
+        MusicData musicData = new MusicData("周杰伦", "上海一九四三", "范特西", 80, isPlay ? play : pause);
+        Logger.t(TAG).i("settingMusicData");
+        VPOperateManager.getInstance().settingMusicData(writeResponse, musicData, new IMusicControlListener() {
+            @Override
+            public void oprateMusicSuccess() {
+                Logger.t(TAG).i("Music-oprateMusicSuccess");
+            }
+
+            @Override
+            public void oprateMusicFail() {
+                Logger.t(TAG).i("Music-oprateMusicFail");
+            }
+
+            @Override
+            public void nextMusic() {
+                Logger.t(TAG).i("Music-nextMusic");
+            }
+
+            @Override
+            public void previousMusic() {
+                Logger.t(TAG).i("Music-previousMusic");
+            }
+
+            @Override
+            public void pauseAndPlayMusic() {
+                Logger.t(TAG).i("Music-pauseAndPlayMusic");
+            }
+
+            @Override
+            public void pauseMusic() {
+                Logger.t(TAG).i("Music-pauseMusic");
+            }
+
+            @Override
+            public void playMusic() {
+                Logger.t(TAG).i("Music-playMusic");
+            }
+
+            @Override
+            public void voiceUp() {
+                Logger.t(TAG).i("Music-voiceUp");
+            }
+
+            @Override
+            public void voiceDown() {
+                Logger.t(TAG).i("Music-voiceDown");
+            }
+
+
+        });
     }
 }

@@ -25,6 +25,7 @@ import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.oad.service.DfuService;
 import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.oad.OnFindOadDeviceListener;
+import com.veepoo.protocol.model.OadFileBean;
 import com.veepoo.protocol.model.enums.ECPUPlatform;
 import com.veepoo.protocol.model.enums.ECpuType;
 import com.veepoo.protocol.model.settings.OadSetting;
@@ -42,7 +43,6 @@ import vpno.nordicsemi.android.dfu.DfuProgressListenerAdapter;
 import vpno.nordicsemi.android.dfu.DfuServiceInitiator;
 import vpno.nordicsemi.android.dfu.DfuServiceListenerHelper;
 
-
 /**
  * Created by timaimee on 2016/8/17.
  */
@@ -59,7 +59,6 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
     private int failCount = 0;
     private boolean isCanEnterOadModel = false, isFindOadDevice = false;
     private final static int MAX_ALLOW_FAIL_COUNT = 5;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +81,7 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
         String deviceAddress = getIntent().getStringExtra("deviceaddress");
         String deviceVersion = getIntent().getStringExtra("deviceversion");
         String deviceTestVersion = getIntent().getStringExtra("devicetestversion");
-        OadSetting oadSetting = new OadSetting(deviceAddress, deviceVersion, deviceTestVersion, deviceNumber, isOadModel);
-        return oadSetting;
+        return new OadSetting(deviceAddress, deviceVersion, deviceTestVersion, deviceNumber, isOadModel);
     }
 
     private void initView() {
@@ -93,22 +91,20 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
         oadButton = (Button) findViewById(R.id.oad_update);
         progressBar = (ProgressBar) findViewById(R.id.oad_upload_progress);
         oadButton.setOnClickListener(this);
-
         initDeviceStateView();
     }
 
     private void initDeviceStateView() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("设备地址：" + oadSetting.getDeviceAddress());
-        sb.append("\n");
-        sb.append("设备编号：" + oadSetting.getDeviceNumber());
-        sb.append("\n");
-        sb.append("正式版本号：" + oadSetting.getDeviceVersion());
-        sb.append("\n");
-        sb.append("测试版本号：" + oadSetting.getDeviceTestVersion());
-        sb.append("\n");
-        sb.append("是否DFU模式：" + oadSetting.isOadModel());
-        deviceStateTv.setText(sb.toString());
+        String sb = "设备地址：" + oadSetting.getDeviceAddress() +
+                "\n" +
+                "设备编号：" + oadSetting.getDeviceNumber() +
+                "\n" +
+                "正式版本号：" + oadSetting.getDeviceVersion() +
+                "\n" +
+                "测试版本号：" + oadSetting.getDeviceTestVersion() +
+                "\n" +
+                "是否DFU模式：" + oadSetting.isOadModel();
+        deviceStateTv.setText(sb);
 
     }
 
@@ -137,15 +133,30 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
 //        oadSetting.setHostUrl("http://www.baidu.com");
         Logger.t(TAG).i("升级前：版本验证->文件验证->查找目标设备");
         oadSetting.setDebug(true);
-        VPOperateManager.getMangerInstance(mContext).checkVersionAndFile(oadSetting, new OnUpdateCheckListener() {
+        oadSetting.setAutoDownload(false);//不自动下载，如果设置为false则会回调onRemoteOadFileGet方法获取远程ota文件信息
+        VPOperateManager.getInstance().checkVersionAndFile(oadSetting, new OnUpdateCheckListener() {
             @Override
             public void onNetVersionInfo(int deviceNumber, String deviceVersion, String des) {
                 Logger.t(TAG).i("服务器版本信息,设备号=" + deviceNumber + ",最新版本=" + deviceVersion + ",升级描述=" + des);
             }
 
             @Override
+            public void onRemoteOadFileGet(OadFileBean oadFileBean) {
+                Logger.t(TAG).i("onRemoteOadFileGet - " + oadFileBean.toString());
+            }
+
+            @Override
             public void onDownLoadOadFile(float progress) {
-                Logger.t(TAG).i("从服务器下载文件,进度=" + progress);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        progressBar.setVisibility(View.VISIBLE);
+                        int percent = (int) (progress * 100);
+                        progressBar.setProgress(percent);
+                        textPercentTv.setText("下载进度：" + percent + "%");
+                    }
+                });
             }
 
             @Override
@@ -174,7 +185,7 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
 
             @Override
             public void onCheckSuccess(String oadFileName) {
-                Logger.t(TAG).i("版本确认无误，文件确认无误");
+                Logger.t(TAG).i("版本确认无误，文件确认无误 oadFileName = " + oadFileName);
                 mOadFileName = oadFileName;
                 if (!TextUtils.isEmpty(mOadFileName)) {
                     isCanEnterOadModel = true;
@@ -197,7 +208,7 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
             }
 
             @Override
-            public void findOadDevice(String s, ECPUPlatform ecpuPlatform) {
+            public void findOadDevice(String oadAddress, ECPUPlatform cpuPlatform) {
 
             }
 
@@ -213,14 +224,14 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
         VPOperateManager.getMangerInstance(mContext).findOadModelDevice(oadSetting, new OnFindOadDeviceListener() {
             @Override
             public void findOadDevice(String oadAddress, ECpuType eCpuType) {
-                Logger.t(TAG).i("findOadDevice:"+mOadAddress);
+                Logger.t(TAG).i("findOadDevice:" + mOadAddress);
                 mOadAddress = oadAddress;
-                Logger.t(TAG).i("findOadDevice:"+mOadAddress);
+                Logger.t(TAG).i("findOadDevice:" + mOadAddress);
                 selectOad(eCpuType);
             }
 
             @Override
-            public void findOadDevice(String s, ECPUPlatform ecpuPlatform) {
+            public void findOadDevice(String oadAddress, ECPUPlatform cpuPlatform) {
 
             }
 
