@@ -41,6 +41,7 @@ import com.veepoo.protocol.listener.data.IDeviceBTConnectionListener;
 import com.veepoo.protocol.listener.data.IDeviceBTInfoListener;
 import com.veepoo.protocol.listener.data.IDeviceControlPhoneModelState;
 import com.veepoo.protocol.listener.data.IDeviceFuctionDataListener;
+import com.veepoo.protocol.listener.data.IDeviceFunctionStatusChangeListener;
 import com.veepoo.protocol.listener.data.IDeviceRenameListener;
 import com.veepoo.protocol.listener.data.IDrinkDataListener;
 import com.veepoo.protocol.listener.data.IECGAutoReportListener;
@@ -342,6 +343,15 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 showToast("BT连接超时");
             }
         });
+
+
+        VPOperateManager.getInstance().setDeviceFunctionStatusChangeListener(new IDeviceFunctionStatusChangeListener() {
+            @Override
+            public void onFunctionStatusChanged(@NotNull DeviceFunction function, @NotNull EFunctionStatus status) {
+                Logger.t(TAG).d("设备功能状态改变：" + function.getDes() + " -> " + status);
+            }
+        });
+
         ToastUtil.initialize(this);
     }
 
@@ -904,6 +914,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     String message = "(监听到手环要查找手机)-where is the phone,make some noise!";
                     Logger.t(TAG).i(message);
                     sendMsg(message, 1);
+                }
+
+                @Override
+                public void deviceFindingCYPhone() {
+
                 }
             });
         } else if (oprater.equals(DEVICE_COUSTOM_READ)) {

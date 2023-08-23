@@ -69,13 +69,13 @@ dependencies {
     implementation fileTree(include: ['*.jar','*.aar'], dir: 'libs')
     implementation files('libs/libcomx-0.5.jar')
     implementation files('libs/gson-2.2.4.jar')
-    implementation files('libs/vpbluetooth-1.6.aar')
-    implementation files('libs/vpprotocol-2.2.64.15.aar')
+    implementation files('libs/vpbluetooth-1.7.aar')
+    implementation files('libs/vpprotocol-2.2.65.15.aar')
 
-    implementation files('libs/JL_Watch_V1.7.1-release.aar')
-    implementation files('libs/jl_rcsp_V0.2.7-release.aar')
-    implementation files('libs/jl_bt_ota_V1.7.5-release.aar')
-    implementation files('libs/BmpConvert_V0.0.4-release.aar')
+    implementation files('libs/JL_Watch_V1.9.1-release.aar')
+    implementation files('libs/jl_rcsp_V0.5.1-release.aar')
+    implementation files('libs/jl_bt_ota_V1.9.2-release.aar')
+    implementation files('libs/BmpConvert_V1.2.0-release.aar')
 
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:appcompat-v7:28.0.0-alpha1'
