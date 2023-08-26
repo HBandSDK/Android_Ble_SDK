@@ -1,6 +1,7 @@
 package com.timaimee.vpdemo.activity;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothGatt;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -2471,7 +2472,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             } else {
                 ToastUtil.show("当前设备无联系人功能");
             }
-        } else if(oprater.equals(CY_FIND_PHONE)) {
+        } else if (oprater.equals(CY_FIND_PHONE)) {
             VPOperateManager.getInstance().settingFindPhoneListener(new IFindPhonelistener() {
                 @Override
                 public void findPhone() {
@@ -2485,6 +2486,17 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             });
             //传音KH70定制需求，APP控制设备退出查找手机模式；
             VPOperateManager.getInstance().stopFindCYPhoneByDevice(writeResponse);
+        } else if (oprater.equals(GATT_CLOSE)) {
+            BluetoothGatt gatt = VPOperateManager.getInstance().getCurrentConnectGatt();
+            if (gatt != null) {
+                Logger.t(TAG).i("Gatt-Close:" + gatt.getDevice().getName() + " | " + gatt.getDevice().getAddress());
+                gatt.disconnect();
+                gatt.close();
+                gatt = null;
+            } else {
+                Logger.t(TAG).i("Gatt-Close: Gatt is NULL");
+            }
+
         }
 
     }
