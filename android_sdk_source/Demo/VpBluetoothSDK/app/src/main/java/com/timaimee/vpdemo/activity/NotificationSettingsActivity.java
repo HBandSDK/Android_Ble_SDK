@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
+import com.timaimee.vpdemo.adapter.GridAdatper;
 import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.data.IG15MessageListener;
@@ -31,6 +32,7 @@ import com.veepoo.protocol.model.settings.ContentSocailSetting;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: YWX
@@ -51,7 +53,7 @@ public class NotificationSettingsActivity extends Activity {
         setContentView(R.layout.activity_notification_settings);
         mGridView = findViewById(R.id.gvNotification);
         mInput = findViewById(R.id.etInput);
-        VPOperateManager.getMangerInstance(this).readSocialMsg(new IBleWriteResponse() {
+        VPOperateManager.getInstance().readSocialMsg(new IBleWriteResponse() {
             @Override
             public void onResponse(int code) {
 
@@ -88,21 +90,23 @@ public class NotificationSettingsActivity extends Activity {
                 if (TextUtils.isEmpty(msg)) {
                     msg = "君子和而不同,小人同而不和";
                 }
-                if (function.status == EFunctionStatus.SUPPORT_OPEN) {
-                    ContentSetting contentSetting;
-                    if (function.type == ESocailMsg.PHONE) {
-                        contentSetting = new ContentPhoneSetting(ESocailMsg.PHONE, function.label, "010-6635214");
-                    } else if (function.type == ESocailMsg.SMS) {
-                        contentSetting = new ContentSmsSetting(ESocailMsg.SMS, function.label, "010-6635214", msg);
-                    } else if (function.type == ESocailMsg.G15MSG) {
-                        testG15(msg);
-                        return;
-                    } else {
-                        contentSetting = new ContentSocailSetting(function.type, function.label, msg);
-                    }
-                    VPOperateManager.getMangerInstance(mGridView.getContext()).sendSocialMsgContent(new OperaterActivity.WriteResponse(), contentSetting);
+
+                if(function.type == ESocailMsg.G15MSG) {
+                    testG15(msg);
                 } else {
-                    Toast.makeText(mGridView.getContext(), "设备端消息开关好像没有打开！", Toast.LENGTH_SHORT).show();
+                    if (function.status == EFunctionStatus.SUPPORT_OPEN) {
+                        ContentSetting contentSetting;
+                        if (function.type == ESocailMsg.PHONE) {
+                            contentSetting = new ContentPhoneSetting(ESocailMsg.PHONE, function.label, "010-6635214");
+                        } else if (function.type == ESocailMsg.SMS) {
+                            contentSetting = new ContentSmsSetting(ESocailMsg.SMS, function.label, "010-6635214", msg);
+                        } else {
+                            contentSetting = new ContentSocailSetting(function.type, function.label, msg);
+                        }
+                        VPOperateManager.getInstance().sendSocialMsgContent(new OperaterActivity.WriteResponse(), contentSetting);
+                    } else {
+                        Toast.makeText(mGridView.getContext(), "设备端消息开关好像没有打开！", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -131,7 +135,7 @@ public class NotificationSettingsActivity extends Activity {
         functions.add(new NotificationFunction(ESocailMsg.SINA, socailMsgData.getSina(), "新浪"));
         functions.add(new NotificationFunction(ESocailMsg.FACEBOOK, socailMsgData.getFacebook(), "非死不可"));
 
-        functions.add(new NotificationFunction(ESocailMsg.TWITTER, socailMsgData.getTwitter(), "推特"));
+        functions.add(new NotificationFunction(ESocailMsg.TWITTER, socailMsgData.getTwitter(), "X(原推特)"));
         functions.add(new NotificationFunction(ESocailMsg.TIKTOK, socailMsgData.getTikTok(), "TikTok"));
         functions.add(new NotificationFunction(ESocailMsg.FLICKR, socailMsgData.getFlickr(), "Flickr"));
         functions.add(new NotificationFunction(ESocailMsg.TELEGRAM, socailMsgData.getTelegram(), "Telegram"));
@@ -140,7 +144,7 @@ public class NotificationSettingsActivity extends Activity {
         functions.add(new NotificationFunction(ESocailMsg.INSTAGRAM, socailMsgData.getInstagram(), "Instagram"));
         functions.add(new NotificationFunction(ESocailMsg.PHONE, socailMsgData.getPhone(), "电话"));
         functions.add(new NotificationFunction(ESocailMsg.SMS, socailMsgData.getMsg(), "短信"));
-        functions.add(new NotificationFunction(ESocailMsg.MESSENGER, socailMsgData.getMsg(), "MESSENGER"));
+        functions.add(new NotificationFunction(ESocailMsg.MESSENGER, socailMsgData.getMessenger(), "MESSENGER"));
         functions.add(new NotificationFunction(ESocailMsg.WXWORK, socailMsgData.getWxWork(), "企业微信"));
         functions.add(new NotificationFunction(ESocailMsg.KAKAO_TALK, socailMsgData.getKakaoTalk(), "Kakao Talk"));
 

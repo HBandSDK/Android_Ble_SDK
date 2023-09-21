@@ -9,32 +9,48 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="merge"/>
+    <uses-permission
+        android:name="android.permission.ACCESS_NETWORK_STATE"
+        tools:node="merge" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
 
+
+    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
 
     <!--允许程序访问WiFi网络信息-->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!--允许程序读写手机状态和身份-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
+    <uses-feature
+        android:name="android.bluetooth.le"
+        android:required="true" />
+
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher_d"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:resizeableActivity="true"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="2aac4346f58659a4f548c11080768b5d" />
+
         <activity
             android:name=".activity.MainActivity"
+            android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -43,40 +59,81 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.OperaterActivity" />
-        <activity android:name=".activity.GpsReportActivity" />
-        <activity android:name=".activity.AimSportCalcActivity" />
-        <activity android:name=".activity.GpsLatlonActivity" />
-        <activity android:name=".activity.InstitutionActivity" />
-        <activity android:name=".activity.EcgDetectActivity" />
-        <activity android:name=".activity.PttActivity" />
-        <activity android:name=".activity.UiUpdateAGPSActivity" />
-        <activity android:name=".activity.UiUpdateCustomActivity" />
-        <activity android:name=".activity.UiUpdateServerActivity" />
-        <activity android:name=".oad.activity.OadActivity" />
-        <activity android:name=".oad.activity.NotificationActivity" />
-        <activity android:name=".activity.TextAlarmActivity"/>
-        <activity android:name=".activity.NotificationSettingsActivity"/>
-        <activity android:name=".activity.OriginalDataLogActivity"/>
-        <activity android:name=".activity.G15QRCodeActivity"/>
-        <activity android:name=".activity.UiUpdateG15ImgActivity"/>
-        <activity android:name=".activity.ECGSwitchActivity"/>
-        <activity android:name=".activity.HealthRemindActivity"/>
-        <activity android:name=".activity.JLDeviceOPTActivity"/>
-        <activity android:name=".activity.ContactActivity"/>
-        <activity android:name=".activity.AddContactActivity"/>
+
+        <activity
+            android:name=".activity.FunctionSwitchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.OperaterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.GpsReportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.AimSportCalcActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.GpsLatlonActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.InstitutionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.EcgDetectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.PttActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.UiUpdateAGPSActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.UiUpdateCustomActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.UiUpdateServerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".oad.activity.OadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".oad.activity.NotificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.UiUpdateG15ImgActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.TextAlarmActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.OriginalDataLogActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.NotificationSettingsActivity"
+            android:exported="false" />
+        <activity android:name=".activity.G15QRCodeActivity" android:exported="false"/>
+        <activity android:name=".activity.TestActivity" android:exported="false"/>
+        <activity android:name=".activity.ECGSwitchActivity" android:exported="false"/>
+        <activity android:name=".activity.F2DebugActivity" android:exported="false"/>
+        <activity android:name=".activity.HealthRemindActivity" android:exported="false"/>
+        <activity android:name=".activity.JLDeviceOPTActivity" android:exported="false"/>
+        <activity android:name=".activity.ContactActivity" android:exported="false"/>
+        <activity android:name=".activity.AddContactActivity" android:exported="false"/>
+
         <service
             android:name="com.inuker.bluetooth.library.BluetoothService"
             android:enabled="true"
+            android:exported="false"
             android:foregroundServiceType="location" />
 
-        <service android:name=".oad.service.DfuService" />
+        <service android:name=".oad.service.DfuService" android:exported="false"/>
         <!-- 高德地图定位 -->
-        <service android:name="com.amap.api.location.APSService" />
+        <service android:name="com.amap.api.location.APSService" android:exported="false"/>
 
         <service
             android:name=".MyService"
             android:enabled="true"
+            android:exported="false"
             android:foregroundServiceType="location" />
     </application>
 

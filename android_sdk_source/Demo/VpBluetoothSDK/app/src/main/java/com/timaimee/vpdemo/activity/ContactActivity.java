@@ -109,6 +109,17 @@ public class ContactActivity extends AppCompatActivity implements IContactOptLis
                 VPOperateManager.getInstance().readContact(-1, ContactActivity.this, response);
             }
         });
+        findViewById(R.id.tvDeleteAll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListData.isEmpty()) {
+                    ToastUtil.show("列表为空");
+                    return;
+                }
+                ToastUtil.show("删除全部");
+                VPOperateManager.getInstance().deleteContactList(mListData, ContactActivity.this, response);
+            }
+        });
         initListData();
     }
 
@@ -202,6 +213,7 @@ public class ContactActivity extends AppCompatActivity implements IContactOptLis
 
     @Override
     public void onContactReadSuccess(@NotNull List<Contact> contactList) {
+        Logger.t(TAG).e("读取联系人成功：" + contactList.size());
         isHasRead = true;
         if (mListData == null) {
             mListData = new ArrayList<>();
@@ -221,11 +233,14 @@ public class ContactActivity extends AppCompatActivity implements IContactOptLis
 
     @Override
     public void onContactReadASSameCRC() {
+        isHasRead = true;
+        Logger.t(TAG).e("读取联系人，但CRC值一致，设备端和app端联系人列表一致(包括设备端没有数据)，无需重复读取");
         showMsg("读取联系人，但CRC值一致，设备端和app端联系人列表一致，无需重复读取");
     }
 
     @Override
     public void onContactReadFailed() {
+        Logger.t(TAG).e("读取联系失败");
         showMsg("读取联系失败");
     }
 

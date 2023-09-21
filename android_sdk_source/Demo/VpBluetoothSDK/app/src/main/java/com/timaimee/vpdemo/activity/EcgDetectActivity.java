@@ -16,8 +16,6 @@ import com.veepoo.protocol.model.datas.EcgDetectInfo;
 import com.veepoo.protocol.model.datas.EcgDetectResult;
 import com.veepoo.protocol.model.datas.EcgDetectState;
 import com.veepoo.protocol.model.datas.EcgDiagnosis;
-import com.veepoo.protocol.shareprence.VpSpGetUtil;
-import com.veepoo.protocol.util.EcgUtil;
 
 import java.util.Arrays;
 
@@ -49,35 +47,35 @@ public class EcgDetectActivity extends Activity implements View.OnClickListener 
         int id = v.getId();
         switch (id) {
             case R.id.start:
-                VPOperateManager.getMangerInstance(mContext).startDetectECG(writeResponse, true, new IECGDetectListener() {
+                VPOperateManager.getInstance().startDetectECG(writeResponse, true, new IECGDetectListener() {
                     @Override
                     public void onEcgDetectInfoChange(EcgDetectInfo ecgDetectInfo) {
-                        String message = "ecgDetectInfo-1:" + ecgDetectInfo.toString();
+                        String message = "-onEcgDetectInfoChange-:" + ecgDetectInfo.toString();
                         Logger.t(TAG).i(message);
                     }
 
                     @Override
                     public void onEcgDetectStateChange(EcgDetectState ecgDetectState) {
-                        String message = "ecgDetectResultState-2:" + ecgDetectState.toString();
+                        String message = "-onEcgDetectStateChange-:" + ecgDetectState.toString();
                         Logger.t(TAG).i(message);
                     }
 
                     @Override
                     public void onEcgDetectResultChange(EcgDetectResult ecgDetectResult) {
-                        String message = "ecgDetectResult-3:" + ecgDetectResult.toString();
+                        String message = "-onEcgDetectResultChange-:" + ecgDetectResult.toString();
                         Logger.t(TAG).i(message);
-                    }
-
-                    @Override
-                    public void onEcgDetectDiagnosisChange(EcgDiagnosis ecgDiagnosis) {
-
                     }
 
                     @Override
                     public void onEcgADCChange(int[] ecgData) {
-                        String message = "ecgDetectADC-0:" + Arrays.toString(ecgData);
+                        String message = "-onEcgADCChange-:" + Arrays.toString(ecgData);
                         Logger.t(TAG).i(message);
-                        mEcgHeartView.changeData(ecgData, 20);
+//                        mEcgHeartView.changeData(ecgData, 20);
+                    }
+
+                    @Override
+                    public void onEcgDetectDiagnosisChange(EcgDiagnosis ecgDiagnosis) {
+                        Logger.t(TAG).i("ecg多诊断 :: = " + ecgDiagnosis.toString());
                     }
                 });
                 break;

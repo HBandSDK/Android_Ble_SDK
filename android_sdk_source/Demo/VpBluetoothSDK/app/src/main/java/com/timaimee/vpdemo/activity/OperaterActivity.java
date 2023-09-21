@@ -1,5 +1,11 @@
 package com.timaimee.vpdemo.activity;
 
+import static com.timaimee.vpdemo.activity.Oprate.*;
+import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT;
+import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT_CLOSE;
+import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT_OPEN;
+import static com.veepoo.protocol.model.enums.EFunctionStatus.UNSUPPORT;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothGatt;
 import android.content.Context;
@@ -8,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Process;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -16,11 +23,18 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.inuker.bluetooth.library.connect.response.BleNotifyResponse;
+import com.inuker.bluetooth.library.jieli.dial.JLWatchFaceManager;
+import com.inuker.bluetooth.library.jieli.ota.JLOTAHolder;
+import com.inuker.bluetooth.library.jieli.response.RcspAuthResponse;
+import com.jieli.jl_fatfs.model.FatFile;
+import com.jieli.jl_rcsp.model.base.BaseError;
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.adapter.GridAdatper;
 import com.timaimee.vpdemo.oad.activity.OadActivity;
 import com.veepoo.protocol.VPOperateManager;
+import com.veepoo.protocol.listener.base.IBleNotifyResponse;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.data.AbsBloodGlucoseChangeListener;
 import com.veepoo.protocol.listener.data.IAlarm2DataListListener;
@@ -46,6 +60,8 @@ import com.veepoo.protocol.listener.data.IDeviceFunctionStatusChangeListener;
 import com.veepoo.protocol.listener.data.IDeviceRenameListener;
 import com.veepoo.protocol.listener.data.IDrinkDataListener;
 import com.veepoo.protocol.listener.data.IECGAutoReportListener;
+import com.veepoo.protocol.listener.data.IECGReadDataListener;
+import com.veepoo.protocol.listener.data.IECGReadIdListener;
 import com.veepoo.protocol.listener.data.IFatigueDataListener;
 import com.veepoo.protocol.listener.data.IFindDeviceDatalistener;
 import com.veepoo.protocol.listener.data.IFindDevicelistener;
@@ -57,7 +73,9 @@ import com.veepoo.protocol.listener.data.ILanguageDataListener;
 import com.veepoo.protocol.listener.data.ILightDataCallBack;
 import com.veepoo.protocol.listener.data.ILongSeatDataListener;
 import com.veepoo.protocol.listener.data.ILowPowerListener;
+import com.veepoo.protocol.listener.data.IMtuChangeListener;
 import com.veepoo.protocol.listener.data.IMusicControlListener;
+import com.veepoo.protocol.listener.data.INewECGDataReportListener;
 import com.veepoo.protocol.listener.data.INightTurnWristeDataListener;
 import com.veepoo.protocol.listener.data.IOriginData3Listener;
 import com.veepoo.protocol.listener.data.IOriginDataListener;
@@ -97,16 +115,20 @@ import com.veepoo.protocol.model.datas.ChantingData;
 import com.veepoo.protocol.model.datas.CheckWearData;
 import com.veepoo.protocol.model.datas.CountDownData;
 import com.veepoo.protocol.model.datas.DrinkData;
+import com.veepoo.protocol.model.datas.EcgDetectResult;
+import com.veepoo.protocol.model.datas.EcgDiagnosis;
 import com.veepoo.protocol.model.datas.FatigueData;
 import com.veepoo.protocol.model.datas.FindDeviceData;
 import com.veepoo.protocol.model.datas.FunctionDeviceSupportData;
 import com.veepoo.protocol.model.datas.FunctionSocailMsgData;
 import com.veepoo.protocol.model.datas.HRVOriginData;
+import com.veepoo.protocol.model.datas.HalfHourSportData;
 import com.veepoo.protocol.model.datas.HeartData;
 import com.veepoo.protocol.model.datas.HeartWaringData;
 import com.veepoo.protocol.model.datas.LanguageData;
 import com.veepoo.protocol.model.datas.LongSeatData;
 import com.veepoo.protocol.model.datas.LowPowerData;
+import com.veepoo.protocol.model.datas.MealInfo;
 import com.veepoo.protocol.model.datas.MusicData;
 import com.veepoo.protocol.model.datas.NightTurnWristeData;
 import com.veepoo.protocol.model.datas.OriginData;
@@ -115,7 +137,6 @@ import com.veepoo.protocol.model.datas.OriginHalfHourData;
 import com.veepoo.protocol.model.datas.PersonInfoData;
 import com.veepoo.protocol.model.datas.PwdData;
 import com.veepoo.protocol.model.datas.RRIntervalData;
-import com.veepoo.protocol.model.datas.RRLorenzInfo;
 import com.veepoo.protocol.model.datas.ScreenLightData;
 import com.veepoo.protocol.model.datas.ScreenStyleData;
 import com.veepoo.protocol.model.datas.SleepData;
@@ -140,12 +161,13 @@ import com.veepoo.protocol.model.enums.EAllSetType;
 import com.veepoo.protocol.model.enums.EBPDetectModel;
 import com.veepoo.protocol.model.enums.EBloodGlucoseStatus;
 import com.veepoo.protocol.model.enums.ECameraStatus;
+import com.veepoo.protocol.model.enums.EEcgDataType;
 import com.veepoo.protocol.model.enums.EFunctionStatus;
 import com.veepoo.protocol.model.enums.ELanguage;
 import com.veepoo.protocol.model.enums.EMultiAlarmOprate;
 import com.veepoo.protocol.model.enums.EOprateStauts;
-import com.veepoo.protocol.model.enums.ESex;
 import com.veepoo.protocol.model.enums.ERenameError;
+import com.veepoo.protocol.model.enums.ESex;
 import com.veepoo.protocol.model.enums.ESpo2hDataType;
 import com.veepoo.protocol.model.enums.ESportType;
 import com.veepoo.protocol.model.enums.ETemperatureUnit;
@@ -159,9 +181,6 @@ import com.veepoo.protocol.model.settings.AutoDetectStateSetting;
 import com.veepoo.protocol.model.settings.BpSetting;
 import com.veepoo.protocol.model.settings.ChantingSetting;
 import com.veepoo.protocol.model.settings.CheckWearSetting;
-import com.veepoo.protocol.model.settings.ContentPhoneSetting;
-import com.veepoo.protocol.model.settings.ContentSetting;
-import com.veepoo.protocol.model.settings.ContentSocailSetting;
 import com.veepoo.protocol.model.settings.CountDownSetting;
 import com.veepoo.protocol.model.settings.CustomSetting;
 import com.veepoo.protocol.model.settings.CustomSettingData;
@@ -178,6 +197,9 @@ import com.veepoo.protocol.model.settings.WomenSetting;
 import com.veepoo.protocol.shareprence.VpSpGetUtil;
 import com.veepoo.protocol.util.Spo2hOriginUtil;
 import com.veepoo.protocol.util.TextAlarmSp;
+import com.veepoo.protocol.util.VPLogger;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -186,14 +208,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import static com.timaimee.vpdemo.activity.Oprate.*;
-import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT;
-import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT_CLOSE;
-import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT_OPEN;
-import static com.veepoo.protocol.model.enums.EFunctionStatus.UNSUPPORT;
-
-import org.jetbrains.annotations.NotNull;
+import java.util.UUID;
 
 import tech.gujin.toast.ToastUtil;
 
@@ -261,6 +276,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             sendMsg(message, 3);
         }
     };
+    String PID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -275,7 +291,10 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         initGridView();
         listenDeviceCallbackData();
         listenCamera();
+        PID = "【进程名：" + Process.myPid() + "，线程：" + Thread.currentThread().getName() + "】";
+        VPLogger.e("数据操作--->" + PID);
         VPOperateManager.getInstance().init(this);
+        VPOperateManager.getInstance().setAutoConnectBTBySdk(false);
         VPOperateManager.getInstance().registerBTInfoListener(new IDeviceBTInfoListener() {
             @Override
             public void onDeviceBTFunctionNotSupport() {
@@ -345,16 +364,32 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             }
         });
 
+        VPOperateManager.getInstance().listenDeviceCallbackData(new IBleNotifyResponse() {
+            @Override
+            public void onNotify(UUID service, UUID character, byte[] value) {
+                super.onNotify(service, character, value);
+            }
+        });
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         VPOperateManager.getInstance().setDeviceFunctionStatusChangeListener(new IDeviceFunctionStatusChangeListener() {
             @Override
             public void onFunctionStatusChanged(@NotNull DeviceFunction function, @NotNull EFunctionStatus status) {
                 Logger.t(TAG).d("设备功能状态改变：" + function.getDes() + " -> " + status);
+                currentState = status;
+                des = function.getDes();
             }
         });
-
-        ToastUtil.initialize(this);
     }
+
+    public static EFunctionStatus currentState = null;
+
+    public static String des = null;
 
     private void initGridView() {
         mGridView = (GridView) findViewById(R.id.main_gridview);
@@ -380,7 +415,6 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         tv2.setText("");
         tv3.setText("");
         if (oprater.equals(HEART_DETECT_START)) {
-//            startListenADC();
             VPOperateManager.getInstance().startDetectHeart(writeResponse, new IHeartDataListener() {
 
                 @Override
@@ -461,6 +495,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             controlVolume();
         } else if (oprater.equals(UI_UPDATE_SERVER)) {
 
+            if (VPOperateManager.getInstance().isJLDevice()) {
+                Toast.makeText(mContext, "不支持服务器表盘", Toast.LENGTH_LONG).show();
+                return;
+            }
+
             int bigTranType = VpSpGetUtil.getVpSpVariInstance(mContext).getBigTranType();
             int serverUICount = VpSpGetUtil.getVpSpVariInstance(mContext).getWatchuiServer();
             if (bigTranType == 2 && serverUICount > 0) {
@@ -484,8 +523,17 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             } else {
                 Toast.makeText(mContext, "不支持大数据传输", Toast.LENGTH_LONG).show();
             }
-        } else if (oprater.equals(WEATHER_SETTING_STATUEINFO)) {
+        } else if (oprater.equals(WEATHER_SETTING_STATUEINFO_ON)) {
             WeatherStatusSetting weatherStatusSetting = new WeatherStatusSetting(0, true, EWeatherType.C);
+            VPOperateManager.getInstance().settingWeatherStatusInfo(writeResponse, weatherStatusSetting, new IWeatherStatusDataListener() {
+                @Override
+                public void onWeatherDataChange(WeatherStatusData weatherStatusData) {
+                    String message = "settingWeatherStatusInfo onWeatherDataChange read:\n" + weatherStatusData.toString();
+                    Logger.t(TAG).i(message);
+                }
+            });
+        } else if (oprater.equals(WEATHER_SETTING_STATUEINFO_OFF)) {
+            WeatherStatusSetting weatherStatusSetting = new WeatherStatusSetting(0, false, EWeatherType.C);
             VPOperateManager.getInstance().settingWeatherStatusInfo(writeResponse, weatherStatusSetting, new IWeatherStatusDataListener() {
                 @Override
                 public void onWeatherDataChange(WeatherStatusData weatherStatusData) {
@@ -498,12 +546,14 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             if (weatherStyle == 2) {
                 setWeatherData2();
             } else {
-                count++;
-                if (count % 2 == 0) {
-                    setWeatherData1();
-                } else {
-                    setWeatherData11();
-                }
+                setWeatherData24();
+
+//                count++;
+//                if (count % 2 == 0) {
+//                    setWeatherData24();
+//                } else {
+//                    setWeatherData11();
+//                }
             }
         } else if (oprater.equals(LOW_POWER_READ)) {
             VPOperateManager.getInstance().readLowPower(writeResponse, new ILowPowerListener() {
@@ -629,8 +679,6 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 public void onPwdDataChange(PwdData pwdData) {
                     String message = "PwdData:\n" + pwdData.toString();
                     Logger.t(TAG).i(message);
-//                    sendMsg(message, 1);
-
                     deviceNumber = pwdData.getDeviceNumber();
                     deviceVersion = pwdData.getDeviceVersion();
                     deviceTestVersion = pwdData.getDeviceTestVersion();
@@ -641,7 +689,6 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 public void onFunctionSupportDataChange(FunctionDeviceSupportData functionSupport) {
                     String message = "FunctionDeviceSupportData:\n" + functionSupport.toString();
                     Logger.t(TAG).i(message);
-//                    sendMsg(message, 2);
                     EFunctionStatus newCalcSport = functionSupport.getNewCalcSport();
                     if (newCalcSport != null && newCalcSport.equals(SUPPORT)) {
                         isNewSportCalc = true;
@@ -663,14 +710,20 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, "0000", is24Hourmodel);
 
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    readOriginData();
-//                }
-//            },1000);
+        } else if (oprater.equals(PWD_COMFIRM_2_DISCONNECT)) { //发起BT立马断开
+            connectBT();//连接BT
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    VPOperateManager.getInstance().disconnectWatch(writeResponse); //去掉了BLE连接库的断开
+                    mHandler.postDelayed(() -> {
+                        disconnectBT(); //500ms后断开BT
+                    }, 500);
+                }
+            }, 200);//200ms后 执行断开操作
 
-
+        } else if (oprater.equals(PWD_COMFIRM_2_DISCONNECT_)) {
+            VPOperateManager.getInstance().disconnectWatch(writeResponse);
         } else if (oprater.equals(PWD_MODIFY)) {
             VPOperateManager.getInstance().modifyDevicePwd(writeResponse, new IPwdDataListener() {
                 @Override
@@ -1176,17 +1229,13 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             socailMsgData.setSnapchat(EFunctionStatus.SUPPORT_OPEN);
             socailMsgData.setGmail(EFunctionStatus.SUPPORT_OPEN);
             socailMsgData.setSkype(EFunctionStatus.SUPPORT_OPEN);
-
             socailMsgData.setTikTok(EFunctionStatus.SUPPORT_OPEN);
             socailMsgData.setTelegram(SUPPORT_OPEN);
             socailMsgData.setConnected2_me(EFunctionStatus.SUPPORT_OPEN);
-
-
             socailMsgData.setPhone(EFunctionStatus.SUPPORT_OPEN);
             socailMsgData.setMsg(EFunctionStatus.SUPPORT_OPEN);
             socailMsgData.setKakaoTalk(EFunctionStatus.SUPPORT_OPEN);
             socailMsgData.setShieldPolice(SUPPORT_OPEN);
-
 
             VPOperateManager.getInstance().settingSocialMsg(writeResponse, new ISocialMsgDataListener() {
                 @Override
@@ -1229,7 +1278,6 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             socailMsgData.setMsg(EFunctionStatus.SUPPORT_CLOSE);
             socailMsgData.setKakaoTalk(SUPPORT_CLOSE);
             socailMsgData.setShieldPolice(SUPPORT_CLOSE);
-
             VPOperateManager.getInstance().settingSocialMsg(writeResponse, new ISocialMsgDataListener() {
                 @Override
                 public void onSocialMsgSupportDataChange(FunctionSocailMsgData socailMsgData) {
@@ -1356,7 +1404,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
                 @Override
                 public void appAnswerCall() {
-                    String message = "手表提示:app处理接听来电\n";
+                    String message = "手表提示:手机接听来电\n";
                     Logger.t(TAG).i(message);
                     sendMsg(message, 1);
                 }
@@ -1462,7 +1510,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             VPOperateManager.getInstance().startDetectSPO2H(writeResponse, new ISpo2hDataListener() {
                 @Override
                 public void onSpO2HADataChange(Spo2hData spo2HData) {
-                    String message = "血氧-开始:\n" + spo2HData.toString();
+                    String message = "血氧-测量:\n" + spo2HData.toString();
                     Logger.t(TAG).i(message);
                     sendMsg(message, 1);
                 }
@@ -1829,17 +1877,24 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             IOriginProgressListener originData3Listener = new IOriginData3Listener() {
                 @Override
                 public void onOriginFiveMinuteListDataChange(List<OriginData3> originDataList) {
-                    String message = "健康数据-返回:" + originDataList.toString();
-                    Logger.t(TAG).i(message);
+                    for (OriginData3 originData3 : originDataList) {
+                        Logger.t(TAG).i("五分钟数据:" + originData3);
+                    }
                 }
 
                 @Override
                 public void onOriginHalfHourDataChange(OriginHalfHourData originHalfHourDataList) {
                     String message = "健康数据[30分钟]-返回:" + originHalfHourDataList.toString();
                     Logger.t(TAG).i(message);
+                    Logger.t(TAG).i("健康数据[30分钟]-返回:时间 = " + originHalfHourDataList.getDate());
+                    Logger.t(TAG).i("健康数据[30分钟]-返回:总步数 = " + originHalfHourDataList.getAllStep());
                     Logger.t(TAG).i("健康数据[30分钟]-返回:30分钟的心率数据 size = " + originHalfHourDataList.getHalfHourRateDatas().size());
                     Logger.t(TAG).i("健康数据[30分钟]-返回:30分钟的血压数据 size = " + originHalfHourDataList.getHalfHourBps().size());
                     Logger.t(TAG).i("健康数据[30分钟]-返回:30分钟的运动数据 size = " + originHalfHourDataList.getHalfHourSportDatas().size());
+
+                    for (HalfHourSportData halfHourSportData : originHalfHourDataList.getHalfHourSportDatas()) {
+                        Logger.t(TAG).i("健康数据[30分钟]-halfHourSportData = " + halfHourSportData.toString());
+                    }
                 }
 
                 @Override
@@ -1951,11 +2006,10 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 @Override
                 public void onOriginFiveMinuteListDataChange(List<OriginData3> originData3List) {
                     String message = "健康数据[5分钟]-返回:" + originData3List.size();
-//                    for (int i = 0; i < originData3List.size(); i++) {
-//                        String s = originData3List.get(i).toString();
-//                        Logger.t(TAG).i(s);
-//                    }
-
+                    for (int i = 0; i < originData3List.size(); i++) {
+                        String s = originData3List.get(i).toString();
+                        Logger.t(TAG).i(s);
+                    }
                     Logger.t(TAG).i(message);
                 }
 
@@ -2402,6 +2456,53 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     showToast("血糖私人模式设置失败");
                 }
             });
+        } else if (oprater.equals(BLOOD_GLUCOSE_MULTIPLE_READ)) {
+            VPOperateManager.getInstance().readMultipleCalibrationBGValue(writeResponse, new AbsBloodGlucoseChangeListener() {
+
+                @Override
+                public void onBGMultipleAdjustingReadSuccess(boolean isOpen, MealInfo breakfast, MealInfo lunch, MealInfo dinner) {
+                    showToast("血糖多校准模式读取成功：isOpen " + isOpen + " breakfast = " + breakfast.toString() + " lunch = " + lunch.toString() + " dinner = " + dinner.toString());
+                    Logger.t("血糖多校准模式读取成功-").d(isOpen + " breakfast = " + breakfast.toString() + " lunch = " + lunch.toString() + " dinner = " + dinner.toString());
+                }
+
+                @Override
+                public void onBGMultipleAdjustingReadFailed() {
+                    showToast("血糖多校准模式读取失败");
+                }
+            });
+        } else if (oprater.equals(BLOOD_GLUCOSE_MULTIPLE_SETTING)) {
+            MealInfo breakfast = new MealInfo(1);
+            MealInfo lunch = new MealInfo(2);
+            MealInfo dinner = new MealInfo(3);
+            breakfast.isUnitMmolL = true;
+            breakfast.setAfterMealTime(540);
+            breakfast.setBeforeMealTime(480);
+            breakfast.setBgAfterMeal(7.5f);
+            breakfast.setBgBeforeMeal(5.5f);
+            lunch.isUnitMmolL = true;
+            lunch.setAfterMealTime(780);
+            lunch.setBeforeMealTime(720);
+            lunch.setBgAfterMeal(6.5f);
+            lunch.setBgBeforeMeal(5.0f);
+            dinner.isUnitMmolL = true;
+            dinner.setAfterMealTime(1140);
+            dinner.setBeforeMealTime(1080);
+            dinner.setBgAfterMeal(6.5f);
+            dinner.setBgBeforeMeal(5.0f);
+            VPOperateManager.getInstance().settingMultipleCalibrationBGValue(true, breakfast, lunch, dinner, writeResponse, new AbsBloodGlucoseChangeListener() {
+
+                @Override
+                public void onBGMultipleAdjustingSettingSuccess() {
+                    Logger.t("血糖多校准模式设置成功-");
+                    showToast("血糖多校准模式设置成功");
+
+                }
+
+                @Override
+                public void onBGMultipleAdjustingSettingFailed() {
+                    showToast("血糖多校准模式设置失败");
+                }
+            });
         } else if (oprater.equals(BLE_RENAME)) {
             VPOperateManager.getInstance().bleDeviceRename("abcdefghijk", new IDeviceRenameListener() {
                 @Override
@@ -2427,11 +2528,128 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, writeResponse);
         } else if (oprater.equals(BT_CONNECT)) {
-
+            connectBT();
         } else if (oprater.equals(BT_CLOSE)) {
+            disconnectBT();
+        } else if (oprater.equals(BLE_DISCONNECT)) {
+            VPOperateManager.getInstance().disconnectWatch(writeResponse);
+        } else if (oprater.equals(BT_READ)) {
+            VPOperateManager.getInstance().readBTInfo(writeResponse, new IDeviceBTInfoListener() {
+                @Override
+                public void onDeviceBTFunctionNotSupport() {
+                    Logger.t("【BT】-").d("【BT】- ---> 不支持BT功能");
+                    showToast("不支持BT功能");
+                }
 
+                @Override
+                public void onDeviceBTInfoSettingSuccess(@NotNull BTInfo btInfo) {
+                    Logger.t("【BT】-").d("【BT】- ---> btInfo : " + btInfo.toString());
+                    showToast("【BT】- ---> btInfo : " + btInfo.toString());
+                }
+
+                @Override
+                public void onDeviceBTInfoSettingFailed() {
+                    Logger.t("【BT】-").d("【BT】- ---> BT设置失败");
+                    showToast("【BT】- ---> BT设置失败");
+                }
+
+                @Override
+                public void onDeviceBTInfoReadSuccess(@NotNull BTInfo btInfo) {
+                    Logger.t("【BT】-").d("【BT】- ---> BT读取成功, btInfo : " + btInfo.toString());
+                    showToast("【BT】- ---> BT读取成功, btInfo : " + btInfo.toString());
+                }
+
+                @Override
+                public void onDeviceBTInfoReadFailed() {
+                    Logger.t("【BT】-").d("【BT】- ---> BT读取失败");
+                    showToast("【BT】- ---> BT读取失败");
+                }
+
+                @Override
+                public void onDeviceBTInfoReport(@NotNull BTInfo btInfo) {
+                    Logger.t("【BT】-").d("【BT】- ---> BT上报，btInfo = " + btInfo.toString());
+                    showToast("【BT】- ---> BT上报，btInfo = " + btInfo.toString());
+                }
+            });
         } else if (oprater.equals(HEALTH_REMIND)) {
             startActivity(new Intent(this, HealthRemindActivity.class));
+        } else if (oprater.equals(JL_AUTH)) {
+            VPOperateManager.getInstance().startJLDeviceAuth(new RcspAuthResponse() {
+                @Override
+                public void onRcspAuthStart() {
+                    showToast("设备认证开始");
+                }
+
+                @Override
+                public void onRcspAuthSuccess() {
+                    showToast("设备认证成功");
+                }
+
+                @Override
+                public void onRcspAuthFailed() {
+                    showToast("设备认证失败");
+                }
+            });
+        } else if (oprater.equals(JL_NOTIFY_OPEN)) {
+            VPOperateManager.getInstance().openJLDataNotify(new BleNotifyResponse() {
+                @Override
+                public void onNotify(UUID service, UUID character, byte[] value) {
+
+                }
+
+                @Override
+                public void onResponse(int code) {
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            VPOperateManager.getInstance().changeMTU(247, new IMtuChangeListener() {
+                                @Override
+                                public void onChangeMtuLength(int cmdLength) {
+
+                                }
+                            });
+                        }
+                    }, 1000);
+
+                }
+            });
+        } else if (oprater.equals(JL_INIT_FILE_SYS)) {
+            //杰理文件系统
+            VPOperateManager.getInstance().listJLWatchList(new JLWatchFaceManager.OnWatchDialInfoGetListener() {
+                @Override
+                public void onGettingWatchDialInfo() {
+                    ToastUtil.show("正在获取中...请勿重复调用");
+                }
+
+                @Override
+                public void onWatchDialInfoGetStart() {
+                    Logger.t(TAG).e("系统表盘--->Start");
+                    ToastUtil.show("获取文件系统列表-开始");
+                }
+
+                @Override
+                public void onWatchDialInfoGetComplete() {
+                    Logger.t(TAG).e("系统表盘--->Complete");
+                    ToastUtil.show("获取文件系统列表-完成");
+                }
+
+                @Override
+                public void onWatchDialInfoGetSuccess(List<FatFile> systemFatFiles, List<FatFile> serverFatFiles, FatFile picFatFile) {
+                    for (FatFile systemFatFile : systemFatFiles) {
+                        Logger.t(TAG).e("系统表盘--->" + systemFatFile.toString());
+                    }
+                    for (FatFile serverFatFile : serverFatFiles) {
+                        Logger.t(TAG).e("服务器表盘--->" + serverFatFile.toString());
+                    }
+                    Logger.t(TAG).e("照片表盘--->" + picFatFile.toString());
+                }
+
+                @Override
+                public void onWatchDialInfoGetFailed(BaseError error) {
+                    Logger.t(TAG).e("系统表盘--->Error:" + error.toString());
+                    ToastUtil.show("获取文件系统列表-失败");
+                }
+            });
         } else if (oprater.equals(FIND_DEVICE)) {
             VPOperateManager.getInstance().startFindDeviceByPhone(new IBleWriteResponse() {
                 @Override
@@ -2459,6 +2677,79 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     Logger.t(TAG).e("findingDevice--->");
                 }
             });
+        } else if (oprater.equals(JL_SET_PHOTO_DIAL)) {
+            String bigInPath = "/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/hband/jlDail/20230413093755.png";
+            String smallInPath = "/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/hband/jlDail/bgp_w000.png";
+            VPOperateManager.getInstance().setJLWatchPhotoDial(bigInPath, new JLWatchFaceManager.JLTransferPicDialListener() {
+                @Override
+                public void onJLTransferPicDialStart() {
+                    Logger.t(TAG).e("【杰理表盘传输】onJLTransferPicDialStart--->" + Thread.currentThread().toString());
+                }
+
+                @Override
+                public void onTransferPicDialProgress(int progress) {
+                    Logger.t(TAG).e("【杰理表盘传输】--->progress = " + progress + " : Thread = " + Thread.currentThread().toString());
+                }
+
+                @Override
+                public void onScaleBGPFileTransferComplete() {
+                    Logger.t(TAG).e("【杰理表盘传输】--->缩略图传输完成" + " : Thread = " + Thread.currentThread().toString());
+                }
+
+                @Override
+                public void onBigBGPFileTransferComplete() {
+                    Logger.t(TAG).e("【杰理表盘传输】--->大图传输完成" + " : Thread = " + Thread.currentThread().toString());
+                }
+
+                @Override
+                public void onTransferComplete() {
+                    Logger.t(TAG).e("【杰理表盘传输】--->表盘传输完成" + " : Thread = " + Thread.currentThread().toString());
+                }
+
+                @Override
+                public void onTransferError(int code, String msg) {
+                    Logger.t(TAG).e("【杰理表盘传输】--->表盘传输失败 code = " + code + ", msg = " + msg + " : Thread = " + Thread.currentThread().toString());
+                }
+            });
+        } else if (oprater.equals(JL_DEVICE_OTA)) {
+            // oad_path   = /storage/emulated/0/Android/data/com.timaimee.vpdemo/files/hband/jlOta/KH32_9626_00320800_OTA_UI_230421_19.zip
+            String firmwareFilePath = "/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/hband/jlOta/KH32_9626_00320800_OTA_UI_230421_19.zip";
+            VPOperateManager.getInstance().startJLDeviceOTAUpgrade(firmwareFilePath, new JLOTAHolder.OnJLDeviceOTAListener() {
+                @Override
+                public void onOTAStart() {
+                    Logger.t(TAG).e("【杰理OTA】--->OTA升级【开始】");
+                }
+
+                @Override
+                public void onProgress(float progress) {
+                    Logger.t(TAG).e("【杰理OTA】--->OTA升级中:" + progress + "%");
+                }
+
+                @Override
+                public void onNeedReconnect(String address, String dfuLangAddress, boolean isReconnectBySdk) {
+                    Logger.t(TAG).e("【杰理OTA】--->OTA升级dfuLang重连中: address = " + address + " , dfuLangAddress = " + dfuLangAddress + " , 是否由SDK重连 = " + isReconnectBySdk);
+                }
+
+                @Override
+                public void onDFULangConnectSuccess(String dfuLangAddress) {
+
+                }
+
+                @Override
+                public void onDFULangConnectFailed(String dfuLangAddress) {
+
+                }
+
+                @Override
+                public void onOTASuccess() {
+                    Logger.t(TAG).e("【杰理OTA】--->OTA升级【成功】");
+                }
+
+                @Override
+                public void onOTAFailed(com.jieli.jl_bt_ota.model.base.BaseError error) {
+                    Logger.t(TAG).e("【杰理OTA】--->OTA升级【失败】:" + error.toString());
+                }
+            });
         } else if (oprater.equals(JL_DEVICE)) {
             if (VPOperateManager.getInstance().isJLDevice()) {
                 startActivity(new Intent(this, JLDeviceOPTActivity.class));
@@ -2472,22 +2763,9 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             } else {
                 ToastUtil.show("当前设备无联系人功能");
             }
-        } else if (oprater.equals(CY_FIND_PHONE)) {
-            VPOperateManager.getInstance().settingFindPhoneListener(new IFindPhonelistener() {
-                @Override
-                public void findPhone() {
-
-                }
-
-                @Override
-                public void deviceFindingCYPhone() {
-                    //传音KH70定制需求，设备端进入查找手机模式，只需一次上报;
-                }
-            });
-            //传音KH70定制需求，APP控制设备退出查找手机模式；
-            VPOperateManager.getInstance().stopFindCYPhoneByDevice(writeResponse);
         } else if (oprater.equals(GATT_CLOSE)) {
-            BluetoothGatt gatt = VPOperateManager.getInstance().getCurrentConnectGatt();
+            //BluetoothGatt gatt = VPOperateManager.getInstance().getConnectGatt(mac);//传入mac地址获取、推荐使用此方法
+            BluetoothGatt gatt = VPOperateManager.getInstance().getCurrentConnectGatt();//获取当前练级的
             if (gatt != null) {
                 Logger.t(TAG).i("Gatt-Close:" + gatt.getDevice().getName() + " | " + gatt.getDevice().getAddress());
                 gatt.disconnect();
@@ -2497,12 +2775,59 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 Logger.t(TAG).i("Gatt-Close: Gatt is NULL");
             }
 
+        } else if (oprater.equals(FUNCTION_SWITCH)) {
+            startActivity(new Intent(this, FunctionSwitchActivity.class));
+        } else if (oprater.equals(READ_ECG_ID)) {
+            TimeData timeData = new TimeData(0, 0, 0, 0, 0, 0);
+            VPOperateManager.getInstance().readECGId(writeResponse, timeData, EEcgDataType.MANUALLY, new IECGReadIdListener() {
+                @Override
+                public void readIdFinish(int[] ids) {
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < ids.length; i++) {
+                        sb.append(ids[i] + ",");
+                    }
+                    showToast("读取ECG ID完成：" + sb.toString());
+
+
+                }
+            });
+
+        } else if (oprater.equals(READ_ECG_DATA)) {
+            TimeData timeData = new TimeData(0, 0, 0, 0, 0, 0);
+            VPOperateManager.getInstance().readECGData(writeResponse, timeData, EEcgDataType.MANUALLY, new IECGReadDataListener() {
+                @Override
+                public void readDataFinish(List<EcgDetectResult> resultList) {
+
+                    showToast("读取ECG 数据完成：" + resultList.toString());
+                    Logger.t(TAG).e("读取ECG 数据完成：" + resultList.toString());
+                    for (int i = 0; i < resultList.size(); i++) {
+                        Logger.t(TAG).e("ECG " + i + resultList.get(i).toString());
+                    }
+                }
+
+                @Override
+                public void readDiagnosisDataFinish(List<EcgDiagnosis> resultList) {
+                    showToast("读取ECG 数据完成：" + resultList.toString());
+                    Logger.t(TAG).e("读取ECG 数据完成：" + resultList.toString());
+                    for (int i = 0; i < resultList.size(); i++) {
+                        Logger.t(TAG).e("ECG " + i + resultList.get(i).toString());
+                    }
+                }
+            });
+        } else if (oprater.equals(SET_ECG_NEW_DATA_REPORT)) {
+            VPOperateManager.getInstance().setNewEcgDataReportListener(new INewECGDataReportListener() {
+                @Override
+                public void onNewECGDetectDataReportReport() {
+                    showToast("监听到设备有新的ecg测量数据上报，请读取ECG数据获取详细信息");
+                }
+            });
+
+            showToast("已设置监听，请到设备上进行ecg测量");
         }
 
     }
 
     private void readRR(final DayState dayState) {
-        Logger.t(TAG).e("读取RR逐跳帧数据 --》 Day = " + dayState);
         VPOperateManager.getInstance().readRRIntervalByDay(writeResponse, new IRRIntervalProgressListener() {
 
             @Override
@@ -2532,7 +2857,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
     }
 
     private void showToast(String msg) {
-        Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+        ToastUtil.show(msg);
     }
 
     private TextAlarm2Setting getTextAlarm2Setting() {
@@ -2556,7 +2881,6 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         String unRepeatDdate = "0000-00-00";
         return new Alarm2Setting(hour, minute, repestStr, scene, unRepeatDdate, isOpen);
     }
-
 
     private void setWeatherData1() {
         //CRC
@@ -2692,9 +3016,15 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         });
     }
 
+
     private int TR() {
         Random random = new Random();
         return random.nextInt(60);
+    }
+
+    private int YR() {
+        Random random = new Random();
+        return random.nextInt(6);
     }
 
     private int WR() {
@@ -2853,6 +3183,103 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         });
     }
 
+    private void setWeatherData24() {
+        //CRC
+        int crc = 0;
+        //城市名称
+        String cityName = "南山";
+        //数据来源
+        int sourcr = 0;
+        //最近更新时间
+        int year = TimeData.getSysYear();
+        int month = TimeData.getSysMonth();
+        int day = TimeData.getSysDay();
+        int hour = TimeData.getSysHour();
+        int minute = TimeData.getSysMiute();
+        TimeData lasTimeUpdate = new TimeData(year, month, day, hour, minute, 0);
+        //天气列表（以小时为单位）
+        List<WeatherEvery3Hour> weatherEvery3HourList = new ArrayList<>();
+        for (int i = 0; i < 24; i++) {
+            TimeData hourTime = new TimeData(year, month, day, i, 1, 00);
+            WeatherEvery3Hour weatherEvery3Hour =
+                    new WeatherEvery3Hour(hourTime, c2f(i), i, YR(), WR(), "3-4", 15.0);
+            weatherEvery3HourList.add(weatherEvery3Hour);
+        }
+
+        for (int i = 0; i < 24; i++) {
+            TimeData hourTime = new TimeData(year, month, day + 1, i, 1, 00);
+            WeatherEvery3Hour weatherEvery3Hour =
+                    new WeatherEvery3Hour(hourTime, c2f(i + 5), i + 5, YR(), WR(), "3-4", 15.0);
+            weatherEvery3HourList.add(weatherEvery3Hour);
+        }
+
+        for (int i = 0; i < 24; i++) {
+            TimeData hourTime = new TimeData(year, month, day + 2, i, 1, 00);
+            WeatherEvery3Hour weatherEvery3Hour =
+                    new WeatherEvery3Hour(hourTime, c2f(i + 10), i + 10, YR(), WR(), "3-4", 15.0);
+            weatherEvery3HourList.add(weatherEvery3Hour);
+        }
+
+        /**
+         * 天气状态
+         * 0-4	晴
+         * 5-12	晴转多云
+         * 13-16	阴天
+         * 17-20	阵雨
+         * 21-24	雷阵雨
+         * 25-32	冰雹
+         * 33-40	小雨
+         * 41-48	中雨
+         * 49-56	大雨
+         * 57-72	暴雨
+         * 73-84	小雪
+         * 85-100	大雪
+         * 101-155	多云
+         */
+        //天气列表（以天为单位）
+        List<WeatherEveryDay> weatherEveryDayList = new ArrayList<>();
+        int t1 = TR();
+        int t2 = TR();
+        int t3 = TR();
+        TimeData everyDay0 = new TimeData(year, month, day,
+                Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
+                Calendar.getInstance().get(Calendar.MINUTE), 0);
+        WeatherEveryDay weatherEveryDay0 = new WeatherEveryDay(everyDay0,
+                c2f(23),
+                c2f(0),
+                23,
+                0, 10, weatherEvery3HourList.get(0).getWeatherState(), weatherEvery3HourList.get(1).getWeatherState(), "10-12", 5.2);
+        weatherEveryDayList.add(weatherEveryDay0);
+
+        TimeData everyDay1 = new TimeData(year, month, day + 1, 0, 0, 0);
+        TimeData everyDay2 = new TimeData(year, month, day + 2, 0, 0, 0);
+        WeatherEveryDay weatherEveryDay1 = new WeatherEveryDay(everyDay1,
+                c2f(28),
+                c2f(5),
+                28,
+                5, 10, weatherEvery3HourList.get(24).getWeatherState(), weatherEvery3HourList.get(1 + 24).getWeatherState(), "10-12", 5.2);
+
+        WeatherEveryDay weatherEveryDay2 = new WeatherEveryDay(everyDay2,
+                c2f(33),
+                c2f(10),
+                33,
+                10, 10, weatherEvery3HourList.get(24 + 24).getWeatherState(), weatherEvery3HourList.get(1 + 24 + 24).getWeatherState(), "10-12", 5.2);
+        weatherEveryDayList.add(weatherEveryDay1);
+        weatherEveryDayList.add(weatherEveryDay2);
+        WeatherData weatherData = new WeatherData(crc, cityName, sourcr, lasTimeUpdate, weatherEvery3HourList, weatherEveryDayList);
+        VPOperateManager.getInstance().settingWeatherData(writeResponse, weatherData, new IWeatherStatusDataListener() {
+            @Override
+            public void onWeatherDataChange(WeatherStatusData weatherStatusData) {
+                String message = "settingWeatherData onWeatherDataChange read:\n" + weatherStatusData.toString();
+                Logger.t(TAG).i(message);
+                sendMsg(message, 1);
+            }
+        });
+    }
+
+    private int c2f(int c) {
+        return (int) (32f + c * 1.8f);
+    }
 
     private void setWeatherData2() {
         List<WeatherData2> weatherData2 = new ArrayList<>();
@@ -2924,7 +3351,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
             @Override
             public void appAnswerCall() {
-                String message = "手表提示:app处理接听来电\n";
+                String message = "手表提示:手机接听来电\n";
                 Logger.t(TAG).i(message);
                 sendMsg(message, 1);
             }
@@ -3138,7 +3565,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
     @Override
     protected void onDestroy() {
-        VPOperateManager.getMangerInstance(this).disconnectWatch(new IBleWriteResponse() {
+        VPOperateManager.getInstance().disconnectWatch(new IBleWriteResponse() {
             @Override
             public void onResponse(int i) {
 
@@ -3253,4 +3680,61 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
         });
     }
+
+    private void connectBT() {
+        VPOperateManager.getInstance().connectBT(VPOperateManager.getCurrentDeviceAddress(), new IDeviceBTConnectionListener() {
+            @Override
+            public void onDeviceBTConnecting() {
+                Logger.t("【BT】-").d("BT设备连接中");
+                showToast("BT设备连接中");
+            }
+
+            @Override
+            public void onDeviceBTConnected() {
+                Logger.t("【BT】-").d("BT设备已连接");
+                showToast("BT设备已连接");
+            }
+
+            @Override
+            public void onDeviceBTDisconnected() {
+                Logger.t("【BT】-").d("BT设备已断开");
+                showToast("BT设备已断开");
+            }
+
+            @Override
+            public void onDeviceBTConnectTimeout() {
+                Logger.t("【BT】-").d("BT连接超时");
+                showToast("BT连接超时");
+            }
+        });
+    }
+
+    private void disconnectBT() {
+        VPOperateManager.getInstance().disconnectBT(VPOperateManager.getCurrentDeviceAddress(), new IDeviceBTConnectionListener() {
+            @Override
+            public void onDeviceBTConnecting() {
+                Logger.t("【BT】-").d("BT设备连接中");
+                showToast("BT设备连接中");
+            }
+
+            @Override
+            public void onDeviceBTConnected() {
+                Logger.t("【BT】-").d("BT设备已连接");
+                showToast("BT设备已连接");
+            }
+
+            @Override
+            public void onDeviceBTDisconnected() {
+                Logger.t("【BT】-").d("BT设备已断开");
+                showToast("BT设备已断开");
+            }
+
+            @Override
+            public void onDeviceBTConnectTimeout() {
+                Logger.t("【BT】-").d("BT连接超时");
+                showToast("BT连接超时");
+            }
+        });
+    }
+
 }

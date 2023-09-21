@@ -21,12 +21,7 @@ import com.jieli.jl_rcsp.model.base.BaseError;
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
 import com.veepoo.protocol.VPOperateManager;
-import com.veepoo.protocol.listener.data.IContactOptListener;
 import com.veepoo.protocol.listener.data.IMtuChangeListener;
-import com.veepoo.protocol.model.datas.Contact;
-import com.veepoo.protocol.model.enums.EContactOpt;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;

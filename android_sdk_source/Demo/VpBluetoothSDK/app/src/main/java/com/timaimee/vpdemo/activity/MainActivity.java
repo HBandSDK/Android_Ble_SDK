@@ -1,5 +1,9 @@
 package com.timaimee.vpdemo.activity;
 
+import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT;
+import static com.veepoo.protocol.util.VpBleByteUtil.isBeyondVp;
+import static com.veepoo.protocol.util.VpBleByteUtil.isBrandDevice;
+
 import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -31,6 +35,7 @@ import com.inuker.bluetooth.library.model.BleGattProfile;
 import com.inuker.bluetooth.library.search.SearchResult;
 import com.inuker.bluetooth.library.search.response.SearchResponse;
 import com.inuker.bluetooth.library.utils.BluetoothUtils;
+import com.jieli.jl_bt_ota.util.JL_Log;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.DeviceCompare;
@@ -55,7 +60,6 @@ import com.veepoo.protocol.model.datas.FunctionSocailMsgData;
 import com.veepoo.protocol.model.datas.PwdData;
 import com.veepoo.protocol.model.enums.EFunctionStatus;
 import com.veepoo.protocol.model.settings.CustomSettingData;
-import com.veepoo.protocol.util.HRVOriginUtil;
 import com.veepoo.protocol.util.VPLogger;
 
 import java.io.File;
@@ -69,9 +73,7 @@ import no.nordicsemi.android.support.v18.scanner.ScanCallback;
 import no.nordicsemi.android.support.v18.scanner.ScanFilter;
 import no.nordicsemi.android.support.v18.scanner.ScanResult;
 import no.nordicsemi.android.support.v18.scanner.ScanSettings;
-
-import static com.timaimee.vpdemo.activity.Oprate.PWD_COMFIRM;
-import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT;
+import tech.gujin.toast.ToastUtil;
 
 public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener, OnRecycleViewClickCallback {
     private final static String TAG = MainActivity.class.getSimpleName();
@@ -91,22 +93,41 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
     TextView mTitleTextView;
     private boolean mIsOadModel;
     BluetoothLeScannerCompat mScanner;
-    private boolean isStartConnecting = false;
+
+    @Override
+    protected void onDestroy() {
+        VPOperateManager.getInstance().disconnectWatch(new IBleWriteResponse() {
+            @Override
+            public void onResponse(int code) {
+
+            }
+        });
+        super.onDestroy();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initLog();
+        ToastUtil.initialize(this);
         VPOperateManager.getInstance().init(this);
+//        if (BuildConfig.IS_DEBUG || true) {
+        //杰理日志
+        com.jieli.jl_rcsp.util.JL_Log.setTagPrefix("HBand-JLFace");
+        com.jieli.jl_rcsp.util.JL_Log.configureLog(this, true, true);
+        JL_Log.setLog(true);
+        JL_Log.setIsSaveLogFile(this, true);
+//        }
+        initLog();
         Logger.t(TAG).i("onSearchStarted");
+        VPOperateManager.getInstance().init(this);
+//        VPOperateManager.getInstance().setAutoConnectBTBySdk(false);
         mScanner = BluetoothLeScannerCompat.getScanner();
         VPLogger.setDebug(true);
         initRecyleView();
         checkPermission();
         registerBluetoothStateListener();
         createFile();
-//        startService(new Intent(this, MyService.class));
     }
 
     private void createFile() {
@@ -126,10 +147,8 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
 
     public void onClick(View view) {
         int id = view.getId();
-        switch (id) {
-            case R.id.scan:
-                scanDevice();
-                break;
+        if (id == R.id.scan) {
+            scanDevice();
         }
     }
 
@@ -146,7 +165,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
         bleConnectAdatpter.setBleItemOnclick(this);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
-        mTitleTextView.setText("Scan Device V" + getAppVersion(mContext));
+        mTitleTextView.setText("扫描设备 V" + getAppVersion(mContext));
     }
 
 
@@ -179,7 +198,8 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
             } else {
                 Logger.t(TAG).i("requestPermission,shouldShowRequestPermissionRationale else");
                 ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+                                /*Manifest.permission.BLUETOOTH_SCAN,Manifest.permission.BLUETOOTH_CONNECT,*/Manifest.permission.BLUETOOTH_PRIVILEGED},
                         MY_PERMISSIONS_REQUEST_BLUETOOTH);
             }
         } else {
@@ -205,9 +225,9 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
 
     private void initLog() {
         Logger.init(YOUR_APPLICATION)
-//                .methodCount(0)
-//                .methodOffset(0)
-//                .hideThreadInfo()
+                .methodCount(0)
+                .methodOffset(0)
+                .hideThreadInfo()
                 .logLevel(LogLevel.FULL)
                 .logAdapter(new CustomLogAdapter());
     }
@@ -222,7 +242,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
         }
 
         if (!BluetoothUtils.isBluetoothEnabled()) {
-            Toast.makeText(mContext, "bluetooth is not open", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "蓝牙没有开启", Toast.LENGTH_SHORT).show();
             return true;
         }
 //        startScan();
@@ -232,7 +252,6 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
 
 
     private void startScan() {
-        Logger.t(TAG).i("startScan");
         //后台扫描跟前台扫描的方式不一样
         ScanSettings settings = new ScanSettings.Builder()
                 .setLegacy(false)
@@ -308,10 +327,8 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
                     Logger.t(TAG).i("连接成功");
                     Logger.t(TAG).i("是否是固件升级模式=" + isoadModel);
                     mIsOadModel = isoadModel;
-                    isStartConnecting = true;
                 } else {
                     Logger.t(TAG).i("连接失败");
-                    isStartConnecting = false;
                 }
             }
         }, new INotifyResponse() {
@@ -320,79 +337,57 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
                 if (state == Code.REQUEST_SUCCESS) {
                     //蓝牙与设备的连接状态
                     Logger.t(TAG).i("监听成功-可进行其他操作");
-                    isStartConnecting = true;
-//                    if(iS2ECGSwitch) {
-//                        startPasswordValid(mac);
-//                    } else {
-                        Intent intent = new Intent(mContext, OperaterActivity.class);
-                        intent.putExtra("isoadmodel", mIsOadModel);
-                        intent.putExtra("deviceaddress", mac);
-                        startActivity(intent);
-//                    }
+
+                    Intent intent = new Intent(mContext, OperaterActivity.class);
+                    intent.putExtra("isoadmodel", mIsOadModel);
+                    intent.putExtra("deviceaddress", mac);
+                    startActivity(intent);
+
+//                    VPOperateManager.getInstance().confirmDevicePwd(new IBleWriteResponse() {
+//                        @Override
+//                        public void onResponse(int code) {
+//
+//                        }
+//                    }, new IPwdDataListener() {
+//                        @Override
+//                        public void onPwdDataChange(PwdData pwdData) {
+//                            String message = "PwdData:\n" + pwdData.toString();
+//                            Logger.t(TAG).i(message);
+//                            int deviceNumber = pwdData.getDeviceNumber();
+//                            String deviceVersion = pwdData.getDeviceVersion();
+//                            String deviceTestVersion = pwdData.getDeviceTestVersion();
+//                            Logger.t(TAG).e("设备号：" + deviceNumber + ",版本号：" + deviceVersion + ",\n测试版本号：" + deviceTestVersion);
+//                        }
+//                    }, new IDeviceFuctionDataListener() {
+//                        @Override
+//                        public void onFunctionSupportDataChange(FunctionDeviceSupportData functionSupport) {
+//                            String message = "FunctionDeviceSupportData:\n" + functionSupport.toString();
+//                            Logger.t(TAG).i(message);
+//                        }
+//                    }, new ISocialMsgDataListener() {
+//                        @Override
+//                        public void onSocialMsgSupportDataChange(FunctionSocailMsgData socailMsgData) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onSocialMsgSupportDataChange2(FunctionSocailMsgData socailMsgData) {
+//
+//                        }
+//                    }, new ICustomSettingDataListener() {
+//                        @Override
+//                        public void OnSettingDataChange(CustomSettingData customSettingData) {
+//                            String message = "CustomSettingData:\n" + customSettingData.toString();
+//                            Logger.t(TAG).i(message);
+//                        }
+//                    }, "0000", true);
+
                 } else {
                     Logger.t(TAG).i("监听失败，重新连接");
-                    isStartConnecting = false;
                 }
-
             }
         });
     }
-
-    private boolean iS2ECGSwitch = false;
-
-    private void  startPasswordValid(final String mac){
-            boolean is24Hourmodel = false;
-            VPOperateManager.getMangerInstance(mContext).confirmDevicePwd(new IBleWriteResponse() {
-                @Override
-                public void onResponse(int i) {
-
-                }
-            }, new IPwdDataListener() {
-                @Override
-                public void onPwdDataChange(PwdData pwdData) {
-                    String message = "PwdData:\n" + pwdData.toString();
-                    Logger.t(TAG).i(message);
-                    int deviceNumber = pwdData.getDeviceNumber();
-                    if(deviceNumber == 9010 ||deviceNumber == 9026 ||deviceNumber == 9031||
-                            deviceNumber == 9019 ||deviceNumber == 9025 ||deviceNumber == 9030){
-                        mHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent intent = new Intent(mContext, ECGSwitchActivity.class);
-                                intent.putExtra("isoadmodel", mIsOadModel);
-                                intent.putExtra("deviceaddress", mac);
-                                startActivity(intent);
-                            }
-                        },1000);
-                    }
-                }
-            }, new IDeviceFuctionDataListener() {
-                @Override
-                public void onFunctionSupportDataChange(FunctionDeviceSupportData functionSupport) {
-                    String message = "FunctionDeviceSupportData:\n" + functionSupport.toString();
-                    Logger.t(TAG).i(message);
-                }
-            }, new ISocialMsgDataListener() {
-                @Override
-                public void onSocialMsgSupportDataChange(FunctionSocailMsgData functionSocailMsgData) {
-
-                }
-
-                @Override
-                public void onSocialMsgSupportDataChange2(FunctionSocailMsgData functionSocailMsgData) {
-
-                }
-            }, new ICustomSettingDataListener() {
-                @Override
-                public void OnSettingDataChange(CustomSettingData customSettingData) {
-                    String message = "CustomSettingData:\n" + customSettingData.toString();
-                    Logger.t(TAG).i(message);
-                }
-            }, "0000", is24Hourmodel);
-
-
-    }
-
 
     /**
      * 蓝牙打开or关闭状态
@@ -400,7 +395,6 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
     private void registerBluetoothStateListener() {
         VPOperateManager.getInstance().registerBluetoothStateListener(mBluetoothStateListener);
     }
-
 
     /**
      * 监听系统蓝牙的打开和关闭的回调状态
@@ -428,6 +422,18 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
     };
 
 
+    public static boolean isShowDevice(byte[] scanRecord) {
+        if (isBeyondVp(scanRecord)) {
+            if (isBrandDevice(scanRecord)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     /**
      * 扫描的回调
      */
@@ -444,11 +450,11 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (!mListAddress.contains(device.getAddress())) {
+                    if (!mListAddress.contains(device.getAddress()) /*&& isShowDevice(device.scanRecord)*/) {
                         mListData.add(device);
                         mListAddress.add(device.getAddress());
                     }
-                    Collections.sort(mListData, new DeviceCompare());
+                    mListData.sort(new DeviceCompare());
                     bleConnectAdatpter.notifyDataSetChanged();
                 }
             });
@@ -476,14 +482,18 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
                 refreshStop();
             }
         }
-
     }
 
     @Override
     public void onRefresh() {
-        Logger.t(TAG).i("onRefresh");
         if (checkBLE()) {
-            scanDevice();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Logger.t(TAG).i("onRefresh");
+                    scanDevice();
+                }
+            }, 3000);
         }
     }
 
@@ -496,7 +506,6 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
             mBScanner = mBAdapter.getBluetoothLeScanner();
         }
         checkBLE();
-
     }
 
     /**
@@ -526,35 +535,15 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void OnRecycleViewClick(int position) {
-        if (isStartConnecting) {
-            return;
-        }
-        isStartConnecting = true;
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(mContext, "Connecting, please wait...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "正在连接，请稍等...", Toast.LENGTH_SHORT).show();
             }
         });
         SearchResult searchResult = mListData.get(position);
         connectDevice(searchResult.getAddress(), searchResult.getName());
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        isStartConnecting = false;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        VPOperateManager.getMangerInstance(this).disconnectWatch(new IBleWriteResponse() {
-            @Override
-            public void onResponse(int i) {
-
-            }
-        });
     }
 
     public String getAppVersion(Context context) {
