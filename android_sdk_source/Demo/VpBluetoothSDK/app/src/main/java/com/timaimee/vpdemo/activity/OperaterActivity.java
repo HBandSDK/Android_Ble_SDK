@@ -16,17 +16,19 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.inuker.bluetooth.library.connect.response.BleNotifyResponse;
 import com.inuker.bluetooth.library.jieli.dial.JLWatchFaceManager;
 import com.inuker.bluetooth.library.jieli.ota.JLOTAHolder;
 import com.inuker.bluetooth.library.jieli.response.RcspAuthResponse;
+import com.inuker.bluetooth.library.log.VPLocalLogger;
 import com.jieli.jl_fatfs.model.FatFile;
 import com.jieli.jl_rcsp.model.base.BaseError;
 import com.orhanobut.logger.Logger;
@@ -46,6 +48,11 @@ import com.veepoo.protocol.listener.data.IBPDetectDataListener;
 import com.veepoo.protocol.listener.data.IBPFunctionListener;
 import com.veepoo.protocol.listener.data.IBPSettingDataListener;
 import com.veepoo.protocol.listener.data.IBatteryDataListener;
+import com.veepoo.protocol.listener.data.IBloodComponentDetectListener;
+import com.veepoo.protocol.listener.data.IBloodComponentOptListener;
+import com.veepoo.protocol.listener.data.IBodyComponentDetectListener;
+import com.veepoo.protocol.listener.data.IBodyComponentReadDataListener;
+import com.veepoo.protocol.listener.data.IBodyComponentReadIdListener;
 import com.veepoo.protocol.listener.data.ICameraDataListener;
 import com.veepoo.protocol.listener.data.IChantingDataListener;
 import com.veepoo.protocol.listener.data.ICheckWearDataListener;
@@ -75,6 +82,7 @@ import com.veepoo.protocol.listener.data.ILongSeatDataListener;
 import com.veepoo.protocol.listener.data.ILowPowerListener;
 import com.veepoo.protocol.listener.data.IMtuChangeListener;
 import com.veepoo.protocol.listener.data.IMusicControlListener;
+import com.veepoo.protocol.listener.data.INewBodyComponentReportListener;
 import com.veepoo.protocol.listener.data.INewECGDataReportListener;
 import com.veepoo.protocol.listener.data.INightTurnWristeDataListener;
 import com.veepoo.protocol.listener.data.IOriginData3Listener;
@@ -108,6 +116,8 @@ import com.veepoo.protocol.model.datas.AutoDetectOriginData;
 import com.veepoo.protocol.model.datas.AutoDetectStateData;
 import com.veepoo.protocol.model.datas.BTInfo;
 import com.veepoo.protocol.model.datas.BatteryData;
+import com.veepoo.protocol.model.datas.BloodComponent;
+import com.veepoo.protocol.model.datas.BodyComponent;
 import com.veepoo.protocol.model.datas.BpData;
 import com.veepoo.protocol.model.datas.BpFunctionData;
 import com.veepoo.protocol.model.datas.BpSettingData;
@@ -157,8 +167,11 @@ import com.veepoo.protocol.model.datas.WomenData;
 import com.veepoo.protocol.model.datas.weather.WeatherData;
 import com.veepoo.protocol.model.datas.weather.WeatherEvery3Hour;
 import com.veepoo.protocol.model.datas.weather.WeatherEveryDay;
+import com.veepoo.protocol.model.enums.DetectState;
 import com.veepoo.protocol.model.enums.EAllSetType;
 import com.veepoo.protocol.model.enums.EBPDetectModel;
+import com.veepoo.protocol.model.enums.EBloodComponentDetectState;
+import com.veepoo.protocol.model.enums.EBloodFatUnit;
 import com.veepoo.protocol.model.enums.EBloodGlucoseStatus;
 import com.veepoo.protocol.model.enums.ECameraStatus;
 import com.veepoo.protocol.model.enums.EEcgDataType;
@@ -172,6 +185,7 @@ import com.veepoo.protocol.model.enums.ESpo2hDataType;
 import com.veepoo.protocol.model.enums.ESportType;
 import com.veepoo.protocol.model.enums.ETemperatureUnit;
 import com.veepoo.protocol.model.enums.ETimeMode;
+import com.veepoo.protocol.model.enums.EUricAcidUnit;
 import com.veepoo.protocol.model.enums.EWeatherType;
 import com.veepoo.protocol.model.enums.EWomenStatus;
 import com.veepoo.protocol.model.settings.Alarm2Setting;
@@ -200,6 +214,7 @@ import com.veepoo.protocol.util.TextAlarmSp;
 import com.veepoo.protocol.util.VPLogger;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -225,6 +240,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
     private String deviceaddress;
     boolean isSleepPrecision = false;
     Message msg;
+    boolean isBloodCompositionOpen = false;
     Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
@@ -1007,6 +1023,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             boolean isCanReadTempture = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportReadTempture();//是否支持读取温度
             boolean isCanDetectTempByApp = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportCheckTemptureByApp();//是否可以通过app监测体温
             boolean isCanDetectBloodGlucoseByApp = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportBloodGlucoseDetect();//是否可以通过app监测血糖
+            boolean isCanDetectBloodComponentByApp = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportBloodComponentDetect();//是否可以通过app监测血液成分
 
             Logger.t(TAG).i("是否可以读取体温：" + isCanReadTempture + " 是否可以通过app自动检测体温");
 
@@ -1033,6 +1050,16 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             } else {
                 customSetting.setIsOpenAutoTemperatureDetect(UNSUPPORT);
             }
+
+            if (isCanDetectBloodComponentByApp) {
+                boolean isOpenTempDetect = VpSpGetUtil.getVpSpVariInstance(mContext).isSupportBloodComponentDetect();
+                customSetting.setIsOpenBloodComponentDetect(isOpenTempDetect ? SUPPORT_CLOSE : SUPPORT_OPEN);
+            } else {
+                customSetting.setIsOpenBloodComponentDetect(UNSUPPORT);
+            }
+
+            customSetting.setUricAcidUnit(EUricAcidUnit.umol_L);
+            customSetting.setBloodFatUnit(EBloodFatUnit.mmol_L);
             VPOperateManager.getInstance().changeCustomSetting(writeResponse, new ICustomSettingDataListener() {
                 @Override
                 public void OnSettingDataChange(CustomSettingData customSettingData) {
@@ -2817,14 +2844,144 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         } else if (oprater.equals(SET_ECG_NEW_DATA_REPORT)) {
             VPOperateManager.getInstance().setNewEcgDataReportListener(new INewECGDataReportListener() {
                 @Override
-                public void onNewECGDetectDataReportReport() {
+                public void onNewECGDetectDataReport() {
                     showToast("监听到设备有新的ecg测量数据上报，请读取ECG数据获取详细信息");
                 }
             });
 
             showToast("已设置监听，请到设备上进行ecg测量");
-        }
+        } else if (oprater.equals(DETECT_START_BODY_COMPONENT)) {
+            VPOperateManager.getInstance().startDetectBodyComponent(writeResponse, new IBodyComponentDetectListener() {
+                @Override
+                public void onDetecting(int progress, int leadState) {
 
+                }
+
+                @Override
+                public void onDetectSuccess(@NotNull BodyComponent bodyComponent) {
+                    showToast("测量成功：" + bodyComponent.toString());
+                }
+
+                @Override
+                public void onDetectFailed(@NotNull DetectState detectState) {
+                    showToast("测量失败：" + detectState.toString());
+                }
+
+                @Override
+                public void onDetectStop() {
+                    showToast("测量停止");
+                }
+            });
+            showToast("正在测量身体成分数据....");
+
+        } else if (oprater.equals(DETECT_STOP_BODY_COMPONENT)) {
+            showToast("结束测量身体成分数据");
+            VPOperateManager.getInstance().stopDetectBodyComponent(writeResponse);
+        } else if (oprater.equals(READ_BODY_COMPONENT_ID)) {
+            VPOperateManager.getInstance().readBodyComponentId(writeResponse, new IBodyComponentReadIdListener() {
+                @Override
+                public void readIdFinish(@NotNull ArrayList<Integer> ids) {
+                    showToast("读取完成,ID数量：" + ids.size());
+                }
+            });
+        } else if (oprater.equals(READ_BODY_COMPONENT_DATA)) {
+
+            VPOperateManager.getInstance().readBodyComponentData(writeResponse, new IBodyComponentReadDataListener() {
+                @Override
+                public void readBodyComponentDataFinish(@Nullable List<BodyComponent> bodyComponentList) {
+                    showToast("读取身体成分数据完成：" + bodyComponentList.toString());
+                }
+            });
+        } else if (oprater.equals(SET_BODY_COMPONENT_NEW_DATA_REPORT)) {
+            VPOperateManager.getInstance().setBodyComponentReportListener(new INewBodyComponentReportListener() {
+                @Override
+                public void onNewBodyComponentReport() {
+                    showToast("监听到设备有新的身体成分数据上报，请读取身体成分数据获取详细信息");
+                }
+            });
+
+            showToast("已设置监听，请到设备上进行身体成分测量");
+        } else if (oprater.equals(SHARE_LOG)) {
+            VPLocalLogger.getInstance().shareLogFile(this, "com.timaimee.vpdemo.fileProvider");
+        } else if (oprater.equals(READ_BLOOD_COMPOSITION_CALIBRATION)) {
+            VPOperateManager.getInstance().readBloodComponentCalibration(writeResponse, new IBloodComponentOptListener() {
+
+                @Override
+                public void onBloodCompositionSettingFailed() {
+
+                }
+
+                @Override
+                public void onBloodCompositionSettingSuccess(boolean isOpen, @NotNull BloodComponent bloodComposition) {
+
+                }
+
+                @Override
+                public void onBloodCompositionReadFailed() {
+                    showToast("读取血液成分校准失败");
+                }
+
+                @Override
+                public void onBloodCompositionReadSuccess(boolean isOpen, @NotNull BloodComponent bloodComposition) {
+                    showToast("读取血液成分校准成功：" + isOpen + "," + bloodComposition.toString());
+                    OperaterActivity.this.isBloodCompositionOpen = isOpen;
+                }
+            });
+
+        } else if (oprater.equals(SETTING_BLOOD_COMPOSITION_CALIBRATION)) {
+            BloodComponent bloodComponent = new BloodComponent(99f, 88f, 77f, 66f, 55f);
+            VPOperateManager.getInstance().settingBloodComponentCalibration(writeResponse, isBloodCompositionOpen, bloodComponent, new IBloodComponentOptListener() {
+
+                @Override
+                public void onBloodCompositionSettingFailed() {
+                    showToast("设置血液成分校准失败");
+                }
+
+                @Override
+                public void onBloodCompositionSettingSuccess(boolean isOpen, @NotNull BloodComponent bloodComposition) {
+                    showToast("设置血液成分校准成功：" + isOpen + "," + bloodComposition.toString());
+                }
+
+                @Override
+                public void onBloodCompositionReadFailed() {
+
+                }
+
+                @Override
+                public void onBloodCompositionReadSuccess(boolean isOpen, @NotNull BloodComponent bloodComposition) {
+
+                }
+            });
+
+        } else if (oprater.equals(DETECT_START_BLOOD_COMPONENT)) {
+            VPOperateManager.getInstance().startDetectBloodComponent(writeResponse, isBloodCompositionOpen, new IBloodComponentDetectListener() {
+                @Override
+                public void onDetectComplete(@NotNull BloodComponent bloodComponent) {
+                    showToast("血液成分测量完成：" + bloodComponent.toString());
+                }
+
+                @Override
+                public void onDetectStop() {
+                    showToast("血液成分测量结束");
+                }
+
+                @Override
+                public void onDetecting(int progress, @NotNull BloodComponent bloodComponent) {
+                    if (progress % 50 == 0) {
+                        showToast("血液成分测量中..");
+                    }
+
+                }
+
+                @Override
+                public void onDetectFailed(@NotNull EBloodComponentDetectState errorState) {
+                    showToast("血液成分测量失败：" + errorState);
+                }
+            });
+
+        } else if (oprater.equals(DETECT_STOP_BLOOD_COMPONENT)) {
+            VPOperateManager.getInstance().stopDetectBloodComponent(writeResponse);
+        }
     }
 
     private void readRR(final DayState dayState) {

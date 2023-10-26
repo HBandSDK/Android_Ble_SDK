@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;

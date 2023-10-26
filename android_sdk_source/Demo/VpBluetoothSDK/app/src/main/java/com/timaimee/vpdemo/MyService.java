@@ -21,7 +21,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.ParcelUuid;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 
 import com.inuker.bluetooth.library.utils.BluetoothLog;

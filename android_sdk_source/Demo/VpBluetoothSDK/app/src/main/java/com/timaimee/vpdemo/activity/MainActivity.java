@@ -1,6 +1,5 @@
 package com.timaimee.vpdemo.activity;
 
-import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT;
 import static com.veepoo.protocol.util.VpBleByteUtil.isBeyondVp;
 import static com.veepoo.protocol.util.VpBleByteUtil.isBrandDevice;
 
@@ -17,20 +16,21 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.inuker.bluetooth.library.Code;
 import com.inuker.bluetooth.library.Constants;
+import com.inuker.bluetooth.library.log.VPLocalLogger;
 import com.inuker.bluetooth.library.model.BleGattProfile;
 import com.inuker.bluetooth.library.search.SearchResult;
 import com.inuker.bluetooth.library.search.response.SearchResponse;
@@ -51,15 +51,6 @@ import com.veepoo.protocol.listener.base.IABluetoothStateListener;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.base.IConnectResponse;
 import com.veepoo.protocol.listener.base.INotifyResponse;
-import com.veepoo.protocol.listener.data.ICustomSettingDataListener;
-import com.veepoo.protocol.listener.data.IDeviceFuctionDataListener;
-import com.veepoo.protocol.listener.data.IPwdDataListener;
-import com.veepoo.protocol.listener.data.ISocialMsgDataListener;
-import com.veepoo.protocol.model.datas.FunctionDeviceSupportData;
-import com.veepoo.protocol.model.datas.FunctionSocailMsgData;
-import com.veepoo.protocol.model.datas.PwdData;
-import com.veepoo.protocol.model.enums.EFunctionStatus;
-import com.veepoo.protocol.model.settings.CustomSettingData;
 import com.veepoo.protocol.util.VPLogger;
 
 import java.io.File;
@@ -96,6 +87,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
 
     @Override
     protected void onDestroy() {
+        VPLocalLogger.stopMonitor();
         VPOperateManager.getInstance().disconnectWatch(new IBleWriteResponse() {
             @Override
             public void onResponse(int code) {
@@ -128,6 +120,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
         checkPermission();
         registerBluetoothStateListener();
         createFile();
+        VPLocalLogger.startMonitor(this);
     }
 
     private void createFile() {

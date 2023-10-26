@@ -79,7 +79,7 @@
         app:layout_constraintStart_toEndOf="@id/btnToTop"
         app:layout_constraintTop_toBottomOf="@id/btn1" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_log"
         android:layout_width="match_parent"
         android:background="#8eee"
