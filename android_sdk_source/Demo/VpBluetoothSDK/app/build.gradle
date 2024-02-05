@@ -69,8 +69,8 @@ dependencies {
     implementation fileTree(include: ['*.jar','*.aar'], dir: 'libs')
     implementation files('libs/libcomx-0.5.jar')
     implementation files('libs/gson-2.2.4.jar')
-    implementation files('libs/vpbluetooth-1.11.aar')
-    implementation files('libs/vpprotocol-2.2.77.15.aar')
+    implementation files('libs/vpbluetooth-1.13.aar')
+    implementation files('libs/vpprotocol-2.2.82.15.aar')
 
     implementation files('libs/JL_Watch_V1.10.0-release.aar')
     implementation files('libs/jl_rcsp_V0.5.2-release.aar')
