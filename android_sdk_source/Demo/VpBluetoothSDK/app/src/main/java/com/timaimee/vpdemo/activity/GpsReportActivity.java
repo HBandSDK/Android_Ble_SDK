@@ -4,24 +4,22 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.CameraUpdateFactory;
-import com.amap.api.maps.LocationSource;
-import com.amap.api.maps.MapView;
-import com.amap.api.maps.UiSettings;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps.model.MyLocationStyle;
-import com.amap.api.maps.model.Polyline;
-import com.amap.api.maps.model.PolylineOptions;
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.CameraUpdateFactory;
+import com.amap.api.maps2d.LocationSource;
+import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.UiSettings;
+import com.amap.api.maps2d.model.BitmapDescriptorFactory;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.MarkerOptions;
+import com.amap.api.maps2d.model.MyLocationStyle;
+import com.amap.api.maps2d.model.PolylineOptions;
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
 import com.veepoo.protocol.VPOperateManager;
@@ -55,8 +53,10 @@ public class GpsReportActivity extends Activity implements LocationSource, AMapL
         @Override
         public void onResponse(int code) {
             Logger.t(TAG).i("write cmd status:" + code);
+
         }
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +82,7 @@ public class GpsReportActivity extends Activity implements LocationSource, AMapL
     List<LatLng> mLatLngsPointList = new ArrayList<>();
     List<String> mPointStrList = new ArrayList<>();
 
-    public void startReport(View view) {
+    public void startReport() {
         mLatLngsPointList.clear();
 
         VPOperateManager.getMangerInstance(mContext).setReportGps(writeResponse, true, new IReportGpsDataListener() {
@@ -96,7 +96,7 @@ public class GpsReportActivity extends Activity implements LocationSource, AMapL
         });
     }
 
-    public void stopReport(View view) {
+    public void stopReport() {
         VPOperateManager.getMangerInstance(mContext).setReportGps(writeResponse, false, new IReportGpsDataListener() {
             @Override
             public void onReportGpsDataDataChange(ReportGpsLatLongData reportGpsLatLongData) {
@@ -164,10 +164,10 @@ public class GpsReportActivity extends Activity implements LocationSource, AMapL
         }
 
         if (mlocationClient == null) {
-            try{
+            try {
                 mlocationClient = new AMapLocationClient(this);
                 mlocationClient.setLocationListener(this);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -186,12 +186,14 @@ public class GpsReportActivity extends Activity implements LocationSource, AMapL
             mlocationClient.stopLocation();
         mlocationClient = null;
         mListener = null;
+
     }
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         Logger.t(TAG).i("onPointerCaptureChanged");
     }
+
 
     @Override
     protected void onResume() {

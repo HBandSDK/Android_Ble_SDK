@@ -51,7 +51,7 @@
             android:text="Close GPS" />
     </LinearLayout>
 
-    <com.amap.api.maps.MapView
+    <com.amap.api.maps2d.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
