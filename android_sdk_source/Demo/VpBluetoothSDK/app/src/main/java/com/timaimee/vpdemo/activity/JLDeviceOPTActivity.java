@@ -250,9 +250,9 @@ public class JLDeviceOPTActivity extends Activity implements View.OnClickListene
      * 设置照片表盘
      */
     private void setPhotoDial() {
-        String dialPhotoPath = "/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/hband/jlDail/20230413093755.png";
+        String dialPhotoPath = "/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/hband/jlDail/20240408163910.png";
         if (photoDialFlag % 2 == 0) {
-            dialPhotoPath = "/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/hband/jlDail/20230522144758.png";
+            dialPhotoPath = "/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/hband/jlDail/20240408163642.png";
         }
         photoDialFlag++;
         tvDialInfo.setText(dialPhotoPath);
@@ -337,7 +337,9 @@ public class JLDeviceOPTActivity extends Activity implements View.OnClickListene
     }
 
     private void startOTA() {
-        String firmwareFilePath = "/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/hband/jlOta/KH32_9626_00320800_OTA_UI_230421_19.zip";
+        String otaFileName = "JE51P_5057_00510064_OTA_UI_KEY_240402_15.zip";
+        String otaFileName1 = "9664_00.70.01.zip";
+        String firmwareFilePath = "/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/hband/jlOta/" + otaFileName;
         tvOTAInfo.setText(firmwareFilePath);
         VPOperateManager.getInstance().startJLDeviceOTAUpgrade(firmwareFilePath, new JLOTAHolder.OnJLDeviceOTAListener() {
             @Override

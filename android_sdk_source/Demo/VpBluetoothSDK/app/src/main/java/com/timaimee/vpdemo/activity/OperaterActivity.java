@@ -76,6 +76,7 @@ import com.veepoo.protocol.listener.data.IFindPhonelistener;
 import com.veepoo.protocol.listener.data.IHRVOriginDataListener;
 import com.veepoo.protocol.listener.data.IHeartDataListener;
 import com.veepoo.protocol.listener.data.IHeartWaringDataListener;
+import com.veepoo.protocol.listener.data.IHrvAnalysisReportListener;
 import com.veepoo.protocol.listener.data.ILanguageDataListener;
 import com.veepoo.protocol.listener.data.ILightDataCallBack;
 import com.veepoo.protocol.listener.data.ILongSeatDataListener;
@@ -135,6 +136,7 @@ import com.veepoo.protocol.model.datas.HRVOriginData;
 import com.veepoo.protocol.model.datas.HalfHourSportData;
 import com.veepoo.protocol.model.datas.HeartData;
 import com.veepoo.protocol.model.datas.HeartWaringData;
+import com.veepoo.protocol.model.datas.HrvAnalysisReport;
 import com.veepoo.protocol.model.datas.LanguageData;
 import com.veepoo.protocol.model.datas.LongSeatData;
 import com.veepoo.protocol.model.datas.LowPowerData;
@@ -1928,6 +1930,16 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 public void onOriginHRVOriginListDataChange(List<HRVOriginData> originHrvDataList) {
                     HRVOriginData hrvOriginData = originHrvDataList.get(0);
                     String rate = hrvOriginData.getRate();
+                    /*hrv为付费项目，需要确保你们的设备在付费设备列表里面，否则改接口不会回调*/
+                    VPOperateManager.getInstance().getHrvAnalysisReport(originHrvDataList, new IHrvAnalysisReportListener() {
+                        @Override
+                        public void onHrvAnalysisReport(String date, List<HrvAnalysisReport> reports) {
+                            Logger.t(TAG).i("Hrv诊断报告 =======================================================date = " + date);
+                            for (HrvAnalysisReport datum : reports) {
+                                Logger.t(TAG).i("Hrv诊断报告 = " + datum.toString());
+                            }
+                        }
+                    });
                 }
 
                 @Override
