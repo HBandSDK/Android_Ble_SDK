@@ -73,6 +73,9 @@ public class GridAdatper extends BaseAdapter {
         if (mGridHold.mButton.getText().toString().equals(Oprate.READ_HEALTH_ORIGINAL)) {
             mGridHold.mButton.setBackgroundColor(Color.RED);
         }
+        if (mGridHold.mButton.getText().toString().equals(Oprate.JL_DEVICE)) {
+            mGridHold.mButton.setBackgroundColor(Color.parseColor("#A5FB3E"));
+        }
         return convertView;
     }
 

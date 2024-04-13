@@ -174,6 +174,7 @@ import com.veepoo.protocol.model.enums.EAllSetType;
 import com.veepoo.protocol.model.enums.EBPDetectModel;
 import com.veepoo.protocol.model.enums.EBloodComponentDetectState;
 import com.veepoo.protocol.model.enums.EBloodFatUnit;
+import com.veepoo.protocol.model.enums.EBloodGlucoseRiskLevel;
 import com.veepoo.protocol.model.enums.EBloodGlucoseStatus;
 import com.veepoo.protocol.model.enums.ECameraStatus;
 import com.veepoo.protocol.model.enums.EEcgDataType;
@@ -2441,7 +2442,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
 
                 @Override
-                public void onBloodGlucoseDetect(int progress, float bloodGlucose) {
+                public void onBloodGlucoseDetect(int progress, float bloodGlucose, EBloodGlucoseRiskLevel riskLevel) {
                     showToast("[progress:" + progress + " bloodGlucose: " + bloodGlucose + "]");
                 }
 
@@ -2459,7 +2460,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
 
                 @Override
-                public void onBloodGlucoseDetect(int progress, float bloodGlucose) {
+                public void onBloodGlucoseDetect(int progress, float bloodGlucose, EBloodGlucoseRiskLevel riskLevel) {
                     showToast("[progress:" + progress + " bloodGlucose: " + bloodGlucose + "]");
                 }
 
