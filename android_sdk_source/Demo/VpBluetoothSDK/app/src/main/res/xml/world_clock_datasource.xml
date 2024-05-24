@@ -1,0 +1,2210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TimeZoneArray>
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Abidjan"
+        originalTimeZoneName="Africa/Abidjan"
+        shortGenericTimeZoneName="Greenwich Mean Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Accra"
+        originalTimeZoneName="Africa/Accra"
+        shortGenericTimeZoneName="Greenwich Mean Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Addis Ababa"
+        originalTimeZoneName="Africa/Addis_Ababa"
+        shortGenericTimeZoneName="East Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Algiers"
+        originalTimeZoneName="Africa/Algiers"
+        shortGenericTimeZoneName="Central European Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Asmara"
+        originalTimeZoneName="Africa/Asmara"
+        shortGenericTimeZoneName="East Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Bamako"
+        originalTimeZoneName="Africa/Bamako"
+        shortGenericTimeZoneName="Greenwich Mean Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Bangui"
+        originalTimeZoneName="Africa/Bangui"
+        shortGenericTimeZoneName="West Africa Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Banjul"
+        originalTimeZoneName="Africa/Banjul"
+        shortGenericTimeZoneName="Greenwich Mean Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Bissau"
+        originalTimeZoneName="Africa/Bissau"
+        shortGenericTimeZoneName="Greenwich Mean Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Blantyre"
+        originalTimeZoneName="Africa/Blantyre"
+        shortGenericTimeZoneName="Central Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Brazzaville"
+        originalTimeZoneName="Africa/Brazzaville"
+        shortGenericTimeZoneName="West Africa Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Bujumbura"
+        originalTimeZoneName="Africa/Bujumbura"
+        shortGenericTimeZoneName="Central Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Cairo"
+        originalTimeZoneName="Africa/Cairo"
+        shortGenericTimeZoneName="Eastern European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Casablanca"
+        originalTimeZoneName="Africa/Casablanca"
+        shortGenericTimeZoneName="Morocco Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Ceuta"
+        originalTimeZoneName="Africa/Ceuta"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Conakry"
+        originalTimeZoneName="Africa/Conakry"
+        shortGenericTimeZoneName="Greenwich Mean Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Dakar"
+        originalTimeZoneName="Africa/Dakar"
+        shortGenericTimeZoneName="Greenwich Mean Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Dar es Salaam"
+        originalTimeZoneName="Africa/Dar_es_Salaam"
+        shortGenericTimeZoneName="East Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Djibouti"
+        originalTimeZoneName="Africa/Djibouti"
+        shortGenericTimeZoneName="East Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Douala"
+        originalTimeZoneName="Africa/Douala"
+        shortGenericTimeZoneName="West Africa Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="El Aaiun"
+        originalTimeZoneName="Africa/El_Aaiun"
+        shortGenericTimeZoneName="Western Sahara Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Freetown"
+        originalTimeZoneName="Africa/Freetown"
+        shortGenericTimeZoneName="Greenwich Mean Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Gaborone"
+        originalTimeZoneName="Africa/Gaborone"
+        shortGenericTimeZoneName="Central Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Harare"
+        originalTimeZoneName="Africa/Harare"
+        shortGenericTimeZoneName="Central Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Johannesburg"
+        originalTimeZoneName="Africa/Johannesburg"
+        shortGenericTimeZoneName="South Africa Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Juba"
+        originalTimeZoneName="Africa/Juba"
+        shortGenericTimeZoneName="Central Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Kampala"
+        originalTimeZoneName="Africa/Kampala"
+        shortGenericTimeZoneName="East Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Khartoum"
+        originalTimeZoneName="Africa/Khartoum"
+        shortGenericTimeZoneName="Central Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Kigali"
+        originalTimeZoneName="Africa/Kigali"
+        shortGenericTimeZoneName="Central Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Kinshasa"
+        originalTimeZoneName="Africa/Kinshasa"
+        shortGenericTimeZoneName="West Africa Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Lagos"
+        originalTimeZoneName="Africa/Lagos"
+        shortGenericTimeZoneName="West Africa Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Libreville"
+        originalTimeZoneName="Africa/Libreville"
+        shortGenericTimeZoneName="West Africa Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Lome"
+        originalTimeZoneName="Africa/Lome"
+        shortGenericTimeZoneName="Greenwich Mean Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Luanda"
+        originalTimeZoneName="Africa/Luanda"
+        shortGenericTimeZoneName="West Africa Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Lubumbashi"
+        originalTimeZoneName="Africa/Lubumbashi"
+        shortGenericTimeZoneName="Central Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Lusaka"
+        originalTimeZoneName="Africa/Lusaka"
+        shortGenericTimeZoneName="Central Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Malabo"
+        originalTimeZoneName="Africa/Malabo"
+        shortGenericTimeZoneName="West Africa Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Maputo"
+        originalTimeZoneName="Africa/Maputo"
+        shortGenericTimeZoneName="Central Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Maseru"
+        originalTimeZoneName="Africa/Maseru"
+        shortGenericTimeZoneName="South Africa Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Mbabane"
+        originalTimeZoneName="Africa/Mbabane"
+        shortGenericTimeZoneName="South Africa Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Mogadishu"
+        originalTimeZoneName="Africa/Mogadishu"
+        shortGenericTimeZoneName="East Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Monrovia"
+        originalTimeZoneName="Africa/Monrovia"
+        shortGenericTimeZoneName="Greenwich Mean Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Nairobi"
+        originalTimeZoneName="Africa/Nairobi"
+        shortGenericTimeZoneName="East Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Ndjamena"
+        originalTimeZoneName="Africa/Ndjamena"
+        shortGenericTimeZoneName="West Africa Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Niamey"
+        originalTimeZoneName="Africa/Niamey"
+        shortGenericTimeZoneName="West Africa Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Nouakchott"
+        originalTimeZoneName="Africa/Nouakchott"
+        shortGenericTimeZoneName="Greenwich Mean Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Ouagadougou"
+        originalTimeZoneName="Africa/Ouagadougou"
+        shortGenericTimeZoneName="Greenwich Mean Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Porto-Novo"
+        originalTimeZoneName="Africa/Porto-Novo"
+        shortGenericTimeZoneName="West Africa Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Sao Tome"
+        originalTimeZoneName="Africa/Sao_Tome"
+        shortGenericTimeZoneName="Greenwich Mean Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Tripoli"
+        originalTimeZoneName="Africa/Tripoli"
+        shortGenericTimeZoneName="Eastern European Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Tunis"
+        originalTimeZoneName="Africa/Tunis"
+        shortGenericTimeZoneName="Central European Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Windhoek"
+        originalTimeZoneName="Africa/Windhoek"
+        shortGenericTimeZoneName="Central Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT-10:00"
+        cityName="Adak"
+        originalTimeZoneName="America/Adak"
+        shortGenericTimeZoneName="Hawaii-Aleutian Time" />
+    <TimeZoneBean
+        abbreviation="GMT-9:00"
+        cityName="Anchorage"
+        originalTimeZoneName="America/Anchorage"
+        shortGenericTimeZoneName="Alaska Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Anguilla"
+        originalTimeZoneName="America/Anguilla"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Antigua"
+        originalTimeZoneName="America/Antigua"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Araguaina"
+        originalTimeZoneName="America/Araguaina"
+        shortGenericTimeZoneName="Brasilia Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Buenos Aires"
+        originalTimeZoneName="America/Argentina/Buenos_Aires"
+        shortGenericTimeZoneName="Argentina Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Catamarca"
+        originalTimeZoneName="America/Argentina/Catamarca"
+        shortGenericTimeZoneName="Argentina Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Cordoba"
+        originalTimeZoneName="America/Argentina/Cordoba"
+        shortGenericTimeZoneName="Argentina Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Jujuy"
+        originalTimeZoneName="America/Argentina/Jujuy"
+        shortGenericTimeZoneName="Argentina Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="La Rioja"
+        originalTimeZoneName="America/Argentina/La_Rioja"
+        shortGenericTimeZoneName="Argentina Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Mendoza"
+        originalTimeZoneName="America/Argentina/Mendoza"
+        shortGenericTimeZoneName="Argentina Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Rio Gallegos"
+        originalTimeZoneName="America/Argentina/Rio_Gallegos"
+        shortGenericTimeZoneName="Argentina Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Salta"
+        originalTimeZoneName="America/Argentina/Salta"
+        shortGenericTimeZoneName="Argentina Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="San Juan"
+        originalTimeZoneName="America/Argentina/San_Juan"
+        shortGenericTimeZoneName="Argentina Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="San Luis"
+        originalTimeZoneName="America/Argentina/San_Luis"
+        shortGenericTimeZoneName="Argentina Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Tucuman"
+        originalTimeZoneName="America/Argentina/Tucuman"
+        shortGenericTimeZoneName="Argentina Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Ushuaia"
+        originalTimeZoneName="America/Argentina/Ushuaia"
+        shortGenericTimeZoneName="Argentina Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Aruba"
+        originalTimeZoneName="America/Aruba"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Asuncion"
+        originalTimeZoneName="America/Asuncion"
+        shortGenericTimeZoneName="Paraguay Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Atikokan"
+        originalTimeZoneName="America/Atikokan"
+        shortGenericTimeZoneName="Eastern Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Bahia"
+        originalTimeZoneName="America/Bahia"
+        shortGenericTimeZoneName="Brasilia Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Bahia Banderas"
+        originalTimeZoneName="America/Bahia_Banderas"
+        shortGenericTimeZoneName="Central Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Barbados"
+        originalTimeZoneName="America/Barbados"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Belem"
+        originalTimeZoneName="America/Belem"
+        shortGenericTimeZoneName="Brasilia Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Belize"
+        originalTimeZoneName="America/Belize"
+        shortGenericTimeZoneName="Central Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Blanc-Sablon"
+        originalTimeZoneName="America/Blanc-Sablon"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Boa Vista"
+        originalTimeZoneName="America/Boa_Vista"
+        shortGenericTimeZoneName="Amazon Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Bogota"
+        originalTimeZoneName="America/Bogota"
+        shortGenericTimeZoneName="Colombia Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-7:00"
+        cityName="Boise"
+        originalTimeZoneName="America/Boise"
+        shortGenericTimeZoneName="Mountain Time" />
+    <TimeZoneBean
+        abbreviation="GMT-7:00"
+        cityName="Cambridge Bay"
+        originalTimeZoneName="America/Cambridge_Bay"
+        shortGenericTimeZoneName="Mountain Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Campo Grande"
+        originalTimeZoneName="America/Campo_Grande"
+        shortGenericTimeZoneName="Amazon Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Cancun"
+        originalTimeZoneName="America/Cancun"
+        shortGenericTimeZoneName="Eastern Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Caracas"
+        originalTimeZoneName="America/Caracas"
+        shortGenericTimeZoneName="Venezuela Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Cayenne"
+        originalTimeZoneName="America/Cayenne"
+        shortGenericTimeZoneName="French Guiana Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Cayman"
+        originalTimeZoneName="America/Cayman"
+        shortGenericTimeZoneName="Eastern Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Chicago"
+        originalTimeZoneName="America/Chicago"
+        shortGenericTimeZoneName="Central Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Chihuahua"
+        originalTimeZoneName="America/Chihuahua"
+        shortGenericTimeZoneName="Central Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-7:00"
+        cityName="Ciudad Juarez"
+        originalTimeZoneName="America/Ciudad_Juarez"
+        shortGenericTimeZoneName="Mountain Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Costa Rica"
+        originalTimeZoneName="America/Costa_Rica"
+        shortGenericTimeZoneName="Central Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-7:00"
+        cityName="Creston"
+        originalTimeZoneName="America/Creston"
+        shortGenericTimeZoneName="Mountain Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Cuiaba"
+        originalTimeZoneName="America/Cuiaba"
+        shortGenericTimeZoneName="Amazon Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Curacao"
+        originalTimeZoneName="America/Curacao"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Danmarkshavn"
+        originalTimeZoneName="America/Danmarkshavn"
+        shortGenericTimeZoneName="Greenwich Mean Time" />
+    <TimeZoneBean
+        abbreviation="GMT-7:00"
+        cityName="Dawson"
+        originalTimeZoneName="America/Dawson"
+        shortGenericTimeZoneName="Yukon Time" />
+    <TimeZoneBean
+        abbreviation="GMT-7:00"
+        cityName="Dawson Creek"
+        originalTimeZoneName="America/Dawson_Creek"
+        shortGenericTimeZoneName="Mountain Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-7:00"
+        cityName="Denver"
+        originalTimeZoneName="America/Denver"
+        shortGenericTimeZoneName="Mountain Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Detroit"
+        originalTimeZoneName="America/Detroit"
+        shortGenericTimeZoneName="Eastern Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Dominica"
+        originalTimeZoneName="America/Dominica"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-7:00"
+        cityName="Edmonton"
+        originalTimeZoneName="America/Edmonton"
+        shortGenericTimeZoneName="Mountain Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Eirunepe"
+        originalTimeZoneName="America/Eirunepe"
+        shortGenericTimeZoneName="Acre Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="El Salvador"
+        originalTimeZoneName="America/El_Salvador"
+        shortGenericTimeZoneName="Central Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-7:00"
+        cityName="Fort Nelson"
+        originalTimeZoneName="America/Fort_Nelson"
+        shortGenericTimeZoneName="Mountain Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Fortaleza"
+        originalTimeZoneName="America/Fortaleza"
+        shortGenericTimeZoneName="Brasilia Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Glace Bay"
+        originalTimeZoneName="America/Glace_Bay"
+        shortGenericTimeZoneName="Atlantic Time" />
+    <TimeZoneBean
+        abbreviation="GMT-2:00"
+        cityName="Godthab"
+        originalTimeZoneName="America/Godthab"
+        shortGenericTimeZoneName="West Greenland Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Goose Bay"
+        originalTimeZoneName="America/Goose_Bay"
+        shortGenericTimeZoneName="Atlantic Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Grand Turk"
+        originalTimeZoneName="America/Grand_Turk"
+        shortGenericTimeZoneName="Eastern Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Grenada"
+        originalTimeZoneName="America/Grenada"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Guadeloupe"
+        originalTimeZoneName="America/Guadeloupe"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Guatemala"
+        originalTimeZoneName="America/Guatemala"
+        shortGenericTimeZoneName="Central Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Guayaquil"
+        originalTimeZoneName="America/Guayaquil"
+        shortGenericTimeZoneName="Ecuador Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Guyana"
+        originalTimeZoneName="America/Guyana"
+        shortGenericTimeZoneName="Guyana Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Halifax"
+        originalTimeZoneName="America/Halifax"
+        shortGenericTimeZoneName="Atlantic Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Havana"
+        originalTimeZoneName="America/Havana"
+        shortGenericTimeZoneName="Cuba Time" />
+    <TimeZoneBean
+        abbreviation="GMT-7:00"
+        cityName="Hermosillo"
+        originalTimeZoneName="America/Hermosillo"
+        shortGenericTimeZoneName="Mexican Pacific Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Indianapolis"
+        originalTimeZoneName="America/Indiana/Indianapolis"
+        shortGenericTimeZoneName="Eastern Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Knox"
+        originalTimeZoneName="America/Indiana/Knox"
+        shortGenericTimeZoneName="Central Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Marengo"
+        originalTimeZoneName="America/Indiana/Marengo"
+        shortGenericTimeZoneName="Eastern Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Petersburg"
+        originalTimeZoneName="America/Indiana/Petersburg"
+        shortGenericTimeZoneName="Eastern Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Tell City"
+        originalTimeZoneName="America/Indiana/Tell_City"
+        shortGenericTimeZoneName="Central Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Vevay"
+        originalTimeZoneName="America/Indiana/Vevay"
+        shortGenericTimeZoneName="Eastern Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Vincennes"
+        originalTimeZoneName="America/Indiana/Vincennes"
+        shortGenericTimeZoneName="Eastern Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Winamac"
+        originalTimeZoneName="America/Indiana/Winamac"
+        shortGenericTimeZoneName="Eastern Time" />
+    <TimeZoneBean
+        abbreviation="GMT-7:00"
+        cityName="Inuvik"
+        originalTimeZoneName="America/Inuvik"
+        shortGenericTimeZoneName="Mountain Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Iqaluit"
+        originalTimeZoneName="America/Iqaluit"
+        shortGenericTimeZoneName="Eastern Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Jamaica"
+        originalTimeZoneName="America/Jamaica"
+        shortGenericTimeZoneName="Eastern Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-9:00"
+        cityName="Juneau"
+        originalTimeZoneName="America/Juneau"
+        shortGenericTimeZoneName="Alaska Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Louisville"
+        originalTimeZoneName="America/Kentucky/Louisville"
+        shortGenericTimeZoneName="Eastern Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Monticello"
+        originalTimeZoneName="America/Kentucky/Monticello"
+        shortGenericTimeZoneName="Eastern Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Kralendijk"
+        originalTimeZoneName="America/Kralendijk"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="La Paz"
+        originalTimeZoneName="America/La_Paz"
+        shortGenericTimeZoneName="Bolivia Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Lima"
+        originalTimeZoneName="America/Lima"
+        shortGenericTimeZoneName="Peru Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-8:00"
+        cityName="Los Angeles"
+        originalTimeZoneName="America/Los_Angeles"
+        shortGenericTimeZoneName="Pacific Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Lower Princes"
+        originalTimeZoneName="America/Lower_Princes"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Maceio"
+        originalTimeZoneName="America/Maceio"
+        shortGenericTimeZoneName="Brasilia Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Managua"
+        originalTimeZoneName="America/Managua"
+        shortGenericTimeZoneName="Central Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Manaus"
+        originalTimeZoneName="America/Manaus"
+        shortGenericTimeZoneName="Amazon Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Marigot"
+        originalTimeZoneName="America/Marigot"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Martinique"
+        originalTimeZoneName="America/Martinique"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Matamoros"
+        originalTimeZoneName="America/Matamoros"
+        shortGenericTimeZoneName="Central Time" />
+    <TimeZoneBean
+        abbreviation="GMT-7:00"
+        cityName="Mazatlan"
+        originalTimeZoneName="America/Mazatlan"
+        shortGenericTimeZoneName="Mexican Pacific Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Menominee"
+        originalTimeZoneName="America/Menominee"
+        shortGenericTimeZoneName="Central Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Merida"
+        originalTimeZoneName="America/Merida"
+        shortGenericTimeZoneName="Central Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-9:00"
+        cityName="Metlakatla"
+        originalTimeZoneName="America/Metlakatla"
+        shortGenericTimeZoneName="Alaska Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Mexico City"
+        originalTimeZoneName="America/Mexico_City"
+        shortGenericTimeZoneName="Central Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Miquelon"
+        originalTimeZoneName="America/Miquelon"
+        shortGenericTimeZoneName="St. Pierre &amp; Miquelon Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Moncton"
+        originalTimeZoneName="America/Moncton"
+        shortGenericTimeZoneName="Atlantic Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Monterrey"
+        originalTimeZoneName="America/Monterrey"
+        shortGenericTimeZoneName="Central Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Montevideo"
+        originalTimeZoneName="America/Montevideo"
+        shortGenericTimeZoneName="Uruguay Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Montreal"
+        originalTimeZoneName="America/Montreal"
+        shortGenericTimeZoneName="Montreal Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Montserrat"
+        originalTimeZoneName="America/Montserrat"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Nassau"
+        originalTimeZoneName="America/Nassau"
+        shortGenericTimeZoneName="Eastern Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="New York"
+        originalTimeZoneName="America/New_York"
+        shortGenericTimeZoneName="Eastern Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Nipigon"
+        originalTimeZoneName="America/Nipigon"
+        shortGenericTimeZoneName="Eastern Time" />
+    <TimeZoneBean
+        abbreviation="GMT-9:00"
+        cityName="Nome"
+        originalTimeZoneName="America/Nome"
+        shortGenericTimeZoneName="Alaska Time" />
+    <TimeZoneBean
+        abbreviation="GMT-2:00"
+        cityName="Noronha"
+        originalTimeZoneName="America/Noronha"
+        shortGenericTimeZoneName="Fernando de Noronha Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Beulah"
+        originalTimeZoneName="America/North_Dakota/Beulah"
+        shortGenericTimeZoneName="Central Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Center"
+        originalTimeZoneName="America/North_Dakota/Center"
+        shortGenericTimeZoneName="Central Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="New Salem"
+        originalTimeZoneName="America/North_Dakota/New_Salem"
+        shortGenericTimeZoneName="Central Time" />
+    <TimeZoneBean
+        abbreviation="GMT-2:00"
+        cityName="Nuuk"
+        originalTimeZoneName="America/Nuuk"
+        shortGenericTimeZoneName="West Greenland Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Ojinaga"
+        originalTimeZoneName="America/Ojinaga"
+        shortGenericTimeZoneName="Central Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Panama"
+        originalTimeZoneName="America/Panama"
+        shortGenericTimeZoneName="Eastern Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Pangnirtung"
+        originalTimeZoneName="America/Pangnirtung"
+        shortGenericTimeZoneName="Eastern Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Paramaribo"
+        originalTimeZoneName="America/Paramaribo"
+        shortGenericTimeZoneName="Suriname Time" />
+    <TimeZoneBean
+        abbreviation="GMT-7:00"
+        cityName="Phoenix"
+        originalTimeZoneName="America/Phoenix"
+        shortGenericTimeZoneName="Mountain Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Port-au-Prince"
+        originalTimeZoneName="America/Port-au-Prince"
+        shortGenericTimeZoneName="Eastern Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Port of Spain"
+        originalTimeZoneName="America/Port_of_Spain"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Porto Velho"
+        originalTimeZoneName="America/Porto_Velho"
+        shortGenericTimeZoneName="Amazon Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Puerto Rico"
+        originalTimeZoneName="America/Puerto_Rico"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Punta Arenas"
+        originalTimeZoneName="America/Punta_Arenas"
+        shortGenericTimeZoneName="Punta Arenas Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Rainy River"
+        originalTimeZoneName="America/Rainy_River"
+        shortGenericTimeZoneName="Central Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Rankin Inlet"
+        originalTimeZoneName="America/Rankin_Inlet"
+        shortGenericTimeZoneName="Central Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Recife"
+        originalTimeZoneName="America/Recife"
+        shortGenericTimeZoneName="Brasilia Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Regina"
+        originalTimeZoneName="America/Regina"
+        shortGenericTimeZoneName="Central Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Resolute"
+        originalTimeZoneName="America/Resolute"
+        shortGenericTimeZoneName="Central Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Rio Branco"
+        originalTimeZoneName="America/Rio_Branco"
+        shortGenericTimeZoneName="Acre Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-8:00"
+        cityName="Santa Isabel"
+        originalTimeZoneName="America/Santa_Isabel"
+        shortGenericTimeZoneName="Northwest Mexico Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Santarem"
+        originalTimeZoneName="America/Santarem"
+        shortGenericTimeZoneName="Brasilia Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Santiago"
+        originalTimeZoneName="America/Santiago"
+        shortGenericTimeZoneName="Chile Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Santo Domingo"
+        originalTimeZoneName="America/Santo_Domingo"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Sao Paulo"
+        originalTimeZoneName="America/Sao_Paulo"
+        shortGenericTimeZoneName="Brasilia Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-1:00"
+        cityName="Scoresbysund"
+        originalTimeZoneName="America/Scoresbysund"
+        shortGenericTimeZoneName="East Greenland Time" />
+    <TimeZoneBean
+        abbreviation="GMT-7:00"
+        cityName="Shiprock"
+        originalTimeZoneName="America/Shiprock"
+        shortGenericTimeZoneName="Mountain Time" />
+    <TimeZoneBean
+        abbreviation="GMT-9:00"
+        cityName="Sitka"
+        originalTimeZoneName="America/Sitka"
+        shortGenericTimeZoneName="Alaska Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="St Barthelemy"
+        originalTimeZoneName="America/St_Barthelemy"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:30"
+        cityName="St Johns"
+        originalTimeZoneName="America/St_Johns"
+        shortGenericTimeZoneName="Newfoundland Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="St Kitts"
+        originalTimeZoneName="America/St_Kitts"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="St Lucia"
+        originalTimeZoneName="America/St_Lucia"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="St Thomas"
+        originalTimeZoneName="America/St_Thomas"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="St Vincent"
+        originalTimeZoneName="America/St_Vincent"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Swift Current"
+        originalTimeZoneName="America/Swift_Current"
+        shortGenericTimeZoneName="Central Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Tegucigalpa"
+        originalTimeZoneName="America/Tegucigalpa"
+        shortGenericTimeZoneName="Central Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Thule"
+        originalTimeZoneName="America/Thule"
+        shortGenericTimeZoneName="Atlantic Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Thunder Bay"
+        originalTimeZoneName="America/Thunder_Bay"
+        shortGenericTimeZoneName="Eastern Time" />
+    <TimeZoneBean
+        abbreviation="GMT-8:00"
+        cityName="Tijuana"
+        originalTimeZoneName="America/Tijuana"
+        shortGenericTimeZoneName="Pacific Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Toronto"
+        originalTimeZoneName="America/Toronto"
+        shortGenericTimeZoneName="Eastern Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Tortola"
+        originalTimeZoneName="America/Tortola"
+        shortGenericTimeZoneName="Atlantic Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-8:00"
+        cityName="Vancouver"
+        originalTimeZoneName="America/Vancouver"
+        shortGenericTimeZoneName="Pacific Time" />
+    <TimeZoneBean
+        abbreviation="GMT-7:00"
+        cityName="Whitehorse"
+        originalTimeZoneName="America/Whitehorse"
+        shortGenericTimeZoneName="Yukon Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Winnipeg"
+        originalTimeZoneName="America/Winnipeg"
+        shortGenericTimeZoneName="Central Time" />
+    <TimeZoneBean
+        abbreviation="GMT-9:00"
+        cityName="Yakutat"
+        originalTimeZoneName="America/Yakutat"
+        shortGenericTimeZoneName="Alaska Time" />
+    <TimeZoneBean
+        abbreviation="GMT-7:00"
+        cityName="Yellowknife"
+        originalTimeZoneName="America/Yellowknife"
+        shortGenericTimeZoneName="Mountain Time" />
+    <TimeZoneBean
+        abbreviation="GMT+11:00"
+        cityName="Casey"
+        originalTimeZoneName="Antarctica/Casey"
+        shortGenericTimeZoneName="Casey Time" />
+    <TimeZoneBean
+        abbreviation="GMT+7:00"
+        cityName="Davis"
+        originalTimeZoneName="Antarctica/Davis"
+        shortGenericTimeZoneName="Davis Time" />
+    <TimeZoneBean
+        abbreviation="GMT+10:00"
+        cityName="DumontDUrville"
+        originalTimeZoneName="Antarctica/DumontDUrville"
+        shortGenericTimeZoneName="Dumont-d’Urville Time" />
+    <TimeZoneBean
+        abbreviation="GMT+11:00"
+        cityName="Macquarie"
+        originalTimeZoneName="Antarctica/Macquarie"
+        shortGenericTimeZoneName="Eastern Australia Time" />
+    <TimeZoneBean
+        abbreviation="GMT+5:00"
+        cityName="Mawson"
+        originalTimeZoneName="Antarctica/Mawson"
+        shortGenericTimeZoneName="Mawson Time" />
+    <TimeZoneBean
+        abbreviation="GMT+13:00"
+        cityName="McMurdo"
+        originalTimeZoneName="Antarctica/McMurdo"
+        shortGenericTimeZoneName="New Zealand Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Palmer"
+        originalTimeZoneName="Antarctica/Palmer"
+        shortGenericTimeZoneName="Palmer Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Rothera"
+        originalTimeZoneName="Antarctica/Rothera"
+        shortGenericTimeZoneName="Rothera Time" />
+    <TimeZoneBean
+        abbreviation="GMT+13:00"
+        cityName="South Pole"
+        originalTimeZoneName="Antarctica/South_Pole"
+        shortGenericTimeZoneName="New Zealand Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Syowa"
+        originalTimeZoneName="Antarctica/Syowa"
+        shortGenericTimeZoneName="Syowa Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Troll"
+        originalTimeZoneName="Antarctica/Troll"
+        shortGenericTimeZoneName="Troll Time" />
+    <TimeZoneBean
+        abbreviation="GMT+6:00"
+        cityName="Vostok"
+        originalTimeZoneName="Antarctica/Vostok"
+        shortGenericTimeZoneName="Vostok Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Longyearbyen"
+        originalTimeZoneName="Arctic/Longyearbyen"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Aden"
+        originalTimeZoneName="Asia/Aden"
+        shortGenericTimeZoneName="Arabian Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+6:00"
+        cityName="Almaty"
+        originalTimeZoneName="Asia/Almaty"
+        shortGenericTimeZoneName="East Kazakhstan Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Amman"
+        originalTimeZoneName="Asia/Amman"
+        shortGenericTimeZoneName="Jordan Time" />
+    <TimeZoneBean
+        abbreviation="GMT+12:00"
+        cityName="Anadyr"
+        originalTimeZoneName="Asia/Anadyr"
+        shortGenericTimeZoneName="Anadyr Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+5:00"
+        cityName="Aqtau"
+        originalTimeZoneName="Asia/Aqtau"
+        shortGenericTimeZoneName="West Kazakhstan Time" />
+    <TimeZoneBean
+        abbreviation="GMT+5:00"
+        cityName="Aqtobe"
+        originalTimeZoneName="Asia/Aqtobe"
+        shortGenericTimeZoneName="West Kazakhstan Time" />
+    <TimeZoneBean
+        abbreviation="GMT+5:00"
+        cityName="Ashgabat"
+        originalTimeZoneName="Asia/Ashgabat"
+        shortGenericTimeZoneName="Turkmenistan Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+5:00"
+        cityName="Atyrau"
+        originalTimeZoneName="Asia/Atyrau"
+        shortGenericTimeZoneName="West Kazakhstan Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Baghdad"
+        originalTimeZoneName="Asia/Baghdad"
+        shortGenericTimeZoneName="Arabian Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Bahrain"
+        originalTimeZoneName="Asia/Bahrain"
+        shortGenericTimeZoneName="Arabian Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+4:00"
+        cityName="Baku"
+        originalTimeZoneName="Asia/Baku"
+        shortGenericTimeZoneName="Azerbaijan Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+7:00"
+        cityName="Bangkok"
+        originalTimeZoneName="Asia/Bangkok"
+        shortGenericTimeZoneName="Indochina Time" />
+    <TimeZoneBean
+        abbreviation="GMT+7:00"
+        cityName="Barnaul"
+        originalTimeZoneName="Asia/Barnaul"
+        shortGenericTimeZoneName="Barnaul Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Beirut"
+        originalTimeZoneName="Asia/Beirut"
+        shortGenericTimeZoneName="Eastern European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+6:00"
+        cityName="Bishkek"
+        originalTimeZoneName="Asia/Bishkek"
+        shortGenericTimeZoneName="Kyrgyzstan Time" />
+    <TimeZoneBean
+        abbreviation="GMT+8:00"
+        cityName="Brunei"
+        originalTimeZoneName="Asia/Brunei"
+        shortGenericTimeZoneName="Brunei Darussalam Time" />
+    <TimeZoneBean
+        abbreviation="GMT+5:30"
+        cityName="Calcutta"
+        originalTimeZoneName="Asia/Calcutta"
+        shortGenericTimeZoneName="India Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+9:00"
+        cityName="Chita"
+        originalTimeZoneName="Asia/Chita"
+        shortGenericTimeZoneName="Yakutsk Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+8:00"
+        cityName="Choibalsan"
+        originalTimeZoneName="Asia/Choibalsan"
+        shortGenericTimeZoneName="Ulaanbaatar Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+8:00"
+        cityName="Chongqing"
+        originalTimeZoneName="Asia/Chongqing"
+        shortGenericTimeZoneName="China Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+5:30"
+        cityName="Colombo"
+        originalTimeZoneName="Asia/Colombo"
+        shortGenericTimeZoneName="India Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Damascus"
+        originalTimeZoneName="Asia/Damascus"
+        shortGenericTimeZoneName="Syria Time" />
+    <TimeZoneBean
+        abbreviation="GMT+6:00"
+        cityName="Dhaka"
+        originalTimeZoneName="Asia/Dhaka"
+        shortGenericTimeZoneName="Bangladesh Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+9:00"
+        cityName="Dili"
+        originalTimeZoneName="Asia/Dili"
+        shortGenericTimeZoneName="East Timor Time" />
+    <TimeZoneBean
+        abbreviation="GMT+4:00"
+        cityName="Dubai"
+        originalTimeZoneName="Asia/Dubai"
+        shortGenericTimeZoneName="Gulf Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+5:00"
+        cityName="Dushanbe"
+        originalTimeZoneName="Asia/Dushanbe"
+        shortGenericTimeZoneName="Tajikistan Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Famagusta"
+        originalTimeZoneName="Asia/Famagusta"
+        shortGenericTimeZoneName="Famagusta Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Gaza"
+        originalTimeZoneName="Asia/Gaza"
+        shortGenericTimeZoneName="Eastern European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+8:00"
+        cityName="Harbin"
+        originalTimeZoneName="Asia/Harbin"
+        shortGenericTimeZoneName="China Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Hebron"
+        originalTimeZoneName="Asia/Hebron"
+        shortGenericTimeZoneName="Eastern European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+7:00"
+        cityName="Ho Chi Minh"
+        originalTimeZoneName="Asia/Ho_Chi_Minh"
+        shortGenericTimeZoneName="Indochina Time" />
+    <TimeZoneBean
+        abbreviation="GMT+8:00"
+        cityName="Hong Kong"
+        originalTimeZoneName="Asia/Hong_Kong"
+        shortGenericTimeZoneName="Hong Kong Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+7:00"
+        cityName="Hovd"
+        originalTimeZoneName="Asia/Hovd"
+        shortGenericTimeZoneName="Hovd Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+8:00"
+        cityName="Irkutsk"
+        originalTimeZoneName="Asia/Irkutsk"
+        shortGenericTimeZoneName="Irkutsk Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+7:00"
+        cityName="Jakarta"
+        originalTimeZoneName="Asia/Jakarta"
+        shortGenericTimeZoneName="Western Indonesia Time" />
+    <TimeZoneBean
+        abbreviation="GMT+9:00"
+        cityName="Jayapura"
+        originalTimeZoneName="Asia/Jayapura"
+        shortGenericTimeZoneName="Eastern Indonesia Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Jerusalem"
+        originalTimeZoneName="Asia/Jerusalem"
+        shortGenericTimeZoneName="Israel Time" />
+    <TimeZoneBean
+        abbreviation="GMT+4:30"
+        cityName="Kabul"
+        originalTimeZoneName="Asia/Kabul"
+        shortGenericTimeZoneName="Afghanistan Time" />
+    <TimeZoneBean
+        abbreviation="GMT+12:00"
+        cityName="Kamchatka"
+        originalTimeZoneName="Asia/Kamchatka"
+        shortGenericTimeZoneName="Petropavlovsk-Kamchatski Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+5:00"
+        cityName="Karachi"
+        originalTimeZoneName="Asia/Karachi"
+        shortGenericTimeZoneName="Pakistan Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+6:00"
+        cityName="Kashgar"
+        originalTimeZoneName="Asia/Kashgar"
+        shortGenericTimeZoneName="Urumqi Time" />
+    <TimeZoneBean
+        abbreviation="GMT+5:45"
+        cityName="Kathmandu"
+        originalTimeZoneName="Asia/Kathmandu"
+        shortGenericTimeZoneName="Nepal Time" />
+    <TimeZoneBean
+        abbreviation="GMT+5:45"
+        cityName="Katmandu"
+        originalTimeZoneName="Asia/Katmandu"
+        shortGenericTimeZoneName="Nepal Time" />
+    <TimeZoneBean
+        abbreviation="GMT+9:00"
+        cityName="Khandyga"
+        originalTimeZoneName="Asia/Khandyga"
+        shortGenericTimeZoneName="Yakutsk Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+7:00"
+        cityName="Krasnoyarsk"
+        originalTimeZoneName="Asia/Krasnoyarsk"
+        shortGenericTimeZoneName="Krasnoyarsk Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+8:00"
+        cityName="Kuala Lumpur"
+        originalTimeZoneName="Asia/Kuala_Lumpur"
+        shortGenericTimeZoneName="Malaysia Time" />
+    <TimeZoneBean
+        abbreviation="GMT+8:00"
+        cityName="Kuching"
+        originalTimeZoneName="Asia/Kuching"
+        shortGenericTimeZoneName="Malaysia Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Kuwait"
+        originalTimeZoneName="Asia/Kuwait"
+        shortGenericTimeZoneName="Arabian Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+8:00"
+        cityName="Macau"
+        originalTimeZoneName="Asia/Macau"
+        shortGenericTimeZoneName="China Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+11:00"
+        cityName="Magadan"
+        originalTimeZoneName="Asia/Magadan"
+        shortGenericTimeZoneName="Magadan Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+8:00"
+        cityName="Makassar"
+        originalTimeZoneName="Asia/Makassar"
+        shortGenericTimeZoneName="Central Indonesia Time" />
+    <TimeZoneBean
+        abbreviation="GMT+8:00"
+        cityName="Manila"
+        originalTimeZoneName="Asia/Manila"
+        shortGenericTimeZoneName="Philippine Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+4:00"
+        cityName="Muscat"
+        originalTimeZoneName="Asia/Muscat"
+        shortGenericTimeZoneName="Gulf Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Nicosia"
+        originalTimeZoneName="Asia/Nicosia"
+        shortGenericTimeZoneName="Eastern European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+7:00"
+        cityName="Novokuznetsk"
+        originalTimeZoneName="Asia/Novokuznetsk"
+        shortGenericTimeZoneName="Krasnoyarsk Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+7:00"
+        cityName="Novosibirsk"
+        originalTimeZoneName="Asia/Novosibirsk"
+        shortGenericTimeZoneName="Novosibirsk Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+6:00"
+        cityName="Omsk"
+        originalTimeZoneName="Asia/Omsk"
+        shortGenericTimeZoneName="Omsk Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+5:00"
+        cityName="Oral"
+        originalTimeZoneName="Asia/Oral"
+        shortGenericTimeZoneName="West Kazakhstan Time" />
+    <TimeZoneBean
+        abbreviation="GMT+7:00"
+        cityName="Phnom Penh"
+        originalTimeZoneName="Asia/Phnom_Penh"
+        shortGenericTimeZoneName="Indochina Time" />
+    <TimeZoneBean
+        abbreviation="GMT+7:00"
+        cityName="Pontianak"
+        originalTimeZoneName="Asia/Pontianak"
+        shortGenericTimeZoneName="Western Indonesia Time" />
+    <TimeZoneBean
+        abbreviation="GMT+9:00"
+        cityName="Pyongyang"
+        originalTimeZoneName="Asia/Pyongyang"
+        shortGenericTimeZoneName="Korean Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Qatar"
+        originalTimeZoneName="Asia/Qatar"
+        shortGenericTimeZoneName="Arabian Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+6:00"
+        cityName="Qostanay"
+        originalTimeZoneName="Asia/Qostanay"
+        shortGenericTimeZoneName="East Kazakhstan Time" />
+    <TimeZoneBean
+        abbreviation="GMT+5:00"
+        cityName="Qyzylorda"
+        originalTimeZoneName="Asia/Qyzylorda"
+        shortGenericTimeZoneName="West Kazakhstan Time" /><!--###这里多了Rangoon-->
+    <TimeZoneBean
+        abbreviation="GMT+6:30"
+        cityName="Rangoon"
+        originalTimeZoneName="Asia/Rangoon"
+        shortGenericTimeZoneName="Myanmar Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Riyadh"
+        originalTimeZoneName="Asia/Riyadh"
+        shortGenericTimeZoneName="Arabian Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+11:00"
+        cityName="Sakhalin"
+        originalTimeZoneName="Asia/Sakhalin"
+        shortGenericTimeZoneName="Sakhalin Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+5:00"
+        cityName="Samarkand"
+        originalTimeZoneName="Asia/Samarkand"
+        shortGenericTimeZoneName="Uzbekistan Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+9:00"
+        cityName="Seoul"
+        originalTimeZoneName="Asia/Seoul"
+        shortGenericTimeZoneName="Korean Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+8:00"
+        cityName="Shanghai"
+        originalTimeZoneName="Asia/Shanghai"
+        shortGenericTimeZoneName="China Standard Time" />
+
+    <TimeZoneBean
+        abbreviation="GMT+8:00"
+        cityName="Singapore"
+        originalTimeZoneName="Asia/Singapore"
+        shortGenericTimeZoneName="Singapore Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+11:00"
+        cityName="Srednekolymsk"
+        originalTimeZoneName="Asia/Srednekolymsk"
+        shortGenericTimeZoneName="Srednekolymsk Time" />
+
+    <TimeZoneBean
+        abbreviation="GMT+8:00"
+        cityName="Taipei"
+        originalTimeZoneName="Asia/Taipei"
+        shortGenericTimeZoneName="Taipei Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+5:00"
+        cityName="Tashkent"
+        originalTimeZoneName="Asia/Tashkent"
+        shortGenericTimeZoneName="Uzbekistan Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+4:00"
+        cityName="Tbilisi"
+        originalTimeZoneName="Asia/Tbilisi"
+        shortGenericTimeZoneName="Georgia Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:30"
+        cityName="Tehran"
+        originalTimeZoneName="Asia/Tehran"
+        shortGenericTimeZoneName="Iran Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+6:00"
+        cityName="Thimphu"
+        originalTimeZoneName="Asia/Thimphu"
+        shortGenericTimeZoneName="Bhutan Time" />
+    <TimeZoneBean
+        abbreviation="GMT+9:00"
+        cityName="Tokyo"
+        originalTimeZoneName="Asia/Tokyo"
+        shortGenericTimeZoneName="Japan Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+7:00"
+        cityName="Tomsk"
+        originalTimeZoneName="Asia/Tomsk"
+        shortGenericTimeZoneName="Tomsk Time" />
+    <TimeZoneBean
+        abbreviation="GMT+8:00"
+        cityName="Ulaanbaatar"
+        originalTimeZoneName="Asia/Ulaanbaatar"
+        shortGenericTimeZoneName="Ulaanbaatar Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+6:00"
+        cityName="Urumqi"
+        originalTimeZoneName="Asia/Urumqi"
+        shortGenericTimeZoneName="Urumqi Time" />
+    <TimeZoneBean
+        abbreviation="GMT+10:00"
+        cityName="Ust-Nera"
+        originalTimeZoneName="Asia/Ust-Nera"
+        shortGenericTimeZoneName="Vladivostok Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+7:00"
+        cityName="Vientiane"
+        originalTimeZoneName="Asia/Vientiane"
+        shortGenericTimeZoneName="Indochina Time" />
+    <TimeZoneBean
+        abbreviation="GMT+10:00"
+        cityName="Vladivostok"
+        originalTimeZoneName="Asia/Vladivostok"
+        shortGenericTimeZoneName="Vladivostok Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+9:00"
+        cityName="Yakutsk"
+        originalTimeZoneName="Asia/Yakutsk"
+        shortGenericTimeZoneName="Yakutsk Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+6:30"
+        cityName="Yangon"
+        originalTimeZoneName="Asia/Yangon"
+        shortGenericTimeZoneName="Myanmar Time" />
+    <TimeZoneBean
+        abbreviation="GMT+5:00"
+        cityName="Yekaterinburg"
+        originalTimeZoneName="Asia/Yekaterinburg"
+        shortGenericTimeZoneName="Yekaterinburg Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+4:00"
+        cityName="Yerevan"
+        originalTimeZoneName="Asia/Yerevan"
+        shortGenericTimeZoneName="Armenia Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-1:00"
+        cityName="Azores"
+        originalTimeZoneName="Atlantic/Azores"
+        shortGenericTimeZoneName="Azores Time" />
+    <TimeZoneBean
+        abbreviation="GMT-4:00"
+        cityName="Bermuda"
+        originalTimeZoneName="Atlantic/Bermuda"
+        shortGenericTimeZoneName="Atlantic Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Canary"
+        originalTimeZoneName="Atlantic/Canary"
+        shortGenericTimeZoneName="Western European Time" />
+    <TimeZoneBean
+        abbreviation="GMT-1:00"
+        cityName="Cape Verde"
+        originalTimeZoneName="Atlantic/Cape_Verde"
+        shortGenericTimeZoneName="Cape Verde Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Faroe"
+        originalTimeZoneName="Atlantic/Faroe"
+        shortGenericTimeZoneName="Western European Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Madeira"
+        originalTimeZoneName="Atlantic/Madeira"
+        shortGenericTimeZoneName="Western European Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Reykjavik"
+        originalTimeZoneName="Atlantic/Reykjavik"
+        shortGenericTimeZoneName="Greenwich Mean Time" />
+    <TimeZoneBean
+        abbreviation="GMT-2:00"
+        cityName="South Georgia"
+        originalTimeZoneName="Atlantic/South_Georgia"
+        shortGenericTimeZoneName="South Georgia Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="St Helena"
+        originalTimeZoneName="Atlantic/St_Helena"
+        shortGenericTimeZoneName="Greenwich Mean Time" />
+    <TimeZoneBean
+        abbreviation="GMT-3:00"
+        cityName="Stanley"
+        originalTimeZoneName="Atlantic/Stanley"
+        shortGenericTimeZoneName="Falkland Islands Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+10:30"
+        cityName="Adelaide"
+        originalTimeZoneName="Australia/Adelaide"
+        shortGenericTimeZoneName="Central Australia Time" />
+    <TimeZoneBean
+        abbreviation="GMT+10:00"
+        cityName="Brisbane"
+        originalTimeZoneName="Australia/Brisbane"
+        shortGenericTimeZoneName="Australian Eastern Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+10:30"
+        cityName="Broken Hill"
+        originalTimeZoneName="Australia/Broken_Hill"
+        shortGenericTimeZoneName="Central Australia Time" />
+    <TimeZoneBean
+        abbreviation="GMT+11:00"
+        cityName="Currie"
+        originalTimeZoneName="Australia/Currie"
+        shortGenericTimeZoneName="Eastern Australia Time" />
+    <TimeZoneBean
+        abbreviation="GMT+9:30"
+        cityName="Darwin"
+        originalTimeZoneName="Australia/Darwin"
+        shortGenericTimeZoneName="Australian Central Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+8:45"
+        cityName="Eucla"
+        originalTimeZoneName="Australia/Eucla"
+        shortGenericTimeZoneName="Australian Central Western Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+11:00"
+        cityName="Hobart"
+        originalTimeZoneName="Australia/Hobart"
+        shortGenericTimeZoneName="Eastern Australia Time" />
+    <TimeZoneBean
+        abbreviation="GMT+10:00"
+        cityName="Lindeman"
+        originalTimeZoneName="Australia/Lindeman"
+        shortGenericTimeZoneName="Australian Eastern Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+11:00"
+        cityName="Lord Howe"
+        originalTimeZoneName="Australia/Lord_Howe"
+        shortGenericTimeZoneName="Lord Howe Time" />
+    <TimeZoneBean
+        abbreviation="GMT+11:00"
+        cityName="Melbourne"
+        originalTimeZoneName="Australia/Melbourne"
+        shortGenericTimeZoneName="Eastern Australia Time" />
+    <TimeZoneBean
+        abbreviation="GMT+8:00"
+        cityName="Perth"
+        originalTimeZoneName="Australia/Perth"
+        shortGenericTimeZoneName="Australian Western Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+11:00"
+        cityName="Sydney"
+        originalTimeZoneName="Australia/Sydney"
+        shortGenericTimeZoneName="Eastern Australia Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Amsterdam"
+        originalTimeZoneName="Europe/Amsterdam"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Andorra"
+        originalTimeZoneName="Europe/Andorra"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+4:00"
+        cityName="Astrakhan"
+        originalTimeZoneName="Europe/Astrakhan"
+        shortGenericTimeZoneName="Astrakhan Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Athens"
+        originalTimeZoneName="Europe/Athens"
+        shortGenericTimeZoneName="Eastern European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Belgrade"
+        originalTimeZoneName="Europe/Belgrade"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Berlin"
+        originalTimeZoneName="Europe/Berlin"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Bratislava"
+        originalTimeZoneName="Europe/Bratislava"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Brussels"
+        originalTimeZoneName="Europe/Brussels"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Bucharest"
+        originalTimeZoneName="Europe/Bucharest"
+        shortGenericTimeZoneName="Eastern European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Budapest"
+        originalTimeZoneName="Europe/Budapest"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Busingen"
+        originalTimeZoneName="Europe/Busingen"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Chisinau"
+        originalTimeZoneName="Europe/Chisinau"
+        shortGenericTimeZoneName="Eastern European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Copenhagen"
+        originalTimeZoneName="Europe/Copenhagen"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Dublin"
+        originalTimeZoneName="Europe/Dublin"
+        shortGenericTimeZoneName="Ireland Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Gibraltar"
+        originalTimeZoneName="Europe/Gibraltar"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Guernsey"
+        originalTimeZoneName="Europe/Guernsey"
+        shortGenericTimeZoneName="Guernsey Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Helsinki"
+        originalTimeZoneName="Europe/Helsinki"
+        shortGenericTimeZoneName="Eastern European Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Isle of Man"
+        originalTimeZoneName="Europe/Isle_of_Man"
+        shortGenericTimeZoneName="Isle of Man Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Istanbul"
+        originalTimeZoneName="Europe/Istanbul"
+        shortGenericTimeZoneName="Türkiye Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Jersey"
+        originalTimeZoneName="Europe/Jersey"
+        shortGenericTimeZoneName="Jersey Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Kaliningrad"
+        originalTimeZoneName="Europe/Kaliningrad"
+        shortGenericTimeZoneName="Eastern European Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Kiev"
+        originalTimeZoneName="Europe/Kiev"
+        shortGenericTimeZoneName="Eastern European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Kirov"
+        originalTimeZoneName="Europe/Kirov"
+        shortGenericTimeZoneName="Kirov Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Kyiv"
+        originalTimeZoneName="Europe/Kyiv"
+        shortGenericTimeZoneName="Eastern European Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="Lisbon"
+        originalTimeZoneName="Europe/Lisbon"
+        shortGenericTimeZoneName="Western European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Ljubljana"
+        originalTimeZoneName="Europe/Ljubljana"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT"
+        cityName="London"
+        originalTimeZoneName="Europe/London"
+        shortGenericTimeZoneName="United Kingdom Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Luxembourg"
+        originalTimeZoneName="Europe/Luxembourg"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Madrid"
+        originalTimeZoneName="Europe/Madrid"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Malta"
+        originalTimeZoneName="Europe/Malta"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Mariehamn"
+        originalTimeZoneName="Europe/Mariehamn"
+        shortGenericTimeZoneName="Eastern European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Minsk"
+        originalTimeZoneName="Europe/Minsk"
+        shortGenericTimeZoneName="Moscow Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Monaco"
+        originalTimeZoneName="Europe/Monaco"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Moscow"
+        originalTimeZoneName="Europe/Moscow"
+        shortGenericTimeZoneName="Moscow Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Oslo"
+        originalTimeZoneName="Europe/Oslo"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Paris"
+        originalTimeZoneName="Europe/Paris"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Podgorica"
+        originalTimeZoneName="Europe/Podgorica"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Prague"
+        originalTimeZoneName="Europe/Prague"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Riga"
+        originalTimeZoneName="Europe/Riga"
+        shortGenericTimeZoneName="Eastern European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Rome"
+        originalTimeZoneName="Europe/Rome"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+4:00"
+        cityName="Samara"
+        originalTimeZoneName="Europe/Samara"
+        shortGenericTimeZoneName="Samara Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="San Marino"
+        originalTimeZoneName="Europe/San_Marino"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Sarajevo"
+        originalTimeZoneName="Europe/Sarajevo"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+4:00"
+        cityName="Saratov"
+        originalTimeZoneName="Europe/Saratov"
+        shortGenericTimeZoneName="Saratov Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Simferopol"
+        originalTimeZoneName="Europe/Simferopol"
+        shortGenericTimeZoneName="Moscow Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Skopje"
+        originalTimeZoneName="Europe/Skopje"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Sofia"
+        originalTimeZoneName="Europe/Sofia"
+        shortGenericTimeZoneName="Eastern European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Stockholm"
+        originalTimeZoneName="Europe/Stockholm"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Tallinn"
+        originalTimeZoneName="Europe/Tallinn"
+        shortGenericTimeZoneName="Eastern European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Tirane"
+        originalTimeZoneName="Europe/Tirane"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+4:00"
+        cityName="Ulyanovsk"
+        originalTimeZoneName="Europe/Ulyanovsk"
+        shortGenericTimeZoneName="Ulyanovsk Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Uzhgorod"
+        originalTimeZoneName="Europe/Uzhgorod"
+        shortGenericTimeZoneName="Eastern European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Vaduz"
+        originalTimeZoneName="Europe/Vaduz"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Vatican"
+        originalTimeZoneName="Europe/Vatican"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Vienna"
+        originalTimeZoneName="Europe/Vienna"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Vilnius"
+        originalTimeZoneName="Europe/Vilnius"
+        shortGenericTimeZoneName="Eastern European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Volgograd"
+        originalTimeZoneName="Europe/Volgograd"
+        shortGenericTimeZoneName="Volgograd Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Warsaw"
+        originalTimeZoneName="Europe/Warsaw"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Zagreb"
+        originalTimeZoneName="Europe/Zagreb"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+2:00"
+        cityName="Zaporozhye"
+        originalTimeZoneName="Europe/Zaporozhye"
+        shortGenericTimeZoneName="Eastern European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+1:00"
+        cityName="Zurich"
+        originalTimeZoneName="Europe/Zurich"
+        shortGenericTimeZoneName="Central European Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Antananarivo"
+        originalTimeZoneName="Indian/Antananarivo"
+        shortGenericTimeZoneName="East Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT+6:00"
+        cityName="Chagos"
+        originalTimeZoneName="Indian/Chagos"
+        shortGenericTimeZoneName="Indian Ocean Time" />
+    <TimeZoneBean
+        abbreviation="GMT+7:00"
+        cityName="Christmas"
+        originalTimeZoneName="Indian/Christmas"
+        shortGenericTimeZoneName="Christmas Island Time" />
+    <TimeZoneBean
+        abbreviation="GMT+6:30"
+        cityName="Cocos"
+        originalTimeZoneName="Indian/Cocos"
+        shortGenericTimeZoneName="Cocos Islands Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Comoro"
+        originalTimeZoneName="Indian/Comoro"
+        shortGenericTimeZoneName="East Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT+5:00"
+        cityName="Kerguelen"
+        originalTimeZoneName="Indian/Kerguelen"
+        shortGenericTimeZoneName="French Southern &amp; Antarctic Time" />
+    <TimeZoneBean
+        abbreviation="GMT+4:00"
+        cityName="Mahe"
+        originalTimeZoneName="Indian/Mahe"
+        shortGenericTimeZoneName="Seychelles Time" />
+    <TimeZoneBean
+        abbreviation="GMT+5:00"
+        cityName="Maldives"
+        originalTimeZoneName="Indian/Maldives"
+        shortGenericTimeZoneName="Maldives Time" />
+    <TimeZoneBean
+        abbreviation="GMT+4:00"
+        cityName="Mauritius"
+        originalTimeZoneName="Indian/Mauritius"
+        shortGenericTimeZoneName="Mauritius Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+3:00"
+        cityName="Mayotte"
+        originalTimeZoneName="Indian/Mayotte"
+        shortGenericTimeZoneName="East Africa Time" />
+    <TimeZoneBean
+        abbreviation="GMT+4:00"
+        cityName="Reunion"
+        originalTimeZoneName="Indian/Reunion"
+        shortGenericTimeZoneName="Réunion Time" />
+    <TimeZoneBean
+        abbreviation="GMT+13:00"
+        cityName="Apia"
+        originalTimeZoneName="Pacific/Apia"
+        shortGenericTimeZoneName="Apia Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+13:00"
+        cityName="Auckland"
+        originalTimeZoneName="Pacific/Auckland"
+        shortGenericTimeZoneName="New Zealand Time" />
+    <TimeZoneBean
+        abbreviation="GMT+11:00"
+        cityName="Bougainville"
+        originalTimeZoneName="Pacific/Bougainville"
+        shortGenericTimeZoneName="Bougainville Time" />
+    <TimeZoneBean
+        abbreviation="GMT+13:45"
+        cityName="Chatham"
+        originalTimeZoneName="Pacific/Chatham"
+        shortGenericTimeZoneName="Chatham Time" />
+    <TimeZoneBean
+        abbreviation="GMT+10:00"
+        cityName="Chuuk"
+        originalTimeZoneName="Pacific/Chuuk"
+        shortGenericTimeZoneName="Chuuk Time" />
+    <TimeZoneBean
+        abbreviation="GMT-5:00"
+        cityName="Easter"
+        originalTimeZoneName="Pacific/Easter"
+        shortGenericTimeZoneName="Easter Island Time" />
+    <TimeZoneBean
+        abbreviation="GMT+11:00"
+        cityName="Efate"
+        originalTimeZoneName="Pacific/Efate"
+        shortGenericTimeZoneName="Vanuatu Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+13:00"
+        cityName="Enderbury"
+        originalTimeZoneName="Pacific/Enderbury"
+        shortGenericTimeZoneName="Phoenix Islands Time" />
+    <TimeZoneBean
+        abbreviation="GMT+13:00"
+        cityName="Fakaofo"
+        originalTimeZoneName="Pacific/Fakaofo"
+        shortGenericTimeZoneName="Tokelau Time" />
+    <TimeZoneBean
+        abbreviation="GMT+12:00"
+        cityName="Fiji"
+        originalTimeZoneName="Pacific/Fiji"
+        shortGenericTimeZoneName="Fiji Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+12:00"
+        cityName="Funafuti"
+        originalTimeZoneName="Pacific/Funafuti"
+        shortGenericTimeZoneName="Tuvalu Time" />
+    <TimeZoneBean
+        abbreviation="GMT-6:00"
+        cityName="Galapagos"
+        originalTimeZoneName="Pacific/Galapagos"
+        shortGenericTimeZoneName="Galapagos Time" />
+    <TimeZoneBean
+        abbreviation="GMT-9:00"
+        cityName="Gambier"
+        originalTimeZoneName="Pacific/Gambier"
+        shortGenericTimeZoneName="Gambier Time" />
+    <TimeZoneBean
+        abbreviation="GMT+11:00"
+        cityName="Guadalcanal"
+        originalTimeZoneName="Pacific/Guadalcanal"
+        shortGenericTimeZoneName="Solomon Islands Time" />
+    <TimeZoneBean
+        abbreviation="GMT+10:00"
+        cityName="Guam"
+        originalTimeZoneName="Pacific/Guam"
+        shortGenericTimeZoneName="Chamorro Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-10:00"
+        cityName="Honolulu"
+        originalTimeZoneName="Pacific/Honolulu"
+        shortGenericTimeZoneName="Hawaii-Aleutian Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-10:00"
+        cityName="Johnston"
+        originalTimeZoneName="Pacific/Johnston"
+        shortGenericTimeZoneName="Hawaii-Aleutian Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+13:00"
+        cityName="Kanton"
+        originalTimeZoneName="Pacific/Kanton"
+        shortGenericTimeZoneName="Phoenix Islands Time" />
+    <TimeZoneBean
+        abbreviation="GMT+14:00"
+        cityName="Kiritimati"
+        originalTimeZoneName="Pacific/Kiritimati"
+        shortGenericTimeZoneName="Line Islands Time" />
+    <TimeZoneBean
+        abbreviation="GMT+11:00"
+        cityName="Kosrae"
+        originalTimeZoneName="Pacific/Kosrae"
+        shortGenericTimeZoneName="Kosrae Time" />
+    <TimeZoneBean
+        abbreviation="GMT+12:00"
+        cityName="Kwajalein"
+        originalTimeZoneName="Pacific/Kwajalein"
+        shortGenericTimeZoneName="Marshall Islands Time" />
+    <TimeZoneBean
+        abbreviation="GMT+12:00"
+        cityName="Majuro"
+        originalTimeZoneName="Pacific/Majuro"
+        shortGenericTimeZoneName="Marshall Islands Time" />
+    <TimeZoneBean
+        abbreviation="GMT-9:30"
+        cityName="Marquesas"
+        originalTimeZoneName="Pacific/Marquesas"
+        shortGenericTimeZoneName="Marquesas Time" />
+    <TimeZoneBean
+        abbreviation="GMT-11:00"
+        cityName="Midway"
+        originalTimeZoneName="Pacific/Midway"
+        shortGenericTimeZoneName="Samoa Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+12:00"
+        cityName="Nauru"
+        originalTimeZoneName="Pacific/Nauru"
+        shortGenericTimeZoneName="Nauru Time" />
+    <TimeZoneBean
+        abbreviation="GMT-11:00"
+        cityName="Niue"
+        originalTimeZoneName="Pacific/Niue"
+        shortGenericTimeZoneName="Niue Time" />
+    <TimeZoneBean
+        abbreviation="GMT+12:00"
+        cityName="Norfolk"
+        originalTimeZoneName="Pacific/Norfolk"
+        shortGenericTimeZoneName="Norfolk Island Time" />
+    <TimeZoneBean
+        abbreviation="GMT+11:00"
+        cityName="Noumea"
+        originalTimeZoneName="Pacific/Noumea"
+        shortGenericTimeZoneName="New Caledonia Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-11:00"
+        cityName="Pago Pago"
+        originalTimeZoneName="Pacific/Pago_Pago"
+        shortGenericTimeZoneName="Samoa Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+9:00"
+        cityName="Palau"
+        originalTimeZoneName="Pacific/Palau"
+        shortGenericTimeZoneName="Palau Time" />
+    <TimeZoneBean
+        abbreviation="GMT-8:00"
+        cityName="Pitcairn"
+        originalTimeZoneName="Pacific/Pitcairn"
+        shortGenericTimeZoneName="Pitcairn Time" />
+    <TimeZoneBean
+        abbreviation="GMT+11:00"
+        cityName="Pohnpei"
+        originalTimeZoneName="Pacific/Pohnpei"
+        shortGenericTimeZoneName="Ponape Time" />
+    <TimeZoneBean
+        abbreviation="GMT+11:00"
+        cityName="Ponape"
+        originalTimeZoneName="Pacific/Ponape"
+        shortGenericTimeZoneName="Ponape Time" />
+    <TimeZoneBean
+        abbreviation="GMT+10:00"
+        cityName="Port Moresby"
+        originalTimeZoneName="Pacific/Port_Moresby"
+        shortGenericTimeZoneName="Papua New Guinea Time" />
+    <TimeZoneBean
+        abbreviation="GMT-10:00"
+        cityName="Rarotonga"
+        originalTimeZoneName="Pacific/Rarotonga"
+        shortGenericTimeZoneName="Cook Islands Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+10:00"
+        cityName="Saipan"
+        originalTimeZoneName="Pacific/Saipan"
+        shortGenericTimeZoneName="Chamorro Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT-10:00"
+        cityName="Tahiti"
+        originalTimeZoneName="Pacific/Tahiti"
+        shortGenericTimeZoneName="Tahiti Time" />
+    <TimeZoneBean
+        abbreviation="GMT+12:00"
+        cityName="Tarawa"
+        originalTimeZoneName="Pacific/Tarawa"
+        shortGenericTimeZoneName="Gilbert Islands Time" />
+    <TimeZoneBean
+        abbreviation="GMT+13:00"
+        cityName="Tongatapu"
+        originalTimeZoneName="Pacific/Tongatapu"
+        shortGenericTimeZoneName="Tonga Standard Time" />
+    <TimeZoneBean
+        abbreviation="GMT+10:00"
+        cityName="Truk"
+        originalTimeZoneName="Pacific/Truk"
+        shortGenericTimeZoneName="Chuuk Time" />
+    <TimeZoneBean
+        abbreviation="GMT+12:00"
+        cityName="Wake"
+        originalTimeZoneName="Pacific/Wake"
+        shortGenericTimeZoneName="Wake Island Time" />
+    <TimeZoneBean
+        abbreviation="GMT+12:00"
+        cityName="Wallis"
+        originalTimeZoneName="Pacific/Wallis"
+        shortGenericTimeZoneName="Wallis &amp; Futuna Time" />
+</TimeZoneArray>

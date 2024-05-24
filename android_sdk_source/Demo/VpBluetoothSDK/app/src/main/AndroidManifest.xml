@@ -130,6 +130,10 @@
         <activity android:name=".activity.JLDeviceOPTActivity" android:exported="false"/>
         <activity android:name=".activity.ContactActivity" android:exported="false"/>
         <activity android:name=".activity.AddContactActivity" android:exported="false"/>
+        <activity android:name=".activity.WorldClockActivity" android:exported="false"/>
+        <activity android:name=".activity.AddClockActivity" android:exported="false"/>
+        <activity android:name=".activity.G08WHealthAlarmIntervalActivity" android:exported="false"/>
+        <activity android:name=".activity.EcgMultiLeadDetect1Activity" android:exported="false"/>
 
         <service
             android:name="com.inuker.bluetooth.library.BluetoothService"

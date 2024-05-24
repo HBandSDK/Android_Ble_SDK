@@ -73,6 +73,7 @@ import com.veepoo.protocol.listener.data.IFatigueDataListener;
 import com.veepoo.protocol.listener.data.IFindDeviceDatalistener;
 import com.veepoo.protocol.listener.data.IFindDevicelistener;
 import com.veepoo.protocol.listener.data.IFindPhonelistener;
+import com.veepoo.protocol.listener.data.IG08ProjectPPGLightCallBack;
 import com.veepoo.protocol.listener.data.IHRVOriginDataListener;
 import com.veepoo.protocol.listener.data.IHeartDataListener;
 import com.veepoo.protocol.listener.data.IHeartWaringDataListener;
@@ -2994,7 +2995,41 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
         } else if (oprater.equals(DETECT_STOP_BLOOD_COMPONENT)) {
             VPOperateManager.getInstance().stopDetectBloodComponent(writeResponse);
+        } else if (oprater.equals(DETECT_MULTI_ECG_DETECT)) {
+            startActivity(new Intent(this, EcgMultiLeadDetect1Activity.class));
+        } else if (oprater.equals(WORLD_CLOCK)) {
+            startActivity(new Intent(this, WorldClockActivity.class));
+        } else if (oprater.equals(G08W_HEALTH_ALARM_INTERVAL)) {
+            startActivity(new Intent(this, G08WHealthAlarmIntervalActivity.class));
+        } else if (oprater.equals(G08W_PPG_DATA_CALLBACK)) {
+            VPOperateManager.getInstance().setG08WProjectPPGLightDataCallback(true, new IG08ProjectPPGLightCallBack() {
+                @Override
+                public void onPPGLightCallBack(int lightType, List<Integer> data) {
+                    if (lightType == 0) {
+                        Logger.t(TAG).e("G08W-绿光  --》 " + list2Str(data));
+                        Toast.makeText(mContext, "G08W-绿光  --》 " + data.size(), Toast.LENGTH_SHORT).show();
+                    } else if (lightType == 1) {
+                        Logger.t(TAG).e("G08W-红光  --》 " + list2Str(data));
+                        Toast.makeText(mContext, "G08W-红光  --》 " + data.size(), Toast.LENGTH_SHORT).show();
+                    } else if (lightType == 2) {
+                        Logger.t(TAG).e("G08W-红外  --》 " + list2Str(data));
+                        Toast.makeText(mContext, "G08W-红外  --》 " + data.size(), Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
         }
+    }
+
+    private String list2Str(List<Integer> data) {
+        if (data == null || data.size() == 0) {
+            return "null";
+        }
+        int[] intArray = new int[data.size()];
+        for (int i = 0; i < data.size(); i++) {
+            intArray[i] = data.get(i);
+        }
+        return Arrays.toString(intArray);
     }
 
     private void readRR(final DayState dayState) {
