@@ -3735,6 +3735,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             public void onOriginHRVOriginListDataChange(List<HRVOriginData> originHrvDataList) {
                 HRVOriginData hrvOriginData = originHrvDataList.get(0);
                 String rate = hrvOriginData.getRate();
+                Logger.t(TAG).i("===========onOriginHRVOriginListDataChange");
             }
 
             @Override
