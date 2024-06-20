@@ -82,6 +82,7 @@ import com.veepoo.protocol.listener.data.ILanguageDataListener;
 import com.veepoo.protocol.listener.data.ILightDataCallBack;
 import com.veepoo.protocol.listener.data.ILongSeatDataListener;
 import com.veepoo.protocol.listener.data.ILowPowerListener;
+import com.veepoo.protocol.listener.data.IMagneticTherapyListener;
 import com.veepoo.protocol.listener.data.IMtuChangeListener;
 import com.veepoo.protocol.listener.data.IMusicControlListener;
 import com.veepoo.protocol.listener.data.INewBodyComponentReportListener;
@@ -141,6 +142,7 @@ import com.veepoo.protocol.model.datas.HrvAnalysisReport;
 import com.veepoo.protocol.model.datas.LanguageData;
 import com.veepoo.protocol.model.datas.LongSeatData;
 import com.veepoo.protocol.model.datas.LowPowerData;
+import com.veepoo.protocol.model.datas.MagneticTherapy;
 import com.veepoo.protocol.model.datas.MealInfo;
 import com.veepoo.protocol.model.datas.MusicData;
 import com.veepoo.protocol.model.datas.NightTurnWristeData;
@@ -192,6 +194,7 @@ import com.veepoo.protocol.model.enums.ETimeMode;
 import com.veepoo.protocol.model.enums.EUricAcidUnit;
 import com.veepoo.protocol.model.enums.EWeatherType;
 import com.veepoo.protocol.model.enums.EWomenStatus;
+import com.veepoo.protocol.model.enums.MagneticTherapyType;
 import com.veepoo.protocol.model.settings.Alarm2Setting;
 import com.veepoo.protocol.model.settings.AlarmSetting;
 import com.veepoo.protocol.model.settings.AllSetSetting;
@@ -3002,6 +3005,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         } else if (oprater.equals(G08W_HEALTH_ALARM_INTERVAL)) {
             startActivity(new Intent(this, G08WHealthAlarmIntervalActivity.class));
         } else if (oprater.equals(G08W_PPG_DATA_CALLBACK)) {
+            VPLogger.setDebug(true);
             VPOperateManager.getInstance().setG08WProjectPPGLightDataCallback(true, new IG08ProjectPPGLightCallBack() {
                 @Override
                 public void onPPGLightCallBack(int lightType, List<Integer> data) {
@@ -3016,6 +3020,77 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                         Toast.makeText(mContext, "G08W-红外  --》 " + data.size(), Toast.LENGTH_SHORT).show();
                     }
 
+                }
+            });
+        } else if (oprater.equals(MAGNETIC_OPEN)) {
+            //如果退出了磁疗相关页面还想继续监听或者移除监听可以设置全局的磁疗监听
+//            VPOperateManager.getInstance().setGlobalMagneticTherapy(new IMagneticTherapyListener() {
+//                @Override
+//                public void functionNotSupport() {
+//
+//                }
+//
+//                @Override
+//                public void onMagneticTherapyChange(@NonNull MagneticTherapy data) {
+//
+//                }
+//
+//                @Override
+//                public void onMagneticTherapyOpen(@NonNull MagneticTherapy data) {
+//
+//                }
+//
+//                @Override
+//                public void onMagneticTherapyClose(@NonNull MagneticTherapy data) {
+//
+//                }
+//            });
+
+            MagneticTherapy magneticTherapy = new MagneticTherapy(MagneticTherapyType.PULSE_MAGNETIC_THERAPY, true, 3);
+            int duration = 60;//持续一个小时
+            VPOperateManager.getInstance().openMagneticTherapy(magneticTherapy, duration, writeResponse, new IMagneticTherapyListener() {
+                @Override
+                public void functionNotSupport() {
+                    showToast("暂不支持磁疗功能");
+                }
+
+                @Override
+                public void onMagneticTherapyChange(@NonNull MagneticTherapy data) {
+                    showToast("磁疗档位变化：" + data.toString());
+                }
+
+                @Override
+                public void onMagneticTherapyOpen(@NonNull MagneticTherapy data) {
+                    showToast("磁疗打开上报：" + data.toString());
+                }
+
+                @Override
+                public void onMagneticTherapyClose(@NonNull MagneticTherapy data) {
+                    showToast("磁疗关闭上报：" + data.toString());
+                }
+            });
+        } else if (oprater.equals(MAGNETIC_CLOSE)) {
+            MagneticTherapyType type = MagneticTherapyType.CONVENTIONAL_MAGNETIC_THERAPY;//常规磁疗
+            type = MagneticTherapyType.PULSE_MAGNETIC_THERAPY;//脉冲磁疗
+            VPOperateManager.getInstance().closeMagneticTherapy(type, writeResponse, new IMagneticTherapyListener() {
+                @Override
+                public void functionNotSupport() {
+                    showToast("暂不支持磁疗功能");
+                }
+
+                @Override
+                public void onMagneticTherapyChange(@NonNull MagneticTherapy data) {
+                    showToast("磁疗档位变化：" + data.toString());
+                }
+
+                @Override
+                public void onMagneticTherapyOpen(@NonNull MagneticTherapy data) {
+                    showToast("磁疗打开上报：" + data.toString());
+                }
+
+                @Override
+                public void onMagneticTherapyClose(@NonNull MagneticTherapy data) {
+                    showToast("磁疗关闭上报：" + data.toString());
                 }
             });
         }
