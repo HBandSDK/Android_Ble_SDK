@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">VPSdk</string>
     <string name="action_settings">Settings</string>
+
+    <string-array name="magnetic_therapy_type">
+        <item>脉冲磁疗</item>
+        <item>常规磁疗</item>
+    </string-array>
+
+    <string-array name="magnetic_therapy_state">
+        <item>开启</item>
+        <item>关闭</item>
+    </string-array>
 </resources>

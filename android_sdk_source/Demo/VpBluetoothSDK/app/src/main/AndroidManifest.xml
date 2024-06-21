@@ -122,6 +122,7 @@
         <activity
             android:name=".activity.NotificationSettingsActivity"
             android:exported="false" />
+        <activity android:name=".activity.MagneticTherapyActivity" android:exported="false"/>
         <activity android:name=".activity.G15QRCodeActivity" android:exported="false"/>
         <activity android:name=".activity.TestActivity" android:exported="false"/>
         <activity android:name=".activity.ECGSwitchActivity" android:exported="false"/>

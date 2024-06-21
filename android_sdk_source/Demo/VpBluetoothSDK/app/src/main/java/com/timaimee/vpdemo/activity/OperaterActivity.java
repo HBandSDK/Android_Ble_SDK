@@ -3045,54 +3045,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 //
 //                }
 //            });
-
-            MagneticTherapy magneticTherapy = new MagneticTherapy(MagneticTherapyType.PULSE_MAGNETIC_THERAPY, true, 3);
-            int duration = 60;//持续一个小时
-            VPOperateManager.getInstance().openMagneticTherapy(magneticTherapy, duration, writeResponse, new IMagneticTherapyListener() {
-                @Override
-                public void functionNotSupport() {
-                    showToast("暂不支持磁疗功能");
-                }
-
-                @Override
-                public void onMagneticTherapyChange(@NonNull MagneticTherapy data) {
-                    showToast("磁疗档位变化：" + data.toString());
-                }
-
-                @Override
-                public void onMagneticTherapyOpen(@NonNull MagneticTherapy data) {
-                    showToast("磁疗打开上报：" + data.toString());
-                }
-
-                @Override
-                public void onMagneticTherapyClose(@NonNull MagneticTherapy data) {
-                    showToast("磁疗关闭上报：" + data.toString());
-                }
-            });
-        } else if (oprater.equals(MAGNETIC_CLOSE)) {
-            MagneticTherapyType type = MagneticTherapyType.CONVENTIONAL_MAGNETIC_THERAPY;//常规磁疗
-            type = MagneticTherapyType.PULSE_MAGNETIC_THERAPY;//脉冲磁疗
-            VPOperateManager.getInstance().closeMagneticTherapy(type, writeResponse, new IMagneticTherapyListener() {
-                @Override
-                public void functionNotSupport() {
-                    showToast("暂不支持磁疗功能");
-                }
-
-                @Override
-                public void onMagneticTherapyChange(@NonNull MagneticTherapy data) {
-                    showToast("磁疗档位变化：" + data.toString());
-                }
-
-                @Override
-                public void onMagneticTherapyOpen(@NonNull MagneticTherapy data) {
-                    showToast("磁疗打开上报：" + data.toString());
-                }
-
-                @Override
-                public void onMagneticTherapyClose(@NonNull MagneticTherapy data) {
-                    showToast("磁疗关闭上报：" + data.toString());
-                }
-            });
+            startActivity(new Intent(this,MagneticTherapyActivity.class));
         }
     }
 
