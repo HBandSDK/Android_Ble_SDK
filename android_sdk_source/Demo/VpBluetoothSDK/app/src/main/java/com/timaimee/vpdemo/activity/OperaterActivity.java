@@ -874,6 +874,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     sendMsg(message, 1);
                 }
             }, alarm2Setting);
+        } else if (oprater.equals(ALARM_NEW_)) {
+            startActivity(new Intent(this, NewAlarmActivity.class));
         } else if (oprater.equals(LONGSEAT_SETTING_OPEN)) {
             VPOperateManager.getInstance().settingLongSeat(writeResponse, new LongSeatSetting(10, 35, 11, 45, 60, true), new ILongSeatDataListener() {
                 @Override
@@ -3045,7 +3047,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 //
 //                }
 //            });
-            startActivity(new Intent(this,MagneticTherapyActivity.class));
+            startActivity(new Intent(this, MagneticTherapyActivity.class));
         }
     }
 
