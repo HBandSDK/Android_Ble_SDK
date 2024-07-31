@@ -187,21 +187,6 @@ public class NewAlarmActivity extends Activity implements NewAlarmAdapter.OnNewA
             }
         });
 
-        VPOperateManager.getInstance().readAlarm2(writeResponse, new IAlarm2DataListListener() {
-            @Override
-            public void onAlarmDataChangeListListener(AlarmData2 alarmData2) {
-                EMultiAlarmOprate OPT = alarmData2.getOprate();
-                boolean isOk = OPT == EMultiAlarmOprate.READ_SUCCESS ||
-                        OPT == EMultiAlarmOprate.READ_SUCCESS_SAME_CRC ||
-                        OPT == EMultiAlarmOprate.READ_SUCCESS_SAVE;
-                if (isOk) {
-                    mSettings.clear();
-                    mSettings.addAll(alarmData2.getAlarm2SettingList());
-                    mAdapter.notifyDataSetChanged();
-                }
-                showMsg(isOk ? "读取文字闹钟成功" : "读取文字闹钟失败");
-            }
-        });
     }
 
     private IBleWriteResponse writeResponse = new IBleWriteResponse() {
