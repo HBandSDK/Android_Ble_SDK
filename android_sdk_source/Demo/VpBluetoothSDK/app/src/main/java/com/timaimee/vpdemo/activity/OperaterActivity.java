@@ -159,6 +159,7 @@ import com.veepoo.protocol.model.datas.SleepPrecisionData;
 import com.veepoo.protocol.model.datas.Spo2hData;
 import com.veepoo.protocol.model.datas.Spo2hOriginData;
 import com.veepoo.protocol.model.datas.SportData;
+import com.veepoo.protocol.model.datas.SportModelGPSWatchOriginHeadData;
 import com.veepoo.protocol.model.datas.SportModelOriginHeadData;
 import com.veepoo.protocol.model.datas.SportModelOriginItemData;
 import com.veepoo.protocol.model.datas.SportModelStateData;
@@ -2243,6 +2244,12 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 @Override
                 public void onHeadChangeListListener(SportModelOriginHeadData sportModelHeadData) {
                     String message = "运动模式数据[头部]:" + sportModelHeadData.toString();
+                    Logger.t(TAG).i(message);
+                }
+
+                @Override
+                public void onGPSWatchSportModeHeadChange(SportModelGPSWatchOriginHeadData sportModelGPSWatchOriginHeadData) {
+                    String message = "运动模式数据[头部]:" + sportModelGPSWatchOriginHeadData.toString();
                     Logger.t(TAG).i(message);
                 }
 
