@@ -5,7 +5,7 @@ Android_Ble_SDK is a toolkit for quickly interacting with Bluetooth BLE. It is o
 README: * [中文版](https://github.com/HBandSDK/Android_Ble_SDK/wiki/VeepooSDK-Android-API-%E6%96%87%E6%A1%A3)
         * [English](https://github.com/HBandSDK/Android_Ble_SDK/wiki/VeepooSDK-Android-API-Document)
 
-## 必要条件 |Necessary dependencies jar
+## 必要条件 | Necessary dependencies jar
 
     
    * API>19&&BLE 4.0  
@@ -13,7 +13,7 @@ README: * [中文版](https://github.com/HBandSDK/Android_Ble_SDK/wiki/VeepooSDK
    * [gson-x.x.x.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
    * [vpprotocol_2.1.xx.xx.aar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_core)
 
-## 可选（如果是汇顶的芯片，升级会用到如下包）|Optional (If it is a Goodix chip, the upgrade will use the following package)
+## 可选（如果是汇顶的芯片，升级会用到如下包）| Optional (If it is a Goodix chip, the upgrade will use the following package)
 
    * [libble-0.x.aar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
    * [libcomx-0.x.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
