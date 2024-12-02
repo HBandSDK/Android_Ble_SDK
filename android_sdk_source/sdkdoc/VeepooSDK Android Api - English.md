@@ -14,6 +14,7 @@
 | 1.0.8   | 1.Body composition increase unit display                     | 2023.10.25    |
 | 1.0.9   | 1.Read body composition data interface returns the added measurement time, measurement seconds, etc. | 2023.11.24    |
 | 1.1.0   | 1. Added instructions for obtaining blood sugar risk level;<br/>2. Added 05 flag judgment for body temperature reading. | 2024.04.15    |
+| 1.1.1   | 1. Synchronize personal information API to add weight parameter description;<br />2. Multi-level skin color setting (device support required). | 2024.11.30    |
 
 ## Public interface class
 **VPOperateManager**（SDK main entry）  
@@ -414,6 +415,7 @@ syncPersonInfo(bleWriteResponse, personInfoDataListener, personInfoData)
 | -------------- | ---- | -------------------- |
 | ESex | ESex | Gender |
 | height | Int | Height |
+| weight | Int | Weight |
 | age | Int | Age |
 | stepAim | Int | Target number of steps |
 | sleepAim | Int | Target sleep time (minutes) |
@@ -1173,6 +1175,7 @@ changeCustomSetting(bleWriteResponse, customSettingDataListener, customSetting)
 | isOpenStopWatch | EFunctionStatus | Set whether to turn on the stopwatch function, SUPPORT_OPEN means the stopwatch function is turned on, SUPPORT_CLOSE means the stopwatch function is turned off; UNSUPPORT means not supported |
 | isOpenSpo2hLowRemind | EFunctionStatus | Set low oxygen reminder, SUPPORT_OPEN means low oxygen reminder function is turned on, SUPPORT_CLOSE means low oxygen reminder function is turned off; UNSUPPORT means not supported |
 | isOpenWearDetectSkin | EFunctionStatus | Set skin color wear monitoring, SUPPORT_OPEN means white skin color, SUPPORT_CLOSE means black skin color; UNSUPPORT means not supported |
+| skinType | Int | Skin color level setting, range 0-6, gradually increasing from white skin color to black skin color. Only set when VpSpGetUtil.getVpSpVariInstance(mContext).getSkinType() == 2, other skin color type settings are invalid |
 | isOpenAutoHRV | EFunctionStatus | Set HRV automatic detection function |
 | isOpenAutoInCall | EFunctionStatus | Set automatic answer call function |
 | isOpenDisconnectRemind | EFunctionStatus | Set disconnection reminder function |

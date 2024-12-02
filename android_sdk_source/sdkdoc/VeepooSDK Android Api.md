@@ -14,6 +14,7 @@
 | 1.0.8 | 1.身体成分增加单位显示                                       | 2023.10.25 |
 | 1.0.9 | 读取身体成分数据接口返回增加测量时间、测量秒数等说明         | 2023.11.24 |
 | 1.1.0 | 1.增加获取血糖风险等级相关说明；<br/>2.体温读取增加05标志位判断。 | 2024.04.15 |
+| 1.1.1 | 1.同步个人信息api补充体重参数说明；<br />2.肤色多档位设置(需设备支持)。 | 2024.11.30 |
 
 ## 通用接口类
 **VPOperateManager**（SDK主入口）  
@@ -416,6 +417,7 @@ syncPersonInfo(bleWriteResponse, personInfoDataListener, personInfoData)
 | -------- | ---- | -------------------- |
 | ESex     | ESex | 性别                 |
 | height   | Int  | 身高                 |
+| weight   | Int  | 体重                 |
 | age      | Int  | 年龄                 |
 | stepAim  | Int  | 目标步数             |
 | sleepAim | Int  | 目标睡眠时间（分钟） |
@@ -1176,6 +1178,7 @@ changeCustomSetting(bleWriteResponse, customSettingDataListener, customSetting)
 | isOpenStopWatch             | EFunctionStatus   | 设置是否打开秒表功能，SUPPORT_OPEN 表示打开了秒表功能，SUPPORT_CLOSE 表示关闭秒表功能; UNSUPPORT表示不支持 |
 | isOpenSpo2hLowRemind        | EFunctionStatus   | 设置低氧提醒，SUPPORT_OPEN 表示打开了低氧提醒功能，SUPPORT_CLOSE 表示关闭低氧提醒功能; UNSUPPORT表示不支持 |
 | isOpenWearDetectSkin        | EFunctionStatus   | 设置打开肤色佩戴监测，SUPPORT_OPEN 表示偏白色肤色 ，SUPPORT_CLOSE 表示偏黑色肤色; UNSUPPORT表示不支持 |
+| skinType                    | Int               | 肤色档位设置，范围0-6，从白色肤色-偏黑色肤色逐步递增，仅VpSpGetUtil.getVpSpVariInstance(mContext).getSkinType() == 2时设置，其他肤色类型设置无效 |
 | isOpenAutoHRV               | EFunctionStatus   | 设置HRV自动检测功能                                          |
 | isOpenAutoInCall            | EFunctionStatus   | 设置自动接听来电功能                                         |
 | isOpenDisconnectRemind      | EFunctionStatus   | 设置断连提醒功能                                             |
