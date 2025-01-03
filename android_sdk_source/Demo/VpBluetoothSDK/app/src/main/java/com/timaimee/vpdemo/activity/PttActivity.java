@@ -53,16 +53,27 @@ public class PttActivity extends Activity {
         }
 
         @Override
-        public void onEcgADCChange(final int[] data) {
+        public void onEcgADCChange(int[] ints, int[] ints1) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Logger.t(TAG).i("PTT的波形数据:" + Arrays.toString(data));
-                    ecgHeartRealthView.changeData(data, 25);
+                    Logger.t(TAG).i("PTT的波形数据:" + Arrays.toString(ints));
+                    ecgHeartRealthView.changeData(ints, 25);
                 }
             });
-
         }
+
+//        @Override
+//        public void onEcgADCChange(final int[] data) {
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Logger.t(TAG).i("PTT的波形数据:" + Arrays.toString(data));
+//                    ecgHeartRealthView.changeData(data, 25);
+//                }
+//            });
+//
+//        }
 
         @Override
         public void inPttModel() {

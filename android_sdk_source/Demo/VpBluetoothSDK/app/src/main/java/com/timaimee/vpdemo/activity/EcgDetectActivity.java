@@ -66,16 +66,21 @@ public class EcgDetectActivity extends Activity implements View.OnClickListener 
                         Logger.t(TAG).i(message);
                     }
 
-                    @Override
-                    public void onEcgADCChange(int[] ecgData) {
-                        String message = "-onEcgADCChange-:" + Arrays.toString(ecgData);
-                        Logger.t(TAG).i(message);
-//                        mEcgHeartView.changeData(ecgData, 20);
-                    }
+//                    @Override
+//                    public void onEcgADCChange(int[] ecgData) {
+//                        String message = "-onEcgADCChange-:" + Arrays.toString(ecgData);
+//                        Logger.t(TAG).i(message);
+////                        mEcgHeartView.changeData(ecgData, 20);
+//                    }
 
                     @Override
                     public void onEcgDetectDiagnosisChange(EcgDiagnosis ecgDiagnosis) {
                         Logger.t(TAG).i("ecg多诊断 :: = " + ecgDiagnosis.toString());
+                    }
+
+                    @Override
+                    public void onEcgADCChange(int[] ints, int[] ints1) {
+
                     }
                 });
                 break;

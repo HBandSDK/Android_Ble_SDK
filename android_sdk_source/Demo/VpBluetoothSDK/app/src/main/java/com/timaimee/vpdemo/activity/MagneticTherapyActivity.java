@@ -1,6 +1,5 @@
 package com.timaimee.vpdemo.activity;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -12,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.inuker.bluetooth.library.connect.response.BleWriteResponse;
 import com.timaimee.vpdemo.R;
-import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.data.IMagneticTherapyListener;
 import com.veepoo.protocol.model.datas.MagneticTherapy;
 import com.veepoo.protocol.model.enums.MagneticTherapyType;
