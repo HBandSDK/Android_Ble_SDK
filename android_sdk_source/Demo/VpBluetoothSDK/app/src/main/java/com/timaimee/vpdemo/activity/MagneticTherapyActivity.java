@@ -17,10 +17,10 @@ import com.veepoo.protocol.listener.data.IMagneticTherapyListener;
 import com.veepoo.protocol.model.datas.MagneticTherapy;
 import com.veepoo.protocol.model.enums.MagneticTherapyType;
 
-import cn.carbs.android.segmentcontrolview.library.SegmentControlView;
+//import cn.carbs.android.segmentcontrolview.library.SegmentControlView;
 
 public class MagneticTherapyActivity extends AppCompatActivity implements IMagneticTherapyListener {
-    SegmentControlView scvType, scvState;
+//    SegmentControlView scvType, scvState;
 
     SeekBar sbDuration, sbLevel;
 
@@ -59,85 +59,85 @@ public class MagneticTherapyActivity extends AppCompatActivity implements IMagne
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_magnetic_therapy);
-        scvType = findViewById(R.id.magneticTherapyType);
-        scvState = findViewById(R.id.scvStatus);
-        tvDuration = findViewById(R.id.tvDurationValue);
-        tvLevel = findViewById(R.id.tvLevelValue);
-        btnSetting = findViewById(R.id.btnSetting);
-        sbDuration = findViewById(R.id.sbDuration);
-        sbLevel = findViewById(R.id.sbLevel);
-        tvResult = findViewById(R.id.tvResult);
-        sbDuration.setMin(1);
-        sbDuration.setMax(15);
-        sbLevel.setMax(7);
-        sbLevel.setMin(1);
-        initListener();
+//        scvType = findViewById(R.id.magneticTherapyType);
+//        scvState = findViewById(R.id.scvStatus);
+//        tvDuration = findViewById(R.id.tvDurationValue);
+//        tvLevel = findViewById(R.id.tvLevelValue);
+//        btnSetting = findViewById(R.id.btnSetting);
+//        sbDuration = findViewById(R.id.sbDuration);
+//        sbLevel = findViewById(R.id.sbLevel);
+//        tvResult = findViewById(R.id.tvResult);
+//        sbDuration.setMin(1);
+//        sbDuration.setMax(15);
+//        sbLevel.setMax(7);
+//        sbLevel.setMin(1);
+//        initListener();
     }
 
-    private void initListener() {
-        scvType.setOnSegmentChangedListener(newSelectedIndex -> {
-            if (newSelectedIndex == 0) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    sbDuration.setMin(1);
-                }
-                sbDuration.setMax(255);
-                tvDuration.setText("1分钟");
-            } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    sbDuration.setMin(1);
-                }
-                sbDuration.setMax(15);
-                tvDuration.setText("1分钟");
-            }
-        });
-
-        scvState.setOnSegmentChangedListener(newSelectedIndex -> isOpen = newSelectedIndex == 0);
-
-        sbDuration.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                duration = progress;
-                tvDuration.setText(duration + "分钟");
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-        sbLevel.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                level = progress;
-                tvLevel.setText("" + level);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-        btnSetting.setOnClickListener(v -> {
-            if (isOpen) {
-                MagneticTherapy magneticTherapy = new MagneticTherapy(type, true, level);
-                VPOperateManager.getInstance().openMagneticTherapy(magneticTherapy, duration, response, MagneticTherapyActivity.this);
-            } else {
-                VPOperateManager.getInstance().closeMagneticTherapy(type, response, MagneticTherapyActivity.this);
-            }
-        });
-    }
+//    private void initListener() {
+//        scvType.setOnSegmentChangedListener(newSelectedIndex -> {
+//            if (newSelectedIndex == 0) {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                    sbDuration.setMin(1);
+//                }
+//                sbDuration.setMax(255);
+//                tvDuration.setText("1分钟");
+//            } else {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                    sbDuration.setMin(1);
+//                }
+//                sbDuration.setMax(15);
+//                tvDuration.setText("1分钟");
+//            }
+//        });
+//
+//        scvState.setOnSegmentChangedListener(newSelectedIndex -> isOpen = newSelectedIndex == 0);
+//
+//        sbDuration.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                duration = progress;
+//                tvDuration.setText(duration + "分钟");
+//            }
+//
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//
+//            }
+//
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//
+//            }
+//        });
+//
+//        sbLevel.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                level = progress;
+//                tvLevel.setText("" + level);
+//            }
+//
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//
+//            }
+//
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//
+//            }
+//        });
+//
+//        btnSetting.setOnClickListener(v -> {
+//            if (isOpen) {
+//                MagneticTherapy magneticTherapy = new MagneticTherapy(type, true, level);
+//                VPOperateManager.getInstance().openMagneticTherapy(magneticTherapy, duration, response, MagneticTherapyActivity.this);
+//            } else {
+//                VPOperateManager.getInstance().closeMagneticTherapy(type, response, MagneticTherapyActivity.this);
+//            }
+//        });
+//    }
 
     @Override
     public void functionNotSupport() {

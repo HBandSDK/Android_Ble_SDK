@@ -4,130 +4,130 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="磁疗测试"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <TextView-->
+<!--        android:id="@+id/tvTitle"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="center"-->
+<!--        android:padding="10dp"-->
+<!--        android:text="磁疗测试"-->
+<!--        android:textSize="20sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-    <cn.carbs.android.segmentcontrolview.library.SegmentControlView
-        android:id="@+id/magneticTherapyType"
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        app:scv_FrameCornerRadius="3dp"
-        app:scv_FrameWidth="1dp"
-        app:scv_Gradient="true"
-        app:scv_SegmentPaddingVertical="5dp"
-        app:scv_TextArray="@array/magnetic_therapy_type" />
+<!--    <cn.carbs.android.segmentcontrolview.library.SegmentControlView-->
+<!--        android:id="@+id/magneticTherapyType"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="36dp"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:paddingLeft="10dp"-->
+<!--        android:paddingRight="10dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tvTitle"-->
+<!--        app:scv_FrameCornerRadius="3dp"-->
+<!--        app:scv_FrameWidth="1dp"-->
+<!--        app:scv_Gradient="true"-->
+<!--        app:scv_SegmentPaddingVertical="5dp"-->
+<!--        app:scv_TextArray="@array/magnetic_therapy_type" />-->
 
-    <TextView
-        android:id="@+id/tvDuration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="持续时间："
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/magneticTherapyType" />
+<!--    <TextView-->
+<!--        android:id="@+id/tvDuration"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="10dp"-->
+<!--        android:text="持续时间："-->
+<!--        android:textSize="20sp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/magneticTherapyType" />-->
 
-    <TextView
-        android:id="@+id/tvDurationValue"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="1分钟"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@id/tvDuration"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvDuration" />
+<!--    <TextView-->
+<!--        android:id="@+id/tvDurationValue"-->
+<!--        android:layout_width="70dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="10dp"-->
+<!--        android:text="1分钟"-->
+<!--        android:textSize="20sp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/tvDuration"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@id/tvDuration" />-->
 
-    <androidx.appcompat.widget.AppCompatSeekBar
-        android:id="@+id/sbDuration"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/tvDuration"
-        app:layout_constraintEnd_toStartOf="@id/tvDurationValue"
-        app:layout_constraintStart_toEndOf="@id/tvDuration"
-        app:layout_constraintTop_toTopOf="@id/tvDuration" />
+<!--    <androidx.appcompat.widget.AppCompatSeekBar-->
+<!--        android:id="@+id/sbDuration"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/tvDuration"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/tvDurationValue"-->
+<!--        app:layout_constraintStart_toEndOf="@id/tvDuration"-->
+<!--        app:layout_constraintTop_toTopOf="@id/tvDuration" />-->
 
-    <TextView
-        android:id="@+id/tvLevel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="30dp"
-        android:text="档位强度："
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvDuration" />
+<!--    <TextView-->
+<!--        android:id="@+id/tvLevel"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="10dp"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:text="档位强度："-->
+<!--        android:textSize="20sp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tvDuration" />-->
 
-    <TextView
-        android:id="@+id/tvLevelValue"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="1"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@id/tvLevel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvLevel" />
+<!--    <TextView-->
+<!--        android:id="@+id/tvLevelValue"-->
+<!--        android:layout_width="70dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="10dp"-->
+<!--        android:text="1"-->
+<!--        android:textSize="20sp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/tvLevel"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@id/tvLevel" />-->
 
-    <androidx.appcompat.widget.AppCompatSeekBar
-        android:id="@+id/sbLevel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/tvLevel"
-        app:layout_constraintEnd_toStartOf="@id/tvLevelValue"
-        app:layout_constraintStart_toEndOf="@id/tvLevel"
-        app:layout_constraintTop_toTopOf="@id/tvLevel" />
+<!--    <androidx.appcompat.widget.AppCompatSeekBar-->
+<!--        android:id="@+id/sbLevel"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/tvLevel"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/tvLevelValue"-->
+<!--        app:layout_constraintStart_toEndOf="@id/tvLevel"-->
+<!--        app:layout_constraintTop_toTopOf="@id/tvLevel" />-->
 
-    <cn.carbs.android.segmentcontrolview.library.SegmentControlView
-        android:id="@+id/scvStatus"
-        android:layout_width="150dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="25dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvLevel"
-        app:scv_FrameCornerRadius="3dp"
-        app:scv_FrameWidth="1dp"
-        app:scv_Gradient="true"
-        app:scv_SegmentPaddingVertical="5dp"
-        app:scv_TextArray="@array/magnetic_therapy_state" />
+<!--    <cn.carbs.android.segmentcontrolview.library.SegmentControlView-->
+<!--        android:id="@+id/scvStatus"-->
+<!--        android:layout_width="150dp"-->
+<!--        android:layout_height="36dp"-->
+<!--        android:layout_marginTop="25dp"-->
+<!--        android:paddingLeft="10dp"-->
+<!--        android:paddingRight="10dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tvLevel"-->
+<!--        app:scv_FrameCornerRadius="3dp"-->
+<!--        app:scv_FrameWidth="1dp"-->
+<!--        app:scv_Gradient="true"-->
+<!--        app:scv_SegmentPaddingVertical="5dp"-->
+<!--        app:scv_TextArray="@array/magnetic_therapy_state" />-->
 
-    <Button
-        android:id="@+id/btnSetting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="设置"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/scvStatus" />
+<!--    <Button-->
+<!--        android:id="@+id/btnSetting"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:text="设置"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/scvStatus" />-->
 
-    <TextView
-        android:id="@+id/tvResult"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:layout_marginTop="30dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnSetting"
-        android:textColor="#f00"/>
+<!--    <TextView-->
+<!--        android:id="@+id/tvResult"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textSize="18sp"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/btnSetting"-->
+<!--        android:textColor="#f00"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
