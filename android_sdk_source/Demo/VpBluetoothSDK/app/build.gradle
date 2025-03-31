@@ -70,7 +70,7 @@ dependencies {
     implementation files('libs/libcomx-0.5.jar')
     implementation files('libs/gson-2.2.4.jar')
     implementation files('libs/vpbluetooth-1.14.aar')
-    implementation files('libs/vpprotocol-2.3.10.15.aar')
+    implementation files('libs/vpprotocol-2.3.11.15.aar')
     implementation files('libs/AMap2DMap_6.0.0_AMapSearch_9.4.5_AMapLocation_6.2.0_20221026.jar')
 
     implementation files('libs/JL_Watch_V1.10.0-release.aar')
