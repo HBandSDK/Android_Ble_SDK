@@ -22,8 +22,8 @@ android {
         applicationId "com.timaimee.vpdemo"//com.timaimee.vpdemo //com.ecg.kg
         minSdkVersion 24
         targetSdkVersion 34
-        versionCode 158
-        versionName "1.5.8"
+        versionCode 159
+        versionName "1.5.9"
         ndk {
             //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86","x86_64"
@@ -68,8 +68,8 @@ dependencies {
     implementation fileTree(include: ['*.jar','*.aar'], dir: 'libs')
     implementation files('libs/libcomx-0.5.jar')
     implementation files('libs/gson-2.2.4.jar')
-    implementation files('libs/vpbluetooth-1.14.aar')
-    implementation files('libs/vpprotocol-2.3.11.15.aar')
+    implementation files('libs/vpbluetooth-1.16.aar')
+    implementation files('libs/vpprotocol-2.3.13.15.aar')
     implementation files('libs/AMap2DMap_6.0.0_AMapSearch_9.4.5_AMapLocation_6.2.0_20221026.jar')
 
     implementation files('libs/JL_Watch_V1.10.0-release.aar')
