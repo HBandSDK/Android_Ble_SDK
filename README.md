@@ -2,8 +2,10 @@
 Android_Ble_SDK是一个用于快速与蓝牙BLE交互的工具包，仅提供给我们合作的客户下载使用，方便提升客户的开发效率。
 Android_Ble_SDK is a toolkit for quickly interacting with Bluetooth BLE. It is only available to our cooperative customers for download and use to improve their development efficiency.
 
-README: * [中文版](https://github.com/HBandSDK/Android_Ble_SDK/wiki/VeepooSDK-Android-API-%E6%96%87%E6%A1%A3)
-        * [English](https://github.com/HBandSDK/Android_Ble_SDK/wiki/VeepooSDK-Android-API-Document)
+README: 
+* [中文版](https://github.com/HBandSDK/Android_Ble_SDK/wiki/VeepooSDK-Android-API-%E6%96%87%E6%A1%A3)  
+* [English](https://github.com/HBandSDK/Android_Ble_SDK/wiki/VeepooSDK-Android-API-Document)
+* [deepwiki](https://deepwiki.com/HBandSDK/Android_Ble_SDK)
 
 ## 必要条件 | Necessary dependencies jar
 
