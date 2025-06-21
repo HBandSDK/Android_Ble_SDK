@@ -1,10 +1,12 @@
 package com.timaimee.vpdemo.activity;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.veepoo.protocol.util.VpBleByteUtil.isBeyondVp;
 import static com.veepoo.protocol.util.VpBleByteUtil.isBrandDevice;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -13,10 +15,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +41,13 @@ import com.inuker.bluetooth.library.search.SearchResult;
 import com.inuker.bluetooth.library.search.response.SearchResponse;
 import com.inuker.bluetooth.library.utils.BluetoothUtils;
 import com.jieli.jl_bt_ota.util.JL_Log;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.DeviceCompare;
@@ -123,6 +135,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
         VPLocalLogger.startMonitor(this);
     }
 
+
     private void createFile() {
         String fileSDK = getExternalFilesDir(null) + File.separator + "LTEPH_GPS_1.rtcm";
         File file = new File(fileSDK);
@@ -162,6 +175,20 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
     }
 
 
+    private boolean isGetPermission() {
+        boolean isScanPermissionGranted;
+        if (Build.VERSION.SDK_INT <= 22) {
+            isScanPermissionGranted = true; //android 6.0 以下直接通过
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            isScanPermissionGranted = ContextCompat.checkSelfPermission(mContext, Manifest.permission.BLUETOOTH_SCAN)
+                    == PERMISSION_GRANTED; //android 12 需要BLUETOOTH_SCAN新权限
+        } else {
+            isScanPermissionGranted = ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PERMISSION_GRANTED;
+        }
+        return isScanPermissionGranted;
+    }
+
     private void checkPermission() {
         Logger.t(TAG).i("Build.VERSION.SDK_INT =" + Build.VERSION.SDK_INT);
         if (Build.VERSION.SDK_INT <= 22) {
@@ -169,14 +196,120 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
             return;
         }
 
-        int permissionCheck = ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            Logger.t(TAG).i("checkPermission,PERMISSION_GRANTED");
-            initBLE();
-        } else if (permissionCheck == PackageManager.PERMISSION_DENIED) {
-            requestPermission();
-            Logger.t(TAG).i("checkPermission,PERMISSION_DENIED");
+        if(Build.VERSION.SDK_INT>=31) {
+            initDialogBluetoothScan();
+            checkBLEScanPermissionAboveAndroid11();
+        } else {
+            int permissionCheck = ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION);
+            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                Logger.t(TAG).i("checkPermission,PERMISSION_GRANTED");
+                initBLE();
+            } else if (permissionCheck == PackageManager.PERMISSION_DENIED) {
+                showMsg("Android6.0-Android11 蓝牙扫描需要定位权限");
+                requestPermission();
+                Logger.t(TAG).i("checkPermission,PERMISSION_DENIED");
+            }
         }
+
+    }
+
+    public void showMsg(String msg) {
+        runOnUiThread(() -> {
+            Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+        });
+    }
+    private void commandSettingUI() {
+        try {
+            Logger.t("^^^^^").e("=========================================>>>>> commandSettingUI");
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", getPackageName(), null);
+            intent.setData(uri);
+            startActivityForResult(intent, 1115);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Dialog mDialogBluetoothScan;
+    private void initDialogBluetoothScan() {
+        mDialogBluetoothScan = new Dialog(this, R.style.loading_dialog);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_pop_cancelok, null);
+
+        mDialogBluetoothScan.setContentView(dialogView);
+        mDialogBluetoothScan.setCancelable(false);
+        mDialogBluetoothScan.setCanceledOnTouchOutside(false);
+
+        TextView okTv = (TextView) dialogView.findViewById(R.id.dialog_ok);
+        TextView cancelTv = (TextView) dialogView.findViewById(R.id.dialog_cancel);
+        TextView contentTv = (TextView) dialogView.findViewById(R.id.dialog_content);
+
+        contentTv.setText("扫描设备需允许应用访问周围蓝牙设备并保持蓝牙开关开启");
+        okTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commandSettingUI();
+                mDialogBluetoothScan.dismiss();
+            }
+        });
+        cancelTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialogBluetoothScan.dismiss();
+            }
+        });
+    }
+    private boolean checkBLEScanPermissionAboveAndroid11() {
+        Logger.t(TAG).e("**在Android12及以上版本检查BLE搜索权限");
+        if (Build.VERSION.SDK_INT < 31) {
+            Logger.t(TAG).e("当前版本低于Android12");
+            return false;
+        }
+        boolean hasScanPermission = isGetPermission();
+        Logger.t(TAG).e("**在Android12及以上版本检查BLE搜索权限 hasScanPermission = " + hasScanPermission);
+        if (!hasScanPermission) {
+            boolean isNeedExplanation = ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.BLUETOOTH_SCAN);
+            Logger.t(TAG).e("**在Android12及以上版本检查BLE搜索权限 hasScanPermission = " + hasScanPermission + " , isNeedExplanation = " + isNeedExplanation);
+            if (isNeedExplanation) {
+                showMsg("您已多次拒绝了，请手动打开android12 蓝牙搜索权限");
+                mDialogBluetoothScan.show();
+            } else {
+                List<String> permissionList = new ArrayList<>();
+                permissionList.add(Manifest.permission.BLUETOOTH_SCAN);
+                permissionList.add(Manifest.permission.BLUETOOTH_ADVERTISE);
+                permissionList.add(Manifest.permission.BLUETOOTH_CONNECT);
+                Dexter.withContext(this)
+                        .withPermissions(permissionList)
+                        .withListener(new MultiplePermissionsListener() {
+                            @Override
+                            public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
+                                for (PermissionGrantedResponse grantedResponse : multiplePermissionsReport.getGrantedPermissionResponses()) {
+                                    Logger.t(TAG).e("onPermissionsChecked:Granted::::" + grantedResponse.getRequestedPermission().toString());
+                                }
+                                for (PermissionDeniedResponse deniedResponse : multiplePermissionsReport.getDeniedPermissionResponses()) {
+                                    Logger.t(TAG).e("onPermissionsChecked:Denied::::" + deniedResponse.getRequestedPermission().toString());
+                                }
+                                if (multiplePermissionsReport.getGrantedPermissionResponses().size() == 3) {
+                                    showMsg("蓝牙相关权限已授予了");
+                                } else {
+                                    showMsg("权限被拒绝了请手动授权");
+                                }
+                            }
+
+
+                            @Override
+                            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
+                                for (PermissionRequest permissionRequest : list) {
+                                    Logger.t(TAG).e("onPermissionRationaleShouldBeShown::::" + permissionRequest.toString());
+                                }
+                            }
+                        }).check();
+            }
+            return false;
+        } else {
+        }
+        return false;
     }
 
     private void requestPermission() {
