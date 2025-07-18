@@ -16,8 +16,11 @@ import com.veepoo.protocol.model.datas.EcgDetectInfo;
 import com.veepoo.protocol.model.datas.EcgDetectResult;
 import com.veepoo.protocol.model.datas.EcgDetectState;
 import com.veepoo.protocol.model.datas.EcgDiagnosis;
+import com.veepoo.protocol.shareprence.VpSpGetUtil;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class EcgDetectActivity extends Activity implements View.OnClickListener {
     private final static String TAG = EcgDetectActivity.class.getSimpleName();
@@ -50,7 +53,10 @@ public class EcgDetectActivity extends Activity implements View.OnClickListener 
                 VPOperateManager.getInstance().startDetectECG(writeResponse, true, new IECGDetectListener() {
                     @Override
                     public void onEcgDetectInfoChange(EcgDetectInfo ecgDetectInfo) {
-                        String message = "-onEcgDetectInfoChange-:" + ecgDetectInfo.toString();
+                        int ecgType = VpSpGetUtil.getVpSpVariInstance(mContext).getECGType();
+                        String message = "-onEcgDetectInfoChange-:" + ecgDetectInfo.toString()+",ecgType="+ecgType;
+                        mEcgHeartView.setEcgType(ecgType);
+                        mEcgHeartView.setDrawHz(ecgDetectInfo.getFrequency());
                         Logger.t(TAG).i(message);
                     }
 
@@ -79,8 +85,27 @@ public class EcgDetectActivity extends Activity implements View.OnClickListener 
                     }
 
                     @Override
-                    public void onEcgADCChange(int[] ints, int[] ints1) {
-
+                    public void onEcgADCChange(int[] ecgData, int[] powerData) {
+                        String message = "-onEcgADCChange-:" + Arrays.toString(ecgData);
+                        Logger.t(TAG).i(message);
+                        List<Integer> filterList = new ArrayList<>();
+                        List<Integer> powerList = new ArrayList<>();
+                        for (int i = 0; i < ecgData.length; i++) {
+                            if (ecgData[i] != Integer.MAX_VALUE) {
+                                filterList.add(ecgData[i]);
+                                if (powerList.size() > 0 && i < powerList.size()) {
+                                    powerList.add(powerData[i]);
+                                } else {
+                                    powerList.add(20);
+                                }
+                            }
+                        }
+                        int[] filterAdc = new int[filterList.size()];
+                        int[] filterPower = new int[powerList.size()];
+                        for (int i = 0; i < filterList.size(); i++) {
+                            filterAdc[i] = filterList.get(i);
+                        }
+                        mEcgHeartView.changeData(filterAdc, filterPower,filterAdc.length);
                     }
                 });
                 break;

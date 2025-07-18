@@ -6,18 +6,16 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.veepoo.protocol.util.EcgUtil;
 
 
 /**
@@ -34,16 +32,22 @@ public class EcgHeartRealthView extends View {
     PointF[] mPoints;
     int ecgLineColor = 0, color_line = 0, color_black = 0;
     int linePositionX = 0;
-
+    Context mContext;
+    int ecgType = 0;
 
     public EcgHeartRealthView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        this.mContext = context;
         ecgLineColor = context.getResources().getColor(R.color.ecg_line);
         color_line = getResources().getColor(R.color.ecg_line_bg_normal);
         color_black = getResources().getColor(R.color.ecg_line_bg_bold);
         initPaint();
     }
 
+
+    public void setEcgType(int ecgType) {
+        this.ecgType = ecgType;
+    }
 
     private void initPaint() {
         mLinePiant = new Paint();
@@ -76,9 +80,24 @@ public class EcgHeartRealthView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        Logger.t(TAG).i("onMeasure");
+        Logger.t(TAG).i("onMeasure onPagerSetting");
         mWidth = MeasureSpec.getSize(widthMeasureSpec);
         mHeight = MeasureSpec.getSize(heightMeasureSpec);
+
+        onPagerSetting();
+
+    }
+
+    //波形频率&走速
+    int DRAW_FREQUENCY = 512;
+    int SPEED = 25;
+    //一个格子多少个点 20个点
+    int count = DRAW_FREQUENCY / SPEED;
+
+    public void setDrawHz(int drawfrequency) {
+        this.DRAW_FREQUENCY = drawfrequency;
+        this.count = DRAW_FREQUENCY / SPEED;
+        Logger.t(TAG).i("setDrawHz onPagerSetting");
         onPagerSetting();
 
     }
@@ -105,17 +124,22 @@ public class EcgHeartRealthView extends View {
             }
         }
 
+        if (heartPositionY == null || heartPositionY.length == 0 || mPoints.length != heartPositionY.length) {
+            return;
+        }
         for (int i = 0; i < mPoints.length; i++) {
-            PointF point = new PointF(rowEcgWidth * i, heartPositionY[i]);
-            mPoints[i] = point;
+//            PointF point = new PointF(rowEcgWidth * i, heartPositionY[i]);
+//            mPoints[i] = point;
+            mPoints[i].x = rowEcgWidth * i;
+            mPoints[i].y = heartPositionY[i];
         }
 
         drawPath(canvas, mPoints, linePositionX, item_contents);
     }
 
-    private float getRowY(float v) {
-        float v1 = mHeight / 5 * 3 - v / 175 * coumlnQutoWidth;
-        return v1;
+    private float getRowY(float adcValue, int power) {
+        float v = EcgUtil.convertToMvWithValue((int) adcValue, ecgType, false,power);
+        return mHeight / 5 * 3 - v * 10 * coumlnQutoWidth;
     }
 
 
@@ -218,20 +242,23 @@ public class EcgHeartRealthView extends View {
 
     private int item_contents;
 
-    public synchronized void changeData(int[] data, int item_content) {
+    public synchronized void changeData(int[] data, int[] powerList,int item_content) {
         this.item_contents = item_content;
-        linePositionX = linePositionX % rowEcgCount;
-        for (int i = linePositionX; i < linePositionX + item_contents; i++) {
-            if (i  >= rowEcgCount) {
-                linePositionX = -item_content;
-                break;
+        if (rowEcgCount != 0 && heartPositionY != null) {
+            linePositionX = linePositionX % rowEcgCount;
+            for (int i = linePositionX; i < linePositionX + item_contents; i++) {
+                if (i >= rowEcgCount) {
+                    linePositionX = -item_content;
+                    break;
+                }
+                int index = i - linePositionX;
+                float rowY = getRowY(data[index], powerList[index]);
+                heartPositionY[i] = rowY;
             }
-            float rowY = getRowY(data[i - linePositionX]);
-            heartPositionY[i] = rowY;
+//            Logger.t(TAG).i("changeData: columnCount=" + rowEcgCount + ",linePositionX=" + linePositionX);
+            linePositionX = linePositionX + item_content;
         }
-        Logger.t(TAG).i("changeData: columnCount=" + rowEcgCount + ",linePositionX=" + linePositionX);
         invalidate();
-        linePositionX = linePositionX + item_content;
     }
 
     /**
@@ -239,39 +266,37 @@ public class EcgHeartRealthView extends View {
      */
     public void clearData() {
         linePositionX = 0;
+        Logger.t(TAG).i("clearData onPagerSetting");
         onPagerSetting();
-        invalidate();
     }
 
 
-    List<Integer> arraylist = new ArrayList<>();
-
-    //采样率&走速
-    int HZ = 250;
-    int SPEED = 25;
-    //一个格子多少个点
-    int count = HZ / SPEED;
-    //纵向一共放多少个格子
+    //纵向一共放16个大格子，80个小格子
     int coumlnQutoCount = 16 * 5;
     //一个格子的高度
     float coumlnQutoWidth = 1;
-    //横向一共放多少格子
+    //横向一个共多少个小格子
     float rowQutoCount = 1;
     //一个格子的宽度
     float rowQutoWidth = 1;
-    //横向一共放多少个点
 
+    //横向一共放多少个点
     int rowEcgCount = 1;
     //一个点的宽度
     float rowEcgWidth = 1;
 
     private void onPagerSetting() {
-        coumlnQutoWidth = mHeight / coumlnQutoCount;
+        coumlnQutoWidth = mHeight / coumlnQutoCount;//纵向一共16个大格子，80个小格子
         rowQutoWidth = coumlnQutoWidth;
-        rowQutoCount = mWidth / rowQutoWidth;
+        rowQutoCount = mWidth / rowQutoWidth;//横向一个共多少个小格子
         rowEcgCount = (int) (rowQutoCount * count);
         rowEcgWidth = mWidth / rowEcgCount;
         mPoints = new PointF[rowEcgCount];
+
+        for (int i = 0; i < mPoints.length; i++) {
+            mPoints[i] = new PointF();
+        }
+
         initHeartPosition();
     }
 
