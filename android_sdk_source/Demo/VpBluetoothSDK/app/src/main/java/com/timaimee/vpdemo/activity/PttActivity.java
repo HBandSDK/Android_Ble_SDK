@@ -58,7 +58,7 @@ public class PttActivity extends Activity {
                 @Override
                 public void run() {
                     Logger.t(TAG).i("PTT的波形数据:" + Arrays.toString(ints));
-                    ecgHeartRealthView.changeData(ints, 25);
+                    ecgHeartRealthView.changeData(ints, ints1, 25);
                 }
             });
         }
