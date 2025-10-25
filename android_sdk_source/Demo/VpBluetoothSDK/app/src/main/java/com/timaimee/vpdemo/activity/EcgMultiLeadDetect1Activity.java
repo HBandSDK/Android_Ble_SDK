@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.orhanobut.logger.Logger;
@@ -149,10 +150,11 @@ public class EcgMultiLeadDetect1Activity extends Activity implements View.OnClic
                     }
 
                     @Override
-                    public void onEcgADCChange(ELeadFlag eLeadFlag, int[] data, int packNum) {
-                        //Log.e("Test", "onEcgADCChange："+eLeadFlag+"-->" + Arrays.toString(data));
-                        viewList.get(eLeadFlag.getValue() - 1).changeData(data, data.length);
+                    public void onEcgADCChange(@NonNull ELeadFlag leadFlag, @NonNull int[] data, int gain, int packNum) {
+                        viewList.get(leadFlag.getValue() - 1).changeData(data, data.length);
                     }
+
+
                 });
                 break;
             case R.id.stop:

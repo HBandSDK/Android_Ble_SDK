@@ -150,6 +150,7 @@
         <activity android:name=".activity.G08WHealthAlarmIntervalActivity" android:exported="false"/>
         <activity android:name=".activity.EcgMultiLeadDetect1Activity" android:exported="false"/>
         <activity android:name=".activity.NewAlarmActivity" android:exported="false"/>
+        <activity android:name=".activity.TextImagePushActivity" android:exported="false"/>
 
         <service
             android:name="com.inuker.bluetooth.library.BluetoothService"

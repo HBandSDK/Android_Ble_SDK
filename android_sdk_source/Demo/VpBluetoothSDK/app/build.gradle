@@ -69,13 +69,14 @@ dependencies {
     implementation files('libs/libcomx-0.5.jar')
     implementation files('libs/gson-2.2.4.jar')
     implementation files('libs/vpbluetooth-1.18.aar')
-    implementation files('libs/vpprotocol-2.3.27.15.aar')
+    implementation files('libs/vpprotocol-2.3.28.15.aar')
     implementation files('libs/AMap2DMap_6.0.0_AMapSearch_9.4.5_AMapLocation_6.2.0_20221026.jar')
 
     implementation files('libs/JL_Watch_V1.13.1_11214-release.aar')
     implementation files('libs/jl_rcsp_V0.7.2_527-release.aar')
     implementation files('libs/jl_bt_ota_V1.10.0_10931-release.aar')
     implementation files('libs/BmpConvert_V1.6.0_10604-release.aar')
+    implementation files('libs/abpartool-release.aar')
 
     testImplementation 'junit:junit:4.12'
     implementation 'androidx.appcompat:appcompat:1.3.1'

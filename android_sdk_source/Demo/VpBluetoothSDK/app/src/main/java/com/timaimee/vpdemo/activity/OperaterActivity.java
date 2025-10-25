@@ -1,6 +1,7 @@
 package com.timaimee.vpdemo.activity;
 
 import static com.timaimee.vpdemo.activity.Oprate.*;
+import static com.timaimee.vpdemo.activity.Oprate.TEXT_IMAGE_MSG_PUSH;
 import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT;
 import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT_CLOSE;
 import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT_OPEN;
@@ -3055,6 +3056,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 //                }
 //            });
             startActivity(new Intent(this, MagneticTherapyActivity.class));
+        } else if (oprater.equals(TEXT_IMAGE_MSG_PUSH)) {
+            startActivity(new Intent(this, TextImagePushActivity.class));
         }
     }
 
