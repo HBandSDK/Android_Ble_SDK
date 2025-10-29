@@ -2438,7 +2438,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             VPOperateManager.getInstance().setECGAutoReportListener(new IECGAutoReportListener() {
                 @Override
                 public void onECGAutoReport(int ecgValue, TimeData date) {
-                    String info = "ECG = " + ecgValue + ", date = " + date.getDateAndClockForSleepSecond();
+                    String info = "ECG = " + ecgValue + ", date = " + date.toFullDateTimeString();
                     Logger.t(TAG).e(info);
                     Toast.makeText(mContext, info, Toast.LENGTH_SHORT).show();
                 }

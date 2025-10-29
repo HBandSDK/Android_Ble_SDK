@@ -15,6 +15,9 @@
 | 1.0.9 | 读取身体成分数据接口返回增加测量时间、测量秒数等说明         | 2023.11.24 |
 | 1.1.0 | 1.增加获取血糖风险等级相关说明；<br/>2.体温读取增加05标志位判断。 | 2024.04.15 |
 | 1.1.1 | 1.同步个人信息api补充体重参数说明；<br />2.肤色多档位设置(需设备支持)。 | 2024.11.30 |
+| 1.1.2 | 1.读取运动模式数据删除需要记录包位置的相关注释               | 2024.12.12 |
+| 1.1.3 | 1.增加自动测量读取/设置接口(0xB3)说明;<br />2.增加读取手动测量数据(血压)相关接口 | 2025.06.10 |
+| 1.1.4 | 增加图文推送功能                                             | 2025.10.27 |
 
 ## 通用接口类
 **VPOperateManager**（SDK主入口）  
@@ -38,9 +41,9 @@ VPOperateManager.getInstance()
 ```kotlin
 init(context)
 ```
-| 参数名  	| 类型    	| 备注                        	|
-|---------	|---------	|-----------------------------	|
-| context 	| Context 	| 配置选项ApplicactionContext 	|
+| 参数名  | 类型    | 备注                        |
+| ------- | ------- | --------------------------- |
+| context | Context | 配置选项ApplicactionContext |
 
 注:所有接口仅在sdk初始化后才能调用,App运行期间，只需要初始化一次，无需重复初始化
 
@@ -63,9 +66,9 @@ startScanDevice(searchResponse)
 
 ###### 参数解释
 
-| 参数名         	| 类型           	| 备注           	|
-|----------------	|----------------	|----------------	|
-| searchResponse 	| SearchResponse 	| 扫描结果的回调 	|
+| 参数名         | 类型           | 备注           |
+| -------------- | -------------- | -------------- |
+| searchResponse | SearchResponse | 扫描结果的回调 |
 ###### 返回数据
 
 **SearchResponse**--扫描结果的回调
@@ -154,11 +157,11 @@ connectDevice(mac,connectResponse,bleNotifyResponse)
 ```
 ###### 参数解释
 
-| 参数名            	| 类型             	| 备注                                                                	|
-|-------------------	|------------------	|---------------------------------------------------------------------	|
-| mac               	| String           	| 需要连接的设备地址                                                  	|
-| connectResponse   	| IConnectResponse 	| 连接状态的回调,先返回连接状态，连接成功后，会返回蓝牙通信状态的回调 	|
-| bleNotifyResponse 	| INotifyResponse  	| 蓝牙通信状态的回调,此回调在connectResponse之后被调用                	|
+| 参数名            | 类型             | 备注                                                         |
+| ----------------- | ---------------- | ------------------------------------------------------------ |
+| mac               | String           | 需要连接的设备地址                                           |
+| connectResponse   | IConnectResponse | 连接状态的回调,先返回连接状态，连接成功后，会返回蓝牙通信状态的回调 |
+| bleNotifyResponse | INotifyResponse  | 蓝牙通信状态的回调,此回调在connectResponse之后被调用         |
 
 ###### 返回数据
 
@@ -203,16 +206,16 @@ confirmDevicePwd(bleWriteResponse,pwdDataListener,deviceFuctionDataListener，so
 ###### 参数解释 
 
 
-| 参数名         	| 类型           	| 备注           	|
-|----------------	|----------------	|----------------	|
-| bleWriteResponse 	| IBleWriteResponse 	| code 返回Code.REQUEST_SUCCESS表示向设备发送命令成功，但是发送命令成功不一定会有数据返回，返回成功只能说明设备接收到了命令，如果设备处理不了命令，则有可能没有数据返回，此接口用于开发人员查找问题 |
-| pwdDataListener 	| IPwdDataListener 	| 密码操作的数据返回监听，此处返回的数据包含:设备号，设备发布版本号，设备测试版本号，饮酒数据状态，翻腕亮屏状态，查找手机功能状态，佩戴检测功能状态 	|
-| deviceFuctionDataListener 	| IDeviceFuctionDataListener 	| 设备包含的功能的返回监听，此处返回的数据包含: 各个设备功能状态[是否支持]：血压、饮酒、久坐、心率过高提醒、微信运动、摇-摇拍照、疲劳度、血氧 	|
-| socialMsgDataListener 	| ISocialMsgDataListener 	| 电话、短信、社交软件消息的返回监听，此处返回的数据包含:是否支持接收社交软件的提醒，是否打开电话、短信、社交软件的提醒 	|
-| customSettingDataListener 	| ICustomSettingDataListener 	| 个性化设置操作的监听 	|
-| pwd 	| String 	| 密码长度为4，初使值为0000，传入密码前，请先确保是4位的数字 	|
-| mModelIs24 	| boolean 	| 时间制式，若是选择显示24小时制则传入true,选择12小时制则传入false 	|
-| deviceTimeSetting 	| DeviceTimeSetting 	| 默认为手机系统时间，可自定义时间，精确到秒 	|
+| 参数名                    | 类型                       | 备注                                                         |
+| ------------------------- | -------------------------- | ------------------------------------------------------------ |
+| bleWriteResponse          | IBleWriteResponse          | code 返回Code.REQUEST_SUCCESS表示向设备发送命令成功，但是发送命令成功不一定会有数据返回，返回成功只能说明设备接收到了命令，如果设备处理不了命令，则有可能没有数据返回，此接口用于开发人员查找问题 |
+| pwdDataListener           | IPwdDataListener           | 密码操作的数据返回监听，此处返回的数据包含:设备号，设备发布版本号，设备测试版本号，饮酒数据状态，翻腕亮屏状态，查找手机功能状态，佩戴检测功能状态 |
+| deviceFuctionDataListener | IDeviceFuctionDataListener | 设备包含的功能的返回监听，此处返回的数据包含: 各个设备功能状态[是否支持]：血压、饮酒、久坐、心率过高提醒、微信运动、摇-摇拍照、疲劳度、血氧 |
+| socialMsgDataListener     | ISocialMsgDataListener     | 电话、短信、社交软件消息的返回监听，此处返回的数据包含:是否支持接收社交软件的提醒，是否打开电话、短信、社交软件的提醒 |
+| customSettingDataListener | ICustomSettingDataListener | 个性化设置操作的监听                                         |
+| pwd                       | String                     | 密码长度为4，初使值为0000，传入密码前，请先确保是4位的数字   |
+| mModelIs24                | boolean                    | 时间制式，若是选择显示24小时制则传入true,选择12小时制则传入false |
+| deviceTimeSetting         | DeviceTimeSetting          | 默认为手机系统时间，可自定义时间，精确到秒                   |
 
 ###### 数据返回
 
@@ -3334,10 +3337,10 @@ var isSupport = (bigTranType == 2 && serverUICount > 0)
 设置来自服务器表盘UI的步骤大致分为以下几步:
 
 >第1步.判断是否支持表盘市场
-第2步.获取基本信息
-第3步.获取支持的服务器UI列表
-第4步.下载对应的UI文件
-第5步.设置UI
+>第2步.获取基本信息
+>第3步.获取支持的服务器UI列表
+>第4步.下载对应的UI文件
+>第5步.设置UI
 
 #### 类名
 
@@ -5029,7 +5032,7 @@ readSportModelOrigin(bleWriteResponse, sportModelOriginListener)
 fun onReadOriginProgress(progress: Float)
 
 /***
- * 返回读取的细节，此包的位置需要记住，下次读取数据时，传入此包的位置，可以避免重复读取
+ * 返回读取的细节
  *
  * @param day            数据在手表中的标志位[0=今天，1=昨天，2=前天]
  * @param date           数据的日期,格式为yyyy-mm-dd
@@ -7099,6 +7102,8 @@ public interface IBPDetectDataListener extends IListener {
 | lowPressure    | int             | 低压值,范围[20-200]，,如果不在此范围，请提示用用户测量无效   |
 | isHaveProgress | boolean         | true表示手表有返回进度，false表示没有进度，无进度的手表会在开始测量后的55秒返回数据 |
 
+
+
 ### 血压模式设置
 
 #### 血压测量模式设置
@@ -9115,3 +9120,671 @@ VPOperateManager.getInstance().stopDetectBloodComponent {
 }
 ```
 
+
+
+## 读取设备手动测量数据
+
+包含多种数据读取，需满足以下任何一条件才可读取
+
+**血压** 是否支持读取，判定条件：需支持气泵血压才可读取，判断代码如下：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportBumpBp
+```
+
+**其他** 其他数据暂不支持读取手动测量数据，后续支持
+
+#### 读取设备手动测量数据
+
+###### 前提
+
+需设备支持
+
+###### 接口
+
+```
+readDeviceManualData(bleWriteResponse, timeStampSecond, dataTypeList, dataListener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                            | 描述                                                         |
+| ---------------- | ------------------------------- | ------------------------------------------------------------ |
+| bleWriteResponse | BleWriteResponse                | 写入操作的监听                                               |
+| timeStampSecond  | long                            | 秒级时间戳，表示APP端上一次读取的时间，设备只上报大于它的数据，如果其值为0则表示APP上一次没有读取过 |
+| dataTypeList     | List<DeviceManualDataType>      | 要读取的数据类型，如果为全部则传DeviceManualDataType.ALL     |
+| dataListener     | IDeviceManualDetectDataListener | 设备手动测量数据读取监听                                     |
+
+**DeviceManualDataType** -- 读取的数据类型
+
+```kotlin
+enum class DeviceManualDataType(val bitPosition: Int) {
+
+    /**
+     * 0x00表示血压<br>
+     * 0x01表示心率<br>
+     * 0x02表示血糖<br>
+     * 0x03表示压力<br>
+     * 0x04表示血氧<br>
+     * 0x05表示体温<br>
+     * 0x06表示梅脱<br>
+     * 0x07表示HRV<br>
+     * 0x08表示血液成分<br>
+     * 0x09表示微体检<br>
+     * 0x0A表示情绪<br>
+     * 0x0B表示疲劳度<br>
+     * 0x0C表示皮电
+     */
+    BLOOD_PRESSURE(0),
+    HEART_RATE(1),
+    BLOOD_GLUCOSE(2),
+    STRESS(3),
+    BLOOD_OXYGEN(4),
+    BODY_TEMPERATURE(5),
+    MET(6),
+    HRV(7),
+    BLOOD_COMPOSITION(8),
+    MINI_CHECKUP(9),
+    EMOTION(10),            // 情绪 (位10)
+    FATIGUE(11),         // 疲劳度 (位11)
+    SKIN_CONDUCTANCE(12), // 皮电 (位12)
+    ALL(33);
+
+    // 计算对应的二进制掩码
+    val bitMask: Int
+        get() = 1 shl bitPosition
+   
+}
+```
+
+###### 返回数据
+
+**IDeviceManualDetectDataListener** -- 设备手动测量数据读取监听
+
+```kotlin
+ /**
+     * 血压手动测量数据回调
+     *
+     * @param bloodPressureManualDataList 返回血压手动测量全部数据
+     */
+    fun onBloodPressureDataChange(bloodPressureManualDataList:List<BloodPressureManualData> );
+
+    /**
+     * 心率手动测量数据回调
+     *
+     * @param heartRateManualDataList 返回血压手动测量全部数据
+     */
+    fun onHeartRateDataChange(heartRateManualDataList:List<HeartRateManualData> );
+
+    /**
+     * 血糖手动测量数据回调
+     * @param bloodGlucoseManualDataList
+     */
+    fun onBloodGlucoseDataChange( bloodGlucoseManualDataList:List<BloodGlucoseManualData>);
+
+
+    /**
+     * 压力手动测量数据回调
+     * @param pressureManualDataList
+     */
+    fun onPressureManualDataChange(pressureManualDataList:List<PressureManualData> );
+
+    /**
+     * 血氧手动测量数据回调
+     * @param bloodOxygenManualDataList
+     */
+    fun onBloodOxygenDataChange(bloodOxygenManualDataList:List<BloodOxygenManualData> );
+    /**
+     * 体温手动测量数据回调
+     * @param bodyTemperatureManualDataList
+     */
+    fun onBodyTemperatureDataChange(bodyTemperatureManualDataList:List<BodyTemperatureManualData> );
+
+    /**
+     * 梅托手动测量数据回调
+     * @param metoManualDataList
+     */
+    fun onMetoManualDataChange(metoManualDataList:List<MetoManualData> );
+
+    /**
+     * HRV手动测量数据回调
+     * @param hrvManualDataList
+     */
+    fun onHrvManualDataChange(hrvManualDataList:List<HrvManualData> );
+
+    /**
+     * 血液成分手动测量数据回调
+     * @param bloodComponentManualDataList
+     */
+    fun onBloodComponentManualDataChange(bloodComponentManualDataList:List<BloodComponentManualData> );
+
+    /**
+     * 微体检手动测量数据回调
+     * @param miniCheckupManualDataList
+     */
+    fun onMiniCheckupManualDataChange(miniCheckupManualDataList:List<MiniCheckupManualData> );
+
+    /**
+     * 情绪手动测量数据回调
+     * @param emotionManualDataList
+     */
+    fun onEmotionManualDataChange(emotionManualDataList:List<EmotionManualData> );
+
+
+    /**
+     * 疲劳度手动测量数据回调
+     * @param fatigueManualDataList
+     */
+    fun onFatigueManualDataChange(fatigueManualDataList：List<FatigueManualData> );
+
+    /**
+     * 皮电手动测量数据回调
+     * @param skinConductanceManualDataList
+     */
+    fun onSkinConductanceManualDataChange(skinConductanceManualDataList：List<SkinConductanceManualData> );
+
+    /**
+     * 返回读取的进度
+     *
+     * @param progress 进度值，范围[0-1]
+     */
+    fun onReadProgress(float progress);
+
+    /**
+     * 读取结束
+     */
+    fun onReadComplete();
+
+    /**
+     * 读取失败
+     */
+    fun onReadFail();
+```
+
+**BloodPressureManualData**--血压手动测量数据
+
+```java
+/**
+     * 本条数据的测量时间戳
+     */
+    private int timeStamp;
+
+    /**
+     * 对应的协议类型，0x00：气囊血压（详情见气囊血压单条数据结构）<br>0x01：普通血压
+     * 注：当version == 1时，只有收缩压(血压高压)-systolic、舒张压(血压低压)-diastolic值有用，其余值无参考意义
+     */
+    private int version;
+
+    /**
+     * 测量模式 0光电，1气囊
+     */
+    private int measurementMode;
+
+    /**
+     * 心率值
+     */
+    private int heartRate;
+
+    /**
+     * 收缩压(血压高压)
+     */
+    private int systolic;
+
+    /**
+     * 舒张压(血压低压)
+     */
+    private int diastolic;
+
+    /**
+     * 测试状态
+     */
+    private int testStatus;
+
+    /**
+     * 结果可信度
+     */
+    private int resultCredibility;
+
+    /**
+     * 身高cm
+     */
+    private int height;
+
+    /**
+     * 体重kg
+     */
+    private int weight;
+
+    /**
+     * 年龄
+     */
+    private int age;
+
+    /**
+     * 性别：是否为男性
+     */
+    private boolean isMale;
+
+    /**
+     * 实际测量时长，最大60秒
+     */
+    private int testTime;
+
+    /**
+     * 测量失败超时计数:超过这个次数还没达到最低压力值就会返回测试失败
+     */
+    private int testFailTimeoutCount;
+
+    /**
+     * 气泵型号
+     */
+    private int pumpModel;
+
+    /**
+     * AFE型号
+     */
+    private int afeModel;
+
+    /**
+     * 加速度型号
+     */
+    private int accelerationModel;
+
+    /**
+     * mcu型号
+     */
+    private int mcuModel;
+
+    /**
+     * 算法版本
+     */
+    private String algorithmVersion;
+
+    /**
+     * 软件版本
+     */
+    private String softwareVersion;
+
+    /**
+     * 姿态
+     */
+    private int[] attitudeArray;
+
+    /**
+     * 运动量
+     */
+    private int[] sportArray;
+
+    /**
+     * 压力ADC
+     */
+    private int[] pressureAdcArray;
+
+    /**
+     * PPG数据ADC
+     */
+    private int[] ppgAdcArray;
+
+    /**
+     * 加速度X轴ADC
+     */
+    private int[] accelerationXArray;
+
+    /**
+     * 加速度Y轴ADC
+     */
+    private int[] accelerationYArray;
+
+    /**
+     * 加速度Z轴ADC
+     */
+    private int[] accelerationZArray;
+```
+
+**其他** --其他数据暂不支持，响应的数据结构暂不展示
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().readDeviceManualData(bleWriteResponse, timeStampSecond, dataTypeList, dataListener)
+```
+
+
+
+## 自动测量功能
+
+前提：需设备支持自动测量功能，判断条件如下：
+
+```kotlin
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportAutoMeasure
+```
+
+注：以下所有接口都需在满足设备支持自动测量功能才能调用
+
+#### 读取自动测量设置
+
+###### 前提
+
+需设备支持自动测量功能
+
+###### 接口
+
+```
+readAutoMeasureSettingData(bleWriteResponse, settingDataListener)
+```
+
+###### 参数解释
+
+| 参数名              | 类型                            | 描述                                          |
+| ------------------- | ------------------------------- | --------------------------------------------- |
+| bleWriteResponse    | BleWriteResponse                | 写入操作的监听                                |
+| settingDataListener | IAutoMeasureSettingDataListener | 自动测量设置操作的监听,返回自动测量设置的数据 |
+
+###### 数据返回
+
+**IAutoMeasureSettingDataListener** -- 自动测量功能回调
+
+```kotlin
+	/**
+     * 返回自动测量设置的数据
+     *
+     * @param autoMeasureDataList 自动测量设置的数据列表
+     */
+    fun onSettingDataChange(autoMeasureDataList:List<AutoMeasureData>)
+
+    fun onSettingDataChangeFail()
+
+    fun onSettingDataChangeSuccess()
+```
+
+**AutoMeasureData** -- 自动测量数据
+
+```kotlin
+//    协议类型
+    var protocolType = 0
+
+    //    功能类型
+    var funType = EAutoMeasureType.PULSE_RATE
+
+    //    功能开关
+    var isSwitchOpen = false
+
+    //    支持最小的步进，单位:m(分)
+    var stepUnit = 0
+
+    //    是否支持时间段修改
+    var isSlotModify = false
+
+    //    是否支持时间间隔修改
+    var isIntervalModify = false
+
+    //    支持测试的时间段-开始
+    var supportStartMinute = 0
+
+    //    支持测试的时间段-结束
+    var supportEndMinute = 0
+
+    //    测量间隔，单位:m(分)
+    var measureInterval = 0
+
+    //    当前的测试时间段-开始
+    var currentStartMinute = 0
+
+    //    当前的测试时间段-结束
+    var currentEndMinute = 0
+```
+
+**EAutoMeasureType** -- 自动测量 类型枚举类
+
+```kotlin
+enum class EAutoMeasureType(val value: Int) {
+    PULSE_RATE(0),
+    BLOOD_PRESSURE(1),
+    BLOOD_GLUCOSE(2),
+    STRESS(3),
+    BLOOD_OXYGEN(4),
+    BODY_TEMPERATURE(5),
+    LORENZ(6),
+    HRV(7),
+    BLOOD_COMPOSITION(8);
+
+    companion object {
+        fun fromValue(value: Int): EAutoMeasureType? {
+            return values().find { it.value == value }
+        }
+    }
+}
+```
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().readAutoMeasureSettingData(bleWriteResponse, settingDataListener)
+```
+
+
+
+#### 设置自动测量设置
+
+###### 前提
+
+需设备支持自动测量功能
+
+###### 接口
+
+```
+setAutoMeasureSettingData(bleWriteResponse, measureData, settingDataListener)
+```
+
+###### 参数解释
+
+| 参数名              | 类型                            | 描述                                          |
+| ------------------- | ------------------------------- | --------------------------------------------- |
+| bleWriteResponse    | BleWriteResponse                | 写入操作的监听                                |
+| measureData         | AutoMeasureData                 | 自动测量数据                                  |
+| settingDataListener | IAutoMeasureSettingDataListener | 自动测量设置操作的监听,返回自动测量设置的数据 |
+
+###### 数据返回
+
+**IAutoMeasureSettingDataListener** -- 自动测量功能回调，同【[读取设备手动测量数据](####读取设备手动测量数据)】返回一致
+
+**AutoMeasureData** -- 自动测量数据，同【[读取设备手动测量数据](####读取设备手动测量数据)】返回的数据结构一致
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().setAutoMeasureSettingData(bleWriteResponse, measureData, settingDataListener)
+```
+
+
+
+
+
+## 图文推送功能
+
+前提：需设备支持图文推送功能，判断条件如下：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportTextImagePush()
+```
+
+注：以下所有接口都需在满足设备支持图文推送功能才能调用
+
+### 推送文字信息
+
+###### 前提
+
+需设备支持图文推送功能
+
+###### 接口
+
+```java
+/**
+* 推送文字信息
+*
+* @param msg      文字信息
+* @param listener 文字信息推送监听
+*/
+public void pushTextMsg(String msg, BleWriteResponse bleWriteResponse, ITextMsgPushListener listener) 
+```
+
+###### 参数解释
+
+| 参数名           | 类型                 | 描述             |
+| ---------------- | -------------------- | ---------------- |
+| msg              | String               | 需要发送文本信息 |
+| bleWriteResponse | BleWriteResponse     | 写入操作的监听   |
+| listener         | ITextMsgPushListener | 文字推送的监听   |
+
+###### 数据返回
+
+**ITextMsgPushListener** -- 文字推送功能回调
+
+```java
+/**
+ * 文本消息推送监听
+ */
+public interface ITextMsgPushListener extends IListener {
+
+    /**
+     * 文字信息推送成功
+     */
+    void onTextMsgPushSuccess();
+
+    /**
+     * 文字消息推送失败
+     */
+    void onTextMsgPushFailed();
+
+    /**
+     * 当前设备不支持该功能
+     */
+    void onFunctionNotSupport();
+}
+```
+
+###### 示例代码
+
+```java
+VPOperateManager.getInstance().pushTextMsg(content, new BleWriteResponse() {
+    @Override
+    public void onResponse(int code) {
+        if(code!= Code.REQUEST_SUCCESS) {
+            tvPushInfo.setText("蓝牙数据发送失败");
+        }
+    }
+}, new ITextMsgPushListener() {
+    @Override
+    public void onTextMsgPushSuccess() {
+        tvPushInfo.setText("文本推送成功");
+    }
+
+    @Override
+    public void onTextMsgPushFailed() {
+        tvPushInfo.setText("文本推送失败");
+    }
+
+    @Override
+    public void onFunctionNotSupport() {
+        tvPushInfo.setText("不支持该功能");
+    }
+});
+```
+
+### 推送图片信息
+
+###### 前提
+
+需设备支持图文推送功能
+
+###### 接口
+
+```java
+/**
+* 推送图片信息
+*
+* @param imageFilePath 图片本地地址
+* @param listener      图片消息推送监听
+*/
+public void pushImageMsg(String imageFilePath, IImageMsgPushListener listener) 
+```
+
+###### 参数解释
+
+| 参数名        | 类型                  | 描述                 |
+| ------------- | --------------------- | -------------------- |
+| imageFilePath | String                | 需要发送图片本地路径 |
+| listener      | IImageMsgPushListener | 图片信息推送的监听   |
+
+###### 数据返回
+
+**IImageMsgPushListener** -- 文字推送功能回调
+
+```java
+public interface IImageMsgPushListener extends IListener {
+
+    void onImageMsgPushSuccess();
+
+    /**
+     * 
+     * @param currentBlock
+     * @param sumBlock
+     * @param progress
+     */
+    void onImageMsgPushProgress(int currentBlock, int sumBlock, int progress);
+
+    /**
+     * 图片推送错误
+     * @param errorCode 错误类型
+     */
+    void onImageMsgPushFailed(ErrorCode errorCode);
+
+    /**
+     * 错误码
+     */
+    enum ErrorCode {
+        IMAGE_PATH_ERROR("图片地址错误，不存在"),
+        IMAGE_SIZE_ERROR("图片尺寸异常"),
+        IMAGE_TOO_LARGE("图片内存太大了"),
+        TERMINATION("传输终止"),
+        LISTENER_IS_NULL("监听为空"),
+        NEED_READ_BASE_INFO("没有先执行读取UI信息"),
+        FILE_NOT_EXIST("文件不存在"),
+        LOW_BATTERY("电量过低"),
+        INTO_UPDATE_MODE_FAIL("进入UI模式失败"),
+        FILE_LENGTH_NOT_4_POWER("文件没有4字节对齐"),
+        CHECK_CRC_FAIL("crc校验失败"),
+        FUNCTION_NOT_SUPPORT("功能不支持"),
+        UNKNOWN("未知错误");
+
+        ErrorCode(String info){
+            this.info = info;
+        }
+
+        public String info;
+    }
+}
+```
+
+###### 示例代码
+
+```java
+VPOperateManager.getInstance().pushImageMsg(pushImagePath, new IImageMsgPushListener() {
+    @Override
+    public void onImageMsgPushSuccess() {
+        tvPushInfo.setText("图片推送成功");
+    }
+
+    @Override
+    public void onImageMsgPushProgress(int currentBlock, int sumBlock, int progress) {
+        tvPushInfo.setText("图片推送进度：" + progress + "%");
+    }
+
+    @Override
+    public void onImageMsgPushFailed(ErrorCode errorCode) {
+        tvPushInfo.setText("图片推送错误：" + errorCode.info);
+    }
+});
+```
+
+### 

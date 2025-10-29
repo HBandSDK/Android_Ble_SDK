@@ -24,6 +24,7 @@ import com.veepoo.protocol.listener.data.IImageMsgPushListener;
 import com.veepoo.protocol.listener.data.ITextMsgPushListener;
 import com.veepoo.protocol.listener.data.IUIBaseInfoFormImagePushListener;
 import com.veepoo.protocol.model.datas.UIDataImagePush;
+import com.veepoo.protocol.shareprence.VpSpGetUtil;
 import com.veepoo.protocol.util.UiUpdateUtil;
 import com.veepoo.protocol.util.thread.HBThreadPools;
 
@@ -56,6 +57,7 @@ public class TextImagePushActivity extends Activity implements View.OnClickListe
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_image_push);
+        VpSpGetUtil.getVpSpVariInstance(this).isSupportTextImagePush();
         initView();
         initData();
     }

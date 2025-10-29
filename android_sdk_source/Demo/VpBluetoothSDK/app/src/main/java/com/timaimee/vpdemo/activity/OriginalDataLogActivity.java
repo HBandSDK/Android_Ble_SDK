@@ -66,7 +66,7 @@ public class OriginalDataLogActivity extends Activity implements View.OnClickLis
     private void initHRVLog(List<HRVOriginData> originHrvDataList) {
         clearLogData();
         for (HRVOriginData data : originHrvDataList) {
-            String timeTag = "【" + data.getmTime().getDateAndClockForSleepSecond() + "-" + data.getCurrentPackNumber() + "/" + data.getAllCurrentPackNumber() + "】";
+            String timeTag = "【" + data.getmTime().toFullDateTimeString() + "-" + data.getCurrentPackNumber() + "/" + data.getAllCurrentPackNumber() + "】";
             String log = timeTag + data.rate;
             logs.add(new ShowLog(log, isContainTime(timeTag) ? ShowLog.Level.ERROR : ShowLog.Level.BLUE));
         }
@@ -76,7 +76,7 @@ public class OriginalDataLogActivity extends Activity implements View.OnClickLis
     private void initSpo2Log(List<Spo2hOriginData> originSpo2hDataList, int tag) {
 //        clearLogData();
         for (Spo2hOriginData data : originSpo2hDataList) {
-            String timeTag = "【" + data.getmTime().getDateAndClockForSleepSecond() + "-" + data.getCurrentPackNumber() + "/" + data.getAllPackNumner() + "】";
+            String timeTag = "【" + data.getmTime().toFullDateTimeString() + "-" + data.getCurrentPackNumber() + "/" + data.getAllPackNumner() + "】";
             String log = timeTag
                     + "-> 血氧 = " + data.getOxygenValue() + " 心率 = " + data.getHeartValue() + " 呼吸率 = " + data.getRespirationRate();
             logs.add(new ShowLog(log, isContainTime(timeTag) ? ShowLog.Level.ERROR : tag == 0 ? ShowLog.Level.GREEN : tag == 1 ? ShowLog.Level.BLACK : ShowLog.Level.BLUE));
@@ -95,7 +95,7 @@ public class OriginalDataLogActivity extends Activity implements View.OnClickLis
 
     private void initOriginDataLog(List<OriginData3> originDataList, int tag) {
         for (OriginData3 data : originDataList) {
-            String timeTag = "【" + data.getmTime().getDateAndClockForSleepSecond() + "-" + data.getPackageNumber() + "/" + data.getAllPackage() + "】";
+            String timeTag = "【" + data.getmTime().toFullDateTimeString() + "-" + data.getPackageNumber() + "/" + data.getAllPackage() + "】";
             String log = timeTag + data.toString();
             logs.add(new ShowLog(log, isContainTime(timeTag) ? ShowLog.Level.ERROR : tag == 0 ? ShowLog.Level.GREEN : tag == 1 ? ShowLog.Level.BLACK : ShowLog.Level.BLUE));
         }

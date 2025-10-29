@@ -15,6 +15,9 @@
 | 1.0.9   | 1.Read body composition data interface returns the added measurement time, measurement seconds, etc. | 2023.11.24    |
 | 1.1.0   | 1. Added instructions for obtaining blood sugar risk level;<br/>2. Added 05 flag judgment for body temperature reading. | 2024.04.15    |
 | 1.1.1   | 1. Synchronize personal information API to add weight parameter description;<br />2. Multi-level skin color setting (device support required). | 2024.11.30    |
+| 1.1.2   | 1.Read the comments related to recording the packet position required for deleting sports mode data. | 2024.12.12    |
+| 1.1.3   | 1.Add description for the automatic measurement read/set interface (0xB3); <br />2.Add relevant interfaces for reading manual measurement data (blood pressure) | 2025.06.10    |
+| 1.1.4   | Added Text&Image push Function                               | 2025.10.27    |
 
 ## Public interface class
 **VPOperateManager**（SDK main entry）  
@@ -202,15 +205,15 @@ Note: **The first step after successful connection is to perform other Bluetooth
 
 
 | Parameter name            | Type                       | Describe                                                     |
-|----------------	|----------------	|----------------	|
-| bleWriteResponse 	| IBleWriteResponse 	| code Return Code.REQUEST_SUCCESS means that the command is sent to the device successfully, but the successful sending of the command does not necessarily mean that there will be no data returned. The successful return only means that the device has received the command. If the device cannot process the command, there may be no data returned. This interface is used by developers to find problems |
-| pwdDataListener 	| IPwdDataListener 	| Password operation data return monitoring, the data returned here includes: device number, device release version number, device test version number, drinking data status, wrist flip screen status, phone search function status, wearing detection function status |
-| deviceFuctionDataListener 	| IDeviceFuctionDataListener 	| The returned monitoring of the functions included in the device. The data returned here includes: The status of each device function [whether supported]: blood pressure, drinking, sedentary, high heart rate reminder, WeChat sports, shake-shake photography, fatigue, blood oxygen |
-| socialMsgDataListener 	| ISocialMsgDataListener 	| The returned monitoring of phone calls, text messages, and social software messages. The data returned here includes: whether to support receiving reminders from social software, whether to open phone calls, text messages, and social software reminders |
-| customSettingDataListener 	| ICustomSettingDataListener 	| Listening for Personalized Settings Operations |
-| pwd 	| String 	| The password length is 4, the initial value is 0000, before entering the password, please make sure it is a 4-digit number |
-| mModelIs24 	| boolean 	| Time format, if you choose to display the 24-hour system, pass true, if you choose the 12-hour system, pass false |
-| deviceTimeSetting 	| DeviceTimeSetting 	| The default is the phone system time, you can customize the time, accurate to the second |
+| ------------------------- | -------------------------- | ------------------------------------------------------------ |
+| bleWriteResponse          | IBleWriteResponse          | code Return Code.REQUEST_SUCCESS means that the command is sent to the device successfully, but the successful sending of the command does not necessarily mean that there will be no data returned. The successful return only means that the device has received the command. If the device cannot process the command, there may be no data returned. This interface is used by developers to find problems |
+| pwdDataListener           | IPwdDataListener           | Password operation data return monitoring, the data returned here includes: device number, device release version number, device test version number, drinking data status, wrist flip screen status, phone search function status, wearing detection function status |
+| deviceFuctionDataListener | IDeviceFuctionDataListener | The returned monitoring of the functions included in the device. The data returned here includes: The status of each device function [whether supported]: blood pressure, drinking, sedentary, high heart rate reminder, WeChat sports, shake-shake photography, fatigue, blood oxygen |
+| socialMsgDataListener     | ISocialMsgDataListener     | The returned monitoring of phone calls, text messages, and social software messages. The data returned here includes: whether to support receiving reminders from social software, whether to open phone calls, text messages, and social software reminders |
+| customSettingDataListener | ICustomSettingDataListener | Listening for Personalized Settings Operations               |
+| pwd                       | String                     | The password length is 4, the initial value is 0000, before entering the password, please make sure it is a 4-digit number |
+| mModelIs24                | boolean                    | Time format, if you choose to display the 24-hour system, pass true, if you choose the 12-hour system, pass false |
+| deviceTimeSetting         | DeviceTimeSetting          | The default is the phone system time, you can customize the time, accurate to the second |
 
 ###### Data return
 
@@ -240,13 +243,13 @@ fun onPwdDataChange(pwdData:PwdData);
 
 **EFunctionStatus** -- Functional status
 
-| Parameter name         | Describe   |
-| ------------- | ------ |
-| UNSUPPORT     | function unsupport |
-| SUPPORT       | function support |
-| SUPPORT_OPEN  | function open |
-| SUPPORT_CLOSE | function close |
-| UNKONW        | unknow state |
+| Parameter name | Describe           |
+| -------------- | ------------------ |
+| UNSUPPORT      | function unsupport |
+| SUPPORT        | function support   |
+| SUPPORT_OPEN   | function open      |
+| SUPPORT_CLOSE  | function close     |
+| UNKONW         | unknow state       |
 
 **IDeviceFuctionDataListener** -- Device function status monitoring, monitoring once, may be called back twice, depending on the device
 
@@ -261,59 +264,59 @@ fun onFunctionSupportDataChange(functionSupport:FunctionDeviceSupportData)
 
 **FunctionDeviceSupportData** --Each device function status [supported or not]
 
-| Parameter name        | Type            | Describe                 |
-| --------------------- | --------------- | ------------------------ |
-| Bp | EFunctionStatus | Blood pressure function status |
-| Drink | EFunctionStatus | Drinking function status |
-| Longseat | EFunctionStatus | Sedentary function status |
-| HeartWaring | EFunctionStatus | Heart rate warning function status |
-| WeChatSport | EFunctionStatus | WeChat sports function status |
-| Camera | EFunctionStatus | Photo function status |
-| Fatigue | EFunctionStatus | Fatigue function status |
-| SpoH | EFunctionStatus | Blood oxygen function status |
-| SpoHAdjuster | EFunctionStatus | Blood oxygen calibration function status |
-| SpoHBreathBreak | EFunctionStatus | Blood oxygen apnea reminder function status |
-| Woman | EFunctionStatus | Female function status |
-| Alarm2 | EFunctionStatus | New alarm function status |
-| newCalcSport | EFunctionStatus | New function for step calculation |
-| CountDown | EFunctionStatus | Countdown function status |
-| AngioAdjuster | EFunctionStatus | Dynamic blood pressure adjustment function status |
-| ScreenLight | EFunctionStatus | Screen brightness adjustment function status |
-| HeartDetect | EFunctionStatus | Heart rate detection function status, enabled by default |
-| SportModel | EFunctionStatus | Sport mode function status |
-| NightTurnSetting | EFunctionStatus | Turn wrist to light up screen setting function status |
-| hidFuction | EFunctionStatus | HID function status |
-| screenStyleFunction | EFunctionStatus | Screen style function |
-| beathFunction | EFunctionStatus | Respiration rate function |
-| hrvFunction | EFunctionStatus | HRV function status |
-| weatherFunction | EFunctionStatus | Weather function status |
-| screenLightTime | EFunctionStatus | Screen on time function status |
-| precisionSleep | EFunctionStatus | Precision sleep function status |
-| resetData | EFunctionStatus | Reset device/data function status |
-| ecg | EFunctionStatus | ECG function status |
-| multSportModel | EFunctionStatus | Multi-sport function status |
-| lowPower | EFunctionStatus | Low power function status |
-| findDeviceByPhone | EFunctionStatus | Phone find device function status |
-| agps | EFunctionStatus | AGPS function status |
-| temperatureFunction | EFunctionStatus | Body temperature function status |
-| textAlarm | EFunctionStatus | Text alarm function status |
-| bloodGlucose | EFunctionStatus | Blood glucose function status |
-| bloodGlucoseAdjusting | EFunctionStatus | Blood glucose calibration function |
-| sleepTag | Int | Sleep flag |
-| musicStyle | Int | Music band information 0x99, value 1 |
-| WathcDay | Int | Maximum number of days the watch can save |
-| contactMsgLength | Int | Contact message length |
-| allMsgLength | Int | Maximum number of message reminder packets |
-| sportmodelday | Int | Maximum number of days in sports mode |
-| screenstyle | Int | Screen style selection |
-| weatherStyle | Int | Weather type |
-| originProtcolVersion | Int | Protocol version of original data |
-| bitDataTranType | Int | Bulk data transmission type |
-| watchUiServerCount | Int | Number of watch face markets |
-| watchUiCoustomCount | Int | Number of custom watch faces |
-| temptureType | Int | Temperature type |
-| cpuType | Int | cpu type |
-| ecgType | Int | ecg type |
+| Parameter name        | Type            | Describe                                                 |
+| --------------------- | --------------- | -------------------------------------------------------- |
+| Bp                    | EFunctionStatus | Blood pressure function status                           |
+| Drink                 | EFunctionStatus | Drinking function status                                 |
+| Longseat              | EFunctionStatus | Sedentary function status                                |
+| HeartWaring           | EFunctionStatus | Heart rate warning function status                       |
+| WeChatSport           | EFunctionStatus | WeChat sports function status                            |
+| Camera                | EFunctionStatus | Photo function status                                    |
+| Fatigue               | EFunctionStatus | Fatigue function status                                  |
+| SpoH                  | EFunctionStatus | Blood oxygen function status                             |
+| SpoHAdjuster          | EFunctionStatus | Blood oxygen calibration function status                 |
+| SpoHBreathBreak       | EFunctionStatus | Blood oxygen apnea reminder function status              |
+| Woman                 | EFunctionStatus | Female function status                                   |
+| Alarm2                | EFunctionStatus | New alarm function status                                |
+| newCalcSport          | EFunctionStatus | New function for step calculation                        |
+| CountDown             | EFunctionStatus | Countdown function status                                |
+| AngioAdjuster         | EFunctionStatus | Dynamic blood pressure adjustment function status        |
+| ScreenLight           | EFunctionStatus | Screen brightness adjustment function status             |
+| HeartDetect           | EFunctionStatus | Heart rate detection function status, enabled by default |
+| SportModel            | EFunctionStatus | Sport mode function status                               |
+| NightTurnSetting      | EFunctionStatus | Turn wrist to light up screen setting function status    |
+| hidFuction            | EFunctionStatus | HID function status                                      |
+| screenStyleFunction   | EFunctionStatus | Screen style function                                    |
+| beathFunction         | EFunctionStatus | Respiration rate function                                |
+| hrvFunction           | EFunctionStatus | HRV function status                                      |
+| weatherFunction       | EFunctionStatus | Weather function status                                  |
+| screenLightTime       | EFunctionStatus | Screen on time function status                           |
+| precisionSleep        | EFunctionStatus | Precision sleep function status                          |
+| resetData             | EFunctionStatus | Reset device/data function status                        |
+| ecg                   | EFunctionStatus | ECG function status                                      |
+| multSportModel        | EFunctionStatus | Multi-sport function status                              |
+| lowPower              | EFunctionStatus | Low power function status                                |
+| findDeviceByPhone     | EFunctionStatus | Phone find device function status                        |
+| agps                  | EFunctionStatus | AGPS function status                                     |
+| temperatureFunction   | EFunctionStatus | Body temperature function status                         |
+| textAlarm             | EFunctionStatus | Text alarm function status                               |
+| bloodGlucose          | EFunctionStatus | Blood glucose function status                            |
+| bloodGlucoseAdjusting | EFunctionStatus | Blood glucose calibration function                       |
+| sleepTag              | Int             | Sleep flag                                               |
+| musicStyle            | Int             | Music band information 0x99, value 1                     |
+| WathcDay              | Int             | Maximum number of days the watch can save                |
+| contactMsgLength      | Int             | Contact message length                                   |
+| allMsgLength          | Int             | Maximum number of message reminder packets               |
+| sportmodelday         | Int             | Maximum number of days in sports mode                    |
+| screenstyle           | Int             | Screen style selection                                   |
+| weatherStyle          | Int             | Weather type                                             |
+| originProtcolVersion  | Int             | Protocol version of original data                        |
+| bitDataTranType       | Int             | Bulk data transmission type                              |
+| watchUiServerCount    | Int             | Number of watch face markets                             |
+| watchUiCoustomCount   | Int             | Number of custom watch faces                             |
+| temptureType          | Int             | Temperature type                                         |
+| cpuType               | Int             | cpu type                                                 |
+| ecgType               | Int             | ecg type                                                 |
 
 **ISocialMsgDataListener** --Message notification switch callback monitoring Details return to view【[Message Notification](#Message Notification)】
 
@@ -374,8 +377,8 @@ disconnectWatch(bleWriteResponse)
 
 ###### Parameter Explanation
 
-| Parameter name   | Type              | Describe       |
-| ---------------- | ----------------- | -------------- |
+| Parameter name   | Type              | Describe                       |
+| ---------------- | ----------------- | ------------------------------ |
 | bleWriteResponse | IBleWriteResponse | Listening for write operations |
 
 ###### Example Code
@@ -411,14 +414,14 @@ syncPersonInfo(bleWriteResponse, personInfoDataListener, personInfoData)
 
 **PersonInfoData** --Personal information data
 
-| Parameter name | Type | Describe             |
-| -------------- | ---- | -------------------- |
-| ESex | ESex | Gender |
-| height | Int | Height |
-| weight | Int | Weight |
-| age | Int | Age |
-| stepAim | Int | Target number of steps |
-| sleepAim | Int | Target sleep time (minutes) |
+| Parameter name | Type | Describe                    |
+| -------------- | ---- | --------------------------- |
+| ESex           | ESex | Gender                      |
+| height         | Int  | Height                      |
+| weight         | Int  | Weight                      |
+| age            | Int  | Age                         |
+| stepAim        | Int  | Target number of steps      |
+| sleepAim       | Int  | Target sleep time (minutes) |
 
 ###### Return data
 
@@ -459,51 +462,51 @@ settingDeviceLanguage(bleWriteResponse, languageDataListener, language)
 
 ###### Parameter Explanation
 
-| Parameter name       | Type                  | Describe       |
-| -------------------- | --------------------- | -------------- |
+| Parameter name       | Type                  | Describe                       |
+| -------------------- | --------------------- | ------------------------------ |
 | bleWriteResponse     | IBleWriteResponse     | Listening for write operations |
-| languageDataListener | ILanguageDataListener | Set language callback |
-| language             | ELanguage             | Types of languages |
+| languageDataListener | ILanguageDataListener | Set language callback          |
+| language             | ELanguage             | Types of languages             |
 
 **ELanguage** Language Enumeration
 
-| Parameter name             | Describe       |
-| ----------------- | ---------- |
-| CHINA | Chinese Simplified |
-| CHINA_TRADITIONAL | Chinese Traditional |
-| ENGLISH | English |
-| JAPAN | Japanese |
-| KOREA | Korean |
-| DEUTSCH | German |
-| RUSSIA | Russian |
-| SPANISH | Spanish |
-| ITALIA | Italian |
-| FRENCH | French |
-| VIETNAM | Vietnamese |
-| PORTUGUESA | Portuguese |
-| THAI | Thai |
-| POLISH | Polish |
-| SWEDISH | Swedish |
-| TURKISH | Turkish |
-| DUTCH | Dutch |
-| CZECH | Czech |
-| ARABIC | Arabic |
-| HUNGARY | Hungarian |
-| GREEK | Greek |
-| ROMANIAN | Romanian |
-| SLOVAK | Slovak |
-| INDONESIAN | Indonesian |
-| BRAZIL_PORTUGAL | Brazilian Portuguese |
-| CROATIAN | Croatian |
-| LITHUANIAN | Lithuanian |
-| UKRAINE | Ukrainian |
-| HINDI | Hindi |
-| HEBREW | Hebrew |
-| DANISH | Danish |
-| PERSIAN | Persian |
-| FINNISH | Finnish |
-| MALAY | Malay |
-| UNKONW | Unknown |
+| Parameter name    | Describe             |
+| ----------------- | -------------------- |
+| CHINA             | Chinese Simplified   |
+| CHINA_TRADITIONAL | Chinese Traditional  |
+| ENGLISH           | English              |
+| JAPAN             | Japanese             |
+| KOREA             | Korean               |
+| DEUTSCH           | German               |
+| RUSSIA            | Russian              |
+| SPANISH           | Spanish              |
+| ITALIA            | Italian              |
+| FRENCH            | French               |
+| VIETNAM           | Vietnamese           |
+| PORTUGUESA        | Portuguese           |
+| THAI              | Thai                 |
+| POLISH            | Polish               |
+| SWEDISH           | Swedish              |
+| TURKISH           | Turkish              |
+| DUTCH             | Dutch                |
+| CZECH             | Czech                |
+| ARABIC            | Arabic               |
+| HUNGARY           | Hungarian            |
+| GREEK             | Greek                |
+| ROMANIAN          | Romanian             |
+| SLOVAK            | Slovak               |
+| INDONESIAN        | Indonesian           |
+| BRAZIL_PORTUGAL   | Brazilian Portuguese |
+| CROATIAN          | Croatian             |
+| LITHUANIAN        | Lithuanian           |
+| UKRAINE           | Ukrainian            |
+| HINDI             | Hindi                |
+| HEBREW            | Hebrew               |
+| DANISH            | Danish               |
+| PERSIAN           | Persian              |
+| FINNISH           | Finnish              |
+| MALAY             | Malay                |
+| UNKONW            | Unknown              |
 
 ###### Return data
 
@@ -547,10 +550,10 @@ readSportStep(bleWriteResponse, sportDataListener)
 
 ###### Parameter Explanation
 
-| Parameter name    | Type               | Describe         |
-| ----------------- | ------------------ | ---------------- |
-| bleWriteResponse  | IBleWriteResponse  | Listening for write operations   |
-| sportDataListener | ISportDataListener | Read motion data monitoring |
+| Parameter name    | Type               | Describe                       |
+| ----------------- | ------------------ | ------------------------------ |
+| bleWriteResponse  | IBleWriteResponse  | Listening for write operations |
+| sportDataListener | ISportDataListener | Read motion data monitoring    |
 
 ###### Return data
 
@@ -569,11 +572,11 @@ fun onSportDataChange(sportData:SportData)
 
 | Parameter name                  | Type   | Describe                                                     |
 | ------------------------------- | ------ | ------------------------------------------------------------ |
-| step | Int | Current step count |
-| dis | Double | Current distance in km |
-| kcal | Double | Current calories in kcal |
-| calcType | Int | Calculation method, 0 indicates the traditional algorithm, 1 indicates the new algorithm formula, and 2 indicates the table of the motion mode table |
-| triaxialX, triaxialY, triaxialZ | Int | Triaxial position |
+| step                            | Int    | Current step count                                           |
+| dis                             | Double | Current distance in km                                       |
+| kcal                            | Double | Current calories in kcal                                     |
+| calcType                        | Int    | Calculation method, 0 indicates the traditional algorithm, 1 indicates the new algorithm formula, and 2 indicates the table of the motion mode table |
+| triaxialX, triaxialY, triaxialZ | Int    | Triaxial position                                            |
 
 ###### Example Code
 
@@ -608,10 +611,10 @@ readBattery(bleWriteResponse, batteryDataListener)
 
 ###### Parameter Explanation
 
-| Parameter name      | Type                 | Describe       |
-| ------------------- | -------------------- | -------------- |
+| Parameter name      | Type                 | Describe                       |
+| ------------------- | -------------------- | ------------------------------ |
 | bleWriteResponse    | IBleWriteResponse    | Listening for write operations |
-| batteryDataListener | IBatteryDataListener | Read power monitoring |
+| batteryDataListener | IBatteryDataListener | Read power monitoring          |
 
 ###### Return data
 
@@ -628,13 +631,13 @@ fun onDataChange(batteryData:BatteryData)
 
 | Parameter name | Type    | Describe                                                     |
 | -------------- | ------- | ------------------------------------------------------------ |
-| batteryLevel | Int | Current battery level of the device [1-4], 4 represents full power |
-| batteryPercent | Int | Battery percentage [1-100] |
-| powerModel | Int | Power mode: 0x00 normal, 0x01 charging state, 0x02 low voltage state, 0x03 full power state |
-| state | Int | Sleep state: 0 wake up 1 sleep |
-| bat | Byte | Current battery level of BAT |
-| isLowBattery | Boolean | Is the battery level low: 0x01 represents normal, 0x02 represents low battery |
-| isPercent | Boolean | Whether the battery percentage can be displayed, true represents the battery level in batteryPercent, false represents the battery level in batteryLevel
+| batteryLevel   | Int     | Current battery level of the device [1-4], 4 represents full power |
+| batteryPercent | Int     | Battery percentage [1-100]                                   |
+| powerModel     | Int     | Power mode: 0x00 normal, 0x01 charging state, 0x02 low voltage state, 0x03 full power state |
+| state          | Int     | Sleep state: 0 wake up 1 sleep                               |
+| bat            | Byte    | Current battery level of BAT                                 |
+| isLowBattery   | Boolean | Is the battery level low: 0x01 represents normal, 0x02 represents low battery |
+| isPercent      | Boolean | Whether the battery percentage can be displayed, true represents the battery level in batteryPercent, false represents the battery level in batteryLevel |
 
 ###### Example Code
 
@@ -723,78 +726,78 @@ void onReadOriginComplete();
 
 | Parameter name | Type     | Describe                                                     |
 | -------------- | -------- | ------------------------------------------------------------ |
-| Date | String | Sleep date |
-| cali_flag | Int | Sleep calibration value, currently this value is useless |
-| sleepQulity | Int | Sleep quality |
-| wakeCount | Int | Number of times you wake up during sleep |
-| deepSleepTime | Int | Deep sleep duration (in min) |
-| lowSleepTime | Int | Light sleep duration (in min) |
-| allSleepTime | Int | Total sleep duration |
-| sleepLine | String | Sleep curve is mainly used to display sleep status in a more concrete UI. If your sleep interface has no special requirements for UI, you can ignore it. Sleep curve is divided into normal sleep and precise sleep. Normal sleep is a string composed of 0, 1, 2. Each character represents a duration of 5 minutes, where 0 represents light sleep, 1 represents deep sleep, and 2 represents awakening. For example, "201112" has a length of 6, which means a total of 30 minutes of sleep, 5 minutes of awakening at the beginning and end, 5 minutes of light sleep in the middle, and 15 minutes of deep sleep. For precise sleep, the sleep curve is a string composed of 0, 1, 2, 3, 4. Each character represents a duration of 1 minute, where 0 represents deep sleep, 1 represents light sleep, 2 represents rapid eye movement, 3 represents insomnia, and 4 represents awakening. |
-| sleepDown | TimeData | Time to fall asleep |
-| sleepUp | TimeData | Time to wake up |
+| Date           | String   | Sleep date                                                   |
+| cali_flag      | Int      | Sleep calibration value, currently this value is useless     |
+| sleepQulity    | Int      | Sleep quality                                                |
+| wakeCount      | Int      | Number of times you wake up during sleep                     |
+| deepSleepTime  | Int      | Deep sleep duration (in min)                                 |
+| lowSleepTime   | Int      | Light sleep duration (in min)                                |
+| allSleepTime   | Int      | Total sleep duration                                         |
+| sleepLine      | String   | Sleep curve is mainly used to display sleep status in a more concrete UI. If your sleep interface has no special requirements for UI, you can ignore it. Sleep curve is divided into normal sleep and precise sleep. Normal sleep is a string composed of 0, 1, 2. Each character represents a duration of 5 minutes, where 0 represents light sleep, 1 represents deep sleep, and 2 represents awakening. For example, "201112" has a length of 6, which means a total of 30 minutes of sleep, 5 minutes of awakening at the beginning and end, 5 minutes of light sleep in the middle, and 15 minutes of deep sleep. For precise sleep, the sleep curve is a string composed of 0, 1, 2, 3, 4. Each character represents a duration of 1 minute, where 0 represents deep sleep, 1 represents light sleep, 2 represents rapid eye movement, 3 represents insomnia, and 4 represents awakening. |
+| sleepDown      | TimeData | Time to fall asleep                                          |
+| sleepUp        | TimeData | Time to wake up                                              |
 
 **OriginData** -- 5 minutes of original data
 
 | Parameter name  | Type     | Describe                                                     |
 | --------------- | -------- | ------------------------------------------------------------ |
-| date | String | Sleep date |
-| allPackage | Int | Total number of packages of data for the day |
-| packageNumber | Int | The location of this data on the day |
-| mTime | TimeData | Precise time |
-| rateValue | Int | Heart rate value, range [30-200] |
-| sportValue | Int | Exercise value [0-65536], the larger the value, the more intense the exercise. It is divided into 5 levels, namely [0-220], [201-700], [701-1400], [1401-3200], [3201-65535] |
-| stepValue | Int | Step count value |
-| highValue | Int | High pressure value, range [60-300] |
-| lowValue | Int | Low pressure value, range [20-200] |
-| wear | Int | Wear flag |
-| tempOne | Int | Reserved value |
-| tempTwo | Int | Reserved value |
-| calValue | Double | Calories consumed |
-| disValue | Double | Total distance in km |
-| calcType | Int | Calculation method: 0 indicates the traditional algorithm, 1 indicates the new algorithm formula, and 2 indicates the device in exercise mode |
-| drankPartOne | String | Temporarily reserved |
-| baseTemperature | Double | Body surface temperature, the value is valid when VpSpGetUtil.isSupportReadTempture && VpSpGetUtil.getTemperatureType == |
-| temperature | Double | Body temperature, the value is valid when VpSpGetUtil.isSupportReadTempture && VpSpGetUtil.getTemperatureType == |
+| date            | String   | Sleep date                                                   |
+| allPackage      | Int      | Total number of packages of data for the day                 |
+| packageNumber   | Int      | The location of this data on the day                         |
+| mTime           | TimeData | Precise time                                                 |
+| rateValue       | Int      | Heart rate value, range [30-200]                             |
+| sportValue      | Int      | Exercise value [0-65536], the larger the value, the more intense the exercise. It is divided into 5 levels, namely [0-220], [201-700], [701-1400], [1401-3200], [3201-65535] |
+| stepValue       | Int      | Step count value                                             |
+| highValue       | Int      | High pressure value, range [60-300]                          |
+| lowValue        | Int      | Low pressure value, range [20-200]                           |
+| wear            | Int      | Wear flag                                                    |
+| tempOne         | Int      | Reserved value                                               |
+| tempTwo         | Int      | Reserved value                                               |
+| calValue        | Double   | Calories consumed                                            |
+| disValue        | Double   | Total distance in km                                         |
+| calcType        | Int      | Calculation method: 0 indicates the traditional algorithm, 1 indicates the new algorithm formula, and 2 indicates the device in exercise mode |
+| drankPartOne    | String   | Temporarily reserved                                         |
+| baseTemperature | Double   | Body surface temperature, the value is valid when VpSpGetUtil.isSupportReadTempture && VpSpGetUtil.getTemperatureType == |
+| temperature     | Double   | Body temperature, the value is valid when VpSpGetUtil.isSupportReadTempture && VpSpGetUtil.getTemperatureType == |
 
 **OriginHalfHourData** -- half hour of original data
 
-| Parameter name     | Type                    | Describe                                      |
-| ------------------ | ----------------------- | --------------------------------------------- |
-| halfHourRateDatas | List<HalfHourRateData> | 30 minutes of heart rate data |
-| halfHourBps | List<HalfHourBpData> | 30 minutes of blood pressure data |
-| halfHourSportDatas | List<HalfHourSportData> | 30 minutes of exercise data |
-| allStep | Int | Total number of steps in the current 30 minutes (5*6) of raw data |
-| date | String | Date ("yyyy-MM-dd HH:mm:ss) |
+| Parameter name     | Type                    | Describe                                                     |
+| ------------------ | ----------------------- | ------------------------------------------------------------ |
+| halfHourRateDatas  | List<HalfHourRateData>  | 30 minutes of heart rate data                                |
+| halfHourBps        | List<HalfHourBpData>    | 30 minutes of blood pressure data                            |
+| halfHourSportDatas | List<HalfHourSportData> | 30 minutes of exercise data                                  |
+| allStep            | Int                     | Total number of steps in the current 30 minutes (5*6) of raw data |
+| date               | String                  | Date ("yyyy-MM-dd HH:mm:ss)                                  |
 
 **HalfHourRateData** -- half hour of heart rate data
 
 | Parameter name | Type     | Describe                                                     |
 | -------------- | -------- | ------------------------------------------------------------ |
-| date | String | Date |
-| time | TimeData | Specific time, up to the minute, such as 10:00 means the average value of the period 10:00-10:30 |
-| rateValue | Int | Heart rate value |
-| ecgCount | Int | Total ecg counts |
-| ppgCount | Int | Total ppg counts                                                    |
+| date           | String   | Date                                                         |
+| time           | TimeData | Specific time, up to the minute, such as 10:00 means the average value of the period 10:00-10:30 |
+| rateValue      | Int      | Heart rate value                                             |
+| ecgCount       | Int      | Total ecg counts                                             |
+| ppgCount       | Int      | Total ppg counts                                             |
 
 **HalfHourBpData**-- 30-minute blood pressure data
 
 | Parameter name | Type     | Describe                                                     |
 | -------------- | -------- | ------------------------------------------------------------ |
-| date | String | The date |
-| time | TimeData | The specific time, which can be accurate to the minute at most. For example, 10:00 means the average value of the period from 10:00 to 10:30 |
-| highValue | Int | The highest blood pressure value |
-| lowValue | Int | The lowest blood pressure value                                                |
+| date           | String   | The date                                                     |
+| time           | TimeData | The specific time, which can be accurate to the minute at most. For example, 10:00 means the average value of the period from 10:00 to 10:30 |
+| highValue      | Int      | The highest blood pressure value                             |
+| lowValue       | Int      | The lowest blood pressure value                              |
 
 **HalfHourSportData** -- 30-minute sport data
 
 | Parameter name | Type     | Describe                                                     |
 | -------------- | -------- | ------------------------------------------------------------ |
-| date | String | Date |
-| time | TimeData | Specific time, up to the minute, such as 10:00 means the average value of the period 10:00-10:30 |
-| sportValue | Int | Total exercise in 30 minutes |
-| disValue | Double | Total distance in 30 minutes |
-| calValue | Double | Total calories in 30 minutes |
+| date           | String   | Date                                                         |
+| time           | TimeData | Specific time, up to the minute, such as 10:00 means the average value of the period 10:00-10:30 |
+| sportValue     | Int      | Total exercise in 30 minutes                                 |
+| disValue       | Double   | Total distance in 30 minutes                                 |
+| calValue       | Double   | Total calories in 30 minutes                                 |
 
 ###### Example Code
 
@@ -862,12 +865,12 @@ readOriginDataSingleDay(bleWriteResponse, originDataListener, day, position, wat
 
 | Parameter name     | Type                                     | Describe                                                     |
 | ------------------ | ---------------------------------------- | ------------------------------------------------------------ |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
+| bleWriteResponse   | IBleWriteResponse                        | Listening for write operations                               |
 | originDataListener | IOriginDataListener/IOriginData3Listener | Callback of raw data. The returned data includes steps, heart rate, blood pressure, and exercise volume. |
-| watchday | Int | Data storage capacity of the watch (unit: day) |
-| day | Int | Read position. 0 means today, 1 means yesterday, 2 means the day before yesterday, and so on. The reading order is today-yesterday-the day before yesterday |
-| position | Int | The number of read positions. This value must be greater than or equal to 1 |
-| readOriginSetting | ReadOriginSetting | Read raw data settings                                         |
+| watchday           | Int                                      | Data storage capacity of the watch (unit: day)               |
+| day                | Int                                      | Read position. 0 means today, 1 means yesterday, 2 means the day before yesterday, and so on. The reading order is today-yesterday-the day before yesterday |
+| position           | Int                                      | The number of read positions. This value must be greater than or equal to 1 |
+| readOriginSetting  | ReadOriginSetting                        | Read raw data settings                                       |
 
 Note: **When reading daily data, you need to determine the device protocol version. When the device protocol version is 3 or 5, you need to pass in IOriginData3Listener. In other cases, use IOriginDataListener**
 
@@ -886,10 +889,10 @@ if(originProtocolVersion==3 || originProtocolVersion == 5){
 
 | Parameter name | Type    | Describe                                                     |
 | -------------- | ------- | ------------------------------------------------------------ |
-| day | Int | Read position, 0 means today, 1 means yesterday, 2 means the day before yesterday, and so on. The reading order is today-yesterday-the day before yesterday |
-| position | Int | The position of the number of reads, this value must be greater than or equal to 1 |
-| onlyReadOneDay | Boolean | true means read only today, false means read in order |
-| watchday | Int | The number of days stored in the watch |
+| day            | Int     | Read position, 0 means today, 1 means yesterday, 2 means the day before yesterday, and so on. The reading order is today-yesterday-the day before yesterday |
+| position       | Int     | The position of the number of reads, this value must be greater than or equal to 1 |
+| onlyReadOneDay | Boolean | true means read only today, false means read in order        |
+| watchday       | Int     | The number of days stored in the watch                       |
 
 ###### Return data
 
@@ -969,32 +972,32 @@ fun onOriginSpo2OriginListDataChange(originSpo2hDataList:List<Spo2hOriginData>)
 
 **OriginData3** -- 5-minute daily data (inherited from OriginData, with more data returned)
 
-| Parameter name | Type           | Describe             |
-| -------------- | -------------- | -------------------- |
-| gesture | IntArray | Wearing gesture type |
-| ppgs | IntArray | 5-minute pulse rate value |
-| ecgs | IntArray | 5-minute heart rate value |
-| resRates | IntArray | 5-minute respiration rate value |
-| sleepStates | IntArray | 5-minute sleep state value |
-| oxygens | IntArray | 5-minute blood oxygen value |
-| apneaResults | IntArray | Apnea times array |
-| hypoxiaTimes | IntArray | Hypoxia time array |
-| cardiacLoads | IntArray | Cardiac load array |
-| isHypoxias | IntArray | Apnea results array |
-| corrects | IntArray | Blood oxygen correction value string array |
-| bloodGlucose | Int | Blood glucose value |
-| bloodComponent | BloodComponent | Blood components |
-| | | |
+| Parameter name | Type           | Describe                                   |
+| -------------- | -------------- | ------------------------------------------ |
+| gesture        | IntArray       | Wearing gesture type                       |
+| ppgs           | IntArray       | 5-minute pulse rate value                  |
+| ecgs           | IntArray       | 5-minute heart rate value                  |
+| resRates       | IntArray       | 5-minute respiration rate value            |
+| sleepStates    | IntArray       | 5-minute sleep state value                 |
+| oxygens        | IntArray       | 5-minute blood oxygen value                |
+| apneaResults   | IntArray       | Apnea times array                          |
+| hypoxiaTimes   | IntArray       | Hypoxia time array                         |
+| cardiacLoads   | IntArray       | Cardiac load array                         |
+| isHypoxias     | IntArray       | Apnea results array                        |
+| corrects       | IntArray       | Blood oxygen correction value string array |
+| bloodGlucose   | Int            | Blood glucose value                        |
+| bloodComponent | BloodComponent | Blood components                           |
+|                |                |                                            |
 
 **BloodComponent** --Blood components
 
 | Parameter name | Type  | Describe                                                     |
 | -------------- | ----- | ------------------------------------------------------------ |
-| uricAcid | Float | Uric acid value: unit μmol/L, value range [90.0, 1000.0], reported value range [900, 10000] |
-| tCHO | Float | Total cholesterol: unit mmol/L, value range [0.01, 100.00], reported value range [1, 10000] |
-| tAG | Float | Triglyceride: unit mmol/L, value range [0.01, 100.00] |
-| hDL | Float | High-density lipoprotein: unit mmol/L, value range [0.01, 100.00] |
-| lDL | Float | Low-density lipoprotein: unit mmol/L, value range [0.01, 100.00] |
+| uricAcid       | Float | Uric acid value: unit μmol/L, value range [90.0, 1000.0], reported value range [900, 10000] |
+| tCHO           | Float | Total cholesterol: unit mmol/L, value range [0.01, 100.00], reported value range [1, 10000] |
+| tAG            | Float | Triglyceride: unit mmol/L, value range [0.01, 100.00]        |
+| hDL            | Float | High-density lipoprotein: unit mmol/L, value range [0.01, 100.00] |
+| lDL            | Float | Low-density lipoprotein: unit mmol/L, value range [0.01, 100.00] |
 
 ###### Example Code
 
@@ -1064,68 +1067,68 @@ fun OnSettingDataChange(customSettingData: CustomSettingData?)
 
 | Parameter name        | Type              | Describe                                                     |
 | --------------------- | ----------------- | ------------------------------------------------------------ |
-| status | ECustomStatus | Get the status of the operation |
-| is24Hour | boolean | Is the time format 24 hours? |
-| metricSystem | EFunctionStatus | Metric and imperial: [SUPPORT_OPEN for metric, SUPPORT_CLOSE for imperial, UNSOUPRT for unsupported] |
-| autoHeartDetect | EFunctionStatus | Automatic heart rate measurement |
-| autoBpDetect | EFunctionStatus | Automatic blood pressure detection |
-| sportOverRemain | EFunctionStatus | Excessive exercise reminder |
-| voiceBpHeart | EFunctionStatus | Blood pressure/heart rate broadcast |
-| findPhoneUi | EFunctionStatus | Control the search for mobile phone UI |
-| secondsWatch | EFunctionStatus | Stopwatch |
-| lowSpo2hRemain | EFunctionStatus | Low oxygen alarm |
-| skin | EFunctionStatus | Skin color function |
-| autoHrv | EFunctionStatus | HRV automatic detection |
-| autoIncall | EFunctionStatus | Automatic answering of incoming calls |
-| disconnectRemind | EFunctionStatus | Disconnection reminder |
-| SOS | EFunctionStatus | SOS |
-| ppg | EFunctionStatus | ppg function: automatic pulse rate monitoring--> scientific sleep--> ppg |
-| musicControl | EFunctionStatus | Music control |
-| longClickLockScreen | EFunctionStatus | Long press lock screen |
-| messageScreenLight | EFunctionStatus | Message screen light function |
-| autoTemperatureDetect | EFunctionStatus | Automatic temperature detection |
-| temperatureUnit | ETemperatureUnit | Temperature unit setting |
-| ecgAlwaysOpen | EFunctionStatus | ecg always open |
-| bloodGlucoseDetection | EFunctionStatus | Blood glucose detection |
-| METDetect | EFunctionStatus | MET detection |
-| stressDetect | EFunctionStatus | Stress detection |
-| bloodGlucoseUnit | EBloodGlucoseUnit | Blood glucose unit |
-| skinLevel | Int | Skin color level |
-| bloodComponentDetect | EFunctionStatus | Blood component switch |
-| uricAcidUnit | EUricAcidUnit | Uric acid unit |
-| bloodFatUnit | EBloodFatUnit | Blood fat unit |
+| status                | ECustomStatus     | Get the status of the operation                              |
+| is24Hour              | boolean           | Is the time format 24 hours?                                 |
+| metricSystem          | EFunctionStatus   | Metric and imperial: [SUPPORT_OPEN for metric, SUPPORT_CLOSE for imperial, UNSOUPRT for unsupported] |
+| autoHeartDetect       | EFunctionStatus   | Automatic heart rate measurement                             |
+| autoBpDetect          | EFunctionStatus   | Automatic blood pressure detection                           |
+| sportOverRemain       | EFunctionStatus   | Excessive exercise reminder                                  |
+| voiceBpHeart          | EFunctionStatus   | Blood pressure/heart rate broadcast                          |
+| findPhoneUi           | EFunctionStatus   | Control the search for mobile phone UI                       |
+| secondsWatch          | EFunctionStatus   | Stopwatch                                                    |
+| lowSpo2hRemain        | EFunctionStatus   | Low oxygen alarm                                             |
+| skin                  | EFunctionStatus   | Skin color function                                          |
+| autoHrv               | EFunctionStatus   | HRV automatic detection                                      |
+| autoIncall            | EFunctionStatus   | Automatic answering of incoming calls                        |
+| disconnectRemind      | EFunctionStatus   | Disconnection reminder                                       |
+| SOS                   | EFunctionStatus   | SOS                                                          |
+| ppg                   | EFunctionStatus   | ppg function: automatic pulse rate monitoring--> scientific sleep--> ppg |
+| musicControl          | EFunctionStatus   | Music control                                                |
+| longClickLockScreen   | EFunctionStatus   | Long press lock screen                                       |
+| messageScreenLight    | EFunctionStatus   | Message screen light function                                |
+| autoTemperatureDetect | EFunctionStatus   | Automatic temperature detection                              |
+| temperatureUnit       | ETemperatureUnit  | Temperature unit setting                                     |
+| ecgAlwaysOpen         | EFunctionStatus   | ecg always open                                              |
+| bloodGlucoseDetection | EFunctionStatus   | Blood glucose detection                                      |
+| METDetect             | EFunctionStatus   | MET detection                                                |
+| stressDetect          | EFunctionStatus   | Stress detection                                             |
+| bloodGlucoseUnit      | EBloodGlucoseUnit | Blood glucose unit                                           |
+| skinLevel             | Int               | Skin color level                                             |
+| bloodComponentDetect  | EFunctionStatus   | Blood component switch                                       |
+| uricAcidUnit          | EUricAcidUnit     | Uric acid unit                                               |
+| bloodFatUnit          | EBloodFatUnit     | Blood fat unit                                               |
 
 **EBloodGlucoseUnit**
 
-| Parameter name | Describe                       |
-| ------ | -------------------------- |
-| NONE   | No unit, indicating that unit settings are not supported |
-| mmol_L | mmol/L                     |
-| mg_dl  | mg/dl                      |
+| Parameter name | Describe                                                 |
+| -------------- | -------------------------------------------------------- |
+| NONE           | No unit, indicating that unit settings are not supported |
+| mmol_L         | mmol/L                                                   |
+| mg_dl          | mg/dl                                                    |
 
 **EUricAcidUnit**
 
-| Parameter name | Describe                       |
-| ------ | -------------------------- |
-| NONE   | No unit, indicating that unit settings are not supported |
-| umol_L | umol/L                     |
-| mg_dl  | mg/dl                      |
+| Parameter name | Describe                                                 |
+| -------------- | -------------------------------------------------------- |
+| NONE           | No unit, indicating that unit settings are not supported |
+| umol_L         | umol/L                                                   |
+| mg_dl          | mg/dl                                                    |
 
 **EBloodFatUnit**
 
-| Parameter name | Describe                       |
-| ------ | -------------------------- |
-| NONE   | No unit, indicating that unit settings are not supported |
-| mmol_L | mmol/L                     |
-| mg_dl  | mg/dl                      |
+| Parameter name | Describe                                                 |
+| -------------- | -------------------------------------------------------- |
+| NONE           | No unit, indicating that unit settings are not supported |
+| mmol_L         | mmol/L                                                   |
+| mg_dl          | mg/dl                                                    |
 
 **ETemperatureUnit**
 
-| Parameter name     | Describe                       |
-| ---------- | -------------------------- |
-| NONE       | No unit, indicating that unit settings are not supported |
-| CELSIUS    | Celsius                     |
-| FAHRENHEIT | Fahrenheit                     |
+| Parameter name | Describe                                                 |
+| -------------- | -------------------------------------------------------- |
+| NONE           | No unit, indicating that unit settings are not supported |
+| CELSIUS        | Celsius                                                  |
+| FAHRENHEIT     | Fahrenheit                                               |
 
 ###### Example Code
 
@@ -1161,38 +1164,38 @@ changeCustomSetting(bleWriteResponse, customSettingDataListener, customSetting)
 
 **CustomSetting**
 
-| Parameter name                      | Type              | Describe                                                         |
+| Parameter name              | Type              | Describe                                                     |
 | --------------------------- | ----------------- | ------------------------------------------------------------ |
-| isHaveMetricSystem | boolean | Set the function status of the metric system. Return true to indicate that this function is available and the metric system can be set; return false to indicate that this function is not available and the metric system cannot be set |
-| isMetricSystem | boolean | Set the value of the metric system. Return true to indicate the metric system and return false to indicate the imperial system. The device language must be set to [English or Traditional] to reflect the imperial system |
-| is24Hour | boolean | Set the value of the time system. Return true to indicate the 24-hour system and false to indicate the 12-hour system |
-| isOpenAutoHeartDetect | boolean | Set the status of automatic heart rate measurement. Return true to indicate that the automatic heart rate measurement function is turned on and return false to indicate that the automatic heart rate measurement function is turned off |
-| isOpenAutoBpDetect | boolean | Set the status of automatic blood pressure measurement. Return true to indicate that the automatic blood pressure measurement function is turned on and return false to indicate that the automatic blood pressure measurement function is turned off |
-| temperatureUnit | ETemperatureUnit | Set the temperature unit |
-| isOpenSportRemain | EFunctionStatus | Set the status of excessive exercise, SUPPORT_OPEN means the excessive exercise reminder function is turned on, SUPPORT_CLOSE means the excessive exercise reminder function is turned off; UNSUPPORT means not supported |
-| isOpenVoiceBpHeart | EFunctionStatus | Set the status of heart rate/blood oxygen/blood pressure, SUPPORT_OPEN means the heart rate/blood oxygen/blood pressure broadcast function is turned on, SUPPORT_CLOSE means the heart rate/blood oxygen/blood pressure broadcast function is turned off; UNSUPPORT means not supported |
-| isOpenFindPhoneUI | EFunctionStatus | Set the status of mobile phone search, SUPPORT_OPEN means the mobile phone search function is turned on, SUPPORT_CLOSE means the mobile phone search function is turned off; UNSUPPORT means not supported |
-| isOpenStopWatch | EFunctionStatus | Set whether to turn on the stopwatch function, SUPPORT_OPEN means the stopwatch function is turned on, SUPPORT_CLOSE means the stopwatch function is turned off; UNSUPPORT means not supported |
-| isOpenSpo2hLowRemind | EFunctionStatus | Set low oxygen reminder, SUPPORT_OPEN means low oxygen reminder function is turned on, SUPPORT_CLOSE means low oxygen reminder function is turned off; UNSUPPORT means not supported |
-| isOpenWearDetectSkin | EFunctionStatus | Set skin color wear monitoring, SUPPORT_OPEN means white skin color, SUPPORT_CLOSE means black skin color; UNSUPPORT means not supported |
-| skinType | Int | Skin color level setting, range 0-6, gradually increasing from white skin color to black skin color. Only set when VpSpGetUtil.getVpSpVariInstance(mContext).getSkinType() == 2, other skin color type settings are invalid |
-| isOpenAutoHRV | EFunctionStatus | Set HRV automatic detection function |
-| isOpenAutoInCall | EFunctionStatus | Set automatic answer call function |
-| isOpenDisconnectRemind | EFunctionStatus | Set disconnection reminder function |
-| isOpenSOS | EFunctionStatus | Set SOS function |
-| isOpenAutoTemperatureDetect | EFunctionStatus | Set body temperature automatic detection function |
-| ecgAlwaysOpen | EFunctionStatus | Set ecg normally open function |
-| METDetect | EFunctionStatus | Set met detection function |
-| stressDetect | EFunctionStatus | Set stress detection function |
-| isOpenPPG | EFunctionStatus | Set ppg function, ppg switch is also a precise sleep switch |
-| isOpenMusicControl | EFunctionStatus | Set music control function |
-| isOpenLongClickLockScreen | EFunctionStatus | Set long press lock screen |
-| isOpenMessageScreenLight | EFunctionStatus | Set message screen light |
-| isOpenBloodGlucoseDetect | EFunctionStatus | Set blood sugar automatic detection function |
-| bloodGlucoseUnit | EBloodGlucoseUnit | Set blood sugar unit |
-| isOpenBloodComponentDetect | EFunctionStatus | Blood component automatic detection function |
-| uricAcidUnit | EUricAcidUnit | Uric acid unit setting |
-| bloodFatUnit | EBloodFatUnit | Blood fat unit settings |
+| isHaveMetricSystem          | boolean           | Set the function status of the metric system. Return true to indicate that this function is available and the metric system can be set; return false to indicate that this function is not available and the metric system cannot be set |
+| isMetricSystem              | boolean           | Set the value of the metric system. Return true to indicate the metric system and return false to indicate the imperial system. The device language must be set to [English or Traditional] to reflect the imperial system |
+| is24Hour                    | boolean           | Set the value of the time system. Return true to indicate the 24-hour system and false to indicate the 12-hour system |
+| isOpenAutoHeartDetect       | boolean           | Set the status of automatic heart rate measurement. Return true to indicate that the automatic heart rate measurement function is turned on and return false to indicate that the automatic heart rate measurement function is turned off |
+| isOpenAutoBpDetect          | boolean           | Set the status of automatic blood pressure measurement. Return true to indicate that the automatic blood pressure measurement function is turned on and return false to indicate that the automatic blood pressure measurement function is turned off |
+| temperatureUnit             | ETemperatureUnit  | Set the temperature unit                                     |
+| isOpenSportRemain           | EFunctionStatus   | Set the status of excessive exercise, SUPPORT_OPEN means the excessive exercise reminder function is turned on, SUPPORT_CLOSE means the excessive exercise reminder function is turned off; UNSUPPORT means not supported |
+| isOpenVoiceBpHeart          | EFunctionStatus   | Set the status of heart rate/blood oxygen/blood pressure, SUPPORT_OPEN means the heart rate/blood oxygen/blood pressure broadcast function is turned on, SUPPORT_CLOSE means the heart rate/blood oxygen/blood pressure broadcast function is turned off; UNSUPPORT means not supported |
+| isOpenFindPhoneUI           | EFunctionStatus   | Set the status of mobile phone search, SUPPORT_OPEN means the mobile phone search function is turned on, SUPPORT_CLOSE means the mobile phone search function is turned off; UNSUPPORT means not supported |
+| isOpenStopWatch             | EFunctionStatus   | Set whether to turn on the stopwatch function, SUPPORT_OPEN means the stopwatch function is turned on, SUPPORT_CLOSE means the stopwatch function is turned off; UNSUPPORT means not supported |
+| isOpenSpo2hLowRemind        | EFunctionStatus   | Set low oxygen reminder, SUPPORT_OPEN means low oxygen reminder function is turned on, SUPPORT_CLOSE means low oxygen reminder function is turned off; UNSUPPORT means not supported |
+| isOpenWearDetectSkin        | EFunctionStatus   | Set skin color wear monitoring, SUPPORT_OPEN means white skin color, SUPPORT_CLOSE means black skin color; UNSUPPORT means not supported |
+| skinType                    | Int               | Skin color level setting, range 0-6, gradually increasing from white skin color to black skin color. Only set when VpSpGetUtil.getVpSpVariInstance(mContext).getSkinType() == 2, other skin color type settings are invalid |
+| isOpenAutoHRV               | EFunctionStatus   | Set HRV automatic detection function                         |
+| isOpenAutoInCall            | EFunctionStatus   | Set automatic answer call function                           |
+| isOpenDisconnectRemind      | EFunctionStatus   | Set disconnection reminder function                          |
+| isOpenSOS                   | EFunctionStatus   | Set SOS function                                             |
+| isOpenAutoTemperatureDetect | EFunctionStatus   | Set body temperature automatic detection function            |
+| ecgAlwaysOpen               | EFunctionStatus   | Set ecg normally open function                               |
+| METDetect                   | EFunctionStatus   | Set met detection function                                   |
+| stressDetect                | EFunctionStatus   | Set stress detection function                                |
+| isOpenPPG                   | EFunctionStatus   | Set ppg function, ppg switch is also a precise sleep switch  |
+| isOpenMusicControl          | EFunctionStatus   | Set music control function                                   |
+| isOpenLongClickLockScreen   | EFunctionStatus   | Set long press lock screen                                   |
+| isOpenMessageScreenLight    | EFunctionStatus   | Set message screen light                                     |
+| isOpenBloodGlucoseDetect    | EFunctionStatus   | Set blood sugar automatic detection function                 |
+| bloodGlucoseUnit            | EBloodGlucoseUnit | Set blood sugar unit                                         |
+| isOpenBloodComponentDetect  | EFunctionStatus   | Blood component automatic detection function                 |
+| uricAcidUnit                | EUricAcidUnit     | Uric acid unit setting                                       |
+| bloodFatUnit                | EBloodFatUnit     | Blood fat unit settings                                      |
 
 Note: **If you want to set a function on or off, you need to read Personalization Settings first to determine whether the function is supported. If it is supported, you can set the on/off status. If it is not supported, you still need to send the unsupported command. **
 
@@ -1240,9 +1243,9 @@ readNightTurnWriste(bleWriteResponse, nightTurnWristeDataListener)
 
 ###### Parameter Explanation
 
-| Parameter name              | Type                         | Describe         |
-| --------------------------- | ---------------------------- | ---------------- |
-| bleWriteResponse            | IBleWriteResponse            | Listening for write operations   |
+| Parameter name              | Type                         | Describe                                                |
+| --------------------------- | ---------------------------- | ------------------------------------------------------- |
+| bleWriteResponse            | IBleWriteResponse            | Listening for write operations                          |
 | nightTurnWristeDataListener | INightTurnWristeDataListener | Flip your wrist to light up the screen and monitor data |
 
 ###### Return data
@@ -1260,23 +1263,23 @@ fun onNightTurnWristeDataChange(nightTurnWristeData:NightTurnWristeData)
 
 **NightTurnWristeData** -- Data on screen lighting when hand is raised
 
-| Parameter name             | Type                   | Describe                           |
-| -------------------------- | ---------------------- | ---------------------------------- |
-| OprateStauts | ENightTurnWristeStatus | Status of wrist-turning screen lighting |
-| isSupportCustomSettingTime | Boolean | Whether to support custom time settings, true means support |
-| nightTureWirsteStatusOpen | Boolean | Whether wrist-turning screen lighting is turned on |
-| startTime | TimeData | Start time |
-| endTime | TimeData | End time |
-| level | Int | Sensitivity level |
-| defaultLevel | Int | Default level |
+| Parameter name             | Type                   | Describe                                                    |
+| -------------------------- | ---------------------- | ----------------------------------------------------------- |
+| OprateStauts               | ENightTurnWristeStatus | Status of wrist-turning screen lighting                     |
+| isSupportCustomSettingTime | Boolean                | Whether to support custom time settings, true means support |
+| nightTureWirsteStatusOpen  | Boolean                | Whether wrist-turning screen lighting is turned on          |
+| startTime                  | TimeData               | Start time                                                  |
+| endTime                    | TimeData               | End time                                                    |
+| level                      | Int                    | Sensitivity level                                           |
+| defaultLevel               | Int                    | Default level                                               |
 
 **ENightTurnWristeStatus** -- Status
 
-| Parameter name | Type     |
-| -------------- | -------- |
-| SUCCESS | Success |
-| FAIL | Failure |
-| UNKONW | Unknown status |
+| Parameter name | Type           |
+| -------------- | -------------- |
+| SUCCESS        | Success        |
+| FAIL           | Failure        |
+| UNKONW         | Unknown status |
 
 ###### Example Code
 
@@ -1304,20 +1307,20 @@ settingNightTurnWriste(IBleWriteResponse bleWriteResponse, INightTurnWristeDataL
 
 ###### Parameter Explanation
 
-| Parameter name              | Type                         | Describe         |
-| --------------------------- | ---------------------------- | ---------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
+| Parameter name              | Type                         | Describe                            |
+| --------------------------- | ---------------------------- | ----------------------------------- |
+| bleWriteResponse            | IBleWriteResponse            | Listening for write operations      |
 | nightTurnWristeDataListener | INightTurnWristeDataListener | Wrist-turning screen data listening |
-| nightTurnWristSetting | NightTurnWristSetting | Wrist-turning screen setting |
+| nightTurnWristSetting       | NightTurnWristSetting        | Wrist-turning screen setting        |
 
 **NightTurnWristSetting** -- Wrist-turn screen-on setting
 
-| Parameter name | Type     | Describe                         |
-| -------------- | -------- | -------------------------------- |
-| isOpen | Boolean | Is it open? |
-| startTime | TimeData | Start time |
-| endTime | TimeData | End time |
-| level | Int | Wrist flip level: range [1-10.], default is 5 |
+| Parameter name | Type     | Describe                                      |
+| -------------- | -------- | --------------------------------------------- |
+| isOpen         | Boolean  | Is it open?                                   |
+| startTime      | TimeData | Start time                                    |
+| endTime        | TimeData | End time                                      |
+| level          | Int      | Wrist flip level: range [1-10.], default is 5 |
 
 ###### Return data
 
@@ -1369,9 +1372,9 @@ readScreenLight(bleWriteResponse, screenLightListener)
 
 ###### Parameter Explanation
 
-| Parameter name      | Type                 | Describe         |
-| ------------------- | -------------------- | ---------------- |
-| bleWriteResponse    | IBleWriteResponse    | Listening for write operations   |
+| Parameter name      | Type                 | Describe                          |
+| ------------------- | -------------------- | --------------------------------- |
+| bleWriteResponse    | IBleWriteResponse    | Listening for write operations    |
 | screenLightListener | IScreenLightListener | Screen adjustment data monitoring |
 
 ###### Return data
@@ -1389,33 +1392,33 @@ fun onScreenLightDataChange(screenLightData:ScreenLightData);
 
 **ScreenLightData** -- Screen adjustment data
 
-| Parameter name | Type          | Describe     |
-| -------------- | ------------- | ------------ |
-| status         | EScreenLight  | Operational Status     |
+| Parameter name | Type          | Describe                  |
+| -------------- | ------------- | ------------------------- |
+| status         | EScreenLight  | Operational Status        |
 | screenSetting  | ScreenSetting | Screen brightness setting |
 
 **EScreenLight** -- Operational Status
 
-| Parameter name           | Describe     |
-| --------------- | -------- |
+| Parameter name  | Describe        |
+| --------------- | --------------- |
 | SETTING_SUCCESS | Setting success |
-| SETTING_FAIL | Setting failure |
-| READ_SUCCESS | Read success |
-| READ_FAIL | Read failure |
-| UNKONW | Unknown status |
+| SETTING_FAIL    | Setting failure |
+| READ_SUCCESS    | Read success    |
+| READ_FAIL       | Read failure    |
+| UNKONW          | Unknown status  |
 
 **ScreenSetting** -- Screen brightness setting
 
-| Parameter name | Type | Describe                      |
-| -------------- | ---- | ----------------------------- |
-| startHour | Int | Hour when the first gear starts to work |
-| startMinute | Int | Minute when the first gear starts to work |
-| endHour | Int | Hour when the first gear ends to work |
-| endMinute | Int | Minute when the first gear ends to work |
-| level | Int | Set the first gear of the time period |
-| otherLeverl | Int | Brightness level of other time periods |
-| auto | Int | Automatic adjustment: 1 automatic 2 manual 0 old protocol |
-| maxLevel | Int | Maximum brightness adjustment level |
+| Parameter name | Type | Describe                                                  |
+| -------------- | ---- | --------------------------------------------------------- |
+| startHour      | Int  | Hour when the first gear starts to work                   |
+| startMinute    | Int  | Minute when the first gear starts to work                 |
+| endHour        | Int  | Hour when the first gear ends to work                     |
+| endMinute      | Int  | Minute when the first gear ends to work                   |
+| level          | Int  | Set the first gear of the time period                     |
+| otherLeverl    | Int  | Brightness level of other time periods                    |
+| auto           | Int  | Automatic adjustment: 1 automatic 2 manual 0 old protocol |
+| maxLevel       | Int  | Maximum brightness adjustment level                       |
 
 ###### Example Code
 
@@ -1441,11 +1444,11 @@ settingScreenLight(bleWriteResponse, screenLightListener, screensetting)
 
 ###### Parameter Explanation
 
-| Parameter name      | Type                 | Describe         |
-| ------------------- | -------------------- | ---------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
+| Parameter name      | Type                 | Describe                         |
+| ------------------- | -------------------- | -------------------------------- |
+| bleWriteResponse    | IBleWriteResponse    | Listening for write operations   |
 | screenLightListener | IScreenLightListener | Screen adjustment data listening |
-| screensetting | ScreenSetting | Screen setting parameters |
+| screensetting       | ScreenSetting        | Screen setting parameters        |
 
 ###### Return data
 
@@ -1488,10 +1491,10 @@ readScreenLightTime(bleWriteResponse, screenLightTimeListener)
 
 ###### Parameter Explanation
 
-| Parameter name                  | Type                     | Describe             |
-| ----------------------- | ------------------------ | ---------------- |
-| bleWriteResponse        | IBleWriteResponse        | Listening for write operations   |
-| screenLightTimeListener | IScreenLightTimeListener | Monitor screen on time |
+| Parameter name          | Type                     | Describe                       |
+| ----------------------- | ------------------------ | ------------------------------ |
+| bleWriteResponse        | IBleWriteResponse        | Listening for write operations |
+| screenLightTimeListener | IScreenLightTimeListener | Monitor screen on time         |
 
 ###### Return data
 
@@ -1508,23 +1511,23 @@ fun onScreenLightTimeDataChange(screenLightTimeData:ScreenLightTimeData)
 
 **screenLightTimeData** --Screen on time data
 
-| Parameter name             | Type             | Describe     |
-| ----------------- | ---------------- | -------- |
-| screenLightState | EScreenLightTime | callback status |
-| currentDuration | Int | current duration |
-| recommendDuration | Int | recommended duration |
-| maxDuration | Int | maximum duration |
-| minDuration | Int | minimum duration |
+| Parameter name    | Type             | Describe             |
+| ----------------- | ---------------- | -------------------- |
+| screenLightState  | EScreenLightTime | callback status      |
+| currentDuration   | Int              | current duration     |
+| recommendDuration | Int              | recommended duration |
+| maxDuration       | Int              | maximum duration     |
+| minDuration       | Int              | minimum duration     |
 
 **EScreenLightTime** -- Callback status
 
-| Parameter name           | Describe     |
-| --------------- | -------- |
+| Parameter name  | Describe        |
+| --------------- | --------------- |
 | SETTING_SUCCESS | Setting success |
-| SETTING_FAIL | Setting failure |
-| READ_SUCCESS | Read success |
-| READ_FAIL | Read failure |
-| UNKONW | Unknown status |
+| SETTING_FAIL    | Setting failure |
+| READ_SUCCESS    | Read success    |
+| READ_FAIL       | Read failure    |
+| UNKONW          | Unknown status  |
 
 ###### Example Code
 
@@ -1553,11 +1556,11 @@ setScreenLightTime(IBleWriteResponse bleWriteResponse, IScreenLightTimeListener 
 
 ###### Parameter Explanation
 
-| Parameter name                  | Type                     | Describe               |
-| ----------------------- | ------------------------ | ------------------ |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
-| screenLightTimeListener | IScreenLightTimeListener | Listening for screen light duration |
-| time | Int | Screen light duration, unit: seconds |
+| Parameter name          | Type                     | Describe                             |
+| ----------------------- | ------------------------ | ------------------------------------ |
+| bleWriteResponse        | IBleWriteResponse        | Listening for write operations       |
+| screenLightTimeListener | IScreenLightTimeListener | Listening for screen light duration  |
+| time                    | Int                      | Screen light duration, unit: seconds |
 
 ###### Return data
 
@@ -1593,25 +1596,25 @@ readHealthRemind(healthRemindType, listener, bleWriteResponse)
 
 ###### Parameter Explanation
 
-| Parameter name           | Type                  | Describe             |
-| ---------------- | --------------------- | ---------------- |
-| healthRemindType | HealthRemindType | Health reminder type |
-| listener | IHealthRemindListener | Health reminder data listener |
-| bleWriteResponse | IBleWriteResponse | Write operation listener |
+| Parameter name   | Type                  | Describe                      |
+| ---------------- | --------------------- | ----------------------------- |
+| healthRemindType | HealthRemindType      | Health reminder type          |
+| listener         | IHealthRemindListener | Health reminder data listener |
+| bleWriteResponse | IBleWriteResponse     | Write operation listener      |
 
 **HealthRemindType** --- Health reminder type
 
-| Parameter name        | Describe     |
-| ------------- | -------- |
-| ALL | All reminders |
-| SEDENTARY | Sedentary |
-| DRINK_WATER | Drink water |
-| OVERLOOK | Overlook |
-| SPORTS | Sports |
-| TAKE_MEDICINE | Take medicine |
-| READING | Reading |
-| GOING_OUT | Going out |
-| WASH | Wash hands |
+| Parameter name | Describe      |
+| -------------- | ------------- |
+| ALL            | All reminders |
+| SEDENTARY      | Sedentary     |
+| DRINK_WATER    | Drink water   |
+| OVERLOOK       | Overlook      |
+| SPORTS         | Sports        |
+| TAKE_MEDICINE  | Take medicine |
+| READING        | Reading       |
+| GOING_OUT      | Going out     |
+| WASH           | Wash hands    |
 
 ###### Return data
 
@@ -1660,13 +1663,13 @@ fun onHealthRemindSettingFailed(healthRemindType: HealthRemindType)
 
 **HealthRemind** -- Health Remind
 
-| Parameter name     | Type             | Describe         |
-| ---------- | ---------------- | ------------ |
-| remindtype | HealthRemindType | Health reminder type |
-| startTime | TimeData | Reminder start time |
-| endTime | TimeData | Reminder end time |
-| interval | Int | Reminder interval |
-| status | Boolean | Status |
+| Parameter name | Type             | Describe             |
+| -------------- | ---------------- | -------------------- |
+| remindtype     | HealthRemindType | Health reminder type |
+| startTime      | TimeData         | Reminder start time  |
+| endTime        | TimeData         | Reminder end time    |
+| interval       | Int              | Reminder interval    |
+| status         | Boolean          | Status               |
 
 ###### Example Code
 
@@ -1712,11 +1715,11 @@ settingHealthRemind(healthRemind, listener, bleWriteResponse)
 
 ###### Parameter Explanation
 
-| Parameter name           | Type                  | Describe             |
-| ---------------- | --------------------- | ---------------- |
-| healthRemind | HealthRemind | Health Reminder |
-| listener | IHealthRemindListener | Health Reminder Data Listener |
-| bleWriteResponse | IBleWriteResponse | Write Operation Listener |
+| Parameter name   | Type                  | Describe                      |
+| ---------------- | --------------------- | ----------------------------- |
+| healthRemind     | HealthRemind          | Health Reminder               |
+| listener         | IHealthRemindListener | Health Reminder Data Listener |
+| bleWriteResponse | IBleWriteResponse     | Write Operation Listener      |
 
 ###### Return data
 
@@ -1770,9 +1773,9 @@ startDetectHeart(bleWriteResponse,heartDataListener)
 
 ###### Parameter Explanation
 
-| Parameter name            | Type               | Describe               |
-| ----------------- | ------------------ | ------------------ |
-| bleWriteResponse  | IBleWriteResponse  | Listening for write operations     |
+| Parameter name    | Type               | Describe                            |
+| ----------------- | ------------------ | ----------------------------------- |
+| bleWriteResponse  | IBleWriteResponse  | Listening for write operations      |
 | heartDataListener | IHeartDataListener | Listener for heart rate data return |
 
 ###### Return data
@@ -1790,20 +1793,20 @@ fun onDataChange(heartData:HeartData);
 
 **HeartData**
 
-| Parameter name       | Type         | Describe                           |
-| ----------- | ------------ | ------------------------------ |
-| data | Int | Get heart rate value, range [20-300] |
-| heartStatus | EHeartStatus | The status that the device may return when measuring heart rate |
+| Parameter name | Type         | Describe                                                     |
+| -------------- | ------------ | ------------------------------------------------------------ |
+| data           | Int          | Get heart rate value, range [20-300]                         |
+| heartStatus    | EHeartStatus | The status that the device may return when measuring heart rate |
 
 **EHeartStatus**
 
-| Parameter name | Describe |
-| ---------------------- | ------------------ |
-| STATE_INIT | Initialization |
-| STATE_HEART_BUSY | Device is busy |
-| STATE_HEART_DETECT | Device is detecting |
+| Parameter name         | Describe                        |
+| ---------------------- | ------------------------------- |
+| STATE_INIT             | Initialization                  |
+| STATE_HEART_BUSY       | Device is busy                  |
+| STATE_HEART_DETECT     | Device is detecting             |
 | STATE_HEART_WEAR_ERROR | Detecting, but wearing is wrong |
-| STATE_HEART_NORMAL | Detecting |
+| STATE_HEART_NORMAL     | Detecting                       |
 
 ###### Example Code
 
@@ -1829,8 +1832,8 @@ stopDetectHeart(bleWriteResponse)
 
 ###### Parameter Explanation
 
-| Parameter name           | Type              | Describe           |
-| ---------------- | ----------------- | -------------- |
+| Parameter name   | Type              | Describe                       |
+| ---------------- | ----------------- | ------------------------------ |
 | bleWriteResponse | IBleWriteResponse | Listening for write operations |
 
 ###### Return data
@@ -1856,19 +1859,19 @@ settingHeartWarning(bleWriteResponse, heartWaringDataListener, heartWaringSettin
 
 ###### Parameter Explanation
 
-| Parameter name                  | Type                     | Describe           |
-| ----------------------- | ------------------------ | -------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
-| heartWaringDataListener | IHeartWaringDataListener | Heart rate alarm callback |
-| heartWaringSetting | HeartWaringSetting | Heart rate alarm settings |
+| Parameter name          | Type                     | Describe                       |
+| ----------------------- | ------------------------ | ------------------------------ |
+| bleWriteResponse        | IBleWriteResponse        | Listening for write operations |
+| heartWaringDataListener | IHeartWaringDataListener | Heart rate alarm callback      |
+| heartWaringSetting      | HeartWaringSetting       | Heart rate alarm settings      |
 
 **HeartWaringSetting**
 
-| Parameter name | Type | Describe |
-| --------- | ------- | -------------------------- |
-| heartHigh | Int | Upper limit of heart rate alarm |
-| heartLow | Int | Lower limit of heart rate alarm |
-| isOpen | boolean | true means open, false means closed |
+| Parameter name | Type    | Describe                            |
+| -------------- | ------- | ----------------------------------- |
+| heartHigh      | Int     | Upper limit of heart rate alarm     |
+| heartLow       | Int     | Lower limit of heart rate alarm     |
+| isOpen         | boolean | true means open, false means closed |
 
 ###### Return data
 
@@ -1885,23 +1888,23 @@ fun onHeartWaringDataChange(heartWaringData:HeartWaringData);
 
 **HeartWaringData**
 
-| Parameter name  | Type               | Describe                                 |
-| ------ | ------------------ | ------------------------------------ |
-| status | EHeartWaringStatus | Upper limit of heart rate alarm |
-| ... | -- | Other parameters are the same as **HeartWaringSetting** |
+| Parameter name | Type               | Describe                                                |
+| -------------- | ------------------ | ------------------------------------------------------- |
+| status         | EHeartWaringStatus | Upper limit of heart rate alarm                         |
+| ...            | --                 | Other parameters are the same as **HeartWaringSetting** |
 
 **EHeartWaringStatus**
 
-| Parameter name | Describe |
-| ------------- | -------- |
-| OPEN_SUCCESS | Open successfully |
-| OPEN_FAIL | Open failed |
-| CLOSE_SUCCESS | Close successfully |
-| CLOSE_FAIL | Close failed |
-| READ_SUCCESS | Read successfully |
-| READ_FAIL | Read failed |
-| UNSUPPORT | Unsupported |
-| UNKONW | Unknown |
+| Parameter name | Describe           |
+| -------------- | ------------------ |
+| OPEN_SUCCESS   | Open successfully  |
+| OPEN_FAIL      | Open failed        |
+| CLOSE_SUCCESS  | Close successfully |
+| CLOSE_FAIL     | Close failed       |
+| READ_SUCCESS   | Read successfully  |
+| READ_FAIL      | Read failed        |
+| UNSUPPORT      | Unsupported        |
+| UNKONW         | Unknown            |
 
 ###### Example Code
 
@@ -1928,10 +1931,10 @@ readHeartWarning(bleWriteResponse,heartWaringDataListener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| ----------------------- | ------------------------ | -------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
-| heartWaringDataListener | IHeartWaringDataListener | Heart Rate Alarm Callback |
+| Parameter name          | Type                     | Describe                       |
+| ----------------------- | ------------------------ | ------------------------------ |
+| bleWriteResponse        | IBleWriteResponse        | Listening for write operations |
+| heartWaringDataListener | IHeartWaringDataListener | Heart Rate Alarm Callback      |
 
 ###### Return data
 
@@ -1993,9 +1996,9 @@ startDetectTempture(bleWriteResponse, responseListener)
 
 ###### Parameter Explanation
 
-| Parameter name           | Type                        | Describe               |
-| ---------------- | --------------------------- | ------------------ |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
+| Parameter name   | Type                        | Describe                             |
+| ---------------- | --------------------------- | ------------------------------------ |
+| bleWriteResponse | IBleWriteResponse           | Listening for write operations       |
 | responseListener | ITemptureDetectDataListener | Return listener for temperature data |
 
 ###### Return data
@@ -2013,13 +2016,13 @@ fun onDataChange(temptureDetectData:TemptureDetectData)
 
 **TemptureDetectData**
 
-| Parameter name | Type | Describe |
-| ------------ | ----- | ------------------------------------------------------------ |
-| oprate | Int | 0x00 Not supported, 0x01 Enabled, 0x02 Disabled |
-| deviceState | Int | 0x00 Available, 0x01-0x07 Device busy, 0x08 Device low power, 0x09 Sensor abnormality |
-| progress | Int | Read progress |
-| tempture | Float | Body temperature value |
-| temptureBase | Float | Original body temperature value, base value |
+| Parameter name | Type  | Describe                                                     |
+| -------------- | ----- | ------------------------------------------------------------ |
+| oprate         | Int   | 0x00 Not supported, 0x01 Enabled, 0x02 Disabled              |
+| deviceState    | Int   | 0x00 Available, 0x01-0x07 Device busy, 0x08 Device low power, 0x09 Sensor abnormality |
+| progress       | Int   | Read progress                                                |
+| tempture       | Float | Body temperature value                                       |
+| temptureBase   | Float | Original body temperature value, base value                  |
 
 ###### Example Code
 
@@ -2050,9 +2053,9 @@ stopDetectTempture(bleWriteResponse, responseListener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| ---------------- | --------------------------- | ---------------------------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
+| Parameter name   | Type                        | Describe                                                     |
+| ---------------- | --------------------------- | ------------------------------------------------------------ |
+| bleWriteResponse | IBleWriteResponse           | Listening for write operations                               |
 | responseListener | ITemptureDetectDataListener | Return monitoring of temperature data, this interface can pass null |
 
 ###### Return data
@@ -2095,11 +2098,11 @@ readTemptureDataBySetting(bleWriteResponse, temptureDataListener, readOriginSett
 If the watch stores data for 3 days, read all the temperature data in the order of [temperature data (today - yesterday - the day before yesterday)]. For the temperature data, you can customize the position of the day and the position of the number of bars.
 ###### Parameter Explanation
 
-| Parameter name               | Type                  | Describe                                      |
-| -------------------- | --------------------- | ----------------------------------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
+| Parameter name       | Type                  | Describe                                                     |
+| -------------------- | --------------------- | ------------------------------------------------------------ |
+| bleWriteResponse     | IBleWriteResponse     | Listening for write operations                               |
 | temptureDataListener | ITemptureDataListener | Callback for reading temperature data, returning the progress temperature data |
-| readOriginSetting | ReadOriginSetting | Read daily data settings |
+| readOriginSetting    | ReadOriginSetting     | Read daily data settings                                     |
 
 **ReadOriginSetting** Same parameters as [Read daily data function](#Interface-Read raw health data (5 minutes raw data) readOriginDataBySetting)
 
@@ -2141,14 +2144,14 @@ fun onReadOriginComplete()
 
 **TemptureData**
 
-| Parameter name         | Type     | Describe              |
-| ------------- | -------- | ----------------- |
-| allPackage | Int | Total number of packages |
-| packageNumber | Int | Current number of packages |
-| mTime | TimeData | Time |
-| isFromHandler | Boolean | Whether it is manual measurement |
-| tempture | Float | Temperature value |
-| baseTempture | Float | Original temperature value, base value |
+| Parameter name | Type     | Describe                               |
+| -------------- | -------- | -------------------------------------- |
+| allPackage     | Int      | Total number of packages               |
+| packageNumber  | Int      | Current number of packages             |
+| mTime          | TimeData | Time                                   |
+| isFromHandler  | Boolean  | Whether it is manual measurement       |
+| tempture       | Float    | Temperature value                      |
+| baseTempture   | Float    | Original temperature value, base value |
 ###### Example Code
 
 ```kotlin
@@ -2214,11 +2217,11 @@ startDetectECG(bleWriteResponse, isNeedCurve, ecgDetectListener)
 
 ###### Parameter Explanation
 
-| Parameter name            | Type               | Describe               |
-| ----------------- | ------------------ | ------------------ |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
-| isNeedCurve | Boolean | Do you want to return curve data? |
-| ecgDetectListener | IECGDetectListener | ECG measurement callback |
+| Parameter name    | Type               | Describe                          |
+| ----------------- | ------------------ | --------------------------------- |
+| bleWriteResponse  | IBleWriteResponse  | Listening for write operations    |
+| isNeedCurve       | Boolean            | Do you want to return curve data? |
+| ecgDetectListener | IECGDetectListener | ECG measurement callback          |
 
 ###### Return data
 
@@ -2263,73 +2266,73 @@ fun onEcgADCChange(data: IntArray?)
 
 **EcgDetectInfo**
 
-| Parameter name         | Type | Describe     |
-| ------------- | ---- | -------- |
-| frequency | Int | Sampling frequency |
-| drawFrequency | Int | Waveform frequency |
+| Parameter name | Type | Describe           |
+| -------------- | ---- | ------------------ |
+| frequency      | Int  | Sampling frequency |
+| drawFrequency  | Int  | Waveform frequency |
 
 **EcgDetectState**
 
-| Parameter name | Type | Describe |
-| ----------- | ------------- | ------------------------------------------------------------ |
-| ecgType | Int | ECG measurement type, obtained through VpSpGetUtil.getVpSpVariInstance(applicationContext).ecgType |
-| con | Int | ECG operation value |
-| dataType | Int | Data type (0-sampling frequency) (1-real-time device status) (2-diagnosis results) (3-test failure) (4-test normal end), only 1 will appear at this time |
-| deviceState | EDeviceStatus | Device status |
-| hr1 | Int | Heart rate per second |
-| hr2 | Int | Average heart rate per second |
-| hrv | Int | hrv value, 255 is an invalid value and does not need to be displayed |
-| rr1 | Int | RR value per second |
-| rr2 | Int | Average RR value per 6 seconds |
-| br1 | Int | Respiration rate value per second |
-| br2 | Int | Average respiration rate value per minute |
-| wear | Int | Lead wearing value, 0 means wearing passed, 1 means wearing failed, if wearing failed, app should close measurement |
-| mid | Int | mid value |
-| qtc | Int | qtc value |
-| progress | Int | Progress |
+| Parameter name | Type          | Describe                                                     |
+| -------------- | ------------- | ------------------------------------------------------------ |
+| ecgType        | Int           | ECG measurement type, obtained through VpSpGetUtil.getVpSpVariInstance(applicationContext).ecgType |
+| con            | Int           | ECG operation value                                          |
+| dataType       | Int           | Data type (0-sampling frequency) (1-real-time device status) (2-diagnosis results) (3-test failure) (4-test normal end), only 1 will appear at this time |
+| deviceState    | EDeviceStatus | Device status                                                |
+| hr1            | Int           | Heart rate per second                                        |
+| hr2            | Int           | Average heart rate per second                                |
+| hrv            | Int           | hrv value, 255 is an invalid value and does not need to be displayed |
+| rr1            | Int           | RR value per second                                          |
+| rr2            | Int           | Average RR value per 6 seconds                               |
+| br1            | Int           | Respiration rate value per second                            |
+| br2            | Int           | Average respiration rate value per minute                    |
+| wear           | Int           | Lead wearing value, 0 means wearing passed, 1 means wearing failed, if wearing failed, app should close measurement |
+| mid            | Int           | mid value                                                    |
+| qtc            | Int           | qtc value                                                    |
+| progress       | Int           | Progress                                                     |
 
 **EDeviceStatus**
 
-| Parameter name | Describe |
-| ---------------- | ------------------------------- |
-| FREE | Device idle |
-| BUSY | Device busy |
-| DETECT_BP | Device busy, measuring blood pressure |
-| DETECT_HEART | Device busy, measuring heart rate |
+| Parameter name   | Describe                                               |
+| ---------------- | ------------------------------------------------------ |
+| FREE             | Device idle                                            |
+| BUSY             | Device busy                                            |
+| DETECT_BP        | Device busy, measuring blood pressure                  |
+| DETECT_HEART     | Device busy, measuring heart rate                      |
 | DETECT_AUTO_FIVE | Device busy, automatically measuring 5 minutes of data |
-| DETECT_SP | The device is busy and measuring blood oxygen |
-| DETECT_FTG | The device is busy and measuring fatigue |
-| DETECT_PPG | The device is busy and measuring pulse rate |
-| CHARGING | The device is charging |
-| CHARG_LOW | The device is low in power |
-| UNPASS_WEAR | The device cannot be worn |
-| UNKONW | Unknown |
+| DETECT_SP        | The device is busy and measuring blood oxygen          |
+| DETECT_FTG       | The device is busy and measuring fatigue               |
+| DETECT_PPG       | The device is busy and measuring pulse rate            |
+| CHARGING         | The device is charging                                 |
+| CHARG_LOW        | The device is low in power                             |
+| UNPASS_WEAR      | The device cannot be worn                              |
+| UNKONW           | Unknown                                                |
 
 **EcgDetectResult**
 
-| Parameter name | Type | Describe |
-| ------------------- | -------------- | ------------------ |
-| isSuccess | Boolean | Whether the measurement is successful |
-| type | EECGResultType | Data source of ECG result |
-| timeBean | TimeData | Measurement date |
-| frequency | Int | Sampling frequency |
-| drawfrequency | Int | Waveform frequency |
-| duration | Int | Total seconds |
-| leadSign | Int | Lead signal |
-| originSign | IntArray | Original signal |
-| powers | IntArray | Gain corresponding to the original signal |
-| filterSignals | IntArray | Original signal |
-| result8 | IntArray | 8 diagnostic data |
-| diseaseResult | IntArray | Diagnosis result |
-| aveHeart | Int | Average heart rate |
-| aveResRate | Int | Average respiration rate |
-| aveHrv | Int | Average HRV |
-| aveQT | Int | Average QT |
-| progress | Int | Progress |
-| detectHeartIntArray | IntArray | Measured heart rate data |
-| detectBreath | IntArray | Respiration rate data |
-| detectHrv | IntArray | HRV data |
-| detectQT | IntArray | Array of measured QT values ​​|
+| Parameter name      | Type           | Describe                                  |
+| ------------------- | -------------- | ----------------------------------------- |
+| isSuccess           | Boolean        | Whether the measurement is successful     |
+| type                | EECGResultType | Data source of ECG result                 |
+| timeBean            | TimeData       | Measurement date                          |
+| frequency           | Int            | Sampling frequency                        |
+| drawfrequency       | Int            | Waveform frequency                        |
+| duration            | Int            | Total seconds                             |
+| leadSign            | Int            | Lead signal                               |
+| originSign          | IntArray       | Original signal                           |
+| powers              | IntArray       | Gain corresponding to the original signal |
+| filterSignals       | IntArray       | Original signal                           |
+| result8             | IntArray       | 8 diagnostic data                         |
+| diseaseResult       | IntArray       | Diagnosis result                          |
+| aveHeart            | Int            | Average heart rate                        |
+| aveResRate          | Int            | Average respiration rate                  |
+| aveHrv              | Int            | Average HRV                               |
+| aveQT               | Int            | Average QT                                |
+| progress            | Int            | Progress                                  |
+| detectHeartIntArray | IntArray       | Measured heart rate data                  |
+| detectBreath        | IntArray       | Respiration rate data                     |
+| detectHrv           | IntArray       | HRV data                                  |
+| detectQT            | IntArray       | Array of measured QT values               |
 
 ###### Example Code
 
@@ -2402,9 +2405,9 @@ setNewEcgDataReportListener(listener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| -------- | ------------------------- | ----------------- |
-| listener | INewECGDataReportListener | New ecg data report callback |
+| Parameter name | Type                      | Describe                     |
+| -------------- | ------------------------- | ---------------------------- |
+| listener       | INewECGDataReportListener | New ecg data report callback |
 
 ###### Return data
 
@@ -2445,20 +2448,20 @@ readECGData(bleWriteResponse, timeData, eEcgDataType, onReadDataIdFinishCallBack
 
 ###### Parameter Explanation
 
-| Parameter name                     | Type                 | Describe                                                         |
+| Parameter name             | Type                 | Describe                                                     |
 | -------------------------- | -------------------- | ------------------------------------------------------------ |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
-| timeData | TimeData | The time when data starts to be read. When eEcgDataType==ALL, year, month, day, hour, minute, and second are passed as 0 |
-| eEcgDataType | EEcgDataType | ECG data type |
-| onReadDataIdFinishCallBack | IECGReadDataListener | Data callback for reading ECG data |
+| bleWriteResponse           | IBleWriteResponse    | Listening for write operations                               |
+| timeData                   | TimeData             | The time when data starts to be read. When eEcgDataType==ALL, year, month, day, hour, minute, and second are passed as 0 |
+| eEcgDataType               | EEcgDataType         | ECG data type                                                |
+| onReadDataIdFinishCallBack | IECGReadDataListener | Data callback for reading ECG data                           |
 
 **EEcgDataTypeEEcgDataType**
 
-| Parameter name | Describe |
-| -------- | ----------------- |
-| MANUALLY | Device manual measurement |
-| AUTO | Device active measurement |
-| ALL | Device manual + device active |
+| Parameter name | Describe                      |
+| -------------- | ----------------------------- |
+| MANUALLY       | Device manual measurement     |
+| AUTO           | Device active measurement     |
+| ALL            | Device manual + device active |
 
 ###### Return data
 
@@ -2511,12 +2514,12 @@ readECGId(bleWriteResponse, timeData, eEcgDataType, onReadIdFinishCallBack)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
+| Parameter name         | Type               | Describe                                                     |
 | ---------------------- | ------------------ | ------------------------------------------------------------ |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
-| timeData | TimeData | The time when data starts to be read. When eEcgDataType==ALL, the year, month, day, hour, minute, and second are transmitted as 0 |
-| eEcgDataType | EEcgDataType | ECG data type |
-| onReadIdFinishCallBack | IECGReadIdListener | Callback for the end of reading data ID |
+| bleWriteResponse       | IBleWriteResponse  | Listening for write operations                               |
+| timeData               | TimeData           | The time when data starts to be read. When eEcgDataType==ALL, the year, month, day, hour, minute, and second are transmitted as 0 |
+| eEcgDataType           | EEcgDataType       | ECG data type                                                |
+| onReadIdFinishCallBack | IECGReadIdListener | Callback for the end of reading data ID                      |
 
 ###### Return data
 
@@ -2563,10 +2566,10 @@ readECGSwitchStatus(bleWriteResponse, listener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| ---------------- | ------------------ | -------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
-| listener | IECGSwitchListener | ECG switch listening |
+| Parameter name   | Type               | Describe                       |
+| ---------------- | ------------------ | ------------------------------ |
+| bleWriteResponse | IBleWriteResponse  | Listening for write operations |
+| listener         | IECGSwitchListener | ECG switch listening           |
 
 ###### Return data
 
@@ -2832,21 +2835,21 @@ readSleepDataBySetting(bleWriteResponse, sleepReadDatalistener, readSleepSetting
 
 ###### Parameter Explanation
 
-| Parameter name                | Type                 | Describe                                                 |
-| --------------------- | -------------------- | ---------------------------------------------------- |
-| bleWriteResponse | IBleWriteResponseInt | Listening for write operations |
-| sleepReadDatalistener | ISleepDataListener | Listening for sleep data, returning the progress of sleep reading and the corresponding sleep data |
-| day | Int | Reading day, 0 means today, 1 means yesterday, 2 means the day before yesterday, and so on |
-| watchday | Int | Number of days stored in the watch |
-| readSleepSetting | ReadSleepSetting | Reading settings for sleep |
+| Parameter name        | Type                 | Describe                                                     |
+| --------------------- | -------------------- | ------------------------------------------------------------ |
+| bleWriteResponse      | IBleWriteResponseInt | Listening for write operations                               |
+| sleepReadDatalistener | ISleepDataListener   | Listening for sleep data, returning the progress of sleep reading and the corresponding sleep data |
+| day                   | Int                  | Reading day, 0 means today, 1 means yesterday, 2 means the day before yesterday, and so on |
+| watchday              | Int                  | Number of days stored in the watch                           |
+| readSleepSetting      | ReadSleepSetting     | Reading settings for sleep                                   |
 
 **ReadSleepSetting**
 
-| Parameter name | Type | Describe |
-| -------------- | ------- | ---------------------------------------------- |
-| dayInt | Int | Reading day, 0 means today, 1 means yesterday, 2 means the day before yesterday, and so on |
-| watchDataDay | Int | Number of days stored in the watch |
-| onlyReadOneDay | Boolean | true means read only today, false means read in order         |
+| Parameter name | Type    | Describe                                                     |
+| -------------- | ------- | ------------------------------------------------------------ |
+| dayInt         | Int     | Reading day, 0 means today, 1 means yesterday, 2 means the day before yesterday, and so on |
+| watchDataDay   | Int     | Number of days stored in the watch                           |
+| onlyReadOneDay | Boolean | true means read only today, false means read in order        |
 
 ###### Return data
 
@@ -2888,18 +2891,18 @@ fun onReadSleepComplete()
 
 **SleepData**
 
-| Parameter name         | Type     | Describe                                                         |
-| ------------- | -------- | ------------------------------------------------------------ |
-| Date | String | Sleep date |
-| cali_flag | Int | Sleep calibration value, currently this value is useless |
-| sleepQulity | Int | Sleep quality |
-| wakeCount | Int | Number of times you wake up during sleep |
-| deepSleepTime | Int | Deep sleep duration (in min) |
-| lowSleepTime | Int | Light sleep duration (in min) |
-| allSleepTime | Int | Total sleep duration |
-| sleepLine | String | Sleep curve is mainly used to display sleep status in a more concrete UI. If your sleep interface has no special requirements for UI, you can ignore it. Sleep curve is divided into normal sleep and precise sleep. Normal sleep is a string composed of 0, 1, 2. Each character represents a duration of 5 minutes, where 0 represents light sleep, 1 represents deep sleep, and 2 represents awakening. For example, "201112" has a length of 6, which means a total of 30 minutes of sleep, 5 minutes of awakening at the beginning and end, 5 minutes of light sleep in the middle, and 15 minutes of deep sleep. For precise sleep, the sleep curve is a string composed of 0, 1, 2, 3, 4. Each character represents a duration of 1 minute, where 0 represents deep sleep, 1 represents light sleep, 2 represents rapid eye movement, 3 represents insomnia, and 4 represents awakening. |
-| sleepDown | TimeData | Time to fall asleep |
-| sleepUp | TimeData | Time to wake up |
+| Parameter name | Type     | Describe                                                     |
+| -------------- | -------- | ------------------------------------------------------------ |
+| Date           | String   | Sleep date                                                   |
+| cali_flag      | Int      | Sleep calibration value, currently this value is useless     |
+| sleepQulity    | Int      | Sleep quality                                                |
+| wakeCount      | Int      | Number of times you wake up during sleep                     |
+| deepSleepTime  | Int      | Deep sleep duration (in min)                                 |
+| lowSleepTime   | Int      | Light sleep duration (in min)                                |
+| allSleepTime   | Int      | Total sleep duration                                         |
+| sleepLine      | String   | Sleep curve is mainly used to display sleep status in a more concrete UI. If your sleep interface has no special requirements for UI, you can ignore it. Sleep curve is divided into normal sleep and precise sleep. Normal sleep is a string composed of 0, 1, 2. Each character represents a duration of 5 minutes, where 0 represents light sleep, 1 represents deep sleep, and 2 represents awakening. For example, "201112" has a length of 6, which means a total of 30 minutes of sleep, 5 minutes of awakening at the beginning and end, 5 minutes of light sleep in the middle, and 15 minutes of deep sleep. For precise sleep, the sleep curve is a string composed of 0, 1, 2, 3, 4. Each character represents a duration of 1 minute, where 0 represents deep sleep, 1 represents light sleep, 2 represents rapid eye movement, 3 represents insomnia, and 4 represents awakening. |
+| sleepDown      | TimeData | Time to fall asleep                                          |
+| sleepUp        | TimeData | Time to wake up                                              |
 
 ###### Example Code
 
@@ -3167,9 +3170,9 @@ readScreenStyle(bleWriteResponse, screenStyleListener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| ------------------- | -------------------- | ----------------------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
+| Parameter name      | Type                 | Describe                                        |
+| ------------------- | -------------------- | ----------------------------------------------- |
+| bleWriteResponse    | IBleWriteResponse    | Listening for write operations                  |
 | screenStyleListener | IScreenStyleListener | Screen style listening, return operation status |
 
 ###### Return data
@@ -3187,21 +3190,21 @@ fun onScreenStyleDataChange(screenStyleData:ScreenStyleData);
 
 **ScreenStyleData**
 
-| Parameter name | Type | Describe |
-| ----------- | ------------ | ------------------------------------------------------------ |
-| status | EScreenStyle | Operation status |
-| screenIndex | Int | Dial index The default dial starts from 0, with a maximum of seven default dials. The dial market and custom dials start from 1 |
-| screenType | EUIFromType | * Dial style * 0x00 Device default dial * 0x01 Dial market (device support required) * 0x02 Custom dial (device support required) |
+| Parameter name | Type         | Describe                                                     |
+| -------------- | ------------ | ------------------------------------------------------------ |
+| status         | EScreenStyle | Operation status                                             |
+| screenIndex    | Int          | Dial index The default dial starts from 0, with a maximum of seven default dials. The dial market and custom dials start from 1 |
+| screenType     | EUIFromType  | * Dial style * 0x00 Device default dial * 0x01 Dial market (device support required) * 0x02 Custom dial (device support required) |
 
 **EScreenStyle**
 
-| Parameter name | Describe |
-| --------------- | -------- |
+| Parameter name  | Describe        |
+| --------------- | --------------- |
 | SETTING_SUCCESS | Setting success |
-| SETTING_FAIL | Setting failure |
-| READ_SUCCESS | Read success |
-| READ_FAIL | Read failure |
-| UNKONW | Unknown status |
+| SETTING_FAIL    | Setting failure |
+| READ_SUCCESS    | Read success    |
+| READ_FAIL       | Read failure    |
+| UNKONW          | Unknown status  |
 ###### Example Code
 
 ```kotlin
@@ -3238,21 +3241,21 @@ settingScreenStyle(IBleWriteResponse bleWriteResponse, IScreenStyleListener scre
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| ------------------- | -------------------- | ----------------------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
+| Parameter name      | Type                 | Describe                                        |
+| ------------------- | -------------------- | ----------------------------------------------- |
+| bleWriteResponse    | IBleWriteResponse    | Listening for write operations                  |
 | screenStyleListener | IScreenStyleListener | Screen style listening, return operation status |
-| style | Int | dial subscript |
-| uiFromType | EUIFromType | Watch face type |
+| style               | Int                  | dial subscript                                  |
+| uiFromType          | EUIFromType          | Watch face type                                 |
 
 **EUIFromType**
 
-| Parameter name | Describe |
-| ------- | ------------------ |
-| DEFAULT | Watch face that comes with the watch |
-| CUSTOM | Custom editable watch face |
-| SERVER | Server watch face |
-| ... | No need to pay attention to other types |
+| Parameter name | Describe                                |
+| -------------- | --------------------------------------- |
+| DEFAULT        | Watch face that comes with the watch    |
+| CUSTOM         | Custom editable watch face              |
+| SERVER         | Server watch face                       |
+| ...            | No need to pay attention to other types |
 
 ###### Return data
 
@@ -3329,10 +3332,10 @@ var isSupport = (bigTranType == 2 && serverUICount > 0)
 The steps to set the dial UI from the server are roughly divided into the following steps:
 
 >Step 1. Determine whether the dial market is supported
-Step 2. Get basic information
-Step 3. Get the supported server UI list
-Step 4. Download the corresponding UI file
-Step 5. Set UI
+>Step 2. Get basic information
+>Step 3. Get the supported server UI list
+>Step 4. Download the corresponding UI file
+>Step 5. Set UI
 
 #### Class name
 
@@ -3369,8 +3372,8 @@ getServerWatchUiInfo(uiBaseInfoFormServerListener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| ---------------------------- | ----------------------------- | -------------------- |
+| Parameter name               | Type                          | Describe                          |
+| ---------------------------- | ----------------------------- | --------------------------------- |
 | uiBaseInfoFormServerListener | IUIBaseInfoFormServerListener | Get basic UI information callback |
 
 ###### Return data
@@ -3388,18 +3391,18 @@ fun onBaseUiInfoFormServer(uiDataServer:UIDataServer);
 
 **UIDataServer**
 
-| Parameter name | Type | Describe |
-| ------------------ | ---- | ------------------------------ |
-| useType | Int | Data usage type |
-| oprateType | Int | Operation type |
-| oprateState | Int | Operation status |
-| dataReceiveAddress | Int | UI data receiving start address |
-| dataCanSendLength | Int | Receiveable data length |
-| binDataType | Int | File type, request server to send fields |
-| deviceAialShape | Int | Screen type, request server to send fields |
-| imgCrcId | Int | Watch dial CRC checksum |
-| dataFileLength | Long | Length of the file to be sent |
-| packageIndex | Int | Which package |
+| Parameter name     | Type | Describe                                   |
+| ------------------ | ---- | ------------------------------------------ |
+| useType            | Int  | Data usage type                            |
+| oprateType         | Int  | Operation type                             |
+| oprateState        | Int  | Operation status                           |
+| dataReceiveAddress | Int  | UI data receiving start address            |
+| dataCanSendLength  | Int  | Receiveable data length                    |
+| binDataType        | Int  | File type, request server to send fields   |
+| deviceAialShape    | Int  | Screen type, request server to send fields |
+| imgCrcId           | Int  | Watch dial CRC checksum                    |
+| dataFileLength     | Long | Length of the file to be sent              |
+| packageIndex       | Int  | Which package                              |
 
 ###### Example Code
 
@@ -3427,13 +3430,13 @@ Note: **This interface is a network request and cannot be run in the main thread
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| ----------------- | ------------ | -------------------- |
-| uiDataServer | UIDataServer | Basic information of the server's dial |
-| deviceNumber | String | Device number |
-| deviceTestVersion | String | Device test version |
-| appPackName | String | App package name |
-| appVersion | String | App version |
+| Parameter name    | Type         | Describe                               |
+| ----------------- | ------------ | -------------------------------------- |
+| uiDataServer      | UIDataServer | Basic information of the server's dial |
+| deviceNumber      | String       | Device number                          |
+| deviceTestVersion | String       | Device test version                    |
+| appPackName       | String       | App package name                       |
+| appVersion        | String       | App version                            |
 
 Among them, deviceNumber will be returned when [[connecting device to confirm password](#Verify password operation)], the returned class name is PwdData, the field is deviceNumber, and deviceTestVersion is the deviceTestVersion value in PwdData.
 
@@ -3443,13 +3446,13 @@ Among them, deviceNumber will be returned when [[connecting device to confirm pa
 
 **TUiTheme**
 
-| Parameter name       | Type   | Describe                 |
-| ----------- | ------ | -------------------- |
-| crc | String | Server dial CRC |
-| binProtocol | String | Firmware (no need to pay attention here) |
-| dialShape | String | Dial shape |
-| fileUrl | String | File download path |
-| previewUrl | String | Dial preview image path |
+| Parameter name | Type   | Describe                                 |
+| -------------- | ------ | ---------------------------------------- |
+| crc            | String | Server dial CRC                          |
+| binProtocol    | String | Firmware (no need to pay attention here) |
+| dialShape      | String | Dial shape                               |
+| fileUrl        | String | File download path                       |
+| previewUrl     | String | Dial preview image path                  |
 
 ###### Example Code
 
@@ -3487,11 +3490,11 @@ Note: **This interface is a network request and cannot be run in the main thread
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| ------------------ | ------------------ | ---------------------------------------- |
-| downUrl | String | Downloaded dial file link (fileUrl returned in step 3) |
-| fileSave | String | Saved local path |
-| onDownLoadListener | OnDownLoadListener | Download callback |
+| Parameter name     | Type               | Describe                                               |
+| ------------------ | ------------------ | ------------------------------------------------------ |
+| downUrl            | String             | Downloaded dial file link (fileUrl returned in step 3) |
+| fileSave           | String             | Saved local path                                       |
+| onDownLoadListener | OnDownLoadListener | Download callback                                      |
 
 ###### Return data
 
@@ -3549,11 +3552,11 @@ startSetUiStream(euiFromType, inputStream, uiUpdateListener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| ---------------- | ----------------- | ------------------------------------- |
-| euiFromType | EUIFromType | UI type The default here is: EUIFromType.SERVER |
-| inputStream | InputStream | Dashboard file input stream |
-| uiUpdateListener | IUiUpdateListener | UI upgrade callback |
+| Parameter name   | Type              | Describe                                        |
+| ---------------- | ----------------- | ----------------------------------------------- |
+| euiFromType      | EUIFromType       | UI type The default here is: EUIFromType.SERVER |
+| inputStream      | InputStream       | Dashboard file input stream                     |
+| uiUpdateListener | IUiUpdateListener | UI upgrade callback                             |
 
 ###### Return data
 
@@ -3606,15 +3609,15 @@ fun onUiUpdateFail(eUiUpdateError: EUiUpdateError?)
 
 **EUiUpdateError**
 
-| Parameter name                   | Describe                    |
-| ----------------------- | ----------------------- |
-| LISTENTER_IS_NULL | No listener set |
-| NEED_READ_BASE_INFO | No dial information read first |
-| FILE_UNEXIST | File does not exist |
-| LOW_BATTERY | Battery is too low |
-| INTO_UPDATE_MODE_FAIL | Failed to enter UI mode |
-| FILE_LENGTH_NOT_4_POWER | File is not 4-byte aligned |
-| CHECK_CRC_FAIL | CRC check failed |
+| Parameter name          | Describe                                    |
+| ----------------------- | ------------------------------------------- |
+| LISTENTER_IS_NULL       | No listener set                             |
+| NEED_READ_BASE_INFO     | No dial information read first              |
+| FILE_UNEXIST            | File does not exist                         |
+| LOW_BATTERY             | Battery is too low                          |
+| INTO_UPDATE_MODE_FAIL   | Failed to enter UI mode                     |
+| FILE_LENGTH_NOT_4_POWER | File is not 4-byte aligned                  |
+| CHECK_CRC_FAIL          | CRC check failed                            |
 | APP_CRC_SAME_DEVICE_CRC | CRC of app is consistent with CRC of device |
 
 Note: When the CRC of the dial to be transmitted is consistent with the CRC of the device, there is no need to go through the server dial transmission logic, and the server dial can be directly set through the [[Set Screen Style](#Set Screen Style-settingScreenStyle)] interface.
@@ -3678,9 +3681,9 @@ VPOperateManager.getInstance().setJLWatchDial(localServerDialPath, listener)
 
 ###### Parameter Explanation
 
-| Parameter name              | Type                                   | Describe           |
-| ------------------- | -------------------------------------- | ---------------------- |
-| localServerDialPath | String                                 |                        |
+| Parameter name      | Type                                   | Describe                                  |
+| ------------------- | -------------------------------------- | ----------------------------------------- |
+| localServerDialPath | String                                 |                                           |
 | listener            | JLWatchHolder.OnSetJLWatchDialListener | JieLi Photo Watch Transmission Monitoring |
 
 ###### Return data
@@ -3766,8 +3769,8 @@ getCustomWatchUiInfo( uiBaseInfoFormCustomListener)
 
 ###### Parameter Explanation
 
-| Parameter name                       | Type                          | Describe                     |
-| ---------------------------- | ----------------------------- | ------------------------ |
+| Parameter name               | Type                          | Describe                                             |
+| ---------------------------- | ----------------------------- | ---------------------------------------------------- |
 | uiBaseInfoFormCustomListener | IUIBaseInfoFormCustomListener | Callback for reading basic information of photo dial |
 
 ###### Return data
@@ -3785,19 +3788,19 @@ fun onBaseUiInfoFormCustom(uiDataCustom:UIDataCustom);
 
 **UIDataCustom**
 
-| Parameter name              | Type                    | Describe                     |
-| ------------------ | ----------------------- | ------------------------ |
-| dataReceiveAddress | Int | UI data receiving start address |
-| dataCanSendLength | Int | Receiveable data length |
-| fileLength | Long | Length of the file to be sent |
-| customUIType | EWatchUIType | Device screen type |
-| isDefalutUI | Boolean | Whether it is the default dial in the customization |
-| timePosition | EWatchUIElementPosition | Element position |
-| upTimeType | EWatchUIElementType | Element type above the time |
-| downTimeType | EWatchUIElementType | Element type below the time |
-| color888 | Int | Font display color |
-| crc | Int | CRC value of the dial |
-| packageIndex | Int | Which package, starting from 1 |
+| Parameter name     | Type                    | Describe                                            |
+| ------------------ | ----------------------- | --------------------------------------------------- |
+| dataReceiveAddress | Int                     | UI data receiving start address                     |
+| dataCanSendLength  | Int                     | Receiveable data length                             |
+| fileLength         | Long                    | Length of the file to be sent                       |
+| customUIType       | EWatchUIType            | Device screen type                                  |
+| isDefalutUI        | Boolean                 | Whether it is the default dial in the customization |
+| timePosition       | EWatchUIElementPosition | Element position                                    |
+| upTimeType         | EWatchUIElementType     | Element type above the time                         |
+| downTimeType       | EWatchUIElementType     | Element type below the time                         |
+| color888           | Int                     | Font display color                                  |
+| crc                | Int                     | CRC value of the dial                               |
+| packageIndex       | Int                     | Which package, starting from 1                      |
 
 ###### Example Code
 
@@ -3819,20 +3822,20 @@ setCustomWacthUi(UICustomSetData uiCustomSetData, final IUIBaseInfoFormCustomLis
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| ---------------------------- | ----------------------------- | ---------------- |
-| uiCustomSetData | UICustomSetData | Photo dial settings |
+| Parameter name               | Type                          | Describe                     |
+| ---------------------------- | ----------------------------- | ---------------------------- |
+| uiCustomSetData              | UICustomSetData               | Photo dial settings          |
 | uiBaseInfoFormCustomListener | IUIBaseInfoFormCustomListener | Photo dial settings callback |
 
 **UICustomSetData**
 
 | Parameter nameimePosition | TypeEWatchUIElementPosition | Describe Element position |
-| ----------------- | --------------------------- | ------------------ |
-| timePosition | EWatchUIElementPosition | Element position |
-| upTimeType | EWatchUIElementType | Element type above time |
-| downTimeType | EWatchUIElementType | Element type below time |
-| color888 | Int | Font display color |
-| isDefalutUI | Boolean | Is it the default photo |
+| ------------------------- | --------------------------- | ------------------------- |
+| timePosition              | EWatchUIElementPosition     | Element position          |
+| upTimeType                | EWatchUIElementType         | Element type above time   |
+| downTimeType              | EWatchUIElementType         | Element type below time   |
+| color888                  | Int                         | Font display color        |
+| isDefalutUI               | Boolean                     | Is it the default photo   |
 
 By querying the interface to return customUIType to get the WatchUIType of the device, you can know the element position, default image, photo ratio and other information supported by the device.
 
@@ -3957,10 +3960,10 @@ VPOperateManager.getInstance().setJLWatchPhotoDial(dialPhotoPath, listener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Description |
-| ------------- | -------------------------------------------- | ------------------------------------------------------------ |
-| dialPhotoPath | String | The path of the cropped photo file. (It is recommended to save it in a fixed folder directory. And the cropped size should be consistent with the current watch face size, otherwise it will not be transferred. For example, for a 240x280 watch face, the image needs to be 240x280 in width and height) |
-| listener | JLWatchFaceManager.JLTransferPicDialListener | Jerry Photo Watch Face Transfer Listener |
+| Parameter name | Type                                         | Description                                                  |
+| -------------- | -------------------------------------------- | ------------------------------------------------------------ |
+| dialPhotoPath  | String                                       | The path of the cropped photo file. (It is recommended to save it in a fixed folder directory. And the cropped size should be consistent with the current watch face size, otherwise it will not be transferred. For example, for a 240x280 watch face, the image needs to be 240x280 in width and height) |
+| listener       | JLWatchFaceManager.JLTransferPicDialListener | Jerry Photo Watch Face Transfer Listener                     |
 
 ###### Return data
 
@@ -4080,10 +4083,10 @@ startFindDeviceByPhone(bleWriteResponse, findDevicelistener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| ------------------ | -------------------- | -------------- |
-| bleWriteResponse | IBleWriteResponseInt | Listening for write operations |
-| findDevicelistener | IFindDevicelistener | Find device listening |
+| Parameter name     | Type                 | Describe                       |
+| ------------------ | -------------------- | ------------------------------ |
+| bleWriteResponse   | IBleWriteResponseInt | Listening for write operations |
+| findDevicelistener | IFindDevicelistener  | Find device listening          |
 
 ###### Return data
 
@@ -4194,10 +4197,10 @@ The message notification function mainly includes
 VPOperateManager.getInstance().readSocialMsg(writeResponse, listener)
 ```
 
-| Parameter name | Type | Describe |
-| ------------- | ---------------------- | ------------------------ |
-| writeResponse | IBleWriteResponse | Listening for write operations |
-| listener | ISocialMsgDataListener | Callback listening for message notification switch status |
+| Parameter name | Type                   | Describe                                                  |
+| -------------- | ---------------------- | --------------------------------------------------------- |
+| writeResponse  | IBleWriteResponse      | Listening for write operations                            |
+| listener       | ISocialMsgDataListener | Callback listening for message notification switch status |
 
 #### Or use the following method to get the message switch status cached by SDK
 
@@ -4213,11 +4216,11 @@ This method returns the switch status FunctionSocailMsgData of the message notif
 VPOperateManager.getInstance().settingSocialMsg(writeResponse, listener, socailMsgData);
 ```
 
-| Parameter name | Type | Describe |
-| ------------- | ---------------------- | ------------------------ |
-| writeResponse | IBleWriteResponse | Listening for write operations |
-| listener | ISocialMsgDataListener | Message notification switch state callback listener |
-| socailMsgData | FunctionSocailMsgData | Switch state to be set |
+| Parameter name | Type                   | Describe                                            |
+| -------------- | ---------------------- | --------------------------------------------------- |
+| writeResponse  | IBleWriteResponse      | Listening for write operations                      |
+| listener       | ISocialMsgDataListener | Message notification switch state callback listener |
+| socailMsgData  | FunctionSocailMsgData  | Switch state to be set                              |
 
 #### Switch state and listener callback
 
@@ -4248,42 +4251,42 @@ public interface ISocialMsgDataListener extends IListener {
 
 FunctionSocailMsgData: Message notification status
 
-| Member name | Type | Description |
-| ------------- | --------------- | ---------------- |
-| phone | EFunctionStatus | Phone |
-| msg | EFunctionStatus | SMS |
-| wechat | EFunctionStatus | WeChat |
-| qq | EFunctionStatus | QQ |
-| sina | EFunctionStatus | Sina |
-| facebook | EFunctionStatus | Facebook |
-| twitter | EFunctionStatus | X (original Twitter) |
-| flickr | EFunctionStatus | Flickr |
-| Linkin | EFunctionStatus | Linkin |
-| whats | EFunctionStatus | Whats |
-| line | EFunctionStatus | Line |
-| instagram | EFunctionStatus | Instagram |
-| snapchat | EFunctionStatus | Snapchat |
-| skype | EFunctionStatus | Skype |
-| gmail | EFunctionStatus | Gmail |
-| dingding | EFunctionStatus | Dingding |
-| wxWork | EFunctionStatus | Enterprise WeChat wxWork |
-| tikTok | EFunctionStatus | Douyin TikTok |
-| telegram | EFunctionStatus | Telegram |
-| connected2_me | EFunctionStatus | Connected2Me |
-| kakaoTalk | EFunctionStatus | KakaoTalk |
-| messenger | EFunctionStatus | Messenger |
-| other | EFunctionStatus | Other messages |
-| shieldPolice | EFunctionStatus | Police Right |
+| Member name   | Type            | Description              |
+| ------------- | --------------- | ------------------------ |
+| phone         | EFunctionStatus | Phone                    |
+| msg           | EFunctionStatus | SMS                      |
+| wechat        | EFunctionStatus | WeChat                   |
+| qq            | EFunctionStatus | QQ                       |
+| sina          | EFunctionStatus | Sina                     |
+| facebook      | EFunctionStatus | Facebook                 |
+| twitter       | EFunctionStatus | X (original Twitter)     |
+| flickr        | EFunctionStatus | Flickr                   |
+| Linkin        | EFunctionStatus | Linkin                   |
+| whats         | EFunctionStatus | Whats                    |
+| line          | EFunctionStatus | Line                     |
+| instagram     | EFunctionStatus | Instagram                |
+| snapchat      | EFunctionStatus | Snapchat                 |
+| skype         | EFunctionStatus | Skype                    |
+| gmail         | EFunctionStatus | Gmail                    |
+| dingding      | EFunctionStatus | Dingding                 |
+| wxWork        | EFunctionStatus | Enterprise WeChat wxWork |
+| tikTok        | EFunctionStatus | Douyin TikTok            |
+| telegram      | EFunctionStatus | Telegram                 |
+| connected2_me | EFunctionStatus | Connected2Me             |
+| kakaoTalk     | EFunctionStatus | KakaoTalk                |
+| messenger     | EFunctionStatus | Messenger                |
+| other         | EFunctionStatus | Other messages           |
+| shieldPolice  | EFunctionStatus | Police Right             |
 
 EFunctionStatus: Function status (enumeration type)
 
-| Type | Description |
-| ------------- | ------------ |
-| UNSUPPORT | This function is not supported |
-| SUPPORT | Supported |
-| SUPPORT_OPEN | Supported and open |
-| SUPPORT_CLOSE | Supported and closed |
-| UNKONW | Unknown status |
+| Type          | Description                    |
+| ------------- | ------------------------------ |
+| UNSUPPORT     | This function is not supported |
+| SUPPORT       | Supported                      |
+| SUPPORT_OPEN  | Supported and open             |
+| SUPPORT_CLOSE | Supported and closed           |
+| UNKONW        | Unknown status                 |
 
 ### Send message notification
 
@@ -4301,10 +4304,10 @@ Message notifications are divided into three categories
 VPOperateManager.getInstance().sendSocialMsgContent(writeResponse, contentSetting)
 ```
 
-| Parameter name | Type | Description |
-| -------------- | ----------------- | -------------- |
-| writeResponse | IBleWriteResponse | Listening for write operations |
-| contentSetting | ContentSetting | Message content |
+| Parameter name | Type              | Description                    |
+| -------------- | ----------------- | ------------------------------ |
+| writeResponse  | IBleWriteResponse | Listening for write operations |
+| contentSetting | ContentSetting    | Message content                |
 
 ContentSetting: Message content ESocailMsg is the information type
 ```
@@ -4425,9 +4428,9 @@ MESSENGER((byte) 0x17),
 Mobile phone incoming call messages use ContentPhoneSetting, which inherits from ContentSetting. If you pass in both the name and the phone number, the watch will display the name. The contact name can be null
 ContentPhoneSetting
 
-| Member name | Type | Describe |
-| ------------------ | ------ | ---------- |
-| contactName | String | Contact name |
+| Member name        | Type   | Describe       |
+| ------------------ | ------ | -------------- |
+| contactName        | String | Contact name   |
 | contectPhoneNumber | String | Contact number |
 
 The following construction method is recommended
@@ -4441,11 +4444,11 @@ ContentPhoneSetting contentSetting = new ContentPhoneSetting(ESocailMsg.PHONE, "
 Mobile phone text messages use ContentSmsSetting, which inherits from ContentSetting. If you pass in both the name and the phone number, the watch will display the name
 ContentSmsSetting
 
-| Member name | Type | Describe |
-| ------------------ | ------ | ---------- |
-| contactName | String | Contact name |
-| contectPhoneNumber | String | Contact number |
-| content | String | Message content |
+| Member name        | Type   | Describe        |
+| ------------------ | ------ | --------------- |
+| contactName        | String | Contact name    |
+| contectPhoneNumber | String | Contact number  |
+| content            | String | Message content |
 
 The following construction method is recommended
 
@@ -4501,22 +4504,22 @@ settingMusicData(bleWriteResponse, musicData, iMusicControlListener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| --------------------- | --------------------- | ---------------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
-| musicData | MusicData | Music data (song name, switch, etc.) |
-| iMusicControlListener | IMusicControlListener | Music control listener |
+| Parameter name        | Type                  | Describe                             |
+| --------------------- | --------------------- | ------------------------------------ |
+| bleWriteResponse      | IBleWriteResponse     | Listening for write operations       |
+| musicData             | MusicData             | Music data (song name, switch, etc.) |
+| iMusicControlListener | IMusicControlListener | Music control listener               |
 
 **MusicData** -- Music data
 
-| Parameter name | Type | Describe |
-| --------------- | ------ | -------------------------- |
-| musicAppId | String | Music appid |
-| musicAlbum | String | Music album |
-| musicName | String | Music name |
-| singerName | String | Singer name |
-| palyStatus | Int | Status: 1 Playing status 2 Pause status |
-| musicVoiceLevel | Int | Volume level [1-100] |
+| Parameter name  | Type   | Describe                                |
+| --------------- | ------ | --------------------------------------- |
+| musicAppId      | String | Music appid                             |
+| musicAlbum      | String | Music album                             |
+| musicName       | String | Music name                              |
+| singerName      | String | Singer name                             |
+| palyStatus      | Int    | Status: 1 Playing status 2 Pause status |
+| musicVoiceLevel | Int    | Volume level [1-100]                    |
 
 ###### Return data
 
@@ -4628,11 +4631,11 @@ settingVolume(volumeLevel,bleWriteResponse,iMusicControlListener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| --------------------- | --------------------- | -------------------------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
-| volumeLevel | Int | The volume value to be set, ranging from 0 to 100 |
-| iMusicControlListener | IMusicControlListener | Music control listening |
+| Parameter name        | Type                  | Describe                                          |
+| --------------------- | --------------------- | ------------------------------------------------- |
+| bleWriteResponse      | IBleWriteResponse     | Listening for write operations                    |
+| volumeLevel           | Int                   | The volume value to be set, ranging from 0 to 100 |
+| iMusicControlListener | IMusicControlListener | Music control listening                           |
 
 ###### Return data
 
@@ -4656,8 +4659,8 @@ registerBTInfoListener(iDeviceBTInfoListener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| --------------------- | --------------------- | -------------------- |
+| Parameter name        | Type                  | Describe                                |
+| --------------------- | --------------------- | --------------------------------------- |
 | iDeviceBTInfoListener | IDeviceBTInfoListener | Device Bluetooth call function listener |
 
 ###### Return data
@@ -4704,13 +4707,13 @@ fun onDeviceBTInfoReport(btInfo: BTInfo)
 
 **BTInfo**
 
-| Parameter name | Type | Describe |
-| -------------- | ------- | ------------------------------------------------ |
-| status | Int | Device Bluetooth call status 0: disconnected, 1: connected, 2: pairing. |
-| isBTOpen | Boolean | Is the device Bluetooth call turned on? |
-| isAutoCon | Boolean | Will the device Bluetooth call automatically reconnect? |
-| isAudioOpen | Boolean | Is multimedia audio turned on? |
-| isHavePairInfo | Boolean | Is there pairing information? |
+| Parameter name | Type    | Describe                                                     |
+| -------------- | ------- | ------------------------------------------------------------ |
+| status         | Int     | Device Bluetooth call status 0: disconnected, 1: connected, 2: pairing. |
+| isBTOpen       | Boolean | Is the device Bluetooth call turned on?                      |
+| isAutoCon      | Boolean | Will the device Bluetooth call automatically reconnect?      |
+| isAudioOpen    | Boolean | Is multimedia audio turned on?                               |
+| isHavePairInfo | Boolean | Is there pairing information?                                |
 
 ###### Example Code
 
@@ -4750,8 +4753,8 @@ registerBTConnectionListener(iDeviceBTConnectionListener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| --------------------------- | --------------------------- | ------------------------ |
+| Parameter name              | Type                        | Describe                                        |
+| --------------------------- | --------------------------- | ----------------------------------------------- |
 | iDeviceBTConnectionListener | IDeviceBTConnectionListener | Device Bluetooth call connection status monitor |
 
 ###### Return data
@@ -4819,10 +4822,10 @@ connectBT(mac, listener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| -------- | --------------------------- | ------------------- |
-| mac | String | Bluetooth mac of the device to be connected |
-| listener | IDeviceBTConnectionListener | Device connection listener callback |
+| Parameter name | Type                        | Describe                                    |
+| -------------- | --------------------------- | ------------------------------------------- |
+| mac            | String                      | Bluetooth mac of the device to be connected |
+| listener       | IDeviceBTConnectionListener | Device connection listener callback         |
 ###### Return data
 
 **IDeviceBTConnectionListener** 
@@ -4879,10 +4882,10 @@ readBTInfo(bleWriteResponse, listener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| ---------------- | --------------------- | ---------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
-| listener | IDeviceBTInfoListener | Device connection listening callback |
+| Parameter name   | Type                  | Describe                             |
+| ---------------- | --------------------- | ------------------------------------ |
+| bleWriteResponse | IBleWriteResponse     | Listening for write operations       |
+| listener         | IDeviceBTInfoListener | Device connection listening callback |
 
 ###### Return data
 
@@ -4917,13 +4920,13 @@ setBTStatus(boolean isAutoConnect, boolean isBTOpen, boolean isAudioOpen, isClea
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| ---------------- | ----------------- | -------------------- |
-| isAutoConnect | Boolean | Whether the device automatically reconnects |
-| isBTOpen | Boolean | Whether the device BT is turned on |
-| isAudioOpen | Boolean | Whether the multimedia switch is turned on |
-| isClearPairInfo | Boolean | Whether to clear the device pairing information |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
+| Parameter name   | Type              | Describe                                        |
+| ---------------- | ----------------- | ----------------------------------------------- |
+| isAutoConnect    | Boolean           | Whether the device automatically reconnects     |
+| isBTOpen         | Boolean           | Whether the device BT is turned on              |
+| isAudioOpen      | Boolean           | Whether the multimedia switch is turned on      |
+| isClearPairInfo  | Boolean           | Whether to clear the device pairing information |
+| bleWriteResponse | IBleWriteResponse | Listening for write operations                  |
 
 ###### Return data
 
@@ -4955,9 +4958,9 @@ setBTSwitchStatus(isBTOpen, bleWriteResponse)
 
 ###### Parameter explanation
 
-| Parameter name           | Type              | Describe           |
-| ---------------- | ----------------- | -------------- |
-| isBTOpen         | Boolean           | Whether to open BT |
+| Parameter name   | Type              | Describe                       |
+| ---------------- | ----------------- | ------------------------------ |
+| isBTOpen         | Boolean           | Whether to open BT             |
 | bleWriteResponse | IBleWriteResponse | Listening for write operations |
 
 ###### Return data
@@ -4997,9 +5000,9 @@ readSportModelOrigin(bleWriteResponse, sportModelOriginListener)
 
 ###### Parameter Explanation
 
-| Parameter name                   | Type                      | Describe                 |
-| ------------------------ | ------------------------- | -------------------- |
-| bleWriteResponse         | IBleWriteResponse         | Listening for write operations       |
+| Parameter name           | Type                      | Describe                         |
+| ------------------------ | ------------------------- | -------------------------------- |
+| bleWriteResponse         | IBleWriteResponse         | Listening for write operations   |
 | sportModelOriginListener | ISportModelOriginListener | Read sports mode data monitoring |
 
 ###### Return data
@@ -5015,7 +5018,7 @@ readSportModelOrigin(bleWriteResponse, sportModelOriginListener)
 fun onReadOriginProgress(progress: Float)
 
 /***
-* Returns the details of reading. The location of this package needs to be remembered. When reading data next time, pass in the location of this package to avoid repeated reading
+* Returns the details of reading.
 *
 * @param day data flag in the watch [0=today, 1=yesterday, 2=the day before yesterday]
 * @param date data date, format yyyy-mm-dd
@@ -5046,40 +5049,40 @@ fun onReadOriginComplete()
 
 **SportModelOriginHeadData**--Head information of sports mode
 
-| Parameter name | Type | Describe |
-| ------------ | -------- | ------------------------ |
-| date | String | Sports date |
-| startTime | TimeData | Start time |
-| stopTime | TimeData | Stop time |
-| sportTime | Int | Total sports duration |
-| stepCount | Int | Total steps in sports |
-| sportCount | Int | Total sports volume |
-| kcals | Double | Kilocalories consumed in sports |
-| distance | Double | Sports distance |
-| recordCount | Int | Total number of records |
-| pauseCount | Int | Number of pauses |
-| pauseTime | Int | Pause duration |
-| crc | Int | Data checksum |
-| peisu | Int | Pace |
-| oxsporttimes | Int | Aerobic exercise time |
-| averRate | Int | Average heart rate |
-| sportType | Int | Sport type, see ESportType for details |
+| Parameter name | Type     | Describe                               |
+| -------------- | -------- | -------------------------------------- |
+| date           | String   | Sports date                            |
+| startTime      | TimeData | Start time                             |
+| stopTime       | TimeData | Stop time                              |
+| sportTime      | Int      | Total sports duration                  |
+| stepCount      | Int      | Total steps in sports                  |
+| sportCount     | Int      | Total sports volume                    |
+| kcals          | Double   | Kilocalories consumed in sports        |
+| distance       | Double   | Sports distance                        |
+| recordCount    | Int      | Total number of records                |
+| pauseCount     | Int      | Number of pauses                       |
+| pauseTime      | Int      | Pause duration                         |
+| crc            | Int      | Data checksum                          |
+| peisu          | Int      | Pace                                   |
+| oxsporttimes   | Int      | Aerobic exercise time                  |
+| averRate       | Int      | Average heart rate                     |
+| sportType      | Int      | Sport type, see ESportType for details |
 
 **SportModelOriginItemData**--Detailed information on sport mode
 
-| Parameter name | Type | Describe |
-| ---------- | -------- | -------- |
-| date | String | Sport date |
-| startTime | TimeData | Start time |
-| minute | Int | Sport minute |
-| allMinute | Int | Total minutes |
-| rate | Int | Heart rate |
-| stepCount | Int | Total steps |
-| sportCount | Int | Total exercise volume |
-| distance | Int | Sport distance |
-| kcal | Int | Consumed kilocalories |
-| beathPause | Int | Pause flag |
-| crc | Int | Verification code |
+| Parameter name | Type     | Describe              |
+| -------------- | -------- | --------------------- |
+| date           | String   | Sport date            |
+| startTime      | TimeData | Start time            |
+| minute         | Int      | Sport minute          |
+| allMinute      | Int      | Total minutes         |
+| rate           | Int      | Heart rate            |
+| stepCount      | Int      | Total steps           |
+| sportCount     | Int      | Total exercise volume |
+| distance       | Int      | Sport distance        |
+| kcal           | Int      | Consumed kilocalories |
+| beathPause     | Int      | Pause flag            |
+| crc            | Int      | Verification code     |
 
 ESportType--Sport type enumeration
 
@@ -5898,9 +5901,9 @@ readSportModelState(IBleWriteResponse bleWriteResponse, ISportModelStateListener
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| ----------------------- | ------------------------ | -------------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
+| Parameter name          | Type                     | Describe                          |
+| ----------------------- | ------------------------ | --------------------------------- |
+| bleWriteResponse        | IBleWriteResponse        | Listening for write operations    |
 | sportModelStateListener | ISportModelStateListener | Read sports mode status listening |
 
 ###### Return data
@@ -5923,32 +5926,32 @@ fun onSportStopped()
 
 **SportModelStateData**--Sport mode status data
 
-| Parameter name | Type | Describe |
-| ------------- | ---------------------- | ------------------ |
-| oprateStauts | ECheckWear | Sports mode operation status |
-| deviceStauts | ESportModelStateStauts | Sports mode device status |
-| sportModeType | Int | Sports mode type |
+| Parameter name | Type                   | Describe                     |
+| -------------- | ---------------------- | ---------------------------- |
+| oprateStauts   | ECheckWear             | Sports mode operation status |
+| deviceStauts   | ESportModelStateStauts | Sports mode device status    |
+| sportModeType  | Int                    | Sports mode type             |
 
 **ECheckWear**--Sport mode operation status
 
-| Parameter name | Describe |
-| ------------- | -------- |
-| OPEN_SUCCESS | Open successfully |
-| OPEN_FAIL | Open failed |
-| CLOSE_SUCCESS | Close successfully |
-| CLOSE_FAIL | Close failed |
-| READ_SUCCESS | Read successfully |
-| READ_FAIL | Read failed |
-| UNKONW | Unknown status |
+| Parameter name | Describe           |
+| -------------- | ------------------ |
+| OPEN_SUCCESS   | Open successfully  |
+| OPEN_FAIL      | Open failed        |
+| CLOSE_SUCCESS  | Close successfully |
+| CLOSE_FAIL     | Close failed       |
+| READ_SUCCESS   | Read successfully  |
+| READ_FAIL      | Read failed        |
+| UNKONW         | Unknown status     |
 
 **ESportModelStateStauts**--Device status of sports mode
 
-| Parameter name | Describe |
-| ----------------------- | ---------- |
-| DEVICE_FREE | Device is free |
-| DEVICE_BUSY | Device is busy |
+| Parameter name          | Describe                  |
+| ----------------------- | ------------------------- |
+| DEVICE_FREE             | Device is free            |
+| DEVICE_BUSY             | Device is busy            |
 | DEVICE_HAD_START_BEFORE | Device has been turned on |
-| UNKNOW | Unknown |
+| UNKNOW                  | Unknown                   |
 
 ###### Example Code
 
@@ -5982,9 +5985,9 @@ startSportModel(bleWriteResponse, sportModelStateListener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| ----------------------- | ------------------------ | -------------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
+| Parameter name          | Type                     | Describe                        |
+| ----------------------- | ------------------------ | ------------------------------- |
+| bleWriteResponse        | IBleWriteResponse        | Listening for write operations  |
 | sportModelStateListener | ISportModelStateListener | Read sports mode state listener |
 
 ###### Return data
@@ -6021,9 +6024,9 @@ stopSportModel(bleWriteResponse, sportModelStateListener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| ----------------------- | ------------------------ | -------------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
+| Parameter name          | Type                     | Describe                         |
+| ----------------------- | ------------------------ | -------------------------------- |
+| bleWriteResponse        | IBleWriteResponse        | Listening for write operations   |
 | sportModelStateListener | ISportModelStateListener | Read sports mode status listener |
 
 ###### Return data
@@ -6477,10 +6480,10 @@ public class OriginData3 extends OriginData {
 
 ```
 
-| Parameter name                | Type                   | Unit |
-| --------------------- | ---------------------- | -------- |
-| bloodGlucose          | float                  | mmol/L   |
-| bloodGlucoseRiskLevel | EBloodGlucoseRiskLevel | None  |
+| Parameter name        | Type                   | Unit   |
+| --------------------- | ---------------------- | ------ |
+| bloodGlucose          | float                  | mmol/L |
+| bloodGlucoseRiskLevel | EBloodGlucoseRiskLevel | None   |
 
 ```java
 public enum EBloodGlucoseRiskLevel {
@@ -6578,14 +6581,14 @@ void onDetectError(int opt, EBloodGlucoseStatus status);
 EBloodGlucoseStatus
 ```
 
-| Definition | Description |
-| ------------- | -------------- |
-| NONSUPPORT | Not supported |
-| ENABLE | Available |
-| DETECTING | Measuring |
-| LOW_POWER | Low power cannot be measured |
-| BUSY | Device is busy |
-| WEARING_ERROR | Wearing error |
+| Definition    | Description                  |
+| ------------- | ---------------------------- |
+| NONSUPPORT    | Not supported                |
+| ENABLE        | Available                    |
+| DETECTING     | Measuring                    |
+| LOW_POWER     | Low power cannot be measured |
+| BUSY          | Device is busy               |
+| WEARING_ERROR | Wearing error                |
 
 #### Blood glucose private mode
 
@@ -6595,10 +6598,10 @@ EBloodGlucoseStatus
 VPOperateManager.getInstance().readBloodGlucoseAdjustingData(writeResponse,listener)
 ```
 
-| Parameter name | Type | Describe |
-| ------------- | --------------------------- | -------------------- |
-| writeResponse | IBleWriteResponse | Command write callback |
-| listener | IBloodGlucoseChangeListener | Blood glucose private mode read callback |
+| Parameter name | Type                        | Describe                                 |
+| -------------- | --------------------------- | ---------------------------------------- |
+| writeResponse  | IBleWriteResponse           | Command write callback                   |
+| listener       | IBloodGlucoseChangeListener | Blood glucose private mode read callback |
 
 ###### Read success callback
 
@@ -6626,12 +6629,12 @@ void onBloodGlucoseAdjustingReadFailed();
 VPOperateManager.getInstance().setBloodGlucoseAdjustingData(fValue, isOpen, writeResponse, AbsBloodGlucoseChangeListener)
 ```
 
-| Parameter name                        | Type                        | Description |
-| ----------------------------- | --------------------------- | -------------------- |
-| fValue | float | Private mode blood glucose calibration value |
-| isOpen | boolean | Whether to enable private mode of blood glucose |
-| writeResponse | IBleWriteResponse | Command write callback |
-| AbsBloodGlucoseChangeListener | IBloodGlucoseChangeListener | Blood glucose operation callback |
+| Parameter name                | Type                        | Description                                     |
+| ----------------------------- | --------------------------- | ----------------------------------------------- |
+| fValue                        | float                       | Private mode blood glucose calibration value    |
+| isOpen                        | boolean                     | Whether to enable private mode of blood glucose |
+| writeResponse                 | IBleWriteResponse           | Command write callback                          |
+| AbsBloodGlucoseChangeListener | IBloodGlucoseChangeListener | Blood glucose operation callback                |
 
 ###### Setting success callback
 
@@ -6676,10 +6679,10 @@ readMultipleCalibrationBGValue(bleWriteResponse, listener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| ---------------- | ----------------------------- | -------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
-| listener | AbsBloodGlucoseChangeListener | Blood glucose operation callback |
+| Parameter name   | Type                          | Describe                         |
+| ---------------- | ----------------------------- | -------------------------------- |
+| bleWriteResponse | IBleWriteResponse             | Listening for write operations   |
+| listener         | AbsBloodGlucoseChangeListener | Blood glucose operation callback |
 
 ###### Successful read callback
 
@@ -6706,16 +6709,16 @@ void onBGMultipleAdjustingReadFailed();
 
 **MealInfo** -- Multi-calibration mode data
 
-| Parameter name | Type | Describe |
-| ----------------- | ------- | ------------------------------------------------- |
-| index | Int | The tag of the current meal. 1: breakfast, 2: lunch, 3: dinner. |
-| bgBeforeMeal | Float | Pre-meal blood glucose calibration value, unit mmol/L |
-| bgAfterMeal | Float | Post-meal blood glucose calibration value, unit mmol/L |
-| bgBeforeMeal_mgDL | Int | Pre-meal blood glucose calibration value, unit mg/dL |
-| bgAfterMeal_mgDL | Int | Post-meal blood glucose calibration value, unit mg/dL |
-| beforeMealTime | Int | Pre-meal time (minutes): hours + minutes, for example: 08:30 = 8*60+30 |
-| afterMealTime | Int | Post-meal time (minutes): hours + minutes |
-| isUnitMmolL | Boolean | Whether the unit is mmol/L, priority setting |
+| Parameter name    | Type    | Describe                                                     |
+| ----------------- | ------- | ------------------------------------------------------------ |
+| index             | Int     | The tag of the current meal. 1: breakfast, 2: lunch, 3: dinner. |
+| bgBeforeMeal      | Float   | Pre-meal blood glucose calibration value, unit mmol/L        |
+| bgAfterMeal       | Float   | Post-meal blood glucose calibration value, unit mmol/L       |
+| bgBeforeMeal_mgDL | Int     | Pre-meal blood glucose calibration value, unit mg/dL         |
+| bgAfterMeal_mgDL  | Int     | Post-meal blood glucose calibration value, unit mg/dL        |
+| beforeMealTime    | Int     | Pre-meal time (minutes): hours + minutes, for example: 08:30 = 8*60+30 |
+| afterMealTime     | Int     | Post-meal time (minutes): hours + minutes                    |
+| isUnitMmolL       | Boolean | Whether the unit is mmol/L, priority setting                 |
 
 ##### Set blood glucose multi-calibration mode data
 
@@ -6728,14 +6731,14 @@ settingMultipleCalibrationBGValue(isOpen, breakfast, lunch, dinner, bleWriteResp
 
 ###### Parameter Explanation
 
-| Parameter name           | Type                          | Describe               |
-| ---------------- | ----------------------------- | ------------------ |
-| isOpen | Boolean | Whether to open the multi-calibration mode |
-| breakfast | MealInfo | Breakfast multi-calibration data |
-| lunch | MealInfo | Lunch multi-calibration data |
-| dinner | MealInfo | Dinner multi-calibration data |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
-| listener | AbsBloodGlucoseChangeListener | Blood glucose operation callback |
+| Parameter name   | Type                          | Describe                                   |
+| ---------------- | ----------------------------- | ------------------------------------------ |
+| isOpen           | Boolean                       | Whether to open the multi-calibration mode |
+| breakfast        | MealInfo                      | Breakfast multi-calibration data           |
+| lunch            | MealInfo                      | Lunch multi-calibration data               |
+| dinner           | MealInfo                      | Dinner multi-calibration data              |
+| bleWriteResponse | IBleWriteResponse             | Listening for write operations             |
+| listener         | AbsBloodGlucoseChangeListener | Blood glucose operation callback           |
 
 ###### Setting success callback
 
@@ -6782,23 +6785,23 @@ settingWomenState(bleWriteResponse, womenDataListener, womenSetting)
 
 ###### Parameter Explanation
 
-| Parameter name            | Type               | Describe                                                         |
+| Parameter name    | Type               | Describe                                                     |
 | ----------------- | ------------------ | ------------------------------------------------------------ |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
+| bleWriteResponse  | IBleWriteResponse  | Listening for write operations                               |
 | womenDataListener | IWomenDataListener | Listening for women's status operations, returning the status of the operation |
-| womenSetting | WomenSetting | Women's status setting class, including 4 states in total [menstrual period, pregnancy preparation period, pregnancy period, motherhood period] |
+| womenSetting      | WomenSetting       | Women's status setting class, including 4 states in total [menstrual period, pregnancy preparation period, pregnancy period, motherhood period] |
 
 **WomenSetting**--Women's status settings
 
-| Parameter name | Type | Describe |
-| -------------- | ------------ | ------------------------------- |
-| menseLength | Int | The length of a woman's menstrual period, ranging from [4-28 days] |
-| menesInterval | Int | The length of the menstrual cycle |
-| menesLasterday | TimeData | The time of the last menstrual period, accurate to the day |
-| babyBirthday | TimeData | The child's birth date, accurate to the day |
-| confinementDay | TimeData | Pregnant women's due date, accurate to the day |
-| womenStatus | EWomenStatus | Women's status |
-| babySex | ESex | Child's gender: MAN male, WOMAN female |
+| Parameter name | Type         | Describe                                                     |
+| -------------- | ------------ | ------------------------------------------------------------ |
+| menseLength    | Int          | The length of a woman's menstrual period, ranging from [4-28 days] |
+| menesInterval  | Int          | The length of the menstrual cycle                            |
+| menesLasterday | TimeData     | The time of the last menstrual period, accurate to the day   |
+| babyBirthday   | TimeData     | The child's birth date, accurate to the day                  |
+| confinementDay | TimeData     | Pregnant women's due date, accurate to the day               |
+| womenStatus    | EWomenStatus | Women's status                                               |
+| babySex        | ESex         | Child's gender: MAN male, WOMAN female                       |
 
 >1. When the woman's status is [Menstrual period] and [Preparation period], use this constructor WomenSetting(womenStatus, menseLength, menesInterval, menesLasterday)
 >2. When the woman's status is [Mommy period], use this constructor WomenSetting(womenStatus, menseLength, menesInterval, menesLasterday, babySex, babyBirthday)
@@ -6806,13 +6809,13 @@ settingWomenState(bleWriteResponse, womenDataListener, womenSetting)
 
 **EWomenStatus**
 
-| Parameter name | Describe |
-| -------- | -------- |
-| NONE | No status |
-| MENES | Menstrual status |
-| PREREADY | Pregnancy status |
-| PREING | Pregnancy status |
-| MAMAMI | Mommy status |
+| Parameter name | Describe         |
+| -------------- | ---------------- |
+| NONE           | No status        |
+| MENES          | Menstrual status |
+| PREREADY       | Pregnancy status |
+| PREING         | Pregnancy status |
+| MAMAMI         | Mommy status     |
 
 ###### Return data
 
@@ -6829,19 +6832,19 @@ fun onWomenDataChange(womenData:WomenData)
 
 **WomenData**--Women's status data
 
-| Parameter name | Type | Describe |
-| ------------ | ------------------ | ---------------- |
-| oprateStatus | EWomenOprateStatus | Women's status setting status |
+| Parameter name | Type               | Describe                      |
+| -------------- | ------------------ | ----------------------------- |
+| oprateStatus   | EWomenOprateStatus | Women's status setting status |
 
 **EWomenOprateStatus**--Setting status
 
-| Parameter name | Describe |
-| --------------- | ---------------- |
-| SETTING_SUCCESS | Successfully set women's status |
-| SETTING_FAIL | Failed to set women's status |
-| READ_SUCCESS | Successfully read women's status |
-| READ_FAIL | Failed to read female status |
-| UNKONW | Unknown status |
+| Parameter name  | Describe                         |
+| --------------- | -------------------------------- |
+| SETTING_SUCCESS | Successfully set women's status  |
+| SETTING_FAIL    | Failed to set women's status     |
+| READ_SUCCESS    | Successfully read women's status |
+| READ_FAIL       | Failed to read female status     |
+| UNKONW          | Unknown status                   |
 
 ###### Example Code
 
@@ -6869,9 +6872,9 @@ readWomenState(IBleWriteResponse bleWriteResponse, IWomenDataListener womenDataL
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Describe |
-| ----------------- | ------------------ | --------------------------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
+| Parameter name    | Type               | Describe                                                     |
+| ----------------- | ------------------ | ------------------------------------------------------------ |
+| bleWriteResponse  | IBleWriteResponse  | Listening for write operations                               |
 | womenDataListener | IWomenDataListener | Listening for women status operations, returning the status of the operation |
 
 ###### Return data
@@ -6954,10 +6957,10 @@ public class OriginData {
 
 ```
 
-| Parameter name    | Type | Description                |
-| --------- | ---- | ------------------------------ |
-| highValue | int | High pressure value, range 60-300 (inclusive) |
-| lowValue | int | Low pressure value, range 20-200 (inclusive) |
+| Parameter name | Type | Description                                   |
+| -------------- | ---- | --------------------------------------------- |
+| highValue      | int  | High pressure value, range 60-300 (inclusive) |
+| lowValue       | int  | Low pressure value, range 20-200 (inclusive)  |
 
 #### Thirty-minute blood pressure data
 
@@ -6965,21 +6968,21 @@ OriginHalfHourData is 30 minutes of raw data, including step counting, heart rat
 
 OriginHalfHourData
 
-| Member | Type | Description |
-| ------------------ | ---------------------- | -------------------- |
-| halfHourRateDatas | List<HalfHourRateData> | 30-minute heart rate data array |
-| halfHourBps | List<HalfHourBpData> | 30-minute blood pressure data array |
-| halfHourSportDatas | List<HalfHourSportData> | 30-minute exercise data array |
-| allStep | int | 30-minute total step count |
+| Member             | Type                    | Description                         |
+| ------------------ | ----------------------- | ----------------------------------- |
+| halfHourRateDatas  | List<HalfHourRateData>  | 30-minute heart rate data array     |
+| halfHourBps        | List<HalfHourBpData>    | 30-minute blood pressure data array |
+| halfHourSportDatas | List<HalfHourSportData> | 30-minute exercise data array       |
+| allStep            | int                     | 30-minute total step count          |
 
 HalfHourBpData
 
-| Member | Type | Description |
+| Member    | Type     | Description                                                  |
 | --------- | -------- | ------------------------------------------------------------ |
-| highValue | int | High pressure value, range 60-300 (inclusive) |
-| lowValue | int | Low pressure value, range 20-200 (inclusive) |
-| date | String | Date, date format yyyy-mm-dd |
-| time | TimeDate | The specific time can be accurate to the minute at most, such as 10:00 means the average value of the period 10:00-10:30 |
+| highValue | int      | High pressure value, range 60-300 (inclusive)                |
+| lowValue  | int      | Low pressure value, range 20-200 (inclusive)                 |
+| date      | String   | Date, date format yyyy-mm-dd                                 |
+| time      | TimeDate | The specific time can be accurate to the minute at most, such as 10:00 means the average value of the period 10:00-10:30 |
 
 ### Manual blood pressure measurement
 
@@ -6988,11 +6991,11 @@ HalfHourBpData
 VPOperateManager.getInstance().startDetectBP(writeResponse, listener, detectModel);
 ```
 
-| Parameter name        | Type                  | Describe                                                         |
-| ------------- | --------------------- | ------------------------------------------------------------ |
-| writeResponse | IBleWriteResponse | Listening for write operations |
-| listener | IBPDetectDataListener | Blood glucose measurement result callback |
-| detectModel | EBPDetectModel | Blood pressure measurement mode: <br /> Private mode: DETECT_MODEL_PRIVATE <br /> General mode: DETECT_MODEL_PUBLIC |
+| Parameter name | Type                  | Describe                                                     |
+| -------------- | --------------------- | ------------------------------------------------------------ |
+| writeResponse  | IBleWriteResponse     | Listening for write operations                               |
+| listener       | IBPDetectDataListener | Blood glucose measurement result callback                    |
+| detectModel    | EBPDetectModel        | Blood pressure measurement mode: <br /> Private mode: DETECT_MODEL_PRIVATE <br /> General mode: DETECT_MODEL_PUBLIC |
 
 #### Stop manual blood pressure measurement
 
@@ -7000,10 +7003,10 @@ VPOperateManager.getInstance().startDetectBP(writeResponse, listener, detectMode
 VPOperateManager.getInstance().stopDetectBP(writeResponse, detectModel)
 ```
 
-| Parameter name | Type | Describe |
-| :------------ | ----------------- | ------------------------------------------------------------ |
-| writeResponse | IBleWriteResponse | Listening for write operations |
-| detectModel | EBPDetectModel | Blood pressure measurement mode: <br /> Private mode: DETECT_MODEL_PRIVATE <br /> General mode: DETECT_MODEL_PUBLIC |
+| Parameter name | Type              | Describe                                                     |
+| :------------- | ----------------- | ------------------------------------------------------------ |
+| writeResponse  | IBleWriteResponse | Listening for write operations                               |
+| detectModel    | EBPDetectModel    | Blood pressure measurement mode: <br /> Private mode: DETECT_MODEL_PRIVATE <br /> General mode: DETECT_MODEL_PUBLIC |
 
 #### Blood pressure measurement related callbacks and data
 
@@ -7026,13 +7029,13 @@ void onDataChange(BpData bpData);
 
 Blood pressure data BpData
 
-| Member | Type | Description |
+| Member         | Type            | Description                                                  |
 | -------------- | --------------- | ------------------------------------------------------------ |
-| status | EBPDetectStatus | Blood pressure detection status<br />STATE_BP_BUSY: The device is busy, indicating that blood pressure cannot be measured. When receiving this return, please call End blood pressure measurement<br />STATE_BP_NORMAL: Indicates that blood pressure can be measured |
-| progress | int | Blood pressure measurement progress, range [0-100] |
-| highPressure | int | High pressure value, range [60-300]. If it is not in this range, please prompt the user that the measurement is invalid. |
-| lowPressure | int | Low pressure value, range [20-200]. If it is not in this range, please prompt the user that the measurement is invalid. |
-| isHaveProgress | boolean | true means the watch has returned progress, false means no progress. A watch without progress will return data 55 seconds after starting measurement. |
+| status         | EBPDetectStatus | Blood pressure detection status<br />STATE_BP_BUSY: The device is busy, indicating that blood pressure cannot be measured. When receiving this return, please call End blood pressure measurement<br />STATE_BP_NORMAL: Indicates that blood pressure can be measured |
+| progress       | int             | Blood pressure measurement progress, range [0-100]           |
+| highPressure   | int             | High pressure value, range [60-300]. If it is not in this range, please prompt the user that the measurement is invalid. |
+| lowPressure    | int             | Low pressure value, range [20-200]. If it is not in this range, please prompt the user that the measurement is invalid. |
+| isHaveProgress | boolean         | true means the watch has returned progress, false means no progress. A watch without progress will return data 55 seconds after starting measurement. |
 
 ### Blood pressure mode setting
 
@@ -7042,20 +7045,20 @@ Blood pressure data BpData
 VPOperateManager.getInstance().settingDetectBP(writeResponse, listener, bpSetting)
 ```
 
-| Parameter name        | Type                   | Description          |
-| ------------- | ---------------------- | ------------------------ |
-| writeResponse | IBleWriteResponse | Listening for write operations |
-| listener | IBPSettingDataListener | Blood pressure mode setting callback |
-| bpSetting | BpSetting | Blood pressure private mode setting parameters |
+| Parameter name | Type                   | Description                                    |
+| -------------- | ---------------------- | ---------------------------------------------- |
+| writeResponse  | IBleWriteResponse      | Listening for write operations                 |
+| listener       | IBPSettingDataListener | Blood pressure mode setting callback           |
+| bpSetting      | BpSetting              | Blood pressure private mode setting parameters |
 
 Blood pressure setting class BpSetting
 
-| Member | Type | Description |
-| ------------------ | ------- | -------------------------------- |
+| Member             | Type    | Description                                                  |
+| ------------------ | ------- | ------------------------------------------------------------ |
 | isOpenPrivateModel | boolean | Whether the private mode is turned on for automatic measurement |
-| high | int | User's private high pressure value |
-| low | int | User's private low pressure value |
-| isAngioAdjuste | boolean | Whether dynamic blood pressure calibration is turned on |
+| high               | int     | User's private high pressure value                           |
+| low                | int     | User's private low pressure value                            |
+| isAngioAdjuste     | boolean | Whether dynamic blood pressure calibration is turned on      |
 
 **When isOpenPrivateModel is set to true and isAngioAdjuste is set to false, it means that the *blood pressure private mode is turned on at this time***
 
@@ -7067,10 +7070,10 @@ Blood pressure setting class BpSetting
 VPOperateManager.getInstance().readDetectBP(writeResponse, listener)
 ```
 
-| Parameter name | Type | Description |
-| ------------- | ---------------------- | ---------------- |
-| writeResponse | IBleWriteResponse | Listening for write operations |
-| listener | IBPSettingDataListener | Blood pressure mode reading callback |
+| Parameter name | Type                   | Description                          |
+| -------------- | ---------------------- | ------------------------------------ |
+| writeResponse  | IBleWriteResponse      | Listening for write operations       |
+| listener       | IBPSettingDataListener | Blood pressure mode reading callback |
 
 #### Cancel blood pressure dynamic debugging mode
 
@@ -7108,33 +7111,33 @@ void onDataChange(BpSettingData bpSettingData);
 
 BpSettingData
 
-| Member | Type | Description |
+| Member                | Type           | Description                                                  |
 | --------------------- | -------------- | ------------------------------------------------------------ |
-| status | EBPStatus | Status of dynamic blood pressure calibration: |
-| model | EBPDetectModel | Blood pressure measurement mode: <br />DETECT_MODEL_PRIVATE: Private mode <br />DETECT_MODEL_PUBLIC: Universal mode |
-| highPressure | int | Private high pressure value saved by the device. If it is 0, it means that private data needs to be set first when measuring in private mode. |
-| lowPressure | int | Private low pressure value saved by the device, range [20-200] |
-| angioAdjusterProgress | int | Progress of dynamic blood pressure adjustment [0-100] |
-| isAngioAdjuster | boolean | Status of dynamic blood pressure adjustment. True means that the current state is dynamic blood pressure adjustment |
+| status                | EBPStatus      | Status of dynamic blood pressure calibration:                |
+| model                 | EBPDetectModel | Blood pressure measurement mode: <br />DETECT_MODEL_PRIVATE: Private mode <br />DETECT_MODEL_PUBLIC: Universal mode |
+| highPressure          | int            | Private high pressure value saved by the device. If it is 0, it means that private data needs to be set first when measuring in private mode. |
+| lowPressure           | int            | Private low pressure value saved by the device, range [20-200] |
+| angioAdjusterProgress | int            | Progress of dynamic blood pressure adjustment [0-100]        |
+| isAngioAdjuster       | boolean        | Status of dynamic blood pressure adjustment. True means that the current state is dynamic blood pressure adjustment |
 
 Blood pressure calibration status:
 
 EBPStatus
 
-| SETTING_NORMAL_SUCCESS | Successfully closed private mode [also known as setting universal mode] |
-| ----------------------------- | ---------------------------------- |
-| SETTING_NORMAL_FAIL | Failed to turn off private mode [also known as setting general mode] |
-| SETTING_PRIVATE_SUCCESS | Successfully set private mode |
-| SETTING_PRIVATE_FAIL | Failed to set private mode |
-| READ_SUCCESS | Successfully read blood pressure mode |
-| READ_FAIL | Failed to read blood pressure mode |
-| CANCLE_ANGIO_ADJUSTER_SUCCESS | Successfully canceled dynamic blood pressure adjustment |
-| CANCLE_ANGIO_ADJUSTER_FAIL | Failed to set private mode |
-| ANGIO_ADJUSTER_ING | Dynamic blood pressure calibration in progress |
-| ANGIO_ADJUSTER_FAIL | Dynamic blood pressure calibration failed |
-| ANGIO_ADJUSTER_SUCCESS | Dynamic blood pressure calibration successful |
-| ANGIO_ADJUSTER_DEVICE_BUSY | Device busy during dynamic blood pressure calibration |
-| UNKONW | Unknown status |
+| SETTING_NORMAL_SUCCESS        | Successfully closed private mode [also known as setting universal mode] |
+| ----------------------------- | ------------------------------------------------------------ |
+| SETTING_NORMAL_FAIL           | Failed to turn off private mode [also known as setting general mode] |
+| SETTING_PRIVATE_SUCCESS       | Successfully set private mode                                |
+| SETTING_PRIVATE_FAIL          | Failed to set private mode                                   |
+| READ_SUCCESS                  | Successfully read blood pressure mode                        |
+| READ_FAIL                     | Failed to read blood pressure mode                           |
+| CANCLE_ANGIO_ADJUSTER_SUCCESS | Successfully canceled dynamic blood pressure adjustment      |
+| CANCLE_ANGIO_ADJUSTER_FAIL    | Failed to set private mode                                   |
+| ANGIO_ADJUSTER_ING            | Dynamic blood pressure calibration in progress               |
+| ANGIO_ADJUSTER_FAIL           | Dynamic blood pressure calibration failed                    |
+| ANGIO_ADJUSTER_SUCCESS        | Dynamic blood pressure calibration successful                |
+| ANGIO_ADJUSTER_DEVICE_BUSY    | Device busy during dynamic blood pressure calibration        |
+| UNKONW                        | Unknown status                                               |
 
 ### Blood pressure function settings and reading
 
@@ -7152,11 +7155,11 @@ VPOperateManager.getInstance().settingBpFunctionState(writeResponse, IBPFunction
 
 Function interface and parameter description
 
-| Parameter name | Type | Description |
-| ------------------- | ------------------- | -------------------------------- |
-| writeResponse | IBleWriteResponse | Listening for write operations |
+| Parameter name      | Type                | Description                                            |
+| ------------------- | ------------------- | ------------------------------------------------------ |
+| writeResponse       | IBleWriteResponse   | Listening for write operations                         |
 | IBPFunctionListener | IBPFunctionListener | Blood pressure function read setting callback listener |
-| isOpen | boolean | Whether to open true: open, false: close |
+| isOpen              | boolean             | Whether to open true: open, false: close               |
 
 IBPFunctionListener
 
@@ -7176,10 +7179,10 @@ void onDataChange(BpFunctionData bpFunctionData);
 
 BpFunctionData: Blood pressure function status
 
-| Cost name | Type | Description |
-| --------- | ------- | ---------------- |
+| Cost name | Type    | Description                                   |
+| --------- | ------- | --------------------------------------------- |
 | isSupport | boolean | Whether blood pressure detection is supported |
-| isOpen | boolean | Whether blood pressure function is turned on |
+| isOpen    | boolean | Whether blood pressure function is turned on  |
 
 ## Alarm function
 
@@ -7236,17 +7239,17 @@ VPOperateManager.getInstance().readAlarm(writeResponse, new IAlarmDataListener()
             });
 ```
 
-| Parameter name        | Type               | Description                                              |
-| ------------- | ------------------ | ------------------------------------------------------------ |
-| writeResponse | IBleWriteResponse | Command write callback |
-| listener | IAlarmDataListener | Alarm data callback, this method will be called back when reading, setting and alarm status change |
+| Parameter name | Type               | Description                                                  |
+| -------------- | ------------------ | ------------------------------------------------------------ |
+| writeResponse  | IBleWriteResponse  | Command write callback                                       |
+| listener       | IAlarmDataListener | Alarm data callback, this method will be called back when reading, setting and alarm status change |
 
 AlarmData: Alarm list encapsulation class
 
-| Member name | Type | Description |
+| Member name      | Type               | Description                                                  |
 | ---------------- | ------------------ | ------------------------------------------------------------ |
-| status | EAalarmStatus | Status after operating the alarm: <br />SETTING_SUCCESS: Operation successful <br />SETTING_FAIL: Operation failed <br />READ_SUCCESS: Read successfully <br />READ_FAIL: Read failed <br />UNKONW: Unknown exception |
-| alarmSettingList | List<AlarmSetting> | Alarm list |
+| status           | EAalarmStatus      | Status after operating the alarm: <br />SETTING_SUCCESS: Operation successful <br />SETTING_FAIL: Operation failed <br />READ_SUCCESS: Read successfully <br />READ_FAIL: Read failed <br />UNKONW: Unknown exception |
+| alarmSettingList | List<AlarmSetting> | Alarm list                                                   |
 
 #### Set the alarm
 
@@ -7281,46 +7284,46 @@ The difference between scene alarm and ordinary alarm is that the watch can set 
 
 Alarm2Setting: Scene alarm
 
-| Member name | Type | Description |
+| Member name      | Type    | Description                                                  |
 | ---------------- | ------- | ------------------------------------------------------------ |
-| MAFlag | String | Alarm unique flag |
-| BluetoothAddress | String | Alarm Bluetooth address |
-| alarmId | int | Alarm serial number, serial number range is [1-20] |
-| alarmHour | int | All saved are 24-hour system, hour |
-| alarmMinute | int | All saved are 24-hour system, minute |
-| repeatStatus | | Alarm repeat status (Monday, Tuesday, Wednesday...weekend), <br/> <p><br/> Required format is 7-bit string composed of (0,1), from right to left Monday, Tuesday,...Saturday, Sunday <br/> <p><br/> 1100000-means Sunday, Saturday <br/> <p><br/> 0000011-Tuesday, Monday <br/> <p><br/> If you want to set a non-repeating alarm, set it to 0000000<br/> |
-| unRepeatDate | String | When the alarm is in non-repeating state, set the date.<br/> <p><br/> The required format is xxxx-xx-xx,<br/> <p><br/>If you want to set a repeating alarm, set it to 0000-00-00 |
-| scene | int | Alarm scene [0-20] There are 21 scenes in total, and the default is the normal alarm icon<br /><br />* 0: Alarm icon * 1: Sleep * 2: Sit up * 3: Drink water * 4: Take medicine * 5: Date * 6: Read * 7: Movie * 8: Music * 9: Shopping * 10: Haircut * 11: Birthday * 12: Propose * 13: Work * 14: Parenting * 15: Parent-child travel * 16: Save money * 17: See a doctor * 18: Dog walking * 19: Fishing * 20: Travel |
-| isOpen | boolean | Whether it is turned on, true means the alarm is on, false means the alarm is off |
+| MAFlag           | String  | Alarm unique flag                                            |
+| BluetoothAddress | String  | Alarm Bluetooth address                                      |
+| alarmId          | int     | Alarm serial number, serial number range is [1-20]           |
+| alarmHour        | int     | All saved are 24-hour system, hour                           |
+| alarmMinute      | int     | All saved are 24-hour system, minute                         |
+| repeatStatus     |         | Alarm repeat status (Monday, Tuesday, Wednesday...weekend), <br/> <p><br/> Required format is 7-bit string composed of (0,1), from right to left Monday, Tuesday,...Saturday, Sunday <br/> <p><br/> 1100000-means Sunday, Saturday <br/> <p><br/> 0000011-Tuesday, Monday <br/> <p><br/> If you want to set a non-repeating alarm, set it to 0000000<br/> |
+| unRepeatDate     | String  | When the alarm is in non-repeating state, set the date.<br/> <p><br/> The required format is xxxx-xx-xx,<br/> <p><br/>If you want to set a repeating alarm, set it to 0000-00-00 |
+| scene            | int     | Alarm scene [0-20] There are 21 scenes in total, and the default is the normal alarm icon<br /><br />* 0: Alarm icon * 1: Sleep * 2: Sit up * 3: Drink water * 4: Take medicine * 5: Date * 6: Read * 7: Movie * 8: Music * 9: Shopping * 10: Haircut * 11: Birthday * 12: Propose * 13: Work * 14: Parenting * 15: Parent-child travel * 16: Save money * 17: See a doctor * 18: Dog walking * 19: Fishing * 20: Travel |
+| isOpen           | boolean | Whether it is turned on, true means the alarm is on, false means the alarm is off |
 
 EMultiAlarmOprate: Scene alarm operation status (enumeration type). When the user adds, deletes, modifies, or queries the alarm, the status will be returned in the relevant monitoring.
 
-| Type | Description |
-| -------------------------------- | ----------------------------- |
-| SETTING_SUCCESS | Setting success [Modify, add] |
-| SETTING_FAIL | Setting failure [Modify, add] |
-| CLEAR_SUCCESS | Delete success |
-| CLEAR_FAIL | Delete failure |
-| READ_SUCCESS | Read success |
-| READ_FAIL | Read failure |
-| READ_SUCCESS_NULL | Read success but no alarm |
-| READ_SUCCESS_SAVE | Read success and save to local |
-| READ_SUCCESS_SAME_CRC | Read CRC is consistent, indicating that the alarm has not changed |
-| ALARM_FULL | The number of alarms has reached the upper limit |
-| ALARM_REPORT | Alarm report |
-| ALARM_REPORT_DATE_ERROR | Alarm report but data error |
-| DEVICE_ALARM_MODIFY | Modify the alarm on the device |
-| DEVICE_ADD_ONE_TEXT_ALARM | Add an alarm to the device |
-| DEVICE_DELETE_ONE_TEXT_ALARM, | Delete an alarm on the device |
-| DEVICE_TEXT_ALARM_SWITCH_CHANGED | The device text alarm switch status has changed |
-| UNKONW | Unknown operation |
+| Type                             | Description                                                  |
+| -------------------------------- | ------------------------------------------------------------ |
+| SETTING_SUCCESS                  | Setting success [Modify, add]                                |
+| SETTING_FAIL                     | Setting failure [Modify, add]                                |
+| CLEAR_SUCCESS                    | Delete success                                               |
+| CLEAR_FAIL                       | Delete failure                                               |
+| READ_SUCCESS                     | Read success                                                 |
+| READ_FAIL                        | Read failure                                                 |
+| READ_SUCCESS_NULL                | Read success but no alarm                                    |
+| READ_SUCCESS_SAVE                | Read success and save to local                               |
+| READ_SUCCESS_SAME_CRC            | Read CRC is consistent, indicating that the alarm has not changed |
+| ALARM_FULL                       | The number of alarms has reached the upper limit             |
+| ALARM_REPORT                     | Alarm report                                                 |
+| ALARM_REPORT_DATE_ERROR          | Alarm report but data error                                  |
+| DEVICE_ALARM_MODIFY              | Modify the alarm on the device                               |
+| DEVICE_ADD_ONE_TEXT_ALARM        | Add an alarm to the device                                   |
+| DEVICE_DELETE_ONE_TEXT_ALARM,    | Delete an alarm on the device                                |
+| DEVICE_TEXT_ALARM_SWITCH_CHANGED | The device text alarm switch status has changed              |
+| UNKONW                           | Unknown operation                                            |
 
 AlarmData2: Scene alarm list encapsulation class
 
-| Member name | Type | Description |
-| ----------------- | ------------------- | ------------------ |
-| status | EMultiAlarmOprate | Operation status of the scene alarm |
-| alarm2SettingList | List<Alarm2Setting> | Scene alarm list |
+| Member name       | Type                | Description                         |
+| ----------------- | ------------------- | ----------------------------------- |
+| status            | EMultiAlarmOprate   | Operation status of the scene alarm |
+| alarm2SettingList | List<Alarm2Setting> | Scene alarm list                    |
 
 #### Read scene alarm
 
@@ -7489,10 +7492,10 @@ VPOperateManager.getInstance().readTextAlarm(writeResponse, new ITextAlarmDataLi
 });
 ```
 
-| Parameter name                 | Type                   | Description |
-| ---------------------- | ---------------------- | ---------------- |
-| writeResponse          | IBleWriteResponse      | Listening for write operations   |
-| ITextAlarmDataListener | ITextAlarmDataListener | Text alarm changed callback |
+| Parameter name         | Type                   | Description                    |
+| ---------------------- | ---------------------- | ------------------------------ |
+| writeResponse          | IBleWriteResponse      | Listening for write operations |
+| ITextAlarmDataListener | ITextAlarmDataListener | Text alarm changed callback    |
 
 #### Add text alarm
 
@@ -7538,11 +7541,11 @@ VPOperateManager.getInstance().addTextAlarm(writeResponse, new ITextAlarmDataLis
 }, setting);
 ```
 
-| Parameter name                 | Type                   | Description    |
-| ---------------------- | ---------------------- | ------------------ |
-| writeResponse          | IBleWriteResponse      | Listening for write operations     |
-| ITextAlarmDataListener | ITextAlarmDataListener | Text alarm change callback |
-| setting | TextAlarm2Setting | Alarm entity to be added |
+| Parameter name         | Type                   | Description                    |
+| ---------------------- | ---------------------- | ------------------------------ |
+| writeResponse          | IBleWriteResponse      | Listening for write operations |
+| ITextAlarmDataListener | ITextAlarmDataListener | Text alarm change callback     |
+| setting                | TextAlarm2Setting      | Alarm entity to be added       |
 
 #### Delete text alarm
 
@@ -7565,11 +7568,11 @@ VPOperateManager.getInstance().deleteTextAlarm(writeResponse, new ITextAlarmData
 }, textAlarm);
 ```
 
-| Parameter name                 | Type                   | Description    |
-| ---------------------- | ---------------------- | ------------------ |
-| writeResponse          | IBleWriteResponse      | Listening for write operations     |
-| ITextAlarmDataListener | ITextAlarmDataListener | Text alarm change callback |
-| textAlarm | TextAlarm2Setting | Alarm entity to be deleted |
+| Parameter name         | Type                   | Description                    |
+| ---------------------- | ---------------------- | ------------------------------ |
+| writeResponse          | IBleWriteResponse      | Listening for write operations |
+| ITextAlarmDataListener | ITextAlarmDataListener | Text alarm change callback     |
+| textAlarm              | TextAlarm2Setting      | Alarm entity to be deleted     |
 
 #### Modify text alarm
 
@@ -7587,11 +7590,11 @@ VPOperateManager.getInstance().modifyTextAlarm(writeResponse, new ITextAlarmData
 }, setting);
 ```
 
-| Parameter name                 | Type                   | Description |
-| ---------------------- | ---------------------- | ------------------ |
-| writeResponse          | IBleWriteResponse      | Listening for write operations     |
-| ITextAlarmDataListener | ITextAlarmDataListener | Text alarm change callback |
-| textAlarm | TextAlarm2Setting | Alarm entity to be modified |
+| Parameter name         | Type                   | Description                    |
+| ---------------------- | ---------------------- | ------------------------------ |
+| writeResponse          | IBleWriteResponse      | Listening for write operations |
+| ITextAlarmDataListener | ITextAlarmDataListener | Text alarm change callback     |
+| textAlarm              | TextAlarm2Setting      | Alarm entity to be modified    |
 
 ## Weather function
 
@@ -7610,49 +7613,49 @@ Weather setting call method
 VPOperateManager.getInstance().settingWeatherData(writeResponse, weatherData, IWeatherStatusDataListener)
 ```
 
-| Parameter name        | Type                       | Description      |
-| ------------- | -------------------------- | -------------------- |
-| writeResponse | IBleWriteResponse | Command write callback |
-| weatherData | WeatherData | Weather data |
-| listener | IWeatherStatusDataListener | Weather data setting result callback |
+| Parameter name | Type                       | Description                          |
+| -------------- | -------------------------- | ------------------------------------ |
+| writeResponse  | IBleWriteResponse          | Command write callback               |
+| weatherData    | WeatherData                | Weather data                         |
+| listener       | IWeatherStatusDataListener | Weather data setting result callback |
 
 WeatherData: Weather data
 
-| Member name | Type | Description |
+| Member name           | Type                    | Description                                                  |
 | --------------------- | ----------------------- | ------------------------------------------------------------ |
-| crc | int | crc can be spliced ​​into the CRC of the data according to the update time or the entire data, and it is only necessary to ensure that it is unique <br /> (When the crc is the same, there is no need to update the weather data, which can avoid updating the weather data too frequently) |
-| cityName | String | City name, UTF-8 encoding of the specific city |
-| source | int | The source of weather data, such as Yahoo or Hefeng, (optional) |
-| timeBean | TimeData | Last updated time |
-| weatherEvery3HourList | List<WeatherEvery3Hour> | List of weather forecasts every 3 hours |
-| weatherEverdayList | List<WeatherEveryDay> | Daily weather forecast list |
+| crc                   | int                     | crc can be spliced into the CRC of the data according to the update time or the entire data, and it is only necessary to ensure that it is unique <br /> (When the crc is the same, there is no need to update the weather data, which can avoid updating the weather data too frequently) |
+| cityName              | String                  | City name, UTF-8 encoding of the specific city               |
+| source                | int                     | The source of weather data, such as Yahoo or Hefeng, (optional) |
+| timeBean              | TimeData                | Last updated time                                            |
+| weatherEvery3HourList | List<WeatherEvery3Hour> | List of weather forecasts every 3 hours                      |
+| weatherEverdayList    | List<WeatherEveryDay>   | Daily weather forecast list                                  |
 
 WeatherEvery3Hour: Three-hour weather forecast
 
-| Member name | Type | Description |
+| Member name  | Type     | Description                                                  |
 | ------------ | -------- | ------------------------------------------------------------ |
-| timeBean | TimeData | Current time, year, month, day, hour, minute, accurate to hour, minute, second |
-| temperatureF | int | Fahrenheit |
-| temperatureC | int | Celsius |
-| yellowLevel | int | Ultraviolet intensity index |
-| weatherState | int | Weather status, this value is an int value within a specified range, the value range is determined as follows:<br/> 0-4 Sunny<br/> 5-12 Sunny to cloudy<br/> 13-16 Overcast<br/> 17-20 Showers<br/> 21-24 Thunderstorm<br/> 25-32 Hail<br/> 33-40 Light rain<br/> 41-48 Moderate rain<br/> 49-56 Heavy rain<br/> 57-72 Heavy rain<br/> 73-84 Light snow<br/> 85-100 Heavy snow<br/> 101-155 Cloudy |
-| windLevel | String | Wind direction level. If the wind force is a range value, please connect it with ‘-’, such as "3-5"; if it is a single value, just "3" |
-| canSeeWay | double | Visibility unit m, 3.16 |
+| timeBean     | TimeData | Current time, year, month, day, hour, minute, accurate to hour, minute, second |
+| temperatureF | int      | Fahrenheit                                                   |
+| temperatureC | int      | Celsius                                                      |
+| yellowLevel  | int      | Ultraviolet intensity index                                  |
+| weatherState | int      | Weather status, this value is an int value within a specified range, the value range is determined as follows:<br/> 0-4 Sunny<br/> 5-12 Sunny to cloudy<br/> 13-16 Overcast<br/> 17-20 Showers<br/> 21-24 Thunderstorm<br/> 25-32 Hail<br/> 33-40 Light rain<br/> 41-48 Moderate rain<br/> 49-56 Heavy rain<br/> 57-72 Heavy rain<br/> 73-84 Light snow<br/> 85-100 Heavy snow<br/> 101-155 Cloudy |
+| windLevel    | String   | Wind direction level. If the wind force is a range value, please connect it with ‘-’, such as "3-5"; if it is a single value, just "3" |
+| canSeeWay    | double   | Visibility unit m, 3.16                                      |
 
 WeatherEveryDay: Daily weather forecast
 
-| Member name | Type | Description |
+| Member name          | Type     | Description                                                  |
 | -------------------- | -------- | ------------------------------------------------------------ |
-| timeBean | TimeData | Year Month Day Hour Minute |
-| temperatureMaxF | int | Maximum Fahrenheit |
-| temperatureMinF | int | Minimum Fahrenheit |
-| temperatureMaxC | int | Maximum Celsius |
-| temperatureMinC | int | Minimum Celsius |
-| yellowLevel | int | UV intensity index |
-| weatherStateWhiteDay | int | Daytime weather status, this value is an int value within a specified range, the value range is as follows:<br/> 0-4 Sunny<br/> 5-12 Sunny to cloudy<br/> 13-16 Overcast<br/> 17-20 Showers<br/> 21-24 Thunderstorm<br/> 25-32 Hail<br/> 33-40 Light rain<br/> 41-48 Moderate rain<br/> 49-56 Heavy rain<br/> 57-72 Torrential rain<br/> 73-84 Light snow<br/> 85-100 Heavy snow<br/> 101-155 Overcast |
-| weatherStateNightDay | int | Nighttime weather status, this value is an int value within a specified range, the value range is as follows:<br/> 0-4 Sunny<br/> 5-12 Sunny to cloudy<br/> 13-16 Overcast<br/> 17-20 Showers<br/> 21-24 Thunderstorm<br/> 25-32 Hail<br/> 33-40 Light rain<br/> 41-48 Moderate rain<br/> 49-56 Heavy rain<br/> 57-72 Heavy rain<br/> 73-84 Light snow<br/> 85-100 Heavy snow<br/> 101-155 Overcast |
-| windLevel | String | Wind direction level. If the wind force is a range value, please connect it with ‘-’, such as "3-5"; if it is a single value, just "3" |
-| canSeeWay | double | Visibility unit m, 3.16 |
+| timeBean             | TimeData | Year Month Day Hour Minute                                   |
+| temperatureMaxF      | int      | Maximum Fahrenheit                                           |
+| temperatureMinF      | int      | Minimum Fahrenheit                                           |
+| temperatureMaxC      | int      | Maximum Celsius                                              |
+| temperatureMinC      | int      | Minimum Celsius                                              |
+| yellowLevel          | int      | UV intensity index                                           |
+| weatherStateWhiteDay | int      | Daytime weather status, this value is an int value within a specified range, the value range is as follows:<br/> 0-4 Sunny<br/> 5-12 Sunny to cloudy<br/> 13-16 Overcast<br/> 17-20 Showers<br/> 21-24 Thunderstorm<br/> 25-32 Hail<br/> 33-40 Light rain<br/> 41-48 Moderate rain<br/> 49-56 Heavy rain<br/> 57-72 Torrential rain<br/> 73-84 Light snow<br/> 85-100 Heavy snow<br/> 101-155 Overcast |
+| weatherStateNightDay | int      | Nighttime weather status, this value is an int value within a specified range, the value range is as follows:<br/> 0-4 Sunny<br/> 5-12 Sunny to cloudy<br/> 13-16 Overcast<br/> 17-20 Showers<br/> 21-24 Thunderstorm<br/> 25-32 Hail<br/> 33-40 Light rain<br/> 41-48 Moderate rain<br/> 49-56 Heavy rain<br/> 57-72 Heavy rain<br/> 73-84 Light snow<br/> 85-100 Heavy snow<br/> 101-155 Overcast |
+| windLevel            | String   | Wind direction level. If the wind force is a range value, please connect it with ‘-’, such as "3-5"; if it is a single value, just "3" |
+| canSeeWay            | double   | Visibility unit m, 3.16                                      |
 
 IWeatherStatusDataListener: callback for weather data setting results. This method will be called back when the weather data is set successfully, or the weather switch or weather unit changes.
 
@@ -7700,12 +7703,12 @@ public interface IWeatherStatusDataListener extends IListener {
 
 WeatherStatusData: Weather status data
 
-| Member name | Type | Description |
+| Member name | Type                 | Description                                                  |
 | ----------- | -------------------- | ------------------------------------------------------------ |
-| oprate | EWeatherOprateStatus | Weather operation status: <br /> SETTING_STATUS_SUCCESS: Successfully set weather status <br /> SETTING_STATUS_FAIL: Failed to set weather status <br /> SETTING_CONTENT_SUCCESS: Successfully set weather data <br /> SETTING_CONTENT_FAIL: Failed to set weather data <br /> READ_SUCCESS: Successfully read <br /> READ_FAIL: Failed to read <br /> UNKONW: Unknown status |
-| crc | int | Current weather crc |
-| isOpen | boolean | Whether to open the weather function |
-| weatherType | EWeatherType | Weather type (Fahrenheit, Celsius): <br /> C: Celsius <br /> F: Fahrenheit |
+| oprate      | EWeatherOprateStatus | Weather operation status: <br /> SETTING_STATUS_SUCCESS: Successfully set weather status <br /> SETTING_STATUS_FAIL: Failed to set weather status <br /> SETTING_CONTENT_SUCCESS: Successfully set weather data <br /> SETTING_CONTENT_FAIL: Failed to set weather data <br /> READ_SUCCESS: Successfully read <br /> READ_FAIL: Failed to read <br /> UNKONW: Unknown status |
+| crc         | int                  | Current weather crc                                          |
+| isOpen      | boolean              | Whether to open the weather function                         |
+| weatherType | EWeatherType         | Weather type (Fahrenheit, Celsius): <br /> C: Celsius <br /> F: Fahrenheit |
 
 Weather setting code example:
 
@@ -7764,19 +7767,19 @@ VPOperateManager.getInstance().settingWeatherData(writeResponse, weatherData, ne
 VPOperateManager.getInstance().settingWeatherStatusInfo(writeResponse, weatherStatusSetting, listener)
 ```
 
-| Parameter name | Type | Description |
-| -------------------- | -------------------------- | -------------------- |
-| writeResponse | IBleWriteResponse | Command write callback |
-| weatherStatusSetting | WeatherStatusSetting | Weather switch and unit settings |
-| listener | IWeatherStatusDataListener | Weather data setting result callback |
+| Parameter name       | Type                       | Description                          |
+| -------------------- | -------------------------- | ------------------------------------ |
+| writeResponse        | IBleWriteResponse          | Command write callback               |
+| weatherStatusSetting | WeatherStatusSetting       | Weather switch and unit settings     |
+| listener             | IWeatherStatusDataListener | Weather data setting result callback |
 
 WeatherStatusSetting: Weather unit and switch settings
 
-| Member name | Type | Description |
-| -------- | ------------ | ------------------------------------------------------------ |
-| crc | int | Current weather crc, when setting weather, if weather data has not changed crc, please pass in the last saved weather crc value |
-| isOpen | boolean | Whether to turn on the weather function, true: on, false: off |
-| eWeather | EWeatherType | Type of weather (Fahrenheit, Celsius):<br />C: Celsius<br />F: Fahrenheit |
+| Member name | Type         | Description                                                  |
+| ----------- | ------------ | ------------------------------------------------------------ |
+| crc         | int          | Current weather crc, when setting weather, if weather data has not changed crc, please pass in the last saved weather crc value |
+| isOpen      | boolean      | Whether to turn on the weather function, true: on, false: off |
+| eWeather    | EWeatherType | Type of weather (Fahrenheit, Celsius):<br />C: Celsius<br />F: Fahrenheit |
 
 Weather unit and switch code examples:
 ```
@@ -7806,8 +7809,8 @@ settingFindPhoneListener(findPhonelistener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Description |
-| ----------------- | ------------------ | -------------- |
+| Parameter name    | Type               | Description         |
+| ----------------- | ------------------ | ------------------- |
 | findPhonelistener | IFindPhonelistener | Find phone listener |
 
 ###### Return data
@@ -7857,10 +7860,10 @@ readLongSeat(bleWriteResponse, longSeatDataListener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Description |
-| -------------------- | --------------------- | -------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
-| longSeatDataListener | ILongSeatDataListener | Long-sit data listening |
+| Parameter name       | Type                  | Description                    |
+| -------------------- | --------------------- | ------------------------------ |
+| bleWriteResponse     | IBleWriteResponse     | Listening for write operations |
+| longSeatDataListener | ILongSeatDataListener | Long-sit data listening        |
 
 ###### Return data
 
@@ -7877,28 +7880,28 @@ fun onLongSeatDataChange(longSeat:LongSeatData)
 
 **LongSeatData**--Sedentary data
 
-| Parameter name | Type | Description |
-| ----------- | --------------- | ------------------------------ |
-| status | ELongSeatStatus | Sedentary operation status |
-| startHour | Int | Start time hour |
-| startMinute | Int | Start time minute |
-| endHour | Int | End time hour |
-| endMinute | Int | End time minute |
-| threshold | Int | Threshold: How long does it take for the watch to remind you if you haven't moved |
-| isOpen | Boolean | Switch status |
+| Parameter name | Type            | Description                                                  |
+| -------------- | --------------- | ------------------------------------------------------------ |
+| status         | ELongSeatStatus | Sedentary operation status                                   |
+| startHour      | Int             | Start time hour                                              |
+| startMinute    | Int             | Start time minute                                            |
+| endHour        | Int             | End time hour                                                |
+| endMinute      | Int             | End time minute                                              |
+| threshold      | Int             | Threshold: How long does it take for the watch to remind you if you haven't moved |
+| isOpen         | Boolean         | Switch status                                                |
 
 **ELongSeatStatus**--Sedentary operation status
 
-| Parameter name | Description |
-| ------------- | ------------ |
-| OPEN_SUCCESS | Open successfully |
-| OPEN_FAIL | Open failed |
-| CLOSE_SUCCESS | Close successfully |
-| CLOSE_FAIL | Close failed |
-| READ_SUCCESS | Read successfully |
-| READ_FAIL | Read failed |
-| UNSUPPORT | This function is not supported |
-| UNKONW | Unknown status |
+| Parameter name | Description                    |
+| -------------- | ------------------------------ |
+| OPEN_SUCCESS   | Open successfully              |
+| OPEN_FAIL      | Open failed                    |
+| CLOSE_SUCCESS  | Close successfully             |
+| CLOSE_FAIL     | Close failed                   |
+| READ_SUCCESS   | Read successfully              |
+| READ_FAIL      | Read failed                    |
+| UNSUPPORT      | This function is not supported |
+| UNKONW         | Unknown status                 |
 
 ###### Example Code
 
@@ -7926,22 +7929,22 @@ settingLongSeat(IBleWriteResponse bleWriteResponse, LongSeatSetting longSeatSett
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Description |
-| -------------------- | --------------------- | -------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
-| longSeatSetting | LongSeatSetting | Long sitting setting |
-| longSeatDataListener | ILongSeatDataListener | Long sitting data listening |
+| Parameter name       | Type                  | Description                    |
+| -------------------- | --------------------- | ------------------------------ |
+| bleWriteResponse     | IBleWriteResponse     | Listening for write operations |
+| longSeatSetting      | LongSeatSetting       | Long sitting setting           |
+| longSeatDataListener | ILongSeatDataListener | Long sitting data listening    |
 
 **LongSeatSetting**--Long sitting setting
 
-| Parameter name | Type | Description |
-| ----------- | ------- | ------------------------------ |
-| startHour | Int | Hour of start time |
-| startMinute | Int | Minutes of start time |
-| endHour | Int | Hours of end time |
-| endMinute | Int | Minutes of end time |
-| threshold | Int | Threshold: How long does it take for the watch to remind you if you haven't moved |
-| isOpen | Boolean | Switch status |
+| Parameter name | Type    | Description                                                  |
+| -------------- | ------- | ------------------------------------------------------------ |
+| startHour      | Int     | Hour of start time                                           |
+| startMinute    | Int     | Minutes of start time                                        |
+| endHour        | Int     | Hours of end time                                            |
+| endMinute      | Int     | Minutes of end time                                          |
+| threshold      | Int     | Threshold: How long does it take for the watch to remind you if you haven't moved |
+| isOpen         | Boolean | Switch status                                                |
 
 ###### Return data
 
@@ -7985,9 +7988,9 @@ startCamera(bleWriteResponse, cameraDataListener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Description |
+| Parameter name     | Type                | Description                                                  |
 | ------------------ | ------------------- | ------------------------------------------------------------ |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
+| bleWriteResponse   | IBleWriteResponse   | Listening for write operations                               |
 | cameraDataListener | ICameraDataListener | Callback for photo operation, return success/failure of entering the photo mode, can/cannot take photos, success/failure of exiting the photo mode |
 
 ###### Return data
@@ -8005,15 +8008,15 @@ fun OnCameraDataChange(oprateStatus:ECameraStatus)
 
 **ECameraStatus**--Camera status
 
-| Parameter name | Description |
-| ----------------- | ---------------- |
-| OPEN_SUCCESS | Successfully entered camera mode |
-| OPEN_FALI | Failed to enter camera mode |
-| TAKEPHOTO_CAN | Take a photo |
-| TAKEPHOTO_CAN_NOT | Cannot take a photo |
-| CLOSE_SUCCESS | Successfully exited camera mode |
-| CLOSE_FAIL | Failed to exit camera mode |
-| UNKONW | Unknown |
+| Parameter name    | Description                      |
+| ----------------- | -------------------------------- |
+| OPEN_SUCCESS      | Successfully entered camera mode |
+| OPEN_FALI         | Failed to enter camera mode      |
+| TAKEPHOTO_CAN     | Take a photo                     |
+| TAKEPHOTO_CAN_NOT | Cannot take a photo              |
+| CLOSE_SUCCESS     | Successfully exited camera mode  |
+| CLOSE_FAIL        | Failed to exit camera mode       |
+| UNKONW            | Unknown                          |
 ###### Example Code
 
 ```kotlin
@@ -8094,23 +8097,23 @@ getOadVersion(oadSetting, listener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Description |
-| ---------- | ----------------------- | ------------ |
-| oadSetting | OadSetting | Verify version settings |
-| listener | OnGetOadVersionListener | Verify version listener |
+| Parameter name | Type                    | Description             |
+| -------------- | ----------------------- | ----------------------- |
+| oadSetting     | OadSetting              | Verify version settings |
+| listener       | OnGetOadVersionListener | Verify version listener |
 
 **OadSetting**--Verify version settings
 
-| Parameter name | Type | Description |
+| Parameter name      | Type    | Description                                                  |
 | ------------------- | ------- | ------------------------------------------------------------ |
-| deviceAddressString | String | Device address (required) |
-| deviceVersion | String | Device version (required) |
-| deviceTestVersion | String | Device test version (required) |
-| deviceNumber | String | Device number (required) |
-| isOadModel | Boolean | Firmware upgrade mode (required) |
-| isDebug | Boolean | Debug mode (optional), true means using the debug port of our server, false means using the release port of our server, |
-| hostUrl | String | Host address, transmission format: http://www.baidu.com; optional, default is our server; use with caution!!! Contact our developers before use |
-| isAutoDownload | Boolean | Whether to automatically download after detecting the version |
+| deviceAddressString | String  | Device address (required)                                    |
+| deviceVersion       | String  | Device version (required)                                    |
+| deviceTestVersion   | String  | Device test version (required)                               |
+| deviceNumber        | String  | Device number (required)                                     |
+| isOadModel          | Boolean | Firmware upgrade mode (required)                             |
+| isDebug             | Boolean | Debug mode (optional), true means using the debug port of our server, false means using the release port of our server, |
+| hostUrl             | String  | Host address, transmission format: http://www.baidu.com; optional, default is our server; use with caution!!! Contact our developers before use |
+| isAutoDownload      | Boolean | Whether to automatically download after detecting the version |
 
 ###### Return data
 
@@ -8132,14 +8135,14 @@ void onNetOadDetailInfo(OadFileBean oadFileBean,boolean netIsNew);
 
 **OadFileBean** -- Device upgrade file information
 
-| Parameter name | Type | Description |
-| ------------- | ------ | --------------- |
-| deviceNumber | String | New firmware device number |
-| deviceVersion | String | New firmware version |
-| downUrl | String | New firmware download url |
-| size | String | New firmware size |
-| md5 | String | New firmware md5 |
-| des | String | New version upgrade description |
+| Parameter name | Type   | Description                     |
+| -------------- | ------ | ------------------------------- |
+| deviceNumber   | String | New firmware device number      |
+| deviceVersion  | String | New firmware version            |
+| downUrl        | String | New firmware download url       |
+| size           | String | New firmware size               |
+| md5            | String | New firmware md5                |
+| des            | String | New version upgrade description |
 
 #### Download new firmware
 
@@ -8170,10 +8173,10 @@ VPOperateManager.getInstance().startJLDeviceOTAUpgrade(firmwareFilePath, listene
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Description |
-| ---------------- | --------------------------------- | ------------------------- |
-| firmwareFilePath | String | Locally stored OTA upgrade file path |
-| listener | JLOTAHolder.OnJLDeviceOTAListener | JLI device OTA listener |
+| Parameter name   | Type                              | Description                          |
+| ---------------- | --------------------------------- | ------------------------------------ |
+| firmwareFilePath | String                            | Locally stored OTA upgrade file path |
+| listener         | JLOTAHolder.OnJLDeviceOTAListener | JLI device OTA listener              |
 
 ###### Return data
 
@@ -8619,9 +8622,9 @@ readBodyComponentData(bleWriteResponse, readDataListener)
 
 ###### Parameter Explanation
 
-| Parameter name           | Type                           | Description |
-| ---------------- | ------------------------------ | -------------------------- |
-| bleWriteResponse | IBleWriteResponse | Listening for write operations |
+| Parameter name   | Type                           | Description                                     |
+| ---------------- | ------------------------------ | ----------------------------------------------- |
+| bleWriteResponse | IBleWriteResponse              | Listening for write operations                  |
 | readDataListener | IBodyComponentReadDataListener | Data callback for reading body composition data |
 
 ###### Return data
@@ -8639,25 +8642,25 @@ fun readBodyComponentDataFinish(bodyComponentList: List<BodyComponent>?)
 
 **BodyComponent** -- Body composition data
 
-| Variable name | Type | Description |
+| Variable name      | Type     | Description                                                  |
 | ------------------ | -------- | ------------------------------------------------------------ |
-| BMI | Float | BMI valid range [4.0, 1114.0], retain one decimal place, the reported value is 10 times, the same below |
-| bodyFatRate | Float | Body fat percentage, effective range [2.0, 48.0]% |
-| fatRate | Float | Fat mass, effective range [10.0, 248.0]kg |
-| FFM | Float | Fat-free mass, effective range [1.0, 132.0]kg |
-| muscleRate | Float | Muscle percentage, effective range [39.0, 90.0]% |
-| muscleMass | Float | Muscle mass, effective range [9.0, 248.0]kg |
-| subcutaneousFat | Float | Subcutaneous fat, effective range [1.0, 47.0]% |
-| bodyWater | Float | Body water, effective range [28.0, 79.0]% |
-| waterContent | Float | Water content, effective range [7.0, 217.0]kg |
-| skeletalMuscleRate | Float | Skeletal muscle rate, valid range [13.0, 69.0]% |
-| boneMass | Float | Bone mass, valid range [2.3, 4.8] kg |
-| proteinProportion | Float | Protein ratio, valid range [4.0, 26.0]% |
-| proteinMass | Float | Protein mass, valid range [1.0, 71.0] kg |
-| basalMetabolicRate | Float | Basal metabolic rate, valid range [25, 14995] kcal |
-| timeBean | TimeData | Time of this measurement |
-| duration | Int | Measurement duration |
-| idType | Int | Measurement device type: 1: Device test, 2: App test |
+| BMI                | Float    | BMI valid range [4.0, 1114.0], retain one decimal place, the reported value is 10 times, the same below |
+| bodyFatRate        | Float    | Body fat percentage, effective range [2.0, 48.0]%            |
+| fatRate            | Float    | Fat mass, effective range [10.0, 248.0]kg                    |
+| FFM                | Float    | Fat-free mass, effective range [1.0, 132.0]kg                |
+| muscleRate         | Float    | Muscle percentage, effective range [39.0, 90.0]%             |
+| muscleMass         | Float    | Muscle mass, effective range [9.0, 248.0]kg                  |
+| subcutaneousFat    | Float    | Subcutaneous fat, effective range [1.0, 47.0]%               |
+| bodyWater          | Float    | Body water, effective range [28.0, 79.0]%                    |
+| waterContent       | Float    | Water content, effective range [7.0, 217.0]kg                |
+| skeletalMuscleRate | Float    | Skeletal muscle rate, valid range [13.0, 69.0]%              |
+| boneMass           | Float    | Bone mass, valid range [2.3, 4.8] kg                         |
+| proteinProportion  | Float    | Protein ratio, valid range [4.0, 26.0]%                      |
+| proteinMass        | Float    | Protein mass, valid range [1.0, 71.0] kg                     |
+| basalMetabolicRate | Float    | Basal metabolic rate, valid range [25, 14995] kcal           |
+| timeBean           | TimeData | Time of this measurement                                     |
+| duration           | Int      | Measurement duration                                         |
+| idType             | Int      | Measurement device type: 1: Device test, 2: App test         |
 
 ###### Example Code
 
@@ -8679,8 +8682,8 @@ setBodyComponentReportListener(reportListener)
 
 ###### Parameter Explanation
 
-| Parameter name | Type | Description |
-| -------------- | ------------------------------- | --------------------------------- |
+| Parameter name | Type                            | Description                                                  |
+| -------------- | ------------------------------- | ------------------------------------------------------------ |
 | reportListener | INewBodyComponentReportListener | New body composition measurement data active reporting listener |
 
 ###### Return data
@@ -8718,10 +8721,10 @@ startDetectBodyComponent(bleWriteResponse, bodyDetectListener)
 
 ###### Parameter Explanation
 
-| Parameter name           | Type                         | Description |
-| ---------------- | ---------------------------- | ---------------- |
-| bleWriteResponse | BleWriteResponse | Listening for write operations |
-| detectListener | IBodyComponentDetectListener | Body composition measurement callback |
+| Parameter name   | Type                         | Description                           |
+| ---------------- | ---------------------------- | ------------------------------------- |
+| bleWriteResponse | BleWriteResponse             | Listening for write operations        |
+| detectListener   | IBodyComponentDetectListener | Body composition measurement callback |
 
 ###### Return data
 
@@ -8999,3 +9002,603 @@ VPOperateManager.getInstance().stopDetectBloodComponent {
 }
 ```
 
+
+
+## Reading Device Manual Measurement Data
+
+Supports reading multiple types of data. The following condition must be met for reading:
+
+**Blood Pressure** Whether reading is supported: It must support pneumatic blood pressure to be readable. The judgment code is as follows:
+
+```kotlin
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportBumpBp
+```
+
+**Others** Other data types currently do not support reading manual measurement data. Support will be added in the future.
+
+#### Reading Device Manual Measurement Data
+
+###### Prerequisites
+Device support is required.
+
+###### Interface
+
+```kotlin
+readDeviceManualData(bleWriteResponse, timeStampSecond, dataTypeList, dataListener)
+```
+
+###### Parameter Explanation
+| Parameter Name   | Type                            | Description                                                  |
+| ---------------- | ------------------------------- | ------------------------------------------------------------ |
+| bleWriteResponse | BleWriteResponse                | Listener for write operations                                |
+| timeStampSecond  | long                            | Timestamp in seconds. Device only reports data newer than this timestamp. 0 indicates no previous read |
+| dataTypeList     | List<DeviceManualDataType>      | Data types to read. Use `DeviceManualDataType.ALL` for all types |
+| dataListener     | IDeviceManualDetectDataListener | Listener for manual measurement data reading                 |
+
+**DeviceManualDataType** - Data types for reading
+```kotlin
+enum class DeviceManualDataType(val bitPosition: Int) {
+    /**
+     * 0x00: Blood Pressure<br>
+     * 0x01: Heart Rate<br>
+     * 0x02: Blood Glucose<br>
+     * 0x03: Stress<br>
+     * 0x04: Blood Oxygen<br>
+     * 0x05: Body Temperature<br>
+     * 0x06: MET<br>
+     * 0x07: HRV<br>
+     * 0x08: Blood Composition<br>
+     * 0x09: Mini Checkup<br>
+     * 0x0A: Emotion<br>
+     * 0x0B: Fatigue<br>
+     * 0x0C: Skin Conductance
+     */
+    BLOOD_PRESSURE(0),
+    HEART_RATE(1),
+    BLOOD_GLUCOSE(2),
+    STRESS(3),
+    BLOOD_OXYGEN(4),
+    BODY_TEMPERATURE(5),
+    MET(6),
+    HRV(7),
+    BLOOD_COMPOSITION(8),
+    MINI_CHECKUP(9),
+    EMOTION(10),            // Emotion (bit 10)
+    FATIGUE(11),            // Fatigue (bit 11)
+    SKIN_CONDUCTANCE(12),   // Skin Conductance (bit 12)
+    ALL(33);
+
+    // Calculate corresponding bitmask
+    val bitMask: Int
+        get() = 1 shl bitPosition
+}
+```
+
+###### Returned Data
+
+**IDeviceManualDetectDataListener** - Manual measurement data callback
+
+```kotlin
+/**
+ * Blood pressure manual measurement data callback
+ *
+ * @param bloodPressureManualDataList Returns all manual blood pressure measurement data
+ */
+fun onBloodPressureDataChange(bloodPressureManualDataList: List<BloodPressureManualData>)
+
+/**
+ * Heart rate manual measurement data callback
+ *
+ * @param heartRateManualDataList Returns all manual heart rate measurement data
+ */
+fun onHeartRateDataChange(heartRateManualDataList: List<HeartRateManualData>)
+
+// Other callback methods follow the same pattern...
+fun onBloodGlucoseDataChange(bloodGlucoseManualDataList: List<BloodGlucoseManualData>)
+fun onPressureManualDataChange(pressureManualDataList: List<PressureManualData>)
+fun onBloodOxygenDataChange(bloodOxygenManualDataList: List<BloodOxygenManualData>)
+fun onBodyTemperatureDataChange(bodyTemperatureManualDataList: List<BodyTemperatureManualData>)
+fun onMetoManualDataChange(metoManualDataList: List<MetoManualData>)
+fun onHrvManualDataChange(hrvManualDataList: List<HrvManualData>)
+fun onBloodComponentManualDataChange(bloodComponentManualDataList: List<BloodComponentManualData>)
+fun onMiniCheckupManualDataChange(miniCheckupManualDataList: List<MiniCheckupManualData>)
+fun onEmotionManualDataChange(emotionManualDataList: List<EmotionManualData>)
+fun onFatigueManualDataChange(fatigueManualDataList: List<FatigueManualData>)
+fun onSkinConductanceManualDataChange(skinConductanceManualDataList: List<SkinConductanceManualData>)
+
+/**
+ * Returns read progress
+ *
+ * @param progress Progress value [0-1]
+ */
+fun onReadProgress(progress: Float)
+
+/**
+ * Read complete
+ */
+fun onReadComplete()
+
+/**
+ * Read failed
+ */
+fun onReadFail()
+```
+
+**BloodPressureManualData** - Manual blood pressure measurement data
+
+```java
+/**
+ * Measurement timestamp of this data
+ */
+private int timeStamp;
+
+/**
+ * Protocol type: 0x00: Pneumatic BP (details in pneumatic BP data structure)<br>
+ * 0x01: Regular BP<br>
+ * Note: When version == 1, only systolic and diastolic values are valid
+ */
+private int version;
+
+/**
+ * Measurement mode: 0: Optical, 1: Pneumatic
+ */
+private int measurementMode;
+
+/**
+ * Heart rate value
+ */
+private int heartRate;
+
+/**
+ * Systolic pressure (high BP)
+ */
+private int systolic;
+
+/**
+ * Diastolic pressure (low BP)
+ */
+private int diastolic;
+
+// Other fields follow the same translation pattern...
+private int testStatus;
+private int resultCredibility;
+private int height;   // cm
+private int weight;   // kg
+private int age;
+private boolean isMale;
+private int testTime;        // Maximum 60 seconds
+private int testFailTimeoutCount;
+private int pumpModel;
+private int afeModel;
+private int accelerationModel;
+private int mcuModel;
+private String algorithmVersion;
+private String softwareVersion;
+private int[] attitudeArray;
+private int[] sportArray;
+private int[] pressureAdcArray;
+private int[] ppgAdcArray;
+private int[] accelerationXArray;
+private int[] accelerationYArray;
+private int[] accelerationZArray;
+```
+
+**Others** - Other data types not currently supported. Response data structures not shown.
+
+```
+VPOperateManager.getInstance().readDeviceManualData(bleWriteResponse, timeStampSecond, dataTypeList, dataListener)
+```
+
+
+
+## Automatic Measurement Function
+
+Prerequisite: Device must support automatic measurement function. Judgment condition:
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportAutoMeasure
+```
+
+Note: All following interfaces require device support for automatic measurement.
+
+#### Reading Automatic Measurement Settings
+
+###### Prerequisites
+
+Device must support automatic measurement.
+
+###### Interface
+
+```markdown
+readAutoMeasureSettingData(bleWriteResponse, settingDataListener)
+```
+
+###### Parameter Explanation
+
+|   Parameter Name    |              Type               |                    Description                    |
+| :-----------------: | :-----------------------------: | :-----------------------------------------------: |
+|  bleWriteResponse   |        BleWriteResponse         |           Listener for write operations           |
+| settingDataListener | IAutoMeasureSettingDataListener | Listener returning automatic measurement settings |
+
+###### Returned Data
+
+**IAutoMeasureSettingDataListener** - Automatic measurement callback
+
+```kotlin
+/**
+ * Returns automatic measurement settings data
+ *
+ * @param autoMeasureDataList List of automatic measurement settings data
+ */
+fun onSettingDataChange(autoMeasureDataList: List<AutoMeasureData>)
+
+fun onSettingDataChangeFail()
+
+fun onSettingDataChangeSuccess()
+```
+
+**AutoMeasureData** - Automatic measurement data
+
+```kotlin
+// Protocol type
+var protocolType = 0
+
+// Function type
+var funType = EAutoMeasureType.PULSE_RATE
+
+// Function switch
+var isSwitchOpen = false
+
+// Minimum supported step unit (minutes)
+var stepUnit = 0
+
+// Supports time slot modification
+var isSlotModify = false
+
+// Supports interval modification
+var isIntervalModify = false
+
+// Supported time slot - start (minutes)
+var supportStartMinute = 0
+
+// Supported time slot - end (minutes)
+var supportEndMinute = 0
+
+// Measurement interval (minutes)
+var measureInterval = 0
+
+// Current test slot - start (minutes)
+var currentStartMinute = 0
+
+// Current test slot - end (minutes)
+var currentEndMinute = 0
+```
+
+**EAutoMeasureType** - Automatic measurement type enum
+
+```kotlin
+enum class EAutoMeasureType(val value: Int) {
+    PULSE_RATE(0),
+    BLOOD_PRESSURE(1),
+    BLOOD_GLUCOSE(2),
+    STRESS(3),
+    BLOOD_OXYGEN(4),
+    BODY_TEMPERATURE(5),
+    LORENZ(6),
+    HRV(7),
+    BLOOD_COMPOSITION(8);
+
+    companion object {
+        fun fromValue(value: Int): EAutoMeasureType? {
+            return values().find { it.value == value }
+        }
+    }
+}
+```
+
+###### Example Code
+
+```
+VPOperateManager.getInstance().readAutoMeasureSettingData(bleWriteResponse, settingDataListener)
+```
+
+
+
+#### Setting Automatic Measurement Settings
+
+###### Prerequisites
+
+Device must support automatic measurement.
+
+###### Interface
+
+```
+setAutoMeasureSettingData(bleWriteResponse, measureData, settingDataListener)
+```
+
+###### Parameter Explanation
+
+|   Parameter Name    |              Type               |           Description           |
+| :-----------------: | :-----------------------------: | :-----------------------------: |
+|  bleWriteResponse   |        BleWriteResponse         |  Listener for write operations  |
+|     measureData     |         AutoMeasureData         |   Automatic measurement data    |
+| settingDataListener | IAutoMeasureSettingDataListener | Listener for setting operations |
+
+###### Returned Data
+
+Same as in [Reading Device Manual Measurement Data]
+
+###### Example Code
+
+```
+VPOperateManager.getInstance().setAutoMeasureSettingData(bleWriteResponse, measureData, settingDataListener)
+```
+
+
+
+
+
+
+## Text & Image Push Function
+
+Prerequisite: Device must support text&image push function. Judgment condition:
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportTextImagePush()
+```
+
+Note: All following interfaces require device support for text&image push.
+
+### Push Text message
+
+###### Prerequisites
+
+Device must support  text&image push.
+
+###### Interface
+
+```java
+/**
+     * 推送文字信息
+     * Pushes the text message
+     *
+     * @param msg              文字信息
+     *                         Text message content
+     * @param bleWriteResponse 蓝牙写入操作的回调
+     *                         Callback for the Bluetooth write operation
+     * @param listener         文字信息推送监听
+     *                         Listener for text message push events
+     */
+public void pushTextMsg(String msg, BleWriteResponse bleWriteResponse, ITextMsgPushListener listener) 
+```
+
+###### Parameter Explanation
+
+| Parameter Name   | Type                 | Description                     |
+| ---------------- | -------------------- | ------------------------------- |
+| msg              | String               | Need to send a text message     |
+| bleWriteResponse | BleWriteResponse     | Listener for write operations   |
+| listener         | ITextMsgPushListener | Listening for text push message |
+
+###### Interface
+
+**ITextMsgPushListener** -- Listening for text push message
+
+```java
+/**
+ * 文本消息推送监听
+ * Text Message Push Listener
+ */
+public interface ITextMsgPushListener extends IListener {
+
+    /**
+     * 文字信息推送成功
+     * Text message push succeeded
+     */
+    void onTextMsgPushSuccess();
+
+    /**
+     * 文字消息推送失败
+     * Text message push failed
+     */
+    void onTextMsgPushFailed();
+
+    /**
+     * 当前设备不支持该功能
+     * The current device does not support this feature/function.
+     */
+    void onFunctionNotSupport();
+}
+```
+
+###### Example Code
+
+```java
+VPOperateManager.getInstance().pushTextMsg(content, new BleWriteResponse() {
+    @Override
+    public void onResponse(int code) {
+        if(code!= Code.REQUEST_SUCCESS) {
+            tvPushInfo.setText("蓝牙数据发送失败");
+        }
+    }
+}, new ITextMsgPushListener() {
+    @Override
+    public void onTextMsgPushSuccess() {
+        tvPushInfo.setText("文本推送成功");
+    }
+
+    @Override
+    public void onTextMsgPushFailed() {
+        tvPushInfo.setText("文本推送失败");
+    }
+
+    @Override
+    public void onFunctionNotSupport() {
+        tvPushInfo.setText("不支持该功能");
+    }
+});
+```
+
+### Push Image message
+
+###### Prerequisites
+
+Device must support  text&image push.
+
+###### Interface
+
+```java
+/**
+     * 推送图片信息
+     * Pushes the image message
+     *
+     * @param imageFilePath 图片本地地址
+     *                      Local path of the image file
+     * @param listener      图片消息推送监听
+     *                      Listener for image message push events
+*/
+public void pushImageMsg(String imageFilePath, IImageMsgPushListener listener) 
+```
+
+###### Parameter Explanation
+
+| Parameter Name | Type                  | Description                              |
+| -------------- | --------------------- | ---------------------------------------- |
+| imageFilePath  | String                | Need to send the local path of the image |
+| listener       | IImageMsgPushListener | Listening for image information push     |
+
+###### Interface
+
+**IImageMsgPushListener** -- Listening for image information push
+
+```java
+public interface IImageMsgPushListener extends IListener {
+
+    /**
+     * 图片消息推送成功
+     * Image message push succeeded
+     */
+    void onImageMsgPushSuccess();
+
+    /**
+     * 图片消息推送进度回调
+     * Image message push progress callback
+     *
+     * @param currentBlock 当前块（已发送块）
+     * Current block (blocks sent)
+     * @param sumBlock     总块数
+     * Total number of blocks
+     * @param progress     进度百分比 (0-100)
+     * Progress percentage (0-100)
+     */
+    void onImageMsgPushProgress(int currentBlock, int sumBlock, int progress);
+
+    /**
+     * 图片推送失败/错误
+     * Image push failed/error
+     *
+     * @param errorCode 错误类型
+     * Error type
+     */
+    void onImageMsgPushFailed(ErrorCode errorCode);
+
+    /**
+     * 错误码
+     * Error Codes
+     */
+    enum ErrorCode {
+        /**
+         * 图片地址错误，不存在
+         * Image path error, file does not exist
+         */
+        IMAGE_PATH_ERROR("图片地址错误，不存在"),
+        /**
+         * 图片尺寸异常
+         * Image dimension anomaly
+         */
+        IMAGE_SIZE_ERROR("图片尺寸异常"),
+        /**
+         * 图片内存太大了
+         * Image file size is too large
+         */
+        IMAGE_TOO_LARGE("图片内存太大了"),
+        /**
+         * 传输终止
+         * Transmission terminated
+         */
+        TERMINATION("传输终止"),
+        /**
+         * 监听为空
+         * Listener is null
+         */
+        LISTENER_IS_NULL("监听为空"),
+        /**
+         * 没有先执行读取UI信息
+         * Must read UI base info first
+         */
+        NEED_READ_BASE_INFO("没有先执行读取UI信息"),
+        /**
+         * 文件不存在
+         * File does not exist
+         */
+        FILE_NOT_EXIST("文件不存在"),
+        /**
+         * 电量过低
+         * Low battery level
+         */
+        LOW_BATTERY("电量过低"),
+        /**
+         * 进入UI模式失败
+         * Failed to enter UI update mode
+         */
+        INTO_UPDATE_MODE_FAIL("进入UI模式失败"),
+        /**
+         * 文件没有4字节对齐
+         * File length is not 4-byte aligned
+         */
+        FILE_LENGTH_NOT_4_POWER("文件没有4字节对齐"),
+        /**
+         * crc校验失败
+         * CRC check failed
+         */
+        CHECK_CRC_FAIL("crc校验失败"),
+        /**
+         * 功能不支持
+         * Function not supported
+         */
+        FUNCTION_NOT_SUPPORT("功能不支持"),
+        /**
+         * 未知错误
+         * Unknown error
+         */
+        UNKNOWN("未知错误");
+
+        ErrorCode(String info){
+            this.info = info;
+        }
+
+        public String info;
+    }
+}
+```
+
+###### Example Code
+
+```java
+VPOperateManager.getInstance().pushImageMsg(pushImagePath, new IImageMsgPushListener() {
+    @Override
+    public void onImageMsgPushSuccess() {
+        tvPushInfo.setText("图片推送成功");
+    }
+
+    @Override
+    public void onImageMsgPushProgress(int currentBlock, int sumBlock, int progress) {
+        tvPushInfo.setText("图片推送进度：" + progress + "%");
+    }
+
+    @Override
+    public void onImageMsgPushFailed(ErrorCode errorCode) {
+        tvPushInfo.setText("图片推送错误：" + errorCode.info);
+    }
+});
+```

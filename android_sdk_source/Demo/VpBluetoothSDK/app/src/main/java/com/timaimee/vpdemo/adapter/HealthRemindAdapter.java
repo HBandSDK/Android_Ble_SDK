@@ -58,7 +58,7 @@ public class HealthRemindAdapter extends RecyclerView.Adapter<HealthRemindAdapte
 
         public void updateUI(final HealthRemind setting, final OnHealthRemindToggleChangeListener listener) {
             tvHealthRemindInfo.setText(setting.getRemindType().getDes() + "提醒 间隔（分钟）：" + setting.getInterval());
-            tvHealthTime.setText("时间范围：" + setting.getStartTime().getColck() + "-" + setting.getEndTime().getColck());
+            tvHealthTime.setText("时间范围：" + setting.getStartTime().getClock() + "-" + setting.getEndTime().getClock());
             sv.setOpened(setting.getStatus());
             sv.setOnStateChangedListener(new SwitchView.OnStateChangedListener() {
                 @Override
