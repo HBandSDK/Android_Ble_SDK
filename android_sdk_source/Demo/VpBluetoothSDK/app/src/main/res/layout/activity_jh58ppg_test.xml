@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_centerInParent="true"
+        android:background="#000"
+        android:gravity="center"
+        android:text="JH58PPG测试"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvReadPPGTestSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="读取PPG开关状态"
+        android:background="#FFF000"
+        android:textColor="#000FFF"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+    <Button
+        android:id="@+id/btnReadPPGTestStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:text="读取PPG测量模式"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvReadPPGTestSwitch" />
+
+    <TextView
+        android:id="@+id/tvPPGTestStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="start|center_vertical"
+        app:layout_constraintBottom_toBottomOf="@id/btnReadPPGTestStatus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btnReadPPGTestStatus"
+        app:layout_constraintTop_toTopOf="@id/btnReadPPGTestStatus" />
+
+    <TextView
+        android:id="@+id/tvSetPPGTestSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="设置PPG开关状态"
+        android:textColor="#000FFF"
+        android:background="#FFF000"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnReadPPGTestStatus" />
+
+    <RadioGroup
+        android:id="@+id/rgPPGTestMode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSetPPGTestSwitch">
+
+        <RadioButton
+            android:id="@+id/rbAllOff"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="全关" />
+
+        <RadioButton
+            android:id="@+id/rbMode1On"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="模式1" />
+
+        <RadioButton
+            android:id="@+id/rbMode2On"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="模式2" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tvReadPPGRawData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="读取PPG原始数据"
+        android:textColor="#000FFF"
+        android:background="#FFF000"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rgPPGTestMode" />
+
+    <Button
+        android:id="@+id/btnDatePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/date_time_btn_bg"
+        android:padding="10dp"
+        android:layout_marginTop="6dp"
+        android:text="2025-10-30"
+        app:layout_constraintEnd_toStartOf="@id/tv_"
+        app:layout_constraintTop_toBottomOf="@id/tvReadPPGRawData" />
+
+    <TextView
+        android:id="@+id/tv_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="  -  "
+        app:layout_constraintBottom_toBottomOf="@id/btnDatePicker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btnDatePicker" />
+
+    <Button
+        android:id="@+id/btnTimePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:background="@drawable/date_time_btn_bg"
+        android:padding="10dp"
+        android:layout_marginTop="6dp"
+        android:text="12:30:00"
+        app:layout_constraintStart_toEndOf="@id/tv_"
+        app:layout_constraintTop_toBottomOf="@id/tvReadPPGRawData" />
+
+    <RadioGroup
+        android:id="@+id/rgReadPPGTestMode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnTimePicker">
+
+        <RadioButton
+            android:id="@+id/rbReadMode1On"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="模式1(每15分钟采集10秒时长)"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/rbReadMode2On"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="模式2(每5分钟采集1分钟时长)"
+            android:textSize="12sp" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnReadPPGRawData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="读取PPG原始数据"
+        android:textSize="12sp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toStartOf="@id/btnStartRealTimePPGRawDataTransfer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rgReadPPGTestMode" />
+
+    <Button
+        android:id="@+id/btnStartRealTimePPGRawDataTransfer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="开始PPG实时传输"
+        android:textSize="12sp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toEndOf="@id/btnReadPPGRawData"
+        app:layout_constraintEnd_toStartOf="@id/btnStopRealTimePPGRawDataTransfer"
+        app:layout_constraintTop_toBottomOf="@id/rgReadPPGTestMode" />
+
+    <Button
+        android:id="@+id/btnStopRealTimePPGRawDataTransfer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="停止PPG实时传输"
+        android:layout_marginTop="10dp"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/btnStartRealTimePPGRawDataTransfer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rgReadPPGTestMode" />
+
+    <ScrollView
+        android:id="@+id/svInfo"
+        android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnReadPPGRawData"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="4dp"
+        android:background="@drawable/text_info_bg"
+        android:layout_height="0dp">
+        <TextView
+            android:id="@+id/tvPPGOptInfo"
+            android:padding="10dp"
+            android:text="WCNM(我吃柠檬)"
+            android:textSize="14dp"
+            android:textColor="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

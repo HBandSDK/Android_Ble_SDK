@@ -3058,6 +3058,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             startActivity(new Intent(this, MagneticTherapyActivity.class));
         } else if (oprater.equals(TEXT_IMAGE_MSG_PUSH)) {
             startActivity(new Intent(this, TextImagePushActivity.class));
+        }  else if (oprater.equals(JH58_PPG)) {
+            startActivity(new Intent(this, JH58PPGOptTestActivity.class));
         }
     }
 
