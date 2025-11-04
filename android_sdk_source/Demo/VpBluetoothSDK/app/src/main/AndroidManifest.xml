@@ -152,6 +152,7 @@
         <activity android:name=".activity.NewAlarmActivity" android:exported="false"/>
         <activity android:name=".activity.TextImagePushActivity" android:exported="false"/>
         <activity android:name=".activity.JH58PPGOptTestActivity" android:exported="false"/>
+        <activity android:name=".activity.MiniCheckupActivity" android:exported="false"/>
 
         <service
             android:name="com.inuker.bluetooth.library.BluetoothService"

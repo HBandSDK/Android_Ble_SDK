@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center"
+        android:background="#000"
+        android:layout_centerInParent="true"
+        android:text="微体检"
+        android:textColor="@android:color/white"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btnStartMiniCheckup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="开始微体检"
+        android:textSize="12sp"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toStartOf="@id/btnStopMiniCheckup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+    <Button
+        android:id="@+id/btnStopMiniCheckup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="停止微体检"
+        android:layout_marginTop="10dp"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/btnStartMiniCheckup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+    <ScrollView
+        android:id="@+id/svInfo"
+        android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnStartMiniCheckup"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="4dp"
+        android:background="@drawable/text_info_bg"
+        android:layout_height="0dp">
+        <TextView
+            android:id="@+id/tvMiniCheckupInfo"
+            android:padding="10dp"
+            android:text="WCNM(我吃柠檬)"
+            android:textSize="14dp"
+            android:textColor="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

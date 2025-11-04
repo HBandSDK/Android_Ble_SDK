@@ -3060,6 +3060,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             startActivity(new Intent(this, TextImagePushActivity.class));
         }  else if (oprater.equals(JH58_PPG)) {
             startActivity(new Intent(this, JH58PPGOptTestActivity.class));
+        }  else if (oprater.equals(MINI_CHECKUP)) {
+            startActivity(new Intent(this, MiniCheckupActivity.class));
         }
     }
 
