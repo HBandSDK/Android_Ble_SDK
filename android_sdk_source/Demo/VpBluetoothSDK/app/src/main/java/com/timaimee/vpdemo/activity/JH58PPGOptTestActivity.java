@@ -44,7 +44,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -260,6 +259,7 @@ public class JH58PPGOptTestActivity extends Activity implements View.OnClickList
     private void readPPGRawData() {
         sb.setLength(0);
         appendMsg("【读取】PPG原始数据~");
+        appendMsg("时间:" + timeData.toFullDateTimeString() + " , 模式:" + ppgTestMode);
         VPOperateManager.getInstance().readPPGRawData(timeData, ppgTestMode, new BleWriteResponse() {
             @Override
             public void onResponse(int code) {
@@ -348,39 +348,30 @@ public class JH58PPGOptTestActivity extends Activity implements View.OnClickList
             return;
         }
         String fileName = "JH58PPG原生数据读取.txt";
-        HBThreadPools.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                StringBuilder sb = new StringBuilder();
-                sb.append("数据总数:").append(ppgReadData.getDataCount()).append("组\n")
-                        .append("开始时间:").append(TimeData.getTimeBeanByTimestampSecond((int) ppgReadData.getTimestamp()).toFullDateTimeString()).append("\n");
-                for (PPGRawData ppgRawData : ppgReadData.getPpgRawDataList()) {
-                    sb.append("第【").append(ppgRawData.getIndex()).append("/").append(ppgReadData.getDataCount()).append("】组:")
-                            .append(TimeData.getTimeBeanByTimestampSecond((int) ppgRawData.getTimestamp()).toFullDateTimeString())
-                            .append(", 数据量=").append(ppgRawData.getCount()).append(",一共").append(ppgRawData.getPpgSecondDataList().size()).append("秒数据。\n");
-                    for (PPGSecondData ppgSecondData : ppgRawData.getPpgSecondDataList()) {
-                        sb.append("PPG数据:").append(Arrays.toString(ppgSecondData.getGreenLightSignalList().toArray())).append("\n")
-                                .append("加速度:").append(ppgSecondData.getAccelerationList())
-                                .append("\n");
-                    }
+        HBThreadPools.getInstance().execute(() -> {
+            StringBuilder sb = new StringBuilder();
+            sb.append("数据总数:").append(ppgReadData.getDataCount()).append("组\n");
+            for (PPGRawData ppgRawData : ppgReadData.getPpgRawDataList()) {
+                sb.append("第【").append(ppgRawData.getIndex()).append("/").append(ppgReadData.getDataCount()).append("】组:")
+                        .append(TimeData.getTimeBeanByTimestampSecond((int) ppgRawData.getTimestamp()).toFullDateTimeString())
+                        .append(", 数据量=").append(ppgRawData.getCount()).append(",一共").append(ppgRawData.getPpgSecondDataList().size()).append("秒数据。\n");
+                for (PPGSecondData ppgSecondData : ppgRawData.getPpgSecondDataList()) {
+                    sb.append(ppgSecondData.toDataStr()).append("\n");
                 }
-                appendTextToExternalFilesDir(JH58PPGOptTestActivity.this, fileName, sb.toString());
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        File externalFilesDir = getExternalFilesDir(null);
-
-                        if (externalFilesDir == null) {
-                            Log.e("FileSave", "无法获取外部存储目录，请检查设备状态或存储是否可用。");
-                            return;
-                        }
-
-                        File targetFile = new File(externalFilesDir, fileName);
-
-                        shareTxtContent(JH58PPGOptTestActivity.this, targetFile.getAbsolutePath(), "分享PPG读取的原始数据");
-                    }
-                });
             }
+            appendTextToExternalFilesDir(JH58PPGOptTestActivity.this, fileName, sb.toString());
+            runOnUiThread(() -> {
+                File externalFilesDir = getExternalFilesDir(null);
+
+                if (externalFilesDir == null) {
+                    Log.e("FileSave", "无法获取外部存储目录，请检查设备状态或存储是否可用。");
+                    return;
+                }
+
+                File targetFile = new File(externalFilesDir, fileName);
+
+                shareTxtContent(JH58PPGOptTestActivity.this, targetFile.getAbsolutePath(), "分享PPG读取的原始数据");
+            });
         });
 
     }
