@@ -128,6 +128,11 @@ import com.veepoo.protocol.model.datas.BpSettingData;
 import com.veepoo.protocol.model.datas.ChantingData;
 import com.veepoo.protocol.model.datas.CheckWearData;
 import com.veepoo.protocol.model.datas.CountDownData;
+import com.veepoo.protocol.model.datas.DeviceFunctionPackage1;
+import com.veepoo.protocol.model.datas.DeviceFunctionPackage2;
+import com.veepoo.protocol.model.datas.DeviceFunctionPackage3;
+import com.veepoo.protocol.model.datas.DeviceFunctionPackage4;
+import com.veepoo.protocol.model.datas.DeviceFunctionPackage5;
 import com.veepoo.protocol.model.datas.DrinkData;
 import com.veepoo.protocol.model.datas.EcgDetectResult;
 import com.veepoo.protocol.model.datas.EcgDiagnosis;
@@ -699,41 +704,72 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             }, bpSetting);
         } else if (oprater.equals(PWD_COMFIRM)) {
             boolean is24Hourmodel = false;
-            VPOperateManager.getInstance().confirmDevicePwd(writeResponse, new IPwdDataListener() {
-                @Override
-                public void onPwdDataChange(PwdData pwdData) {
-                    String message = "PwdData:\n" + pwdData.toString();
-                    Logger.t(TAG).i(message);
-                    deviceNumber = pwdData.getDeviceNumber();
-                    deviceVersion = pwdData.getDeviceVersion();
-                    deviceTestVersion = pwdData.getDeviceTestVersion();
-                    titleBleInfo.setText("设备号：" + deviceNumber + ",版本号：" + deviceVersion + ",\n测试版本号：" + deviceTestVersion);
-                }
-            }, new IDeviceFuctionDataListener() {
-                @Override
-                public void onFunctionSupportDataChange(FunctionDeviceSupportData functionSupport) {
-                    String message = "FunctionDeviceSupportData:\n" + functionSupport.toString();
-                    Logger.t(TAG).i(message);
-                    EFunctionStatus newCalcSport = functionSupport.getNewCalcSport();
-                    if (newCalcSport != null && newCalcSport.equals(SUPPORT)) {
-                        isNewSportCalc = true;
-                    } else {
-                        isNewSportCalc = false;
-                    }
-                    watchDataDay = functionSupport.getWathcDay();
-                    weatherStyle = functionSupport.getWeatherStyle();
-                    contactMsgLength = functionSupport.getContactMsgLength();
-                    allMsgLenght = functionSupport.getAllMsgLength();
-                    isSleepPrecision = functionSupport.getPrecisionSleep() == SUPPORT;
-                }
-            }, socialMsgDataListener, new ICustomSettingDataListener() {
-                @Override
-                public void OnSettingDataChange(CustomSettingData customSettingData) {
-                    String message = "CustomSettingData:\n" + customSettingData.toString();
-                    Logger.t(TAG).i(message);
+            VPOperateManager.getInstance().confirmDevicePwd(writeResponse,
+                    new IPwdDataListener() {
+                        @Override
+                        public void onPwdDataChange(PwdData pwdData) {
+                            String message = "PwdData:\n" + pwdData.toString();
+                            Logger.t(TAG).i(message);
+                            deviceNumber = pwdData.getDeviceNumber();
+                            deviceVersion = pwdData.getDeviceVersion();
+                            deviceTestVersion = pwdData.getDeviceTestVersion();
+                            titleBleInfo.setText("设备号：" + deviceNumber + ",版本号：" + deviceVersion + ",\n测试版本号：" + deviceTestVersion);
+                        }
+                    },
+                    new IDeviceFuctionDataListener() {
+                        @Override
+                        public void onFunctionSupportDataChange(FunctionDeviceSupportData functionSupport) {
+                            String message = "FunctionDeviceSupportData:\n" + functionSupport.toString();
+                            Logger.t(TAG).i(message);
+                            EFunctionStatus newCalcSport = functionSupport.getNewCalcSport();
+                            if (newCalcSport != null && newCalcSport.equals(SUPPORT)) {
+                                isNewSportCalc = true;
+                            } else {
+                                isNewSportCalc = false;
+                            }
+                            watchDataDay = functionSupport.getWathcDay();
+                            weatherStyle = functionSupport.getWeatherStyle();
+                            contactMsgLength = functionSupport.getContactMsgLength();
+                            allMsgLenght = functionSupport.getAllMsgLength();
+                            isSleepPrecision = functionSupport.getPrecisionSleep() == SUPPORT;
+                        }
+
+                        @Override
+                        public void onDeviceFunctionPackage1Report(DeviceFunctionPackage1 deviceFunctionPackage1) {
+
+                        }
+
+                        @Override
+                        public void onDeviceFunctionPackage2Report(DeviceFunctionPackage2 deviceFunctionPackage2) {
+
+                        }
+
+                        @Override
+                        public void onDeviceFunctionPackage3Report(DeviceFunctionPackage3 deviceFunctionPackage3) {
+
+                        }
+
+                        @Override
+                        public void onDeviceFunctionPackage4Report(DeviceFunctionPackage4 deviceFunctionPackage4) {
+
+                        }
+
+                        @Override
+                        public void onDeviceFunctionPackage5Report(DeviceFunctionPackage5 deviceFunctionPackage5) {
+
+                        }
+                    },
+                    socialMsgDataListener,
+                    new ICustomSettingDataListener() {
+                        @Override
+                        public void OnSettingDataChange(CustomSettingData customSettingData) {
+                            String message = "CustomSettingData:\n" + customSettingData.toString();
+                            Logger.t(TAG).i(message);
 //                    sendMsg(message, 4);
-                }
-            }, "0000", is24Hourmodel);
+                        }
+                    },
+                    "0000",
+                    is24Hourmodel);
 
         } else if (oprater.equals(PWD_COMFIRM_2_DISCONNECT)) { //发起BT立马断开
             connectBT();//连接BT

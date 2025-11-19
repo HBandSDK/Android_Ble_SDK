@@ -95,7 +95,6 @@ public class JH58PPGOptTestActivity extends Activity implements View.OnClickList
         rgReadPPGTestMode = findViewById(R.id.rgReadPPGTestMode);
         svInfo = findViewById(R.id.svInfo);
     }
-
     private void initData() {
         rgReadPPGTestMode.check(R.id.rbReadMode1On);
         btnDatePicker.setOnClickListener(this);
