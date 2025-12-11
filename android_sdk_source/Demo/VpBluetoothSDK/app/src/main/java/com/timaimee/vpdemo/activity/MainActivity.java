@@ -196,7 +196,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
             return;
         }
 
-        if(Build.VERSION.SDK_INT>=31) {
+        if (Build.VERSION.SDK_INT>=31) {
             initDialogBluetoothScan();
             checkBLEScanPermissionAboveAndroid11();
         } else {
@@ -214,9 +214,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
     }
 
     public void showMsg(String msg) {
-        runOnUiThread(() -> {
-            Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
-        });
+        runOnUiThread(() -> Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show());
     }
     private void commandSettingUI() {
         try {
@@ -270,7 +268,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
         if (!hasScanPermission) {
             boolean isNeedExplanation = ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.BLUETOOTH_SCAN);
-            Logger.t(TAG).e("**在Android12及以上版本检查BLE搜索权限 hasScanPermission = " + hasScanPermission + " , isNeedExplanation = " + isNeedExplanation);
+            Logger.t(TAG).e("**在Android12及以上版本检查BLE搜索权限 hasScanPermission = false , isNeedExplanation = " + isNeedExplanation);
             if (isNeedExplanation) {
                 showMsg("您已多次拒绝了，请手动打开android12 蓝牙搜索权限");
                 mDialogBluetoothScan.show();
