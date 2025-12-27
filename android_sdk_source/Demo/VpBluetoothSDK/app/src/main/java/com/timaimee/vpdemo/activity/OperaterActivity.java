@@ -75,6 +75,7 @@ import com.veepoo.protocol.listener.data.IFindDeviceDatalistener;
 import com.veepoo.protocol.listener.data.IFindDevicelistener;
 import com.veepoo.protocol.listener.data.IFindPhonelistener;
 import com.veepoo.protocol.listener.data.IG08ProjectPPGLightCallBack;
+import com.veepoo.protocol.listener.data.IGsrDetectListener;
 import com.veepoo.protocol.listener.data.IHRVOriginDataListener;
 import com.veepoo.protocol.listener.data.IHeartDataListener;
 import com.veepoo.protocol.listener.data.IHeartWaringDataListener;
@@ -140,6 +141,7 @@ import com.veepoo.protocol.model.datas.FatigueData;
 import com.veepoo.protocol.model.datas.FindDeviceData;
 import com.veepoo.protocol.model.datas.FunctionDeviceSupportData;
 import com.veepoo.protocol.model.datas.FunctionSocailMsgData;
+import com.veepoo.protocol.model.datas.GsrDetectResult;
 import com.veepoo.protocol.model.datas.HRVOriginData;
 import com.veepoo.protocol.model.datas.HalfHourSportData;
 import com.veepoo.protocol.model.datas.HeartData;
@@ -201,6 +203,7 @@ import com.veepoo.protocol.model.enums.ETimeMode;
 import com.veepoo.protocol.model.enums.EUricAcidUnit;
 import com.veepoo.protocol.model.enums.EWeatherType;
 import com.veepoo.protocol.model.enums.EWomenStatus;
+import com.veepoo.protocol.model.enums.GsrDetectAck;
 import com.veepoo.protocol.model.enums.MagneticTherapyType;
 import com.veepoo.protocol.model.settings.Alarm2Setting;
 import com.veepoo.protocol.model.settings.AlarmSetting;
@@ -1449,6 +1452,16 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             VPOperateManager.getInstance().offhookOrIdlePhone(writeResponse);
         } else if (oprater.equals(DEVICE_CONTROL_PHONE)) {
             VPOperateManager.getInstance().settingDeviceControlPhone(new IDeviceControlPhoneModelState() {
+
+                @Override
+                public void inMultiEcgModel() {
+
+                }
+
+                @Override
+                public void outMultiEcgModel() {
+
+                }
 
                 @Override
                 public void inPttModel() {
@@ -3098,6 +3111,42 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             startActivity(new Intent(this, JH58PPGOptTestActivity.class));
         }  else if (oprater.equals(MINI_CHECKUP)) {
             startActivity(new Intent(this, MiniCheckupActivity.class));
+        }else if (oprater.equals(GSR_START)) {
+            VPOperateManager.getInstance().startDetectGsr(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            }, new IGsrDetectListener() {
+                @Override
+                public void onGsrDetectProgress(int progress) {
+                    Logger.t(TAG).e("onGsrDetectProgress --》 " + progress);
+                }
+
+                @Override
+                public void onGsrDetectSuccess(@NonNull GsrDetectResult detectResult) {
+                    Logger.t(TAG).e("onGsrDetectSuccess --》 " + detectResult.toString());
+                }
+
+                @Override
+                public void onGsrDetectFailed(@NonNull GsrDetectAck detectAck) {
+                    Logger.t(TAG).e("onGsrDetectFailed --》 " + detectAck.getDescription());
+                }
+
+                @Override
+                public void onGsrDetectStop() {
+                    Logger.t(TAG).e("onGsrDetectStop --》 -- ");
+                }
+            });
+        } else if (oprater.equals(GSR_STOP)) {
+            VPOperateManager.getInstance().stopDetectGsr(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            });
+        } else if(oprater.equals(ZT163_DEVICE_ALWAYS_OFF_SCREEN)) {
+            startActivity(new Intent(this, ZT163DeviceAlwaysOffScreenActivity.class));
         }
     }
 
@@ -3605,6 +3654,16 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
      */
     public void listenDeviceCallbackData() {
         VPOperateManager.getInstance().settingDeviceControlPhone(new IDeviceControlPhoneModelState() {
+
+            @Override
+            public void inMultiEcgModel() {
+
+            }
+
+            @Override
+            public void outMultiEcgModel() {
+
+            }
 
             @Override
             public void inPttModel() {

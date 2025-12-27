@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="#000"
+        android:textColor="#FFF"
+        android:textSize="18sp"
+        android:text="合镁ZT163设备常灭屏"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"/>
+
+    <Button
+        android:id="@+id/btnOpen"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        android:layout_marginTop="20dp"
+        android:text="开启"
+        android:textSize="18sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnClose"
+        app:layout_constraintTop_toBottomOf="@id/btnOpen"
+        android:layout_marginTop="20dp"
+        android:text="关闭"
+        android:textSize="18sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnRead"
+        app:layout_constraintTop_toBottomOf="@id/btnClose"
+        android:layout_marginTop="20dp"
+        android:text="读取状态"
+        android:textSize="18sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ScrollView
+        android:id="@+id/svInfo"
+        android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnRead"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="4dp"
+        android:background="@drawable/text_info_bg"
+        android:layout_height="0dp">
+        <TextView
+            android:id="@+id/tvInfo"
+            android:padding="10dp"
+            android:text="WCNM(我吃柠檬)"
+            android:textSize="14dp"
+            android:textColor="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
