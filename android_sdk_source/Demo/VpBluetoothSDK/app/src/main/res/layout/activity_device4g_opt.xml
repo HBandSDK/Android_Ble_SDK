@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".activity.Device4gOptActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4G 网络配置"
+            android:textColor="#1A1A1A"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvJLInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="请先读取当前设备配置信息"
+            android:textColor="#FF5252"
+            android:textSize="13sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="#F8F9FA"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="实时状态信息"
+                android:textColor="#757575"
+                android:textSize="12sp"
+                android:textAllCaps="true"
+                android:letterSpacing="0.1" />
+
+            <TextView
+                android:id="@+id/tvConfigInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:lineSpacingExtra="4dp"
+                android:text="等待读取..."
+                android:textColor="#424242"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btnRead"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:text="点击读取"
+                app:icon="@android:drawable/stat_notify_sync" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="24dp"
+            android:background="#EEEEEE" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="参数设置"
+            android:textColor="#1A1A1A"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="服务器账号"
+            app:boxStrokeColor="#2196F3"
+            android:theme="@style/Theme.MaterialComponents.Light">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etAccount"
+                android:layout_width="match_parent"
+                android:text="qq@qq.com"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:textColor="#1A1A1A"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:theme="@style/Theme.MaterialComponents.Light"
+            android:hint="访问密码"
+            app:boxStrokeColor="#2196F3">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:text="AdcGqvN2BhOpYDtiCxiLNA=="
+                android:textColor="#1A1A1A"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnSetting"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="32dp"
+            android:backgroundTint="#2196F3"
+            android:text="应用并保存配置"
+            android:textSize="16sp"
+            app:cornerRadius="8dp" />
+
+        <Button
+            android:id="@+id/btnClear"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="清除账号信息"
+            android:textColor="#9E9E9E" />
+
+    </LinearLayout>
+</ScrollView>

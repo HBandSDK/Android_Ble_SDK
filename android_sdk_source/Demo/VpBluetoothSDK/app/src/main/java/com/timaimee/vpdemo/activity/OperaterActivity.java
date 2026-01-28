@@ -74,6 +74,7 @@ import com.veepoo.protocol.listener.data.IFatigueDataListener;
 import com.veepoo.protocol.listener.data.IFindDeviceDatalistener;
 import com.veepoo.protocol.listener.data.IFindDevicelistener;
 import com.veepoo.protocol.listener.data.IFindPhonelistener;
+import com.veepoo.protocol.listener.data.IFunSwitchListener;
 import com.veepoo.protocol.listener.data.IG08ProjectPPGLightCallBack;
 import com.veepoo.protocol.listener.data.IGsrDetectListener;
 import com.veepoo.protocol.listener.data.IHRVOriginDataListener;
@@ -139,6 +140,7 @@ import com.veepoo.protocol.model.datas.EcgDetectResult;
 import com.veepoo.protocol.model.datas.EcgDiagnosis;
 import com.veepoo.protocol.model.datas.FatigueData;
 import com.veepoo.protocol.model.datas.FindDeviceData;
+import com.veepoo.protocol.model.datas.FunSwitchFlags;
 import com.veepoo.protocol.model.datas.FunctionDeviceSupportData;
 import com.veepoo.protocol.model.datas.FunctionSocailMsgData;
 import com.veepoo.protocol.model.datas.GsrDetectResult;
@@ -3147,6 +3149,43 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             });
         } else if(oprater.equals(ZT163_DEVICE_ALWAYS_OFF_SCREEN)) {
             startActivity(new Intent(this, ZT163DeviceAlwaysOffScreenActivity.class));
+        } else if (oprater.equals(GNSS_SOS_SAFETY_PROTECTION)) {
+            startActivity(new Intent(this, GNSSOptActivity.class));
+        } else if (oprater.equals(FUN_SWITCH_READ)) {
+            VPOperateManager.getInstance().readFunSwitchState(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            }, new IFunSwitchListener() {
+                @Override
+                public void onFunSwitchStatusChanged(int con, Map<Integer, EFunctionStatus> states) {
+                    Toast.makeText(mContext, "读取健康辅助功能完成，具体内容看log", Toast.LENGTH_LONG).show();
+                    //    con    命令类型  1设置  2读取  3设备主动上报
+                    //    states 功能状态 其中Int代表功能类型，详见FunSwitchFlags，EFunctionStatus代表该功能状态，有相关的FunSwitchFlags返回则代表支持，没有代表不支持
+                    Logger.t(TAG).e("onFunSwitchStatusChanged --》 con=" + con + ",states=" + states.toString());
+                }
+            });
+        } else if (oprater.equals(FUN_SWITCH_SETTING)) {
+            VPOperateManager.getInstance().setFunSwitchState(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            }, new IFunSwitchListener() {
+                @Override
+                public void onFunSwitchStatusChanged(int con, Map<Integer, EFunctionStatus> states) {
+
+                }
+            }, FunSwitchFlags.BLOOD_OXYGEN, SUPPORT_OPEN);
+        } else if (oprater.equals(FUN_4G)) {
+            startActivity(new Intent(this, Device4gOptActivity.class));
+        } else if (oprater.equals(AUTO_MEASURE)) {
+            if (VpSpGetUtil.getVpSpVariInstance(mContext).isSupportAutoMeasure()) {
+                startActivity(new Intent(this, AutoMeasureActivity.class));
+            } else {
+                showToast("当前设备不支持自动测量设置");
+            }
         }
     }
 

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_centerInParent="true"
+        android:background="#000"
+        android:gravity="center"
+        android:text="自动测量设置"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvAutoMeasureTypeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:padding="5dp"
+        android:text="自动测量类型:"
+        android:textColor="#000FFF"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+    <TextView
+        android:id="@+id/tvAutoMeasureType"
+        app:layout_constraintTop_toTopOf="@id/tvAutoMeasureTypeTitle"
+        app:layout_constraintBottom_toBottomOf="@id/tvAutoMeasureTypeTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="10dp"
+        android:text="心率"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tvAutoMeasureStateTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="开关状态:"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="#000FFF"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvAutoMeasureType" />
+
+    <com.github.iielse.switchbutton.SwitchView
+        android:id="@+id/svStatus"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:isOpened="true"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintTop_toTopOf="@id/tvAutoMeasureStateTitle"
+        app:layout_constraintBottom_toBottomOf="@id/tvAutoMeasureStateTitle"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tvStepUnitSet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="测量间隔(>1m)"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="#000FFF"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/svStatus" />
+
+    <EditText
+        android:id="@+id/etInterval"
+        app:layout_constraintTop_toTopOf="@id/tvStepUnitSet"
+        app:layout_constraintBottom_toBottomOf="@id/tvStepUnitSet"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="10dp"
+        android:text="60"
+        android:gravity="end|center_vertical"
+        android:inputType="number"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:textStyle="bold"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tvSetMeasureTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        android:text="设置自动测量的时间段"
+        android:textColor="#000FFF"
+        android:background="#FFF000"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvStepUnitSet" />
+
+    <Button
+        android:id="@+id/btnStartTimePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/date_time_btn_bg"
+        android:padding="10dp"
+        android:layout_marginTop="6dp"
+        android:text="12:00"
+        app:layout_constraintEnd_toStartOf="@id/tv_"
+        app:layout_constraintTop_toBottomOf="@id/tvSetMeasureTime" />
+
+    <TextView
+        android:id="@+id/tv_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="  -  "
+        app:layout_constraintBottom_toBottomOf="@id/btnStartTimePicker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btnStartTimePicker" />
+
+    <Button
+        android:id="@+id/btnEndTimePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:background="@drawable/date_time_btn_bg"
+        android:padding="10dp"
+        android:layout_marginTop="6dp"
+        android:text="22:30"
+        app:layout_constraintStart_toEndOf="@id/tv_"
+        app:layout_constraintTop_toBottomOf="@id/tvSetMeasureTime" />
+
+    <TextView
+        android:id="@+id/tvSupportInfo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="5dp"
+        app:layout_constraintTop_toBottomOf="@id/btnStartTimePicker"
+        android:textColor="@color/real_red"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnSetting"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="20dp"
+        android:text="设置"
+        app:layout_constraintTop_toBottomOf="@id/tvSupportInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

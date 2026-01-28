@@ -155,6 +155,26 @@
         <activity android:name=".activity.MiniCheckupActivity" android:exported="false"/>
         <activity android:name=".activity.ZT163DeviceAlwaysOffScreenActivity" android:exported="false"/>
 
+        <activity
+            android:name=".activity.Device4gOptActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.GNSSOptActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.AutoMeasureActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.AutoMeasureEditActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
         <service
             android:name="com.inuker.bluetooth.library.BluetoothService"
             android:enabled="true"

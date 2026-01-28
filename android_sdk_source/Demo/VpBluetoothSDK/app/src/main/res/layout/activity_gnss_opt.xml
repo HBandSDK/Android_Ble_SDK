@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="#000"
+        android:textColor="#FFF"
+        android:textSize="18sp"
+        android:text="亲情安全守护&amp;GNSS双向&amp;SOS求助"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"/>
+
+    <TextView
+        android:id="@+id/tvSafetyProtection"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:text="守护功能状态控制"
+        android:padding="10dp"
+        android:textStyle="bold|italic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnStartSafetyProtection"
+        app:layout_constraintTop_toBottomOf="@id/tvSafetyProtection"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnStopSafetyProtection"
+        android:text="开启守护"
+        android:textSize="18sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnStopSafetyProtection"
+        app:layout_constraintTop_toBottomOf="@id/tvSafetyProtection"
+        app:layout_constraintStart_toEndOf="@id/btnStartSafetyProtection"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="结束守护"
+        android:textSize="18sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tvGNSS"
+        app:layout_constraintTop_toBottomOf="@id/btnStopSafetyProtection"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:text="GNSS实时位置数据交互"
+        android:padding="10dp"
+        android:textStyle="bold|italic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Spinner
+        android:id="@+id/spFunction"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btnPushGnssLocationData"
+        app:layout_constraintBottom_toBottomOf="@id/btnPushGnssLocationData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/etRSSI"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/etAltitude"
+        app:layout_constraintTop_toBottomOf="@id/tvGNSS"
+        android:hint="请输入蓝牙信号值"
+        android:textSize="14sp"
+        android:inputType="numberSigned"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/etAltitude"
+        app:layout_constraintStart_toEndOf="@id/etRSSI"
+        app:layout_constraintTop_toBottomOf="@id/tvGNSS"
+        android:hint="请输入海拔值（cm，默认0）"
+        android:textSize="14sp"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/etLng"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/etAltitude"
+        app:layout_constraintTop_toBottomOf="@id/etRSSI"
+        android:hint="请输入经度"
+        android:textSize="14sp"
+        android:inputType="numberDecimal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/etLat"
+        app:layout_constraintStart_toEndOf="@id/etRSSI"
+        app:layout_constraintTop_toBottomOf="@id/etRSSI"
+        android:hint="请输入纬度"
+        android:textSize="14sp"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnPushGnssLocationData"
+        app:layout_constraintTop_toBottomOf="@id/etLng"
+        app:layout_constraintStart_toEndOf="@id/spFunction"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="推送位置信息"
+        android:textSize="18sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <ScrollView
+        android:id="@+id/svInfo"
+        android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnPushGnssLocationData"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="4dp"
+        android:background="@drawable/text_info_bg"
+        android:layout_height="0dp">
+        <TextView
+            android:id="@+id/tvInfo"
+            android:padding="10dp"
+            android:text="WCNM(我吃柠檬)"
+            android:textSize="14dp"
+            android:textColor="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
