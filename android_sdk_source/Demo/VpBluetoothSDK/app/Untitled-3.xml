@@ -1,181 +1,22 @@
-<HorizontalScrollView
-                        android:id="@+id/infiniteScrollView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16pt"
-                        android:layout_marginBottom="20pt"
-                        android:scrollbars="none"
-                        android:overScrollMode="never"
-                        android:touchscreenBlocksFocus="true"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvAiDes">
+for %f in ("G:\AndroidSDK\ndk\28.0.12674087\toolchains\llvm\prebuilt\windows-x86_64\bin\jniso\arm64-v8a\*.so") do llvm-readelf.exe -l "%f" | findstr /R /C:"LOAD"
+for %f in ("G:\AndroidSDK\ndk\28.0.12674087\toolchains\llvm\prebuilt\windows-x86_64\bin\jniso\armeabi-v7a\*.so") do llvm-readelf.exe -l "%f" | findstr /R /C:"LOAD"
+for %f in ("G:\AndroidSDK\ndk\28.0.12674087\toolchains\llvm\prebuilt\windows-x86_64\bin\jniso\x86\*.so") do llvm-readelf.exe -l "%f" | findstr /R /C:"LOAD"
+for %f in ("G:\AndroidSDK\ndk\28.0.12674087\toolchains\llvm\prebuilt\windows-x86_64\bin\jniso\x86_64\*.so") do llvm-readelf.exe -l "%f" | findstr /R /C:"LOAD"
 
-                        <!-- 外层线性布局：放两份相同内容，实现无缝滚动 -->
-                        <LinearLayout
-                            android:id="@+id/scrollContainer"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
 
-                            <!-- 第一份内容（原内容） -->
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/content1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingStart="4pt"
-                                android:paddingEnd="4pt">
+for %f in ("G:\AndroidSDK\ndk\28.0.12674087\toolchains\llvm\prebuilt\windows-x86_64\bin\GBand\jniLibs\arm64-v8a\*.so") do llvm-readelf.exe -l "%f" | findstr /R /C:"LOAD"
+for %f in ("G:\AndroidSDK\ndk\28.0.12674087\toolchains\llvm\prebuilt\windows-x86_64\bin\GBand\jniLibs\armeabi-v7a\*.so") do llvm-readelf.exe -l "%f" | findstr /R /C:"LOAD"
+for %f in ("G:\AndroidSDK\ndk\28.0.12674087\toolchains\llvm\prebuilt\windows-x86_64\bin\GBand\jniLibs\x86\*.so") do llvm-readelf.exe -l "%f" | findstr /R /C:"LOAD"
+for %f in ("G:\AndroidSDK\ndk\28.0.12674087\toolchains\llvm\prebuilt\windows-x86_64\bin\GBand\jniLibs\x86_64\*.so") do llvm-readelf.exe -l "%f" | findstr /R /C:"LOAD"
 
-                                <TextView
-                                    android:id="@+id/chipToday1"
-                                    style="@style/weight400.textStyle"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/bg_chip_blue"
-                                    android:paddingHorizontal="10pt"
-                                    android:paddingVertical="6pt"
-                                    android:text="分析今天心率数据"
-                                    android:textColor="#5B76EE"
-                                    android:textSize="14pt"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
+for %f in ("G:\AndroidSDK\ndk\28.0.12674087\toolchains\llvm\prebuilt\windows-x86_64\bin\HBand\lib\arm64-v8a\*.so") do llvm-readelf.exe -l "%f" | findstr /R /C:"LOAD"
+for %f in ("G:\AndroidSDK\ndk\28.0.12674087\toolchains\llvm\prebuilt\windows-x86_64\bin\HBand\lib\armeabi-v7a\*.so") do llvm-readelf.exe -l "%f" | findstr /R /C:"LOAD"
+for %f in ("G:\AndroidSDK\ndk\28.0.12674087\toolchains\llvm\prebuilt\windows-x86_64\bin\HBand\lib\x86\*.so") do llvm-readelf.exe -l "%f" | findstr /R /C:"LOAD"
+for %f in ("G:\AndroidSDK\ndk\28.0.12674087\toolchains\llvm\prebuilt\windows-x86_64\bin\HBand\lib\x86_64\*.so") do llvm-readelf.exe -l "%f" | findstr /R /C:"LOAD"
 
-                                <TextView
-                                    android:id="@+id/chipThreeDays1"
-                                    style="@style/weight400.textStyle"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="8pt"
-                                    android:background="@drawable/bg_chip_blue"
-                                    android:paddingHorizontal="10pt"
-                                    android:paddingVertical="6pt"
-                                    android:text="分析近3天心率数据"
-                                    android:textColor="#5B76EE"
-                                    android:textSize="14pt"
-                                    app:layout_constraintStart_toEndOf="@id/chipToday1"
-                                    app:layout_constraintTop_toTopOf="parent" />
 
-                                <TextView
-                                    android:id="@+id/chipSevenDays1"
-                                    style="@style/weight400.textStyle"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="8pt"
-                                    android:background="@drawable/bg_chip_blue"
-                                    android:paddingHorizontal="10pt"
-                                    android:paddingVertical="6pt"
-                                    android:text="分析近7天心率数据"
-                                    android:textColor="#5B76EE"
-                                    android:textSize="14pt"
-                                    app:layout_constraintStart_toEndOf="@id/chipThreeDays1"
-                                    app:layout_constraintTop_toTopOf="parent" />
+for %a in (arm64-v8a armeabi-v7a x86 x86_64) do (echo ====================================== & echo 正在处理架构：%a & echo -------------------------------------- & for %f in ("G:\AndroidSDK\ndk\28.0.12674087\toolchains\llvm\prebuilt\windows-x86_64\bin\jniso\%a\*.so") do (echo 🔹 文件：%f & llvm-readelf.exe -l "%f" | findstr /R /C:"LOAD" & echo.) & echo.)
 
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-
-                            <!-- 第二份内容（和第一份完全一样，实现无缝衔接） -->
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/content2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingStart="4pt"
-                                android:paddingEnd="4pt">
-
-                                <TextView
-                                    android:id="@+id/chipToday2"
-                                    style="@style/weight400.textStyle"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/bg_chip_blue"
-                                    android:paddingHorizontal="10pt"
-                                    android:paddingVertical="6pt"
-                                    android:text="分析今天心率数据"
-                                    android:textColor="#5B76EE"
-                                    android:textSize="14pt"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <TextView
-                                    android:id="@+id/chipThreeDays2"
-                                    style="@style/weight400.textStyle"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="8pt"
-                                    android:background="@drawable/bg_chip_blue"
-                                    android:paddingHorizontal="10pt"
-                                    android:paddingVertical="6pt"
-                                    android:text="分析近3天心率数据"
-                                    android:textColor="#5B76EE"
-                                    android:textSize="14pt"
-                                    app:layout_constraintStart_toEndOf="@id/chipToday2"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <TextView
-                                    android:id="@+id/chipSevenDays2"
-                                    style="@style/weight400.textStyle"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="8pt"
-                                    android:background="@drawable/bg_chip_blue"
-                                    android:paddingHorizontal="10pt"
-                                    android:paddingVertical="6pt"
-                                    android:text="分析近7天心率数据"
-                                    android:textColor="#5B76EE"
-                                    android:textSize="14pt"
-                                    app:layout_constraintStart_toEndOf="@id/chipThreeDays2"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        </LinearLayout>
-
-                    </HorizontalScrollView>
-    override fun onResume() {
-        super.onResume()
-        animator?.cancel()
-        mDatabind.scrollContainer.post {
-            startAnimator()
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        animator?.cancel()
-    }
-
-    var animator:ValueAnimator? = null
-
-    private fun startAnimator() {
-        animator = startInfiniteScroll(mDatabind.scrollContainer, mDatabind.infiniteScrollView)
-    }
-
-    /**
-     * 启动无限从右到左滚动动画
-     * @return 返回动画实例，方便后续停止
-     */
-    private fun startInfiniteScroll(scrollContainer: LinearLayout, scrollView: HorizontalScrollView): ValueAnimator? {
-        val singleContentWidth = scrollContainer.getChildAt(0).width
-
-        // 如果单份内容宽度为0，不执行动画
-        if (singleContentWidth == 0) return null
-
-        // 创建数值动画：从0到单份内容宽度
-        val scrollAnimator = ValueAnimator.ofInt(0, singleContentWidth).apply {
-            duration = 20000 // 滚动单份内容的时长（毫秒），数值越小越快
-            interpolator = LinearInterpolator() // 匀速滚动
-            repeatCount = ValueAnimator.INFINITE // 无限重复
-            repeatMode = ValueAnimator.RESTART // 重复时重置
-
-            addUpdateListener { animation ->
-                val scrollX = animation.animatedValue as Int
-                // 从右到左滚动：scrollX增大 → 内容向左偏移
-                scrollView.scrollTo(scrollX, 0)
-
-                // 当滚动到末尾时，重置滚动位置（避免视觉断层）
-                if (scrollX == singleContentWidth) {
-                    scrollView.scrollTo(0, 0)
-                }
-            }
-        }
-        scrollAnimator.start()
-        return scrollAnimator
-    }
-    
+for %f in ("G:\AndroidSDK\ndk\28.0.12674087\toolchains\llvm\prebuilt\windows-x86_64\bin\jniso\armeabi\*.so") do llvm-readelf.exe -l "%f" | findstr /R /C:"LOAD"
+for %f in ("G:\AndroidSDK\ndk\28.0.12674087\toolchains\llvm\prebuilt\windows-x86_64\bin\jniso\mips\*.so") do llvm-readelf.exe -l "%f" | findstr /R /C:"LOAD"
+for %f in ("G:\AndroidSDK\ndk\28.0.12674087\toolchains\llvm\prebuilt\windows-x86_64\bin\jniso\mips64\*.so") do llvm-readelf.exe -l "%f" | findstr /R /C:"LOAD"
