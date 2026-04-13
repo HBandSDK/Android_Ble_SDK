@@ -26,7 +26,7 @@ import com.veepoo.protocol.listener.data.IUIBaseInfoFormImagePushListener;
 import com.veepoo.protocol.model.datas.UIDataImagePush;
 import com.veepoo.protocol.shareprence.VpSpGetUtil;
 import com.veepoo.protocol.util.UiUpdateUtil;
-import com.veepoo.protocol.util.thread.HBThreadPools;
+//import com.veepoo.protocol.util.thread.HBThreadPools;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -108,7 +108,8 @@ public class TextImagePushActivity extends Activity implements View.OnClickListe
                 Logger.t(TAG).e("-获取图片推送信息-: | " + uiDataImage);
                 int width = uiDataImage.getWidth();
                 int height = uiDataImage.getHeight();
-                HBThreadPools.getInstance().execute(() -> {
+
+                new Thread(() -> {
                     copyAssetFileToExternalFilesDir(TextImagePushActivity.this, "img_push1.jpg", SUB_PATH);
                     copyAssetFileToExternalFilesDir(TextImagePushActivity.this, "img_push2.jpg", SUB_PATH);
 
@@ -123,7 +124,7 @@ public class TextImagePushActivity extends Activity implements View.OnClickListe
                         imagePush01.setImageBitmap(BitmapFactory.decodeFile(imageMsgPushDirPath + File.separator + "image_push_01.png"));
                         imagePush02.setImageBitmap(BitmapFactory.decodeFile(imageMsgPushDirPath + File.separator + "image_push_02.png"));
                     });
-                });
+                }).start();
             }
         });
 

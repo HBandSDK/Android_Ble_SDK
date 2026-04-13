@@ -36,7 +36,7 @@ import com.veepoo.protocol.model.datas.PPGSecondData;
 import com.veepoo.protocol.model.datas.TimeData;
 import com.veepoo.protocol.model.enums.PPGSwitchStatus;
 import com.veepoo.protocol.model.enums.PPGTestMode;
-import com.veepoo.protocol.util.thread.HBThreadPools;
+//import com.veepoo.protocol.util.thread.HBThreadPools;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -347,7 +347,7 @@ public class JH58PPGOptTestActivity extends Activity implements View.OnClickList
             return;
         }
         String fileName = "JH58PPG原生数据读取.txt";
-        HBThreadPools.getInstance().execute(() -> {
+        new Thread(() -> {
             StringBuilder sb = new StringBuilder();
             sb.append("数据总数:").append(ppgReadData.getDataCount()).append("组\n");
             for (PPGRawData ppgRawData : ppgReadData.getPpgRawDataList()) {
@@ -371,7 +371,7 @@ public class JH58PPGOptTestActivity extends Activity implements View.OnClickList
 
                 shareTxtContent(JH58PPGOptTestActivity.this, targetFile.getAbsolutePath(), "分享PPG读取的原始数据");
             });
-        });
+        }).start();
 
     }
 
