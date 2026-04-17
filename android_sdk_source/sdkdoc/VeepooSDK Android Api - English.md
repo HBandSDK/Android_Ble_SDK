@@ -17,7 +17,17 @@
 | 1.1.1   | 1. Synchronize personal information API to add weight parameter description;<br />2. Multi-level skin color setting (device support required). | 2024.11.30    |
 | 1.1.2   | 1.Read the comments related to recording the packet position required for deleting sports mode data. | 2024.12.12    |
 | 1.1.3   | 1.Add description for the automatic measurement read/set interface (0xB3); <br />2.Add relevant interfaces for reading manual measurement data (blood pressure) | 2025.06.10    |
-| 1.1.4   | Added Text&Image push Function                               | 2025.10.27    |
+| 1.1.4   | Fixed an issue with the blood glucose function - blood glucose measurement - stop measurement interface. | 2025.06.16    |
+| 1.1.5   | Add Text&Image push function                                 | 2025.10.27    |
+| 1.1.6   | Add JH58 PPG Function                                        | 2025.10.31    |
+| 1.1.7   | Add Mini-checkup function                                    | 2025.11.04    |
+| 1.1.8   | A new device function reporting interface has been added, and the old onFunctionSupportDataChange method has been discarded. | 2025.11.19    |
+| 1.1.9   | Added Start/Stop APIs for GSR Measurement (or New Interfaces for Starting and Stopping GSR Detection). | 2025.11.24    |
+| 1.2.0   | Added ZT163 project device always off screen function        | 2025.12.27    |
+| 1.2.1   | Micro-Physical-Exam V2 data response: added interfaces for Health Reminders and 4G functionality. | 2025.01.09    |
+| 1.2.2   | Added 12 data return documents for manual measurements, as well as a list of manual measurement types supported by the device. | 2025.04.08    |
+| 1.2.3   | And connection confirmation function                         | 2025.04.16    |
+| 1.2.4   | And Nordic OTA Upgrade Function                              | 2025.04.17    |
 
 ## Public interface class
 **VPOperateManager**（SDK main entry）  
@@ -187,6 +197,54 @@ fun connectState(code:Int, profile:BleGattProfile, isOadModel:boolean);
 fun notifyState(state:Int);
 ```
 
+#### Connection Confirmation Settings
+
+By default, the `deviceShowConfirm` parameter for device connections is set to `true`. When set to `true`, if the device supports connection confirmation, the user is required to manually tap to confirm the connection directly on the device. When this value is set to `false`, the connection will be established immediately, regardless of whether the device supports the connection confirmation feature.
+
+###### Interface
+
+```java
+    /**
+     * Whether the device requires connection confirmation
+     * @return whether to display connection confirmation on the device
+     */
+    public boolean isDeviceShowConfirm() {
+        return deviceShowConfirm;
+    }
+
+    /**
+     * Set whether the device needs to display a connection confirmation
+     * User manual connection: set to true, device displays connection confirmation
+     * Automatic reconnection: set to false, device connects directly without confirmation
+     * @param deviceShowConfirm whether to display connection confirmation on the device
+     */
+    public void setDeviceShowConfirm(boolean deviceShowConfirm) {
+        this.deviceShowConfirm = deviceShowConfirm;
+    }
+
+/**
+ * Get the connection confirmation timeout (default 12 seconds)
+ * @return connection confirmation timeout
+ */
+public int getConnectionConfirmTimeout() {
+    return connectionConfirmTimeout;
+}
+
+/**
+ * Set the connection confirmation timeout
+ * If the set value is less than or equal to 10, it will be forced to 10
+ * @param connectionConfirmTimeout connection confirmation timeout
+ */
+public void setConnectionConfirmTimeout(int connectionConfirmTimeout) {
+    if (connectionConfirmTimeout <= 10) {
+        connectionConfirmTimeout = 10;
+    }
+    this.connectionConfirmTimeout = connectionConfirmTimeout;
+}
+```
+
+
+
 #### Verify password operation
 
 ###### Interface
@@ -220,11 +278,24 @@ Note: **The first step after successful connection is to perform other Bluetooth
 **IPwdDataListener** -- Data return
 
 ```kotlin
-/**
-* Returns the data of password operation
-* @param pwdData Password operation data
-*/
-fun onPwdDataChange(pwdData:PwdData);
+  /**
+     * 密码操作数据发生变化时回调
+     * Callback when password operation data changes
+     *
+     * @param pwdData 密码操作相关数据
+     *                Password operation related data
+     */
+    void onPwdDataChange(PwdData pwdData);
+
+    /**
+     * 连接确认超时回调
+     * 设备在规定时间内未完成连接确认，用户需在此回调中手动断开蓝牙连接
+     *
+     * Callback for connection confirmation timeout
+     * The device does not complete connection confirmation within the specified time,
+     * the user needs to manually disconnect the Bluetooth connection in this callback
+     */
+    void onConnectionConfirmTimeout();
 ```
 
 **PwdData** -- Data for Password verfiy operations
@@ -251,15 +322,71 @@ fun onPwdDataChange(pwdData:PwdData);
 | SUPPORT_CLOSE  | function close     |
 | UNKONW         | unknow state       |
 
-**IDeviceFuctionDataListener** -- Device function status monitoring, monitoring once, may be called back twice, depending on the device
+**IDeviceFunctionDataListener** -- Device function status listener. Listening once may trigger the `onFunctionSupportDataChange` callback multiple times, with the last callback being the most significant, depending on the device. It is recommended to directly listen to the corresponding device function package reporting interface: First package device function package report: `onDeviceFunctionPackage1Report`; Second package device function package report (if the device supports the second package function, it will be reported; otherwise, this method will not be called): `onDeviceFunctionPackage2Report`; Third package device function package report (if the device supports the third package function, it will be reported; otherwise, this method will not be called): `onDeviceFunctionPackage3Report`; Fourth package device function package report (if the device supports the fourth package function, it will be reported; otherwise, this method will not be called): `onDeviceFunctionPackage4Report`; Fifth package device function package report (if the device supports the fifth package function, it will be reported; otherwise, this method will not be called): `onDeviceFunctionPackage5Report`.
 
-```kotlin
+```java
 /**
- * Returns device functional status
- *
- * @param functionSupport
+ * 设备功能状态上报监听
+ * Device function status report
  */
-fun onFunctionSupportDataChange(functionSupport:FunctionDeviceSupportData)
+public interface IDeviceFuctionDataListener extends IListener {
+    /**
+     * 设备功能的上报 (Device function data report)
+     *
+     * @param functionSupport 设备所支持的所有功能列表，因为设备功能比较多，该方法会一次性回调多次，以最后一次为准（非最后一次则有部分功能数据还未初始化）。
+     * The list of all functions supported by the device. Since there are many functions, this method
+     * may be called back multiple times; the last call should be considered final (non-final calls mean
+     * some function data has not yet been initialized).
+     *
+     * 建议直接监听{@link #onDeviceFunctionPackage1Report}
+     * It is recommended to directly listen to {@link #onDeviceFunctionPackage1Report}
+     * {@link #onDeviceFunctionPackage2Report}
+     * {@link #onDeviceFunctionPackage3Report}
+     * {@link #onDeviceFunctionPackage4Report}
+     * {@link #onDeviceFunctionPackage5Report}分别监听对应的功能包数据上报
+     * to monitor the reporting of the corresponding function package data separately.
+     */
+    @Deprecated
+    void onFunctionSupportDataChange(FunctionDeviceSupportData functionSupport);
+
+    /**
+     * 设备功能第一包上报 (Device function Package 1 report)
+     * @param functionPackage1 第一包的设备功能详情。 (Details of the device functions in the first package.)
+     */
+    void onDeviceFunctionPackage1Report(DeviceFunctionPackage1 functionPackage1);
+
+    /**
+     * 设备功能第二包上报 (Device function Package 2 report)
+     * @param functionPackage2 第二包的设备功能详情。（如果设备支持第二包功能则会上报，否则不会有该方法的回调）
+     * Details of the device functions in the second package. (If the device supports the second package
+     * of functions, this will be reported; otherwise, this method will not be called back.)
+     */
+    void onDeviceFunctionPackage2Report(DeviceFunctionPackage2 functionPackage2);
+
+    /**
+     * 设备功能第三包上报 (Device function Package 3 report)
+     * @param functionPackage3 第三包的设备功能详情。（如果设备支持第三包功能则会上报，否则不会有该方法的回调）
+     * Details of the device functions in the third package. (If the device supports the third package
+     * of functions, this will be reported; otherwise, this method will not be called back.)
+     */
+    void onDeviceFunctionPackage3Report(DeviceFunctionPackage3 functionPackage3);
+
+    /**
+     * 设备功能第四包上报 (Device function Package 4 report)
+     * @param functionPackage4 第四包的设备功能详情。（如果设备支持第四包功能则会上报，否则不会有该方法的回调）
+     * Details of the device functions in the fourth package. (If the device supports the fourth package
+     * of functions, this will be reported; otherwise, this method will not be called back.)
+     */
+    void onDeviceFunctionPackage4Report(DeviceFunctionPackage4 functionPackage4);
+
+    /**
+     * 设备功能第五包上报 (Device function Package 5 report)
+     * @param functionPackage5 第五包的设备功能详情。（如果设备支持第五包功能则会上报，否则不会有该方法的回调）
+     * Details of the device functions in the fifth package. (If the device supports the fifth package
+     * of functions, this will be reported; otherwise, this method will not be called back.)
+     */
+    void onDeviceFunctionPackage5Report(DeviceFunctionPackage5 functionPackage5);
+}
 ```
 
 **FunctionDeviceSupportData** --Each device function status [supported or not]
@@ -317,6 +444,114 @@ fun onFunctionSupportDataChange(functionSupport:FunctionDeviceSupportData)
 | temptureType          | Int             | Temperature type                                         |
 | cpuType               | Int             | cpu type                                                 |
 | ecgType               | Int             | ecg type                                                 |
+
+
+
+
+
+**DeviceFunctionPackage1** -- The first package of devices has the following functional status [Supported/Unsupported].
+
+| Parameter name         | Type            | Describe                                                 |
+| ---------------------- | --------------- | -------------------------------------------------------- |
+| bloodPressure          | EFunctionStatus | Blood pressure function status                           |
+| drinking               | EFunctionStatus | Drinking function status                                 |
+| sedentaryRemind        | EFunctionStatus | Sedentary function status                                |
+| heartRateWarning       | EFunctionStatus | Heart rate warning function status                       |
+| WeChatSport            | EFunctionStatus | WeChat sports function status                            |
+| camera                 | EFunctionStatus | Photo function status                                    |
+| fatigue                | EFunctionStatus | Fatigue function status                                  |
+| spoH                   | EFunctionStatus | Blood oxygen function status                             |
+| spo2HAdjustment        | EFunctionStatus | Blood oxygen calibration function status                 |
+| spoHBreathBreak        | EFunctionStatus | Blood oxygen apnea reminder function status              |
+| woman                  | EFunctionStatus | Female function status                                   |
+| alarm                  | EFunctionStatus | New alarm function status                                |
+| newCalcSport           | EFunctionStatus | New function for step calculation                        |
+| ambulatoryBPAdjustment | EFunctionStatus | Dynamic blood pressure adjustment function status        |
+| screenLight            | EFunctionStatus | Screen brightness adjustment function status             |
+| heartRateDetect        | EFunctionStatus | Heart rate detection function status, enabled by default |
+| nightTurnSetting       | EFunctionStatus | Turn wrist to light up screen setting function status    |
+| textAlarm              | EFunctionStatus | Text alarm function status                               |
+| screenLight            | EFunctionStatus | Screen brightness adjustment function status             |
+
+**DeviceFunctionPackage2** -- Second package device functionality status  [Supported/Unsupported].
+
+| Parameter name        | Type            | Describe                                   |
+| --------------------- | --------------- | ------------------------------------------ |
+| countDown             | EFunctionStatus | Countdown function status                  |
+| sportModelFunction    | EFunctionStatus | Sport mode function status                 |
+| hidFunction           | EFunctionStatus | HID function status                        |
+| screenStyleFunction   | EFunctionStatus | Screen style function                      |
+| breathFunction        | EFunctionStatus | Respiration rate function                  |
+| hrvFunction           | EFunctionStatus | HRV function status                        |
+| weatherFunction       | EFunctionStatus | Weather function status                    |
+| screenLightTime       | EFunctionStatus | Screen on time function status             |
+| precisionSleep        | EFunctionStatus | Precision sleep function status            |
+| ecgFunction           | EFunctionStatus | ECG function status                        |
+| multSportMode         | EFunctionStatus | Multi-sport function status                |
+| lowPower              | EFunctionStatus | Low power function status                  |
+| sleepTag              | Int             | Sleep flag                                 |
+| watchDataDayNumber    | Int             | Maximum number of days the watch can save  |
+| contactMsgLength      | Int             | Contact message length                     |
+| allMsgLength          | Int             | Maximum number of message reminder packets |
+| sportModelDay         | Int             | Maximum number of days in sports mode      |
+| screenStyle           | Int             | Screen style selection                     |
+| weatherStyle          | Int             | Weather type                               |
+| originProtocolVersion | Int             | Protocol version of original data          |
+| ecgType               | Int             | ECG type                                   |
+
+**DeviceFunctionPackage3** -- Third-party device functionality status [Supported/Unsupported].
+
+| Parameter name                | Type            | Describe                                        |
+| ----------------------------- | --------------- | ----------------------------------------------- |
+| bigDataTranType               | Int             | Bulk data transmission type                     |
+| watchUiServerCount            | Int             | Number of watch face markets                    |
+| watchUiCustomCount            | Int             | Number of custom watch faces                    |
+| temperatureFunction           | EFunctionStatus | Temperature function status                     |
+| temperatureType               | Int             | Temperature type                                |
+| cpuType                       | Int             | CPU type                                        |
+| stressFunction                | EFunctionStatus | Stress Function status                          |
+| stressType                    | Int             | Stress tye                                      |
+| contactFunction               | EFunctionStatus | Contact function status                         |
+| contactType                   | Int             | Contact type                                    |
+| musicStyle                    | Int             | Music type                                      |
+| screenStyleFunction           | EFunctionStatus | Screen Style function status                    |
+| findDeviceByPhoneFunction     | EFunctionStatus | Find Device By Phone Function status            |
+| agpsFunction                  | EFunctionStatus | AGPS  function status                           |
+| bloodGlucoseTag               | Int             | Blood Glucose type                              |
+| bloodGlucose                  | Int             | Blood Glucose function status                   |
+| bloodGlucoseAdjusting         | EFunctionStatus | Blood glucose calibration function status       |
+| bloodGlucoseMultipleAdjusting | EFunctionStatus | Blood glucose multiple function function status |
+| bloodGlucoseRiskAssessment    | EFunctionStatus | Blood glucose Risk Assessment  function status  |
+
+**DeviceFunctionPackage4** -- Fourth package device functional status[Supported/Unsupported].
+
+| Parameter name                  | Type            | Describe                                           |
+| ------------------------------- | --------------- | -------------------------------------------------- |
+| bloodComponent                  | EFunctionStatus | Blood Component Function Status                    |
+| bloodComponentSingleCalibration | EFunctionStatus | Blood Component Single Calibration Function Status |
+| bodyComponent                   | EFunctionStatus | Body Component Function Status                     |
+| worldClock                      | EFunctionStatus | World Clock Function Status                        |
+| autoMeasure                     | EFunctionStatus | Auto Measure Function Status                       |
+| temperatureAlarm                | EFunctionStatus | Temperature Alarm Function Status                  |
+| wallet                          | EFunctionStatus | Wallet Function Status                             |
+| postcard                        | EFunctionStatus | Postcard  Function Status                          |
+| gameSetting                     | EFunctionStatus | Game Setting Function Status                       |
+| aiQA                            | EFunctionStatus | AI Q&A Function Status                             |
+| aiDial                          | EFunctionStatus | AI Watch Face Function Status                      |
+| distanceCalorieGoal             | EFunctionStatus | Distance&Calorie goal setting  Function Status     |
+| videoDial                       | EFunctionStatus | Video Dial Function Status                         |
+| photoAlbum                      | EFunctionStatus | Photo Album Function Status                        |
+| miniCheckup                     | EFunctionStatus | Mini Check-up Function Status                      |
+
+**DeviceFunctionPackage5** -- Fifth package device functional status[Supported/Unsupported].
+
+| Parameter name | Type            | Describe                        |
+| -------------- | --------------- | ------------------------------- |
+| textImagePush  | EFunctionStatus | Text$Image push function status |
+
+
+
+
 
 **ISocialMsgDataListener** --Message notification switch callback monitoring Details return to view【[Message Notification](#Message Notification)】
 
@@ -1705,7 +1940,7 @@ VPOperateManager.getInstance()
 
 
 
-#### 设置健康提醒
+#### Set health reminders
 
 ###### Interface
 
@@ -7712,7 +7947,7 @@ WeatherStatusData: Weather status data
 
 Weather setting code example:
 
-```
+```java
 //CRC
 int crc = 0;
 //城市名称
@@ -8260,6 +8495,99 @@ private void startOTA() {
             }
         });
     }
+```
+
+#### OTA Upgrades for Nordic Platform Devices
+
+During a Nordic OTA platform upgrade, an internal GATT connection may be established as part of the Nordic update process. If you encounter any anomalies during the OTA, you may try invoking the Nordic OTA upgrade only after the device connection has been disconnected.
+
+###### Premise
+
+The required device must be a Nordic device. The interface for this check is as follows：
+
+```java
+VpSpGetUtil.getVpSpVariInstance(mContext).isNewNordicDevice()
+```
+
+###### Interface
+
+```
+VPOperateManager.getInstance().startNordicOtaUpgrade(firmwareFilePath, listener)
+```
+
+###### Parameter Explanation
+
+| Parameter name   | Type                | Description                          |
+| ---------------- | ------------------- | ------------------------------------ |
+| firmwareFilePath | String              | Locally stored OTA upgrade file path |
+| listener         | OnMcuMgrOtaListener | Nordic Device OTA listener           |
+
+###### Return data
+
+OnMcuMgrOtaListener：Nordic OTA upgrade listener
+
+```java
+/**
+ * MCU Manager OTA 升级监听器
+ * Listener for MCU Manager OTA upgrade events
+ */
+public interface OnMcuMgrOtaListener {
+
+    /**
+     * 升级开始
+     * Upgrade started
+     * @param controller 固件升级控制器
+     *                   Firmware upgrade controller
+     */
+    void onUpgradeStarted(FirmwareUpgradeController controller);
+
+    /**
+     * 升级状态改变
+     * Upgrade state changed
+     * @param prevState 上一个状态
+     *                  Previous state
+     * @param newState  新状态
+     *                  New state
+     */
+    void onStateChanged(FirmwareUpgradeManager.State prevState, FirmwareUpgradeManager.State newState);
+
+    /**
+     * 升级完成
+     * Upgrade completed successfully
+     */
+    void onUpgradeCompleted();
+
+    /**
+     * 升级失败
+     * Upgrade failed
+     * @param state 失败时所处的状态
+     *              State when failure occurred
+     * @param error 升级异常
+     *              Upgrade exception
+     */
+    void onUpgradeFailed(FirmwareUpgradeManager.State state, McuMgrException error);
+
+    /**
+     * 升级已取消
+     * Upgrade canceled
+     * @param state 取消时所处的状态
+     *              State when canceled
+     */
+    void onUpgradeCanceled(FirmwareUpgradeManager.State state);
+
+    /**
+     * 上传进度改变
+     * Upload progress changed
+     * @param bytesSent 已发送的字节数
+     *                  Bytes sent
+     * @param imageSize 固件总大小
+     *                  Total firmware image size
+     * @param timestamp 时间戳
+     *                  Timestamp
+     */
+    void onUploadProgressChanged(int bytesSent, int imageSize, long timestamp);
+
+}
 ```
 
 
@@ -9079,68 +9407,131 @@ enum class DeviceManualDataType(val bitPosition: Int) {
 **IDeviceManualDetectDataListener** - Manual measurement data callback
 
 ```kotlin
-/**
- * Blood pressure manual measurement data callback
- *
- * @param bloodPressureManualDataList Returns all manual blood pressure measurement data
- */
-fun onBloodPressureDataChange(bloodPressureManualDataList: List<BloodPressureManualData>)
+    /**
+     * Blood pressure manual measurement data callback
+     *
+     * @param bloodPressureManualDataList Return all blood pressure manual measurement data
+     */
+    fun onBloodPressureDataChange(bloodPressureManualDataList: List<BloodPressureManualData>)
 
-/**
- * Heart rate manual measurement data callback
- *
- * @param heartRateManualDataList Returns all manual heart rate measurement data
- */
-fun onHeartRateDataChange(heartRateManualDataList: List<HeartRateManualData>)
+    /**
+     * Heart rate manual measurement data callback
+     *
+     * @param heartRateManualDataList Return all heart rate manual measurement data
+     */
+    fun onHeartRateDataChange(heartRateManualDataList: List<HeartRateManualData>)
 
-// Other callback methods follow the same pattern...
-fun onBloodGlucoseDataChange(bloodGlucoseManualDataList: List<BloodGlucoseManualData>)
-fun onPressureManualDataChange(pressureManualDataList: List<PressureManualData>)
-fun onBloodOxygenDataChange(bloodOxygenManualDataList: List<BloodOxygenManualData>)
-fun onBodyTemperatureDataChange(bodyTemperatureManualDataList: List<BodyTemperatureManualData>)
-fun onMetoManualDataChange(metoManualDataList: List<MetoManualData>)
-fun onHrvManualDataChange(hrvManualDataList: List<HrvManualData>)
-fun onBloodComponentManualDataChange(bloodComponentManualDataList: List<BloodComponentManualData>)
-fun onMiniCheckupManualDataChange(miniCheckupManualDataList: List<MiniCheckupManualData>)
-fun onEmotionManualDataChange(emotionManualDataList: List<EmotionManualData>)
-fun onFatigueManualDataChange(fatigueManualDataList: List<FatigueManualData>)
-fun onSkinConductanceManualDataChange(skinConductanceManualDataList: List<SkinConductanceManualData>)
+    /**
+     * Blood glucose manual measurement data callback
+     *
+     * @param bloodGlucoseManualDataList Return all blood glucose manual measurement data
+     */
+    fun onBloodGlucoseDataChange(bloodGlucoseManualDataList: List<BloodGlucoseManualData>)
 
-/**
- * Returns read progress
- *
- * @param progress Progress value [0-1]
- */
-fun onReadProgress(progress: Float)
+    /**
+     * Pressure manual measurement data callback
+     *
+     * @param pressureManualDataList Return all pressure manual measurement data
+     */
+    fun onPressureManualDataChange(pressureManualDataList: List<PressureManualData>)
 
-/**
- * Read complete
- */
-fun onReadComplete()
+    /**
+     * Blood oxygen manual measurement data callback
+     *
+     * @param bloodOxygenManualDataList Return all blood oxygen manual measurement data
+     */
+    fun onBloodOxygenDataChange(bloodOxygenManualDataList: List<BloodOxygenManualData>)
 
-/**
- * Read failed
- */
-fun onReadFail()
+    /**
+     * Body temperature manual measurement data callback
+     *
+     * @param bodyTemperatureManualDataList Return all body temperature manual measurement data
+     */
+    fun onBodyTemperatureDataChange(bodyTemperatureManualDataList: List<BodyTemperatureManualData>)
+
+    /**
+     * METO manual measurement data callback
+     *
+     * @param metoManualDataList Return all METO manual measurement data
+     */
+    fun onMetoManualDataChange(metoManualDataList: List<MetoManualData>)
+
+    /**
+     * HRV manual measurement data callback
+     *
+     * @param hrvManualDataList Return all HRV manual measurement data
+     */
+    fun onHrvManualDataChange(hrvManualDataList: List<HrvManualData>)
+
+    /**
+     * Blood component manual measurement data callback
+     *
+     * @param bloodComponentManualDataList Return all blood component manual measurement data
+     */
+    fun onBloodComponentManualDataChange(bloodComponentManualDataList: List<BloodComponentManualData>)
+
+    /**
+     * Mini checkup manual measurement data callback
+     *
+     * @param miniCheckupManualDataList Return all mini checkup manual measurement data
+     */
+    fun onMiniCheckupManualDataChange(miniCheckupManualDataList: List<MiniCheckupManualData>)
+
+    /**
+     * Emotion manual measurement data callback
+     *
+     * @param emotionManualDataList Return all emotion manual measurement data
+     */
+    fun onEmotionManualDataChange(emotionManualDataList: List<EmotionManualData>)
+
+    /**
+     * Fatigue manual measurement data callback
+     *
+     * @param fatigueManualDataList Return all fatigue manual measurement data
+     */
+    fun onFatigueManualDataChange(fatigueManualDataList: List<FatigueManualData>)
+
+    /**
+     * Skin conductance manual measurement data callback
+     *
+     * @param skinConductanceManualDataList Return all skin conductance manual measurement data
+     */
+    fun onSkinConductanceManualDataChange(skinConductanceManualDataList: List<SkinConductanceManualData>)
+
+    /**
+     * Return the read progress
+     *
+     * @param progress Progress value, range [0-1]
+     */
+    fun onReadProgress(progress: Float)
+
+    /**
+     * Read completed
+     */
+    fun onReadComplete()
+
+    /**
+     * Read failed
+     */
+    fun onReadFail()
 ```
 
-**BloodPressureManualData** - Manual blood pressure measurement data
+**BloodPressureManualData**--Manually Measured Blood Pressure Data
 
 ```java
 /**
- * Measurement timestamp of this data
+ * Measurement timestamp of this data record
  */
 private int timeStamp;
 
 /**
- * Protocol type: 0x00: Pneumatic BP (details in pneumatic BP data structure)<br>
- * 0x01: Regular BP<br>
- * Note: When version == 1, only systolic and diastolic values are valid
+ * Corresponding protocol type, 0x00: Bladder blood pressure (see bladder blood pressure single data structure for details)<br>0x01: Normal blood pressure
+ * Note: When version == 1, only systolic (high blood pressure), diastolic (low blood pressure) are valid, other values are meaningless
  */
 private int version;
 
 /**
- * Measurement mode: 0: Optical, 1: Pneumatic
+ * Measurement mode, 0: Photoelectric, 1: Bladder
  */
 private int measurementMode;
 
@@ -9150,43 +9541,441 @@ private int measurementMode;
 private int heartRate;
 
 /**
- * Systolic pressure (high BP)
+ * Systolic blood pressure (high blood pressure)
  */
 private int systolic;
 
 /**
- * Diastolic pressure (low BP)
+ * Diastolic blood pressure (low blood pressure)
  */
 private int diastolic;
 
-// Other fields follow the same translation pattern...
+/**
+ * Test status
+ */
 private int testStatus;
+
+/**
+ * Result credibility
+ */
 private int resultCredibility;
-private int height;   // cm
-private int weight;   // kg
+
+/**
+ * Height (cm)
+ */
+private int height;
+
+/**
+ * Weight (kg)
+ */
+private int weight;
+
+/**
+ * Age
+ */
 private int age;
+
+/**
+ * Gender: true for male
+ */
 private boolean isMale;
-private int testTime;        // Maximum 60 seconds
+
+/**
+ * Actual measurement duration, max 60 seconds
+ */
+private int testTime;
+
+/**
+ * Measurement failure timeout count: Return test failure if minimum pressure is not reached after this count
+ */
 private int testFailTimeoutCount;
+
+/**
+ * Pump model
+ */
 private int pumpModel;
+
+/**
+ * AFE model
+ */
 private int afeModel;
+
+/**
+ * Acceleration model
+ */
 private int accelerationModel;
+
+/**
+ * MCU model
+ */
 private int mcuModel;
+
+/**
+ * Algorithm version
+ */
 private String algorithmVersion;
+
+/**
+ * Software version
+ */
 private String softwareVersion;
+
+/**
+ * Attitude
+ */
 private int[] attitudeArray;
+
+/**
+ * Exercise amount
+ */
 private int[] sportArray;
+
+/**
+ * Pressure ADC
+ */
 private int[] pressureAdcArray;
+
+/**
+ * PPG data ADC
+ */
 private int[] ppgAdcArray;
+
+/**
+ * Acceleration X-axis ADC
+ */
 private int[] accelerationXArray;
+
+/**
+ * Acceleration Y-axis ADC
+ */
 private int[] accelerationYArray;
+
+/**
+ * Acceleration Z-axis ADC
+ */
 private int[] accelerationZArray;
 ```
 
-**Others** - Other data types not currently supported. Response data structures not shown.
+**HeartRateManualData**--Manual Heart Rate Measurement Data
+
+```java
+/**
+ * Measurement timestamp of this data record
+ */
+private int timeStamp;
+
+/**
+ * Corresponding protocol type. Different protocol types have different data structures.
+ */
+private int version;
+
+/**
+ * Pulse rate
+ */
+private int[] rate;
+```
+
+**HrvManualData**--Manually Measured HRV Data
+
+```java
+/**
+ * Measurement timestamp of this record
+ */
+private int timeStamp;
+
+/**
+ * Protocol type. Different protocol types correspond to different data structures.
+ */
+private int version;
+
+/**
+ * HRV values
+ */
+private int[] hrv;
+```
+
+**BloodComponentManualData**--Manual Measurement Data of Blood Components
+
+```java
+/**
+ * Measurement timestamp of this data record
+ */
+private int timeStamp;
+
+/**
+ * Corresponding protocol type. Different protocol types contain different data structures.
+ */
+private int version;
+
+/**
+ * Uric acid value, keep 1 decimal place, unit: μmol/L, 1mg/dL = 59.5μmol/L
+ */
+private float uricAcid = 0f;
+
+/**
+ * Total cholesterol, keep 2 decimal places, unit: mmol/L
+ */
+private float tCHO = 0f;
+
+/**
+ * Triglyceride, keep 2 decimal places, unit: mmol/L
+ */
+private float tAG = 0f;
+
+/**
+ * High-density lipoprotein, keep 2 decimal places, unit: mmol/L
+ */
+private float hDL = 0f;
+
+/**
+ * Low-density lipoprotein, keep 2 decimal places, unit: mmol/L
+ */
+private float lDL = 0f;
+```
+
+**BloodGlucoseManualData**--Manually Measured Blood Glucose Data
+
+```java
+/**
+ * Measurement timestamp of this data record
+ */
+private int timeStamp;
+
+/**
+ * 0x00: No blood glucose risk level<br>0x01: With blood glucose risk level
+ */
+private int version;
+
+/**
+ * Blood glucose value
+ */
+private float bloodGlucoseValue;
+
+/**
+ * Blood glucose risk level
+ */
+private EBloodGlucoseRiskLevel risk;
+```
+
+**BloodOxygenManualData**--Manual Blood Oxygen Measurement Data
+
+```java
+/**
+ * Measurement timestamp of this data record
+ */
+private int timeStamp;
+
+/**
+ * 0x00: No blood glucose risk level<br>0x01: With blood glucose risk level
+ */
+private int version;
+
+/**
+ * Blood oxygen array
+ */
+private int[] oxygen;
+```
+
+**BodyTemperatureManualData**--Manually Measured Body Temperature Data
+
+```java
+/**
+ * Measurement timestamp of this data record
+ */
+private int timeStamp;
+
+/**
+ * 0x00: Corresponding protocol type. Different protocol types have different data structures (default is 0x00 for later expansion)
+ */
+private int version;
+
+/**
+ * Skin temperature
+ */
+private float baseTemperature;
+
+/**
+ * Body temperature
+ */
+private float temperature;
+```
+
+**EmotionManualData**--Manually Measured Emotional Data
+
+```java
+/**
+ * Measurement timestamp of this data record
+ */
+private int timeStamp;
+
+/**
+ * Corresponding protocol type. Different protocol types contain different data structures.
+ */
+private int version;
+
+/**
+ * Emotion, value range: [-10 ~ 10]
+ */
+private int emotion;
+
+```
+
+**FatigueManualData**--Manually Measured Fatigue Data
+
+```java
+/**
+ * Measurement timestamp of this data record
+ */
+private int timeStamp;
+
+/**
+ * Corresponding protocol type. Different protocol types contain different data structures.
+ */
+private int version;
+
+/**
+ * Fatigue value (valid range: [0 - 99])
+ */
+private int fatigue;
+```
+
+**MiniCheckupManualData**--Micro-Checkup Manual Measurement Data
+
+```java
+/**
+ * Measurement timestamp of this data record
+ */
+private int timeStamp;
+
+/**
+ * Corresponding protocol type. Different protocol types contain different data structures.
+ */
+private int version;
+
+/**
+ * Heart rate
+ */
+private int heart;
+
+/**
+ * Blood oxygen
+ */
+private int oxygen;
+
+/**
+ * Pressure
+ */
+private int pressure;
+
+/**
+ * Emotion (-10, 10)
+ */
+private int emotion;
+
+/**
+ * Fatigue
+ */
+private int fatigue;
+
+/**
+ * Blood glucose
+ */
+private float bloodGlucose;
+
+/**
+ * Blood glucose risk
+ */
+private int bloodGlucoseRisk;
+
+/**
+ * Body temperature
+ */
+private float temperature;
+
+/**
+ * Skin temperature
+ */
+private float baseTemperature;
+
+/**
+ * High blood pressure, range [60-300]
+ */
+private int highValue;
+
+/**
+ * Low blood pressure, range [20-200]
+ */
+private int lowValue;
+```
+
+**PressureManualData**--Manually Measured Pressure Data
+
+```java
+/**
+ * Measurement timestamp of this data record
+ */
+private int timeStamp;
+
+/**
+ * Corresponding protocol type. Different protocol types contain different data structures.
+ */
+private int version;
+
+/**
+ * Pressure value (valid range: [0 - 100])
+ */
+private int pressure;
+```
+
+**SkinConductanceManualData**--Manual Electrodermal Measurement Data
+
+```java
+/**
+ * Measurement timestamp of this data record
+ */
+private int timeStamp;
+
+/**
+ * Corresponding protocol type. Different protocol types contain different data structures.
+ */
+private int version;
+
+/**
+ * Emotion level [-10,10]
+ */
+private int emotionLevel;
+
+/**
+ * Skin moisture [1,99]
+ */
+private int skinMoisture;
+
+/**
+ * Depression risk [0,2], 0: Low, 1: Medium, 2: High
+ */
+private int depressionRisk;
+
+/**
+ * Sympathetic nerve activity [1,99]
+ */
+private int snsActivation;
+
+/**
+ * Cortisol concentration, valid range [0,500] ug/L, normal range [0,230] ug/L.
+ * Common units: ug/dL or nmol/L.
+ * 10 ug/L = 1 ug/dL, 1 nmol/L = 0.36247 ug/L, 1 nmol/L = 0.036247 ug/dL
+ */
+private int cortisolValue;
+```
 
 ```
 VPOperateManager.getInstance().readDeviceManualData(bleWriteResponse, timeStampSecond, dataTypeList, dataListener)
+```
+
+#### Manual measurement types supported by the current device
+
+```java
+VPOperateManager.getInstance().supportManualDetectTypes
 ```
 
 
@@ -9601,4 +10390,1583 @@ VPOperateManager.getInstance().pushImageMsg(pushImagePath, new IImageMsgPushList
         tvPushInfo.setText("图片推送错误：" + errorCode.info);
     }
 });
+```
+
+
+
+## Customized Project JH58 PPG Test Function
+
+Prerequisites：This functionality is currently only available for the customized JH58 project; other projects can ignore it.
+
+###  Add PPG Test Switch Listener
+
+###### Interface
+
+```java
+    /**
+     * <ul>
+     *     <li style="color:#1055d2">Add ppg test swtich status change listener</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">添加PPG测量开关状态监听</li>
+     * </ul>
+     *
+     * @param listener
+     * <ul>
+     *    <li>PPG switch status operation monitoring</li>
+     *    <li>PPG开关状态操作监听</li>
+     * </ul>
+     */
+    public void addPPGTestSwitchStatusListener(IPPGSwitchOperaterListener listener)
+```
+
+###### Parameter Explanation
+
+| Parameter Name | Type                       | Description                |
+| -------------- | -------------------------- | -------------------------- |
+| listener       | IPPGSwitchOperaterListener | PPG switch status listener |
+
+**IPPGSwitchOperaterListener**--PPG switch status monitoring
+
+```kotlin
+/**
+ * PPG开关操作监听类 (PPG Switch Operation Listener Class)
+ */
+interface IPPGSwitchOperaterListener : IListener {
+    /**
+     * ppg开关状态读取结果 (Result of reading the PPG switch status)
+     */
+    fun onPPGSwitchStatusRead(switchStatus: PPGSwitchStatus)
+
+    /**
+     * ppg开关状态设置结果 (Result of setting the PPG switch status)
+     */
+    fun onPPGSwitchStatusSetting(switchStatus: PPGSwitchStatus)
+
+    /**
+     * ppg开关状态上报结果 (Result of reporting the PPG switch status)
+     * // Note: 'Reporting' usually means the device actively sends the status to the application.
+     */
+    fun onPPGSwitchStatusReport(switchStatus: PPGSwitchStatus)
+}
+```
+
+### Read PPG measurement status switch
+
+The settings will be called back in the addPPGTestSwitchStatusListener(IPPGSwitchOperatorListener listener) listener.
+
+###### Interface
+
+```java
+ /***
+     * <ul>
+     *     <li style="color:#1055d2">read ppg test swtich status</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">读取PPG测量开关状态</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if response code equals Code.REQUEST_SUCCESS means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     */
+    public void readPPGSwitchStatus(BleWriteResponse bleWriteResponse)
+```
+
+###### Example Code
+
+```java
+VPOperateManager.getInstance().readPPGSwitchStatus(code -> tvPPGOptInfo.setText("读取PPG测量开关状态指令发送" + (code == Code.REQUEST_SUCCESS ? "成功" : "失败")));
+```
+
+### Set PPG measurement status switch
+
+The settings will be called back in the addPPGTestSwitchStatusListener(IPPGSwitchOperatorListener listener) listener.
+
+###### Interface
+
+```java
+/***
+     * <ul>
+     *     <li style="color:#1055d2">set ppg test switch status</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">设置PPG测量开关状态</li>
+     * </ul>
+     * @param ppgSwitchStatus
+     * <ul>
+     *    <li>Set the PPG measurement switch status</li>
+     *    <li>设置的PPG测量开关状态</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if response code equals Code.REQUEST_SUCCESS means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     */
+public void setPPGSwitchStatus(PPGSwitchStatus ppgSwitchStatus, BleWriteResponse bleWriteResponse)
+```
+
+###### Example Code
+
+```java
+VPOperateManager.getInstance().setPPGSwitchStatus(ppgSwitchStatus, code -> tvPPGOptInfo.setText("设置PPG测量开关状态指令发送" + (code == Code.REQUEST_SUCCESS ? "成功" : "失败")));
+```
+
+
+
+### Read PPG raw data
+
+###### Interface
+
+```java
+    /***
+     * <ul>
+     *     <li style="color:#1055d2">read ppg test raw data</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">读取PPG测量原始数据</li>
+     * </ul>
+     * @param startTime
+     * <ul>
+     *    <li>Start time for reading PPG raw data</li>
+     *    <li>读取PPG原始数据的开始时间</li>
+     * </ul>
+     * @param testMode
+     * <ul>
+     *    <li>Read PPG raw data in this mode</li>
+     *    <li>读取该模式下的PPG原始数据</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if response code equals Code.REQUEST_SUCCESS means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     * @param listener
+     * <ul>
+     *    <li>Monitor PPG raw data reading and reporting</li>
+     *    <li>PPG原始数据读取上报的监听</li>
+     * </ul>
+     */
+    public void readPPGRawData(TimeData startTime, PPGTestMode testMode, BleWriteResponse bleWriteResponse, IPPGRawDataReadListener listener) 
+```
+
+###### Parameter Explanation
+
+| Parameter Name   | Type                    | Description                                                  |
+| ---------------- | ----------------------- | ------------------------------------------------------------ |
+| startTime        | TimeData                | The device will report data from that time onwards based on the time it reads the raw PPG data. |
+| testMode         | PPGTestMode             | Start time for reading PPG raw data,The device will report data from this timestamp onwards. |
+| bleWriteResponse | BleWriteResponse        | Listener for write operations                                |
+| listener         | IPPGRawDataReadListener | Listening for PPG raw data reading and reporting             |
+
+PPGTestMode
+
+```kotlin
+enum class PPGTestMode(val value: Byte, val des: String) {
+    MODE1(0x01, "每15分钟采集10秒时长，绿光+加速度原始数据"),
+    MODE2(0x02, "每5分钟采集1分钟时长，绿光+加速度原始数据"), ;
+
+    companion object {
+        fun toTestMode(@IntRange(from = 1, to = 2) value: Int): PPGTestMode {
+            return PPGTestMode.values().findLast {
+                it.value.toInt() == value
+            }!!
+        }
+    }
+}
+```
+
+**TimeData**
+
+```java
+public class TimeData {
+
+    public int year;
+    public int day;
+    public int month;
+    public int hour;
+    public int minute;
+    public int second;
+    /* 星期几 **/
+    public int weekDay;
+......
+}
+```
+
+**IPPGRawDataReadListener** -- Listening for PPG raw data reading and reporting
+
+```kotlin
+/**
+ * PPG原始数据的读取监听 (PPG Raw Data Read Listener)
+ */
+interface IPPGRawDataReadListener : IListener {
+    /**
+     * 开始读取PPG数据 (Start reading PPG data)
+     * @param count ppg数据的总组数 (Total number of PPG data groups/sets)
+     */
+    fun onPPGReadStart(count: Int)
+
+    /**
+     * 一组PPG原始数据读取监听 (Listener for reading one set/group of PPG raw data)
+     * @param index 第几组 (Which group/set number)
+     * @param count 总组数 (Total number of groups/sets)
+     * @param ppgRawData 该组的PPG原始数据 (The PPG raw data for this group/set)
+     */
+    fun onPPGRawDataRead(index: Int, count: Int, ppgRawData: PPGRawData)
+
+    /**
+     * 所有PPG原始数据均已读取完成 (All PPG raw data has been read completely)
+     * @param ppgReadData ppg原始数据 (The collected PPG raw data)
+     */
+    fun onPPGRawDataReadComplete(ppgReadData: PPGReadData)
+
+    /**
+     * PPG原始数据读取终止 (PPG raw data reading terminated/stopped)
+     */
+    fun onPPGRawDataReadStop()
+}
+```
+
+###### Example Code
+
+```java
+private void readPPGRawData() {
+    sb.setLength(0);
+    appendMsg("【读取】PPG原始数据");
+    VPOperateManager.getInstance().readPPGRawData(timeData, ppgTestMode, new BleWriteResponse() {
+        @Override
+        public void onResponse(int code) {
+            appendMsg("【读取PPG测量开关状态指令发送" + (code == Code.REQUEST_SUCCESS ? "成功】" : "失败】"));
+        }
+    }, new IPPGRawDataReadListener() {
+        @Override
+        public void onPPGReadStart(int count) {
+            appendMsg("开始读取PPG原始数据。\n一共" + count + "组数据");
+        }
+
+        @Override
+        public void onPPGRawDataRead(int index, int count, @NonNull PPGRawData ppgRawData) {
+            appendMsg("PPG原始数据读取中。\n[" + index + "/" + count + "] --> " + ppgRawData.toString());
+        }
+
+        @Override
+        public void onPPGRawDataReadComplete(@NonNull PPGReadData ppgReadData) {
+            appendMsg("PPG原始数据读取完成。\n" + ppgReadData);
+        }
+
+        @Override
+        public void onPPGRawDataReadStop() {
+            String content = tvPPGOptInfo.getText().toString();
+            appendMsg(content + "\nPPG原始数据读取停止。");
+        }
+    });
+}
+```
+
+
+
+### PPG raw signal real-time transmission
+
+#### Add PPG raw signal monitoring
+
+###### Interface
+
+```java
+/**
+     * 设置PPG高频实时传输监听
+     * Configure PPG high-frequency real-time transmission monitoring
+     * @param listener
+     */
+public void addDevicePPGRealTimeTransferListener(IPPGRealTimeTransmissionListener listener)
+```
+
+###### IPPGRealTimeTransmissionListener
+
+```kotlin
+interface IPPGRealTimeTransmissionListener {
+
+
+    /**
+     * （手环请求）高频实时传输请求 (High-frequency real-time transfer request (from device/band))
+     * @param isRequestOpen 是否请求开启高频传输 (Whether the request is to enable high-frequency transmission)
+     */
+    fun onDeviceRequestPPGRealTimeTransfer(isRequestOpen: Boolean)
+
+    /**
+     * （App请求）高频实时传输请求 (High-frequency real-time transfer request (from App))
+     * @param isSuccess 是否成功 (Whether the request was successful)
+     */
+    fun onAppRequestPPGRealTimeTransfer(isSuccess: Boolean)
+
+
+    /**
+     * 绿光原始数据上报 (Green light raw data reporting)
+     * // Note: 'Reporting' typically means data actively sent from the device to the application.
+     */
+    fun onGreenLightDataReport(greenLightDataList: MutableList<Int>)
+
+    /**
+     * 加速度数据上报 (Acceleration data reporting)
+     * // Note: 'Reporting' typically means data actively sent from the device to the application.
+     */
+    fun onAccelerationDataReport(accDataList: MutableList<AccelerationData>)
+
+}
+```
+
+###### AccelerationData
+
+```kotlin
+/**
+ * 加速度数据 (Acceleration Data)
+ * @param x X轴加速度 (X-axis acceleration)
+ * @param y Y轴加速 (Y-axis acceleration)
+ * @param z Z轴加速 (Z-axis acceleration)
+ */
+data class AccelerationData(val x: Int, val y: Int, val z: Int)
+```
+
+#### The app actively enabled PPG real-time transmission.
+
+###### Interface
+
+```java
+/**
+ * app请求开始PPG实时传输 (App requests to start PPG real-time transmission)
+ *
+ * @param bleWriteResponse   指令写入结果回调 (Callback for the command write result)
+ * @param transmissionListener  PPG实时传输监听 (PPG real-time transmission listener)
+ */
+public void startPPGRealTimeTransmission(BleWriteResponse bleWriteResponse, IPPGRealTimeTransmissionListener transmissionListener)
+```
+
+#### The app actively stopped PPG real-time transmission.
+
+###### Interface
+
+```java
+/**
+ * app请求停止PPG实时传输 (App requests to stop PPG real-time transmission)
+ *
+ * @param bleWriteResponse 指令写入结果回调 (Callback for the command write result)
+ */
+public void stopPPGRealTimeTransmission(BleWriteResponse bleWriteResponse)
+```
+
+
+
+## Mini-Checkup Function
+
+Prerequisite: Device must support mini-checkup function. Judgment condition:
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportMiniCheckup()
+```
+
+Note: All the following interfaces can only be called if the device supports the mini-checkup function.
+
+### Start Mini-Checkup test
+
+###### Prerequisites
+
+Device must support  Mini-Checkup test.
+
+###### Interface
+
+```java
+/**
+     * <ul>
+     *     <li style="color:#1055d2">start mini-checkup test</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">开始微体检测量</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if response code equals Code.REQUEST_SUCCESS means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     * @param listener
+     * <ul>
+     *    <li>The listener of mini-checkup</li>
+     *    <li>微体检测量监听</li>
+     * </ul>
+     */
+public void startMiniCheckup(BleWriteResponse bleWriteResponse, IMiniCheckupOptListener listener)
+```
+
+###### Parameter Explanation
+
+| Parameter Name   | Type                    | Description                    |
+| ---------------- | ----------------------- | ------------------------------ |
+| bleWriteResponse | BleWriteResponse        | Listener for write operations  |
+| listener         | IMiniCheckupOptListener | Listener for mini-checkup test |
+
+**IMiniCheckupOptListener** -- 微体检测量回调
+
+```kotlin
+/**
+ * 微体检相关操作监听 (Listener for Mini Checkup Operations)
+ * 用于监听微体检测量过程中的进度、成功、失败及停止等事件。
+ */
+interface IMiniCheckupOptListener {
+
+    /**
+     * 微体检测量的进度 (Mini Checkup measurement progress)
+     * 在测量过程中周期性回调，报告当前进度。
+     * @param progress 测量进度 (Measurement progress)，范围为 1-100。
+     */
+    fun onMiniCheckupTestProgress(progress: Int)
+
+    /**
+     * app请求停止微体检测量成功 (App request to stop Mini Checkup measurement successful)
+     * 当应用发起停止操作并被成功执行后回调。
+     */
+    fun onMiniCheckupStopSuccess()
+
+    /**
+     * 微体检测量失败 (Mini Checkup measurement failed)
+     * 当测量因故中断或未能获取有效结果时回调。
+     * @param errorCode 错误码 (Error code)，详见 EMiniCheckupTestErrorCode。
+     */
+    fun onMiniCheckupTestFailed(errorCode: EMiniCheckupTestErrorCode)
+
+    /**
+     * 微体检测量成功 (Mini Checkup measurement successful)
+     * 当测量流程成功完成并获取到有效结果时回调。
+     * @param testResultData 测量结果 (Measurement result)，包含所有生理指标数据。
+     */
+    fun onMiniCheckupSuccess(testResultData: MiniCheckupResultData)
+}
+```
+
+**EMiniCheckupTestErrorCode** -- The error code of mini-checkup
+
+```kotlin
+/**
+ * 微体检测量错误码(Mini Checkup Measurement Error Codes)
+ */
+enum class EMiniCheckupTestErrorCode {
+
+    /**
+     * 暂不支持该功能
+     * Function not support
+     */
+    FUNCTION_NOT_SUPPORT,
+
+    /**
+     * 测量结束但没有结果
+     * Measurement completed, but no result data obtained
+     */
+    TEST_COMPLETE_NO_RESULT,
+
+    /**
+     * 设备正在测量其他数据
+     * The device is currently measuring other data
+     */
+    DEVICE_BUSY,
+
+    /**
+     * 设备端低电
+     * Low power on the device side
+     */
+    LOW_POWER
+}
+```
+
+**MiniCheckupResultData** -- The result of mini-checkup test
+
+```java
+public class MiniCheckupResultData {
+
+    /**
+     * 心率 (Heart Rate)
+     * 单位：次/分钟 (bpm)
+     */
+    private int heartRate;
+
+    /**
+     * 血氧饱和度 (Blood Oxygen Saturation)
+     * 单位：%
+     */
+    private int bloodOxygen;
+
+    /**
+     * 压力指数 (Stress Index)
+     */
+    private int stress;
+
+    /**
+     * 情绪指数 (Emotional Index / Mood)
+     * 值域：-10 到 10，-10 表示极度低落/负面，10 表示极度高昂/正面。
+     * 改功能暂未启用未赋值，请忽视（This feature is not yet enabled and has not been assigned a value; please ignore it.）
+     */
+    @Deprecated
+    private int emotion;
+
+    /**
+     * 疲劳度指数 (Fatigue Index)
+     * 改功能暂未启用未赋值，请忽视（This feature is not yet enabled and has not been assigned a value; please ignore it.）
+     */
+    @Deprecated
+    private int fatigue;
+
+    /**
+     * 血糖 (Blood Glucose)
+     * 单位：mmol/L 
+     */
+    private float bloodGlucose;
+
+    /**
+     * 体温 (Body Temperature)
+     * 单位：摄氏度 (°C)
+     */
+    private float bodyTemperature;
+
+    /**
+     * 血压 - 收缩压 (Blood Pressure - Systolic)
+     * 即高压，单位：毫米汞柱 (mmHg)
+     */
+    private int systolicBloodPressure;
+
+    /**
+     * 血压 - 舒张压 (Blood Pressure - Diastolic)
+     * 即低压，单位：毫米汞柱 (mmHg)
+     */
+    private int diastolicBloodPressure;
+
+    /**
+     * 心率变异性 (Heart Rate Variability, HRV)
+     * 用于评估自主神经系统活动的指标，单位/表示方式根据具体测量算法而定。
+     */
+    private int hrv;
+}
+```
+
+MiniCheckupDetailData**--微体检测量结果-v2
+
+```java
+/**
+ * 微体检详情数据对象 (Mini Checkup Detail Data Object)
+ * 包含用户在微体检中获取的各项生理和心理健康指标
+ */
+public class MiniCheckupDetailData {
+
+    /**
+     * 基本的个人信息
+     */
+    private MiniCheckupBasePersonalInfo basePersonalInfo;
+
+    /**
+     * 心率 (Heart Rate)
+     * 单位：次/分钟 (bpm)
+     */
+    private int heartRate;
+
+    /**
+     * 血氧饱和度 (Blood Oxygen Saturation)
+     * 单位：%
+     */
+    private int bloodOxygen;
+
+    /**
+     * 压力指数 (Stress Index)
+     */
+    private int stress;
+
+    /**
+     * 情绪指数 (Emotional Index / Mood)
+     * 值域：-10 到 10，-10 表示极度低落/负面，10 表示极度高昂/正面。
+     * 改功能暂未启用未赋值，请忽视（This feature is not yet enabled and has not been assigned a value; please ignore it.）
+     */
+    @Deprecated
+    private int emotion;
+
+    /**
+     * 疲劳度指数 (Fatigue Index)
+     * 改功能暂未启用未赋值，请忽视（This feature is not yet enabled and has not been assigned a value; please ignore it.）
+     */
+    @Deprecated
+    private int fatigue;
+
+    /**
+     * 血糖类型：1表示显示值，2表示显示等级
+     * Blood glucose type: 1:show blood glucose value,2:show blood glucose risk level
+     */
+    private int bloodGlucoseType;
+
+    /**
+     * 血糖 (Blood Glucose)
+     * 单位：mmol/L 或 mg/dL (具体单位根据实际使用场景确定)
+     */
+    private float bloodGlucose;
+
+    /**
+     * 体温 (Body Temperature)
+     * 单位：摄氏度 (°C)
+     */
+    private float bodyTemperature = -273.15f;
+
+    /**
+     * 原始温度 (Original Temperature)
+     * 单位：摄氏度 (°C)
+     */
+    private float originalTemperature = -273.15f;
+
+    /**
+     * 气泵血压
+     * Air Pump Blood Pressure
+     */
+    private MiniCheckupBPAirPump bpAirPump;
+
+    /**
+     * 光电血压
+     * Photoelectric Blood Pressure
+     */
+    private MiniCheckupBPPhotoelectric bpPhotoelectric;
+
+    /**
+     * 心率变异性 (Heart Rate Variability, HRV) 1-210
+     * 用于评估自主神经系统活动的指标，单位/表示方式根据具体测量算法而定。
+     */
+    private int hrv;
+
+    /**
+     * 血液成分
+     * Blood Component
+     */
+    private MiniCheckupBloodComponent bloodComponent;
+
+    /**
+     * 身体成分
+     * Body Component
+     */
+    private MiniCheckupBodyComponent bodyComponent;
+
+    /**
+     * 皮电
+     * Skin Electricity
+     */
+    private MiniCheckupSkinElectricity skinElectricity;
+
+}
+
+public class MiniCheckupBasePersonalInfo {
+    /**
+     * 性别
+     * 性别 0代表 female， 1代表male
+     */
+    private int gender;
+
+    /**
+     * 年龄
+     */
+    private int age;
+
+    /**
+     * 身高， 单位cm
+     */
+    private int height;
+
+    /**
+     * 体重， 单位kg
+     */
+    private int weight;
+ }
+ 
+ /**
+ * 微体检-气泵血压
+ */
+public class MiniCheckupBPAirPump {
+    /**
+     * 血压 - 收缩压 (Blood Pressure - Systolic)
+     * 即高压，单位：毫米汞柱 (mmHg)
+     */
+    private int systolicBloodPressure;
+
+    /**
+     * 血压 - 舒张压 (Blood Pressure - Diastolic)
+     * 即低压，单位：毫米汞柱 (mmHg)
+     */
+    private int diastolicBloodPressure;
+}
+
+MiniCheckupBPPhotoelectric属性与MiniCheckupBPAirPump一致
+
+/**
+ * 微体检-血液成分
+ */
+public class MiniCheckupBloodComponent {
+    /**
+     * 尿酸
+     */
+    private float uricAcid;
+    /**
+     * 总胆固醇
+     */
+    private float tCHO;
+    /**
+     * 甘油三酸酯
+     */
+    private float tAG;
+    /**
+     * 高密度脂蛋白
+     */
+    private float hDL;
+    /**
+     * 低密度脂蛋白
+     */
+    private float lDL;
+    
+}
+public class MiniCheckupBodyComponent {
+    /**
+     * 性别
+     * 性别 0代表 female， 1代表male
+     */
+    private int gender;
+
+    /**
+     * 年龄
+     */
+    private int age;
+
+    /**
+     * 身高， 单位cm
+     */
+    private int height;
+
+    /**
+     * 体重， 单位kg
+     */
+    private int weight;
+
+    /**
+     * 有效范围【4.0，1114.0】，小端，保留一位小数，上报的值是10倍，下同
+     */
+    private float BMI;
+
+    /**
+     * 体脂率     | 2    | 有效范围【2.0，48.0】
+     */
+    private float bodyFatRate;
+
+    /**
+     * 脂肪量     | 2    | 有效范围【10.0，248.0】
+     */
+    private float fatRate;
+
+    /**
+     * 去脂体重   | 2    | 有效范围【1.0，132.0】
+     */
+    private float FFM;
+
+    /**
+     * 肌肉率     | 2    | 有效范围【39.0，90.0】
+     */
+    private float muscleRate;
+
+    /**
+     * 肌肉量     | 2    | 有效范围【9.0，248.0】
+     */
+    private float muscleMass;
+
+    /**
+     * 皮下脂肪   | 2    | 有效范围【1.0，47.0】
+     */
+    private float subcutaneousFat;
+
+    /**
+     * 体内水分   | 2    | 有效范围【28.0，79.0】
+     */
+    private float bodyWater;
+
+    /**
+     * 含水量     | 2    | 有效范围【7.0，217.0】
+     */
+    private float waterContent;
+
+    /**
+     * 骨骼肌率   | 2    | 有效范围【13.0，69.0】
+     */
+    private float skeletalMuscleRate;
+
+    /**
+     * 骨量       | 2    | 有效范围【2.3，4.8】
+     */
+    private float boneMass;
+
+    /**
+     * 蛋白质占比 | 2    | 有效范围【4.0，26.0】
+     */
+    private float proteinProportion;
+
+    /**
+     * 蛋白质量   | 2    | 有效范围【1.0，71.0】
+     */
+    private float proteinMass;
+
+    /**
+     * 基础代谢率 | 2    | 有效范围【25，14995】
+     */
+    private float basalMetabolicRate;
+}
+
+/**
+ * 微体检-皮电
+ */
+public class MiniCheckupSkinElectricity {
+    /**
+     * 情绪 [-10,10]
+     */
+    private int emotion;
+    /**
+     * 皮肤含水量 [1,99]
+     */
+    private int skinMoistureContent;
+    /**
+     * 抑郁症风险 [0,2],0:低风险，1:中风险，2:高风险
+     */
+    private int depressionRisk;
+    /**
+     * 交感神经活跃度 [1,99]
+     */
+    private int sympatheticActivity;
+    /**
+     * 皮质醇浓度,有效范围[0，500]ug/L,正常范围[0，230]ug/L
+     * 通用单位ug/dL或nmol/L，10ug/L = 1ug/dL，
+     * 1nmol/L = 0.36247ug/L， 1nmol/L = 0.036247 ug/dL
+     */
+    private int cortisolConcentration;
+}
+
+
+```
+
+###### Example Code
+
+```java
+VPOperateManager.getInstance().startMiniCheckup(code -> {
+    if (code == Code.REQUEST_SUCCESS) {
+        appendMsg("【开始】微体检指令写入成功！");
+    } else {
+        appendMsg("【开始】微体检指令写入失败！");
+    }
+}, miniCheckupOptListener);
+```
+
+### Stop Mini-Checkup test
+
+###### Prerequisites
+
+Device must support  Mini-Checkup test.
+
+###### Interface
+
+```java
+/**
+     * <ul>
+     *     <li style="color:#1055d2">stop mini-checkup test</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">停止微体检测量</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if response code equals Code.REQUEST_SUCCESS means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     * @param listener
+     * <ul>
+     *    <li>The listener of mini-checkup</li>
+     *    <li>微体检测量监听</li>
+     * </ul>
+     */
+public void stoptMiniCheckup(BleWriteResponse bleWriteResponse, IMiniCheckupOptListener listener)
+```
+
+###### Parameter Explanation
+
+| Parameter Name   | Type                    | Description                    |
+| ---------------- | ----------------------- | ------------------------------ |
+| bleWriteResponse | BleWriteResponse        | Listener for write operations  |
+| listener         | IMiniCheckupOptListener | Listener for mini-checkup test |
+
+###### Example Code
+
+```java
+VPOperateManager.getInstance().stopMiniCheckup(code -> {
+    if (code == Code.REQUEST_SUCCESS) {
+        appendMsg("【停止】微体检指令写入成功！");
+    } else {
+        appendMsg("【停止】微体检指令写入失败！");
+    }
+}, miniCheckupOptListener);
+```
+
+
+
+## GSR (Galvanic Skin Response) Function
+
+Prerequisite: The device must support GSR functionality. The check condition is as follows:
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportGSR()
+```
+
+Note: All the following interfaces must be called only if the device supports GSR functionality.
+
+### Start GSR Measurement
+
+###### Prerequisite
+
+The device must support GSR functionality.
+
+###### Interface
+
+```java
+***
+     * <ul>
+     *     <li style="color:#1055d2">Start GSR measurement</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">Start GSR Measurement</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>Write operation listener</li>
+     * </ul>
+     * @param detectListener
+     * <ul>
+     *     <li style="color:#1055d2">gsr measurement callback</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">GSR Measurement Listener</li>
+     * </ul>
+     */
+ public void startDetectGsr(BleWriteResponse bleWriteResponse, IGsrDetectListener detectListener)
+```
+
+###### Parameter Description
+
+| Parameter Name   | Type               | Description              |
+| ---------------- | ------------------ | ------------------------ |
+| bleWriteResponse | BleWriteResponse   | Write operation listener |
+| listener         | IGsrDetectListener | GSR measurement listener |
+
+###### Data Return
+
+**IGsrDetectListener** -- GSR Measurement Callback
+
+```kotlin
+interface IGsrDetectListener : IListener {
+
+    /**
+     * GSR measurement progress
+     * @param progress Progress percentage
+     */
+    fun onGsrDetectProgress(progress:Int)
+
+    /**
+     * GSR measurement success
+     * @param detectResult The measurement result data
+     */
+    fun onGsrDetectSuccess(detectResult: GsrDetectResult)
+
+    /**
+     * GSR measurement failed
+     * @param detectAck GSR Measurement (GSR/EDA) Response Code or Status
+     */
+    fun onGsrDetectFailed(detectAck: GsrDetectAck)
+
+    /**
+     * GSR measurement stopped
+     */
+    fun onGsrDetectStop()
+}
+```
+
+**GsrDetectAck** -- GSR Measurement Error Code
+
+```kotlin
+/**
+ * GSR Measurement (GSR/EDA) Response Code or Status.
+ *
+ * @property value The corresponding raw byte value (0x00 to 0x05).
+ * @property description Status description.
+ */
+enum class GsrDetectAck(val value: Int, val description: String) {
+    /** 0x00: Available. The App should proceed with the normal measurement process only in this state. */
+    AVAILABLE(0x00, "Available, proceed with normal measurement"),
+
+    /** 0x01: Device is measuring pressure. Mutually exclusive. The App should display a device busy prompt. */
+    BUSY_MEASURING_PRESSURE(0x01, "Device busy: Measuring pressure"),
+
+    /** 0x02: Device is in a low battery state. */
+    LOW_BATTERY(0x02, "Device in low battery state"),
+
+    /** 0x03: Device is measuring other data. The App should display a device busy prompt. */
+    BUSY_MEASURING_OTHER(0x03, "Device busy: Measuring other data"),
+
+    /** 0x04: Device wearing check failed. The App should display an error prompt. */
+    WEARING_CHECK_FAILED(0x04, "Wearing check failed"),
+
+    /** 0x05: Measurement failed. */
+    MEASURE_FAILED(0x05, "Measurement failed");
+}
+```
+
+**GsrDetectResult** -- GSR Measurement Result
+
+```kotlin
+/**
+ * GSR Detection Result Data Class.
+ */
+data class GsrDetectResult(
+    /** Emotion Level [-10, 10] */
+    var emotionLevel: Int = 0,
+
+    /** Skin Moisture [1, 99] */
+    var skinMoisture: Int = 0,
+
+    /** Depression Risk [0, 2] */
+    var depressionRisk: DepressionRisk = DepressionRisk.LOW,
+
+    /** SNS (Sympathetic Nervous System) Activation [1, 99] */
+    var snsActivation: Int = 0,
+
+    /**
+     * Cortisol Value.
+     * Valid Range [0, 500] ug/L.
+     * Note: The unit is ug/L for easy comparison with the valid range.
+     */
+    var cortisolValue: Int = 0
+)
+```
+
+###### Example Code
+
+```java
+VPOperateManager.getInstance().startDetectGsr(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+                    // Write command response
+                }
+            }, new IGsrDetectListener() {
+                @Override
+                public void onGsrDetectProgress(int progress) {
+                    Logger.t(TAG).e("onGsrDetectProgress --》 " + progress);
+                }
+
+                @Override
+                public void onGsrDetectSuccess(@NonNull GsrDetectResult detectResult) {
+                    Logger.t(TAG).e("onGsrDetectSuccess --》 " + detectResult.toString());
+                }
+
+                @Override
+                public void onGsrDetectFailed(@NonNull GsrDetectAck detectAck) {
+                    Logger.t(TAG).e("onGsrDetectFailed --》 " + detectAck.getDescription());
+                }
+
+                @Override
+                public void onGsrDetectStop() {
+                    Logger.t(TAG).e("onGsrDetectStop --》 -- ");
+                }
+            });
+```
+
+### Stop GSR Measurement
+
+###### Prerequisite
+
+The device must support GSR functionality.
+
+###### Interface
+
+```java
+    /***
+     * <ul>
+     *     <li style="color:#1055d2">Stop GSR measurement</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">Stop GSR measurement</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>Write operation listener</li>
+     * </ul>
+     */
+    public void stopDetectGsr(BleWriteResponse bleWriteResponse)
+```
+
+###### Parameter Description
+
+| Parameter Name   | Type             | Description              |
+| ---------------- | ---------------- | ------------------------ |
+| bleWriteResponse | BleWriteResponse | Write operation listener |
+
+###### Example Code
+
+```java
+ VPOperateManager.getInstance().stopDetectGsr(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+                    // Write command response
+                }
+            });
+```
+
+
+
+## ZT163 Project Device-Always-Off-Screen function
+
+Prerequisite: The device must be a ZT163 project device.
+
+Note: All the following interfaces will only work if the device is a ZT163 project device.
+
+### Set ZT163 Device-Always-Off-Screen statue
+
+###### Interface
+
+```java
+/**
+     * [Set ZT163 Project Device Always Off Screen]
+     * <p>
+     * 设置 ZT163 项目常灭屏功能。
+     *
+     * @param isOpen           Function switch. | 是否开启：true-开启，false-关闭。
+     * @param bleWriteResponse Write operation response. | 蓝牙指令写入回调。
+     * @param listener         Operation listener. | 常灭屏功能操作监听。
+     */
+public void setZT163DeviceAlwaysOffScreen(boolean isOpen, BleWriteResponse bleWriteResponse, IZT163DeviceAlwaysOffScreenOptListener listener)
+```
+
+###### Parameter Description
+
+| Parameter Name   | Type               | Description                                       |
+| ---------------- | ------------------ | ------------------------------------------------- |
+| isOpen           | boolean            | true:open the function，false: close the function |
+| bleWriteResponse | BleWriteResponse   | Write operation listener                          |
+| listener         | IGsrDetectListener | ZT163 Device-Always-Off-Screen operation callback |
+
+### Read ZT163 Device-Always-Off-Screen statue
+
+###### Interface
+
+```java
+/**
+     * [Read Always-Off-Screen Status] 读取 ZT163 设备常灭屏状态
+     *
+     * @param bleWriteResponse 写入操作回调 (Success if Code.REQUEST_SUCCESS)
+     * @param listener         状态监听器 (Handles data feedback)
+     */
+public void readZT163DeviceAlwaysOffScreen(BleWriteResponse bleWriteResponse, IZT163DeviceAlwaysOffScreenOptListener listener)
+```
+
+###### Parameter Description
+
+| Parameter Name   | Type               | Description                                       |
+| ---------------- | ------------------ | ------------------------------------------------- |
+| bleWriteResponse | BleWriteResponse   | Write operation listener                          |
+| listener         | IGsrDetectListener | ZT163 Device-Always-Off-Screen operation callback |
+
+**IZT163DeviceAlwaysOffScreenOptListener** -- ZT163 Device-Always-Off-Screen operation callback
+
+```kotlin
+/**
+ * Listener for ZT163 Device Always-Off-Screen operations.
+ * ZT163 项目设备常灭屏功能操作监听。
+ */
+interface IZT163DeviceAlwaysOffScreenOptListener : IListener {
+    /**
+     * Triggered when Always-Off-Screen setting is successful.
+     * 常灭屏设置成功。
+     * @param isOpen true: Enabled, false: Disabled.
+     */
+    fun onZT163DeviceAlwaysOffScreenSettingSuccess(isOpen: Boolean)
+
+    /**
+     * Triggered when Always-Off-Screen setting fails.
+     * 常灭屏设置失败。
+     */
+    fun onZT163DeviceAlwaysOffScreenSettingFailed()
+
+    /**
+     * Callback for Always-Off-Screen status reporting from device.
+     * 设备常灭屏状态主动上报。
+     * @param isOpen true: Enabled, false: Disabled.
+     */
+    fun onZT163DeviceAlwaysOffScreenReport(isOpen: Boolean)
+
+    /**
+     * Triggered when the current device does not support this feature.
+     * 当前设备不支持此功能。
+     */
+    fun onFunctionNotSupport()
+}
+```
+
+###### Example Code
+
+```java
+/**
+ * Activity for controlling ZT163 Device Always-Off-Screen feature.
+ * ZT163 设备常灭屏功能界面。
+ */
+public class ZT163DeviceAlwaysOffScreenActivity extends AppCompatActivity implements IZT163DeviceAlwaysOffScreenOptListener {
+
+    private TextView tvInfo;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_zt163_device_always_off_screen);
+        
+        tvInfo = findViewById(R.id.tvInfo);
+
+        // Enable Always-Off-Screen | 开启常灭屏
+        findViewById(R.id.btnOpen).setOnClickListener(v -> {
+            VPOperateManager.getInstance().setZT163DeviceAlwaysOffScreen(true, code -> {
+                // Command sent callback | 指令发送回调
+            }, this);
+        });
+
+        // Disable Always-Off-Screen | 关闭常灭屏
+        findViewById(R.id.btnClose).setOnClickListener(v -> {
+            VPOperateManager.getInstance().setZT163DeviceAlwaysOffScreen(false, code -> {
+                // Command sent callback | 指令发送回调
+            }, this);
+        });
+
+        // Read Current Status | 读取当前状态
+        findViewById(R.id.btnRead).setOnClickListener(v -> {
+            VPOperateManager.getInstance().readZT163DeviceAlwaysOffScreen(code -> {
+                // Command sent callback | 指令发送回调
+            }, this);
+        });
+    }
+
+    @Override
+    public void onZT163DeviceAlwaysOffScreenSettingSuccess(boolean isOpen) {
+        String state = isOpen ? "ON/开启" : "OFF/关闭";
+        tvInfo.setText("Setting Success | 设置成功: " + state);
+    }
+
+    @Override
+    public void onZT163DeviceAlwaysOffScreenSettingFailed() {
+        tvInfo.setText("Setting Failed | 设置失败");
+    }
+
+    @Override
+    public void onZT163DeviceAlwaysOffScreenReport(boolean isOpen) {
+        String state = isOpen ? "ON/开启" : "OFF/关闭";
+        tvInfo.setText("Status Reported | 状态上报: " + state);
+    }
+
+    @Override
+    public void onFunctionNotSupport() {
+        tvInfo.setText("Function Not Supported | 当前设备不支持该功能");
+    }
+}
+```
+
+
+
+## Health Auxiliary Functions
+
+**Prerequisite:** The device must support health auxiliary functions. The judging condition is as follows:
+
+Kotlin
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportHealthAssessment
+```
+
+**Note:** All of the following interfaces can only be called if the device supports health auxiliary functions.
+
+#### Read Health Auxiliary Function Settings
+
+###### Prerequisite
+
+The device must support health auxiliary functions.
+
+###### Interface
+
+```
+readFunSwitchState(bleWriteResponse, funSwitchListener)
+```
+
+###### Parameter Explanation
+
+| **Parameter Name** | **Type**           | **Description**                  |
+| ------------------ | ------------------ | -------------------------------- |
+| bleWriteResponse   | BleWriteResponse   | Listener for the write operation |
+| funSwitchListener  | IFunSwitchListener | Listener for the function switch |
+
+###### Data Return
+
+**IFunSwitchListener** -- Function switch listener
+
+Java
+
+```java
+    /**
+     * Switch status changed
+     *
+     * @param con    Command type: 1 Set, 2 Read, 3 Device active report
+     * @param states Function states. Int represents the function type (see FunSwitchFlags for details), 
+     * EFunctionStatus represents the state of the function. 
+     * If a corresponding FunSwitchFlags is returned, it means it is supported; 
+     * otherwise, it is not supported.
+     */
+    void onFunSwitchStatusChanged(int con, Map<Integer, EFunctionStatus> states);
+```
+
+**FunSwitchFlags** -- Function Types
+
+Java
+
+```java
+    // Blood Glucose
+    public static final int BLOOD_GLUCOSE = 1;
+    // Blood Pressure
+    public static final int BLOOD_PRESSURE = 2;
+    // Blood Oxygen
+    public static final int BLOOD_OXYGEN = 3;
+    // Body Temperature
+    public static final int BODY_TEMPERATURE = 4;
+    // HRV
+    public static final int HRV = 5;
+    // Stress
+    public static final int STRESS = 6;
+    // MET
+    public static final int MET = 7;
+    // Blood Components
+    public static final int BLOOD_COMPONENT = 8;
+    // Body Composition
+    public static final int BODY_COMPONENT = 9;
+    // Micro Physical Examination
+    public static final int MICRO_PHYSICAL_EXAMINATION = 10;
+    // Emotion
+    public static final int EMOTION = 11;
+    // Fatigue
+    public static final int FATIGUE = 12;
+    // Nuclear Radiation
+    public static final int NUCLEAR_RADIATION = 13;
+    // Fall Reminder
+    public static final int FALLING_REMINDER = 14;
+    // AI Q&A
+    public static final int FALLING_AI_CHAT = 15;
+    // AI Watch Face
+    public static final int FALLING_AI_DIAL = 16;
+    // Electrodermal Activity (EDA) Test
+    public static final int SKIN_ELECTRIC_TEST = 17;
+```
+
+**EFunctionStatus** -- Function Status
+
+###### Sample Code
+
+Kotlin
+
+```
+VPOperateManager.getInstance().readFunSwitchState(bleWriteResponse, funSwitchListener)
+```
+
+------
+
+#### Set Health Auxiliary Function Switch
+
+###### Prerequisite
+
+The device must support health auxiliary functions, and the corresponding `FunSwitchFlags` must be returned during reading.
+
+###### Interface
+
+```
+setFunSwitchState(bleWriteResponse, funSwitchListener, funSwitch, status)
+```
+
+###### Parameter Explanation
+
+| **Parameter Name** | **Type**           | **Description**                               |
+| ------------------ | ------------------ | --------------------------------------------- |
+| bleWriteResponse   | BleWriteResponse   | Listener for the write operation              |
+| funSwitchListener  | IFunSwitchListener | Function listener                             |
+| funSwitch          | Int                | Function type, see FunSwitchFlags for details |
+| status             | EFunctionStatus    | Function status, used to set the switch       |
+
+###### Data Return
+
+**IFunSwitchListener** -- Health auxiliary function callback, identical to the read return.
+
+**funSwitch** -- Function type, see FunSwitchFlags for details.
+
+**status** -- Function status, used to set the switch.
+
+###### Sample Code
+
+Kotlin
+
+```
+VPOperateManager.getInstance().setFunSwitchState(bleWriteResponse, funSwitchListener, FunSwitchFlags.BLOOD_OXYGEN, EFunctionStatus.SUPPORT_OPEN)
+```
+
+------
+
+## 4G Functionality
+
+**Prerequisite:** The device must support 4G functionality. The judging condition is as follows:
+
+Kotlin
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupport4G
+```
+
+**Note:** All of the following interfaces can only be called if the device supports 4G functionality.
+
+#### Read 4G Device Configuration Information
+
+###### Prerequisite
+
+The device must support 4G functionality.
+
+###### Interface
+
+```kotlin
+read4gServerInfo(bleWriteResponse, configListener)
+```
+
+###### Parameter Explanation
+
+| **Parameter Name** | **Type**                   | **Description**                  |
+| ------------------ | -------------------------- | -------------------------------- |
+| bleWriteResponse   | BleWriteResponse           | Listener for the write operation |
+| configListener     | INetServer4gConfigListener | 4G functionality listener        |
+
+###### Data Return
+
+**INetServer4gConfigListener** -- 4G functionality listener
+
+Kotlin
+
+```kotlin
+    /* Read Success */
+    fun onReadSuccess(info: NetworkSever4gConfigInfo)
+    /* Device binding/Setting Success */
+    fun onSettingSuccess()
+    /* Device rejected/Setting Failed */
+    fun onSettingFailed()
+```
+
+**NetworkSever4gConfigInfo** -- 4G Configuration
+
+Kotlin
+
+```kotlin
+class NetworkSever4gConfigInfo {
+
+    // IP Address
+    var ipAddress: String? = null
+
+    // Port
+    var port: Int? = null
+
+    // Username, login account
+    var userName: String? = null
+
+    // Password, a random password generated by the App (not the login account password)
+    var password: String? = null
+
+    // Timestamp of the last synchronization between the APP/device and the server (in seconds)
+    var syncTime: Long? = null
+
+    // 4G Switch
+    var switch4g: Boolean? = null
+
+    // Data Upload Switch: Should be invalid when the 4G switch is OFF
+    var switchUpload: Boolean? = null
+
+    // Time interval for 4G reporting to the server (in minutes)
+    var reportInterval: Int? = null
+
+    // Recovery timestamp (in seconds)
+    var recoveryTime: Long? = null
+
+}
+```
+
+###### Sample Code
+
+Kotlin
+
+```
+VPOperateManager.getInstance().read4gServerInfo(bleWriteResponse, configListener)
+```
+
+------
+
+#### Set 4G Device Function Configuration
+
+###### Prerequisite
+
+The device must support 4G functionality.
+
+**Note:** Individual parameter setting is not supported. If you only need to set a specific item, you must modify that item within the configuration retrieved from the read operation and then set the entire configuration back.
+
+###### Interface
+
+```
+set4gServerInfo(config, bleWriteResponse, configListener)
+```
+
+###### Parameter Explanation
+
+| **Parameter Name** | **Type**                   | **Description**                  |
+| ------------------ | -------------------------- | -------------------------------- |
+| config             | NetworkSever4gConfigInfo   | 4G Configuration                 |
+| bleWriteResponse   | BleWriteResponse           | Listener for the write operation |
+| configListener     | INetServer4gConfigListener | 4G functionality listener        |
+
+###### Data Return
+
+**NetworkSever4gConfigInfo** -- 4G Configuration, identical to the read return.
+
+###### Sample Code
+
+Kotlin
+
+```
+VPOperateManager.getInstance().set4gServerInfo(config, bleWriteResponse, configListener)
+```
+
+------
+
+#### Clear 4G Device Account Information
+
+Used to clear account information on the device.
+
+###### Prerequisite
+
+The device must support 4G functionality.
+
+###### Interface
+
+```
+clear4gAccountInfo(bleWriteResponse, configListener)
+```
+
+###### Parameter Explanation
+
+| **Parameter Name** | **Type**                   | **Description**                  |
+| ------------------ | -------------------------- | -------------------------------- |
+| bleWriteResponse   | BleWriteResponse           | Listener for the write operation |
+| configListener     | INetServer4gConfigListener | 4G functionality listener        |
+
+###### Data Return
+
+**NetworkSever4gConfigInfo** -- 4G Configuration, identical to the read return.
+
+###### Sample Code
+
+Kotlin
+
+```kotlin
+VPOperateManager.getInstance().clear4gAccountInfo(bleWriteResponse, configListener)
 ```

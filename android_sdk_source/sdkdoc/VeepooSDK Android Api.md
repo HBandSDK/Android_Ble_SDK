@@ -17,7 +17,17 @@
 | 1.1.1 | 1.同步个人信息api补充体重参数说明；<br />2.肤色多档位设置(需设备支持)。 | 2024.11.30 |
 | 1.1.2 | 1.读取运动模式数据删除需要记录包位置的相关注释               | 2024.12.12 |
 | 1.1.3 | 1.增加自动测量读取/设置接口(0xB3)说明;<br />2.增加读取手动测量数据(血压)相关接口 | 2025.06.10 |
-| 1.1.4 | 增加图文推送功能                                             | 2025.10.27 |
+| 1.1.4 | 修正血糖功能-血糖测量-停止测量接口有误问题                   | 2025.06.16 |
+| 1.1.5 | 增加图文推送功能                                             | 2025.10.27 |
+| 1.1.6 | 增加JH58 PPG测量功能                                         | 2025.10.31 |
+| 1.1.7 | 增加微体检功能                                               | 2025.11.04 |
+| 1.1.8 | 新增新的设备功能上报接口，舍弃旧版onFunctionSupportDataChange方法 | 2025.11.19 |
+| 1.1.9 | 新增皮电测量开始/结束接口                                    | 2025.11.24 |
+| 1.2.0 | 新增ZT163设备常灭屏功能                                      | 2025.12.27 |
+| 1.2.1 | 微体检v2版本数据返回，新增健康提醒、4G功能相关接口           | 2026.01.09 |
+| 1.2.2 | 新增手动测量的12个返回数据文档以及设备支持的手动测量类型列表 | 2026.04.08 |
+| 1.2.3 | 新增连接确认功能                                             | 2026.04.16 |
+| 1.2.4 | 新增Nordic OTA 固件升级功能                                  | 2026.04.17 |
 
 ## 通用接口类
 **VPOperateManager**（SDK主入口）  
@@ -189,6 +199,65 @@ fun connectState(code:Int, profile:BleGattProfile, isOadModel:boolean);
 fun notifyState(state:Int);
 ```
 
+#### 连接确认设置
+
+默认设备连接 deviceShowConfirm确认为true, 当为true时如果设备支持连接确认时需要用户在设备上手动点击确认连接。当该值为false时 无论设备是否支持连接确认功能都会直接连接
+
+###### 接口
+
+```java
+    /**
+     * Whether the device requires connection confirmation
+     * 设备是否需要连接确认
+     * @return whether to display connection confirmation on the device
+     *         设备是否显示连接确认
+     */
+    public boolean isDeviceShowConfirm() {
+        return deviceShowConfirm;
+    }
+
+    /**
+     * Set whether the device needs to display a connection confirmation
+     * 设置设备是否需要显示连接确认
+     * User manual connection: set to true, device displays connection confirmation
+     * 用户手动连接：设置为 true，设备显示连接确认
+     * Automatic reconnection: set to false, device connects directly without confirmation
+     * 回连：设置为 false，设备直接连接，无需显示连接确认
+     * @param deviceShowConfirm whether to display connection confirmation on the device
+     *                          设备是否显示连接确认
+     */
+    public void setDeviceShowConfirm(boolean deviceShowConfirm) {
+        this.deviceShowConfirm = deviceShowConfirm;
+    }
+
+/**
+ * Get the connection confirmation timeout (default 12 seconds)
+ * 获取连接确认超时时间（默认12秒）
+ * @return connection confirmation timeout
+ *         连接确认超时时间
+ */
+public int getConnectionConfirmTimeout() {
+    return connectionConfirmTimeout;
+}
+
+/**
+ * Set the connection confirmation timeout
+ * 设置连接确认超时时间
+ * If the set value is less than or equal to 10, it will be forced to 10
+ * 若设置值小于等于10，将强制设置为10
+ * @param connectionConfirmTimeout connection confirmation timeout
+ *                                  连接确认超时时间
+ */
+public void setConnectionConfirmTimeout(int connectionConfirmTimeout) {
+    if (connectionConfirmTimeout <= 10) {
+        connectionConfirmTimeout = 10;
+    }
+    this.connectionConfirmTimeout = connectionConfirmTimeout;
+}
+```
+
+
+
 #### 验证密码操作
 
 ###### 接口
@@ -221,13 +290,28 @@ confirmDevicePwd(bleWriteResponse,pwdDataListener,deviceFuctionDataListener，so
 
 **IPwdDataListener** -- 密码操作的数据返回监听
 
-```kotlin
-/**
- * 返回密码操作的数据
- * @param pwdData 密码操作的数据
- */
-fun onPwdDataChange(pwdData:PwdData);
+```java
+  /**
+     * 密码操作数据发生变化时回调
+     * Callback when password operation data changes
+     *
+     * @param pwdData 密码操作相关数据
+     *                Password operation related data
+     */
+    void onPwdDataChange(PwdData pwdData);
+
+    /**
+     * 连接确认超时回调
+     * 设备在规定时间内未完成连接确认，用户需在此回调中手动断开蓝牙连接
+     *
+     * Callback for connection confirmation timeout
+     * The device does not complete connection confirmation within the specified time,
+     * the user needs to manually disconnect the Bluetooth connection in this callback
+     */
+    void onConnectionConfirmTimeout();
 ```
+
+
 
 **PwdData** -- 密码操作的数据
 
@@ -253,15 +337,71 @@ fun onPwdDataChange(pwdData:PwdData);
 | SUPPORT_CLOSE | 关闭   |
 | UNKONW        | 未知   |
 
-**IDeviceFuctionDataListener** -- 设备功能状态监听,监听一次,可能会被回调2次,依设备而定
+**IDeviceFuctionDataListener** -- 设备功能状态监听, 监听一次,onFunctionSupportDataChange可能会被回调多次, 且以最后一次为准，依设备而定，建议直接监听对应的设备功能包上报接口：第一包设备功能包上报onDeviceFunctionPackage1Report、第二包设备功能包上报（如果设备支持第二包功能则会上报，否则不会有该方法的回调）onDeviceFunctionPackage2Report、第三包设备功能包上报（如果设备支持第三包功能则会上报，否则不会有该方法的回调）onDeviceFunctionPackage3Report、第四包设备功能包上报（如果设备支持第四包功能则会上报，否则不会有该方法的回调）onDeviceFunctionPackage4Report、第五包设备功能包上报（如果设备支持第五包功能则会上报，否则不会有该方法的回调）onDeviceFunctionPackage5Report。
 
-```kotlin
+```java
 /**
- * 返回设备功能状态
- *
- * @param functionSupport
+ * 设备功能状态上报监听
+ * Device function status report
  */
-fun onFunctionSupportDataChange(functionSupport:FunctionDeviceSupportData)
+public interface IDeviceFuctionDataListener extends IListener {
+    /**
+     * 设备功能的上报 (Device function data report)
+     *
+     * @param functionSupport 设备所支持的所有功能列表，因为设备功能比较多，该方法会一次性回调多次，以最后一次为准（非最后一次则有部分功能数据还未初始化）。
+     * The list of all functions supported by the device. Since there are many functions, this method
+     * may be called back multiple times; the last call should be considered final (non-final calls mean
+     * some function data has not yet been initialized).
+     *
+     * 建议直接监听{@link #onDeviceFunctionPackage1Report}
+     * It is recommended to directly listen to {@link #onDeviceFunctionPackage1Report}
+     * {@link #onDeviceFunctionPackage2Report}
+     * {@link #onDeviceFunctionPackage3Report}
+     * {@link #onDeviceFunctionPackage4Report}
+     * {@link #onDeviceFunctionPackage5Report}分别监听对应的功能包数据上报
+     * to monitor the reporting of the corresponding function package data separately.
+     */
+    @Deprecated
+    void onFunctionSupportDataChange(FunctionDeviceSupportData functionSupport);
+
+    /**
+     * 设备功能第一包上报 (Device function Package 1 report)
+     * @param functionPackage1 第一包的设备功能详情。 (Details of the device functions in the first package.)
+     */
+    void onDeviceFunctionPackage1Report(DeviceFunctionPackage1 functionPackage1);
+
+    /**
+     * 设备功能第二包上报 (Device function Package 2 report)
+     * @param functionPackage2 第二包的设备功能详情。（如果设备支持第二包功能则会上报，否则不会有该方法的回调）
+     * Details of the device functions in the second package. (If the device supports the second package
+     * of functions, this will be reported; otherwise, this method will not be called back.)
+     */
+    void onDeviceFunctionPackage2Report(DeviceFunctionPackage2 functionPackage2);
+
+    /**
+     * 设备功能第三包上报 (Device function Package 3 report)
+     * @param functionPackage3 第三包的设备功能详情。（如果设备支持第三包功能则会上报，否则不会有该方法的回调）
+     * Details of the device functions in the third package. (If the device supports the third package
+     * of functions, this will be reported; otherwise, this method will not be called back.)
+     */
+    void onDeviceFunctionPackage3Report(DeviceFunctionPackage3 functionPackage3);
+
+    /**
+     * 设备功能第四包上报 (Device function Package 4 report)
+     * @param functionPackage4 第四包的设备功能详情。（如果设备支持第四包功能则会上报，否则不会有该方法的回调）
+     * Details of the device functions in the fourth package. (If the device supports the fourth package
+     * of functions, this will be reported; otherwise, this method will not be called back.)
+     */
+    void onDeviceFunctionPackage4Report(DeviceFunctionPackage4 functionPackage4);
+
+    /**
+     * 设备功能第五包上报 (Device function Package 5 report)
+     * @param functionPackage5 第五包的设备功能详情。（如果设备支持第五包功能则会上报，否则不会有该方法的回调）
+     * Details of the device functions in the fifth package. (If the device supports the fifth package
+     * of functions, this will be reported; otherwise, this method will not be called back.)
+     */
+    void onDeviceFunctionPackage5Report(DeviceFunctionPackage5 functionPackage5);
+}
 ```
 
 **FunctionDeviceSupportData** -- 各个设备功能状态[是否支持]
@@ -319,6 +459,110 @@ fun onFunctionSupportDataChange(functionSupport:FunctionDeviceSupportData)
 | temptureType          | Int             | 温度类型                 |
 | cpuType               | Int             | cpu类型                  |
 | ecgType               | Int             | ecg类型                  |
+
+
+
+**DeviceFunctionPackage1** -- 第一包设备功能状态[是否支持]
+
+| 变量                   | 类型            | 备注                     |
+| ---------------------- | --------------- | ------------------------ |
+| bloodPressure          | EFunctionStatus | 血压功能状态             |
+| drinking               | EFunctionStatus | 饮酒功能状态             |
+| sedentaryRemind        | EFunctionStatus | 久坐功能状态             |
+| heartRateWarning       | EFunctionStatus | 心率警告功能状态         |
+| WeChatSport            | EFunctionStatus | 微信运动功能状态         |
+| camera                 | EFunctionStatus | 拍照功能状态             |
+| fatigue                | EFunctionStatus | 疲劳度功能状态           |
+| spoH                   | EFunctionStatus | 血氧功能状态             |
+| spo2HAdjustment        | EFunctionStatus | 血氧校准功能状态         |
+| spoHBreathBreak        | EFunctionStatus | 血氧呼吸暂停提醒功能状态 |
+| woman                  | EFunctionStatus | 女性功能状态             |
+| alarm                  | EFunctionStatus | 新闹钟功能状态           |
+| newCalcSport           | EFunctionStatus | 计步计算使用新功能       |
+| ambulatoryBPAdjustment | EFunctionStatus | 动态血压调整功能状态     |
+| screenLight            | EFunctionStatus | 屏幕亮度调节功能状态     |
+| heartRateDetect        | EFunctionStatus | 心率检测功能状态，默认有 |
+| nightTurnSetting       | EFunctionStatus | 翻腕亮屏设置功能状态     |
+| textAlarm              | EFunctionStatus | 文字闹钟功能状态         |
+| screenLight            | EFunctionStatus | 屏幕亮度调节功能状态     |
+
+**DeviceFunctionPackage2** -- 第二包设备功能状态[是否支持]
+
+| 变量                  | 类型            | 备注               |
+| --------------------- | --------------- | ------------------ |
+| countDown             | EFunctionStatus | 倒计时功能状态     |
+| sportModelFunction    | EFunctionStatus | 运动模式功能状态   |
+| hidFunction           | EFunctionStatus | HID功能状态        |
+| screenStyleFunction   | EFunctionStatus | 屏幕样式功能       |
+| breathFunction        | EFunctionStatus | 呼吸率功能         |
+| hrvFunction           | EFunctionStatus | HRV功能状态        |
+| weatherFunction       | EFunctionStatus | 天气功能状态       |
+| screenLightTime       | EFunctionStatus | 亮屏时长功能状态   |
+| precisionSleep        | EFunctionStatus | 精准睡眠功能状态   |
+| ecgFunction           | EFunctionStatus | ECG功能状态        |
+| multSportMode         | EFunctionStatus | 多运动功能状态     |
+| lowPower              | EFunctionStatus | 低功耗功能状态     |
+| sleepTag              | Int             | 睡眠标志位         |
+| watchDataDayNumber    | Int             | 手表保存的最大天数 |
+| contactMsgLength      | Int             | 联系人消息长度     |
+| allMsgLength          | Int             | 消息提醒最大包数   |
+| sportModelDay         | Int             | 运动模式的最大天数 |
+| screenstyle           | Int             | 屏幕样式的选择     |
+| weatherStyle          | Int             | 天气的类型         |
+| originProtocolVersion | Int             | 原始数据的协议版本 |
+| ecgType               | Int             | ecg类型            |
+
+**DeviceFunctionPackage3** -- 第三包设备功能状态[是否支持]
+
+| 变量                          | 类型            | 备注             |
+| ----------------------------- | --------------- | ---------------- |
+| bigDataTranType               | Int             | 大块传输类型     |
+| watchUiServerCount            | Int             | 表盘市场的个数   |
+| watchUiCustomCount            | Int             | 自定义表盘的个数 |
+| temperatureFunction           | EFunctionStatus | 体温功能         |
+| temperatureType               | Int             | 体温类型         |
+| cpuType                       | Int             | CPU类型          |
+| stressFunction                | EFunctionStatus | 压力功能         |
+| stressType                    | Int             | 压力类型         |
+| contactFunction               | EFunctionStatus | 联系人功能       |
+| contactType                   | Int             | 联系人类型       |
+| musicStyle                    | Int             | 音乐类型         |
+| screenStyleFunction           | EFunctionStatus | 屏幕样式功能     |
+| findDeviceByPhoneFunction     | EFunctionStatus | 手机查找设备功能 |
+| agpsFunction                  | EFunctionStatus | 星历功能         |
+| bloodGlucoseTag               | Int             | 血糖标志位       |
+| bloodGlucose                  | Int             | 血糖功能         |
+| bloodGlucoseAdjusting         | EFunctionStatus | 血糖校准功能     |
+| bloodGlucoseMultipleAdjusting | EFunctionStatus | 血糖多校准功能   |
+| bloodGlucoseRiskAssessment    | EFunctionStatus | 血糖分析评估功能 |
+
+**DeviceFunctionPackage4** -- 第四包设备功能状态[是否支持]
+
+| 变量                            | 类型            | 备注                   |
+| ------------------------------- | --------------- | ---------------------- |
+| bloodComponent                  | EFunctionStatus | 血液成分功能           |
+| bloodComponentSingleCalibration | EFunctionStatus | 血液成分单次校准功能   |
+| bodyComponent                   | EFunctionStatus | 身体成分功能           |
+| worldClock                      | EFunctionStatus | 世界时钟功能           |
+| autoMeasure                     | EFunctionStatus | 自动测量功能           |
+| temperatureAlarm                | EFunctionStatus | 体温报警功能           |
+| wallet                          | EFunctionStatus | 钱包收款码功能         |
+| postcard                        | EFunctionStatus | 名片功能               |
+| gameSetting                     | EFunctionStatus | 游戏功能               |
+| aiQA                            | EFunctionStatus | ai问答功能             |
+| aiDial                          | EFunctionStatus | ai表盘功能             |
+| distanceCalorieGoal             | EFunctionStatus | 距离卡路里目标设置功能 |
+| videoDial                       | EFunctionStatus | 视频表盘功能           |
+| photoAlbum                      | EFunctionStatus | 相册功能               |
+| miniCheckup                     | EFunctionStatus | 微体检                 |
+
+**DeviceFunctionPackage5** -- 第五包设备功能状态[是否支持]
+
+| 变量          | 类型            | 备注         |
+| ------------- | --------------- | ------------ |
+| textImagePush | EFunctionStatus | 图文推送功能 |
+
+
 
 **ISocialMsgDataListener** --消息通知开关状的回调监听 具体返回查看【[消息通知](#消息通知)】
 
@@ -8346,6 +8590,99 @@ private void startOTA() {
 
 
 
+#### Nordic平台设备OTA升级
+
+nordic OTA平台升级时因为nordic 升级内部也有可能会建立gatt连接，如果ota遇到异常现象可以尝试在设备连接断开后再调用noridc ota升级。
+
+###### 前提
+
+需设备为noridc设备。判断接口如下：
+
+```java
+VpSpGetUtil.getVpSpVariInstance(mContext).isNewNordicDevice()
+```
+
+###### 接口
+
+```
+VPOperateManager.getInstance().startNordicOtaUpgrade(firmwareFilePath, listener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                | 描述                      |
+| ---------------- | ------------------- | ------------------------- |
+| firmwareFilePath | String              | 本地存放的OTA升级文件路径 |
+| listener         | OnMcuMgrOtaListener | Nordic设备OTA监听         |
+
+###### 返回数据
+
+OnMcuMgrOtaListener：Nordic OTA升级监听
+
+```java
+/**
+ * MCU Manager OTA 升级监听器
+ * Listener for MCU Manager OTA upgrade events
+ */
+public interface OnMcuMgrOtaListener {
+
+    /**
+     * 升级开始
+     * Upgrade started
+     * @param controller 固件升级控制器
+     *                   Firmware upgrade controller
+     */
+    void onUpgradeStarted(FirmwareUpgradeController controller);
+
+    /**
+     * 升级状态改变
+     * Upgrade state changed
+     * @param prevState 上一个状态
+     *                  Previous state
+     * @param newState  新状态
+     *                  New state
+     */
+    void onStateChanged(FirmwareUpgradeManager.State prevState, FirmwareUpgradeManager.State newState);
+
+    /**
+     * 升级完成
+     * Upgrade completed successfully
+     */
+    void onUpgradeCompleted();
+
+    /**
+     * 升级失败
+     * Upgrade failed
+     * @param state 失败时所处的状态
+     *              State when failure occurred
+     * @param error 升级异常
+     *              Upgrade exception
+     */
+    void onUpgradeFailed(FirmwareUpgradeManager.State state, McuMgrException error);
+
+    /**
+     * 升级已取消
+     * Upgrade canceled
+     * @param state 取消时所处的状态
+     *              State when canceled
+     */
+    void onUpgradeCanceled(FirmwareUpgradeManager.State state);
+
+    /**
+     * 上传进度改变
+     * Upload progress changed
+     * @param bytesSent 已发送的字节数
+     *                  Bytes sent
+     * @param imageSize 固件总大小
+     *                  Total firmware image size
+     * @param timestamp 时间戳
+     *                  Timestamp
+     */
+    void onUploadProgressChanged(int bytesSent, int imageSize, long timestamp);
+
+}
+```
+
 
 
 ## 联系人功能
@@ -9441,12 +9778,329 @@ enum class DeviceManualDataType(val bitPosition: Int) {
     private int[] accelerationZArray;
 ```
 
-**其他** --其他数据暂不支持，响应的数据结构暂不展示
+**HeartRateManualData**--心率手动测量数据
+
+```java
+	/**
+     * 本条数据的测量时间戳
+     */
+	private int timeStamp;
+
+	/**
+     * 对应的协议类型，不同的协议类型，其包含的数据结构不一样
+     */
+	private int version;
+
+
+	/**
+     * 脉率
+     */
+	private int[] rate;
+```
+
+**HrvManualData**--HRV手动测量数据
+
+```java
+	/**
+     * 本条数据的测量时间戳
+     */
+	private int timeStamp;
+
+	/**
+     * 对应的协议类型，不同的协议类型，其包含的数据结构不一样
+     */
+	private int version;
+
+	/**
+     * hrv数值
+     */
+	private int[] hrv;
+```
+
+**BloodComponentManualData**--血液成分手动测量数据
+
+```java
+	/**
+     * 本条数据的测量时间戳
+     */
+	private int timeStamp;
+
+	/**
+     * 对应的协议类型，不同的协议类型，其包含的数据结构不一样
+     */
+	private int version;
+
+
+	/**
+     * 尿酸值 保留小数点后1位，单位：umol/L, 1mg/dL = 59.5umol/L
+     */
+	private float uricAcid = 0f;
+
+	/**
+     * 总胆固醇 保留小数点后2位，单位：mmol/L
+     */
+	private float tCHO = 0f;
+
+	/**
+     * 甘油三酯 保留小数点后2位，单位：mmol/L
+     */
+	private float tAG = 0f;
+
+	/**
+     * 高密度脂蛋白 保留小数点后2位，单位：mmol/L
+     */
+	private float hDL = 0f;
+
+	/**
+     *低密度脂蛋白 保留小数点后2位，单位：mmol/L
+     */
+	private float lDL = 0f;
+```
+
+**BloodGlucoseManualData**--血糖手动测量数据
+
+```java
+	/**
+     * 本条数据的测量时间戳
+     */
+	private int timeStamp;
+
+	/**
+     * 0x00：无血糖风险等级<br>0x01：带有血糖风险等级
+     */
+	private int version;
+
+	/**
+     * 血糖数值
+     */
+	private float bloodGlucoseValue;
+
+	/**
+     * 血糖风险等级
+     */
+	private EBloodGlucoseRiskLevel risk;
+```
+
+**BloodOxygenManualData**--血氧手动测量数据
+
+```java
+    /**
+     * 本条数据的测量时间戳
+     */
+    private int timeStamp;
+
+    /**
+     * 0x00：无血糖风险等级<br>0x01：带有血糖风险等级
+     */
+    private int version;
+
+    /**
+     * 血氧数组
+     */
+    private int[] oxygen;
+```
+
+**BodyTemperatureManualData**--体温手动测量数据
+
+```java
+
+    /**
+     * 本条数据的测量时间戳
+     */
+    private int timeStamp;
+
+    /**
+     * 0x00：对应的协议类型，不同的协议类型，其包含的数据结构不一样（默认为0x00，方便后期拓展）
+     */
+    private int version;
+
+    /**
+     * 皮肤温度
+     */
+    private float baseTemperature;
+
+    /**
+     * 体温
+     */
+    private float temperature;
+```
+
+**EmotionManualData**--情绪手动测量数据
+
+```java
+    /**
+     * 本条数据的测量时间戳
+     */
+    private int timeStamp;
+
+    /**
+     * 对应的协议类型，不同的协议类型，其包含的数据结构不一样
+     */
+    private int version;
+
+    /**
+     * 情绪 数值范围：[-10~10]
+     */
+    private int emotion;
+
+```
+
+**FatigueManualData**--疲劳度手动测量数据
+
+```java
+    /**
+     * 本条数据的测量时间戳
+     */
+    private int timeStamp;
+
+    /**
+     * 对应的协议类型，不同的协议类型，其包含的数据结构不一样
+     */
+    private int version;
+
+    /**
+     * 疲劳度数值（有效范围[0-99]）
+     */
+    private int fatigue;
+```
+
+**MiniCheckupManualData**--微体检手动测量数据
+
+```java
+
+    /**
+     * 本条数据的测量时间戳
+     */
+    private int timeStamp;
+
+    /**
+     * 对应的协议类型，不同的协议类型，其包含的数据结构不一样
+     */
+    private int version;
+
+    /**
+     * 心率
+     */
+    private int heart;
+
+    /**
+     * 血压
+     */
+    private int oxygen;
+
+    /**
+     * 压力
+     */
+    private int pressure;
+
+    /**
+     * 情绪 (-10,10)
+     */
+    private int emotion;
+
+    /**
+     * 疲劳度
+     */
+    private int fatigue;
+
+    /**
+     * 血糖
+     */
+    private float bloodGlucose;
+
+    /**
+     * 血糖风险
+     */
+    private int bloodGlucoseRisk;
+    /**
+     * 体温
+     */
+    private float temperature;
+
+    /**
+     * 表皮温度
+     */
+    private float baseTemperature;
+
+    /**
+     * 高压值,范围[60-300]
+     */
+    private int highValue;
+    /**
+     * 低压值,范围[20-200]
+     */
+    private int lowValue;
+```
+
+**PressureManualData**--压力手动测量数据
+
+```java
+    /**
+     * 本条数据的测量时间戳
+     */
+    private int timeStamp;
+
+    /**
+     * 对应的协议类型，不同的协议类型，其包含的数据结构不一样
+     */
+    private int version;
+
+    /**
+     * 压力数值（有效范围[0-100]）
+     */
+    private int pressure;
+```
+
+**SkinConductanceManualData**--皮电手动测量数据
+
+```java
+
+    /**
+     * 本条数据的测量时间戳
+     */
+    private int timeStamp;
+
+    /**
+     * 对应的协议类型，不同的协议类型，其包含的数据结构不一样
+     */
+    private int version;
+
+    /**
+     * 情绪 [-10,10]
+     */
+    private int emotionLevel;
+
+    /**
+     * 皮肤含水量 [1,99]<
+     */
+    private int skinMoisture;
+
+    /**
+     * 抑郁症风险[0,2],0:低风险，1:中风险，2:高风险
+     */
+    private int depressionRisk;
+
+    /**
+     * 交感神经活跃度[1,99]<
+     */
+    private int snsActivation;
+
+    /**
+     * 皮质醇浓度,有效范围[0，500]ug/L,正常范围[0，230]ug/L，通用单位ug/dL或nmol/L，10ug/L = 1ug/dL，1nmol/L = 0.36247ug/L， 1nmol/L = 0.036247 ug/dL
+     */
+    private int cortisolValue;
+```
 
 ###### 示例代码
 
 ```kotlin
 VPOperateManager.getInstance().readDeviceManualData(bleWriteResponse, timeStampSecond, dataTypeList, dataListener)
+```
+
+#### 当前设备支持的手动测量类型
+
+```java
+VPOperateManager.getInstance().supportManualDetectTypes
 ```
 
 
@@ -9459,7 +10113,7 @@ VPOperateManager.getInstance().readDeviceManualData(bleWriteResponse, timeStampS
 VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportAutoMeasure
 ```
 
-注：以下所有接口都需在满足设备支持自动测量功能才能调用
+注：以下所有接口都需在满足设备支持自动测量功能才能调用，如果设置支持自动测量功能，则不支持个性化设置功能，相关检测是否支持及开关状态均由该接口判断。
 
 #### 读取自动测量设置
 
@@ -9787,4 +10441,1578 @@ VPOperateManager.getInstance().pushImageMsg(pushImagePath, new IImageMsgPushList
 });
 ```
 
-### 
+
+
+
+
+## 定制项目 JH58 PPG测量功能
+
+前提：目前为定制项目 JH58项目的功能，其他项目可以忽略
+
+### PPG测量开关状态
+
+#### 添加PPG测量开关状态监听
+
+###### 接口
+
+```java
+    /**
+     * <ul>
+     *     <li style="color:#1055d2">Add ppg test swtich status change listener</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">添加PPG测量开关状态监听</li>
+     * </ul>
+     *
+     * @param listener
+     * <ul>
+     *    <li>PPG switch status operation monitoring</li>
+     *    <li>PPG开关状态操作监听</li>
+     * </ul>
+     */
+    public void addPPGTestSwitchStatusListener(IPPGSwitchOperaterListener listener)
+```
+
+###### 参数解释
+
+| 参数名   | 类型                       | 描述                |
+| -------- | -------------------------- | ------------------- |
+| listener | IPPGSwitchOperaterListener | PPG开关状态操作监听 |
+
+**IPPGSwitchOperaterListener**--PPG开关状态操作监听
+
+```kotlin
+/**
+ * PPG开关操作监听类 (PPG Switch Operation Listener Class)
+ */
+interface IPPGSwitchOperaterListener : IListener {
+    /**
+     * ppg开关状态读取结果 (Result of reading the PPG switch status)
+     */
+    fun onPPGSwitchStatusRead(switchStatus: PPGSwitchStatus)
+
+    /**
+     * ppg开关状态设置结果 (Result of setting the PPG switch status)
+     */
+    fun onPPGSwitchStatusSetting(switchStatus: PPGSwitchStatus)
+
+    /**
+     * ppg开关状态上报结果 (Result of reporting the PPG switch status)
+     * // Note: 'Reporting' usually means the device actively sends the status to the application.
+     */
+    fun onPPGSwitchStatusReport(switchStatus: PPGSwitchStatus)
+}
+```
+
+#### 读取PPG测量状态开关
+
+读取结果将在addPPGTestSwitchStatusListener(IPPGSwitchOperaterListener listener) 监听中回调
+
+###### 接口
+
+```java
+ /***
+     * <ul>
+     *     <li style="color:#1055d2">read ppg test swtich status</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">读取PPG测量开关状态</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if response code equals Code.REQUEST_SUCCESS means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     */
+    public void readPPGSwitchStatus(BleWriteResponse bleWriteResponse)
+```
+
+###### 示例代码
+
+```java
+VPOperateManager.getInstance().readPPGSwitchStatus(code -> tvPPGOptInfo.setText("读取PPG测量开关状态指令发送" + (code == Code.REQUEST_SUCCESS ? "成功" : "失败")));
+```
+
+#### 设置PPG测量状态开关
+
+设置结果将在addPPGTestSwitchStatusListener(IPPGSwitchOperaterListener listener) 监听中回调
+
+###### 接口
+
+```java
+
+/***
+     * <ul>
+     *     <li style="color:#1055d2">set ppg test switch status</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">设置PPG测量开关状态</li>
+     * </ul>
+     * @param ppgSwitchStatus
+     * <ul>
+     *    <li>Set the PPG measurement switch status</li>
+     *    <li>设置的PPG测量开关状态</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if response code equals Code.REQUEST_SUCCESS means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     */
+public void setPPGSwitchStatus(PPGSwitchStatus ppgSwitchStatus, BleWriteResponse bleWriteResponse)
+```
+
+###### 示例代码
+
+```java
+VPOperateManager.getInstance().setPPGSwitchStatus(ppgSwitchStatus, code -> tvPPGOptInfo.setText("设置PPG测量开关状态指令发送" + (code == Code.REQUEST_SUCCESS ? "成功" : "失败")));
+```
+
+
+
+### 读取PPG原始数据
+
+###### 接口
+
+```java
+    /***
+     * <ul>
+     *     <li style="color:#1055d2">read ppg test raw data</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">读取PPG测量原始数据</li>
+     * </ul>
+     * @param startTime
+     * <ul>
+     *    <li>Start time for reading PPG raw data</li>
+     *    <li>读取PPG原始数据的开始时间</li>
+     * </ul>
+     * @param testMode
+     * <ul>
+     *    <li>Read PPG raw data in this mode</li>
+     *    <li>读取该模式下的PPG原始数据</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if response code equals Code.REQUEST_SUCCESS means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     * @param listener
+     * <ul>
+     *    <li>Monitor PPG raw data reading and reporting</li>
+     *    <li>PPG原始数据读取上报的监听</li>
+     * </ul>
+     */
+    public void readPPGRawData(TimeData startTime, PPGTestMode testMode, BleWriteResponse bleWriteResponse, IPPGRawDataReadListener listener) 
+```
+
+###### 参数解释
+
+| 参数名           | 类型                    | 描述                                                         |
+| ---------------- | ----------------------- | ------------------------------------------------------------ |
+| startTime        | TimeData                | 读取PPG原始数据的时间，设备将按照该时间，上报该时间往后的数据 |
+| testMode         | PPGTestMode             | 需要读取该模式下的PPG原始数据                                |
+| bleWriteResponse | BleWriteResponse        | 写入操作的监听                                               |
+| listener         | IPPGRawDataReadListener | PPG原始数据读取上报的监听                                    |
+
+PPGTestMode
+
+```kotlin
+enum class PPGTestMode(val value: Byte, val des: String) {
+    MODE1(0x01, "每15分钟采集10秒时长，绿光+加速度原始数据"),
+    MODE2(0x02, "每5分钟采集1分钟时长，绿光+加速度原始数据"), ;
+
+    companion object {
+        fun toTestMode(@IntRange(from = 1, to = 2) value: Int): PPGTestMode {
+            return PPGTestMode.values().findLast {
+                it.value.toInt() == value
+            }!!
+        }
+    }
+}
+```
+
+TimeData
+
+```java
+public class TimeData {
+
+    public int year;
+    public int day;
+    public int month;
+    public int hour;
+    public int minute;
+    public int second;
+    /* 星期几 **/
+    public int weekDay;
+......
+}
+```
+
+
+
+###### 数据返回
+
+**IPPGRawDataReadListener** -- PPG原始数据读取上报的监听
+
+```kotlin
+/**
+ * PPG原始数据的读取监听 (PPG Raw Data Read Listener)
+ */
+interface IPPGRawDataReadListener : IListener {
+    /**
+     * 开始读取PPG数据 (Start reading PPG data)
+     * @param count ppg数据的总组数 (Total number of PPG data groups/sets)
+     */
+    fun onPPGReadStart(count: Int)
+
+    /**
+     * 一组PPG原始数据读取监听 (Listener for reading one set/group of PPG raw data)
+     * @param index 第几组 (Which group/set number)
+     * @param count 总组数 (Total number of groups/sets)
+     * @param ppgRawData 该组的PPG原始数据 (The PPG raw data for this group/set)
+     */
+    fun onPPGRawDataRead(index: Int, count: Int, ppgRawData: PPGRawData)
+
+    /**
+     * 所有PPG原始数据均已读取完成 (All PPG raw data has been read completely)
+     * @param ppgReadData ppg原始数据 (The collected PPG raw data)
+     */
+    fun onPPGRawDataReadComplete(ppgReadData: PPGReadData)
+
+    /**
+     * PPG原始数据读取终止 (PPG raw data reading terminated/stopped)
+     */
+    fun onPPGRawDataReadStop()
+}
+```
+
+###### 示例代码
+
+```java
+private void readPPGRawData() {
+    sb.setLength(0);
+    appendMsg("【读取】PPG原始数据");
+    VPOperateManager.getInstance().readPPGRawData(timeData, ppgTestMode, new BleWriteResponse() {
+        @Override
+        public void onResponse(int code) {
+            appendMsg("【读取PPG测量开关状态指令发送" + (code == Code.REQUEST_SUCCESS ? "成功】" : "失败】"));
+        }
+    }, new IPPGRawDataReadListener() {
+        @Override
+        public void onPPGReadStart(int count) {
+            appendMsg("开始读取PPG原始数据。\n一共" + count + "组数据");
+        }
+
+        @Override
+        public void onPPGRawDataRead(int index, int count, @NonNull PPGRawData ppgRawData) {
+            appendMsg("PPG原始数据读取中。\n[" + index + "/" + count + "] --> " + ppgRawData.toString());
+        }
+
+        @Override
+        public void onPPGRawDataReadComplete(@NonNull PPGReadData ppgReadData) {
+            appendMsg("PPG原始数据读取完成。\n" + ppgReadData);
+        }
+
+        @Override
+        public void onPPGRawDataReadStop() {
+            String content = tvPPGOptInfo.getText().toString();
+            appendMsg(content + "\nPPG原始数据读取停止。");
+        }
+    });
+}
+```
+
+
+
+### PPG原始信号实时传输
+
+#### 添加PPG原始信号监听
+
+###### 接口
+
+```java
+ /**
+     * 设置PPG高频实时传输监听
+     *
+     * @param listener
+     */
+    public void addDevicePPGRealTimeTransferListener(IPPGRealTimeTransmissionListener listener)
+```
+
+###### 实时传输监听
+
+```kotlin
+interface IPPGRealTimeTransmissionListener {
+
+
+    /**
+     * （手环请求）高频实时传输请求 (High-frequency real-time transfer request (from device/band))
+     * @param isRequestOpen 是否请求开启高频传输 (Whether the request is to enable high-frequency transmission)
+     */
+    fun onDeviceRequestPPGRealTimeTransfer(isRequestOpen: Boolean)
+
+    /**
+     * （App请求）高频实时传输请求 (High-frequency real-time transfer request (from App))
+     * @param isSuccess 是否成功 (Whether the request was successful)
+     */
+    fun onAppRequestPPGRealTimeTransfer(isSuccess: Boolean)
+
+
+    /**
+     * 绿光原始数据上报 (Green light raw data reporting)
+     * // Note: 'Reporting' typically means data actively sent from the device to the application.
+     */
+    fun onGreenLightDataReport(greenLightDataList: MutableList<Int>)
+
+    /**
+     * 加速度数据上报 (Acceleration data reporting)
+     * // Note: 'Reporting' typically means data actively sent from the device to the application.
+     */
+    fun onAccelerationDataReport(accDataList: MutableList<AccelerationData>)
+
+}
+```
+
+###### 加速度数据：AccelerationData
+
+```kotlin
+/**
+ * 加速度数据 (Acceleration Data)
+ * @param x X轴加速度 (X-axis acceleration)
+ * @param y Y轴加速 (Y-axis acceleration)
+ * @param z Z轴加速 (Z-axis acceleration)
+ */
+data class AccelerationData(val x: Int, val y: Int, val z: Int)
+```
+
+### App主动开启PPG实时传输
+
+###### 接口
+
+```java
+/**
+ * app请求开始PPG实时传输 (App requests to start PPG real-time transmission)
+ *
+ * @param bleWriteResponse   指令写入结果回调 (Callback for the command write result)
+ * @param transmissionListener  PPG实时传输监听 (PPG real-time transmission listener)
+ */
+public void startPPGRealTimeTransmission(BleWriteResponse bleWriteResponse, IPPGRealTimeTransmissionListener transmissionListener)
+```
+
+### App主动停止PPG实时传输
+
+###### 接口
+
+```java
+/**
+ * app请求停止PPG实时传输 (App requests to stop PPG real-time transmission)
+ *
+ * @param bleWriteResponse 指令写入结果回调 (Callback for the command write result)
+ */
+public void stopPPGRealTimeTransmission(BleWriteResponse bleWriteResponse)
+```
+
+
+
+## 微体检功能
+
+前提：需设备支持微体检功能，判断条件如下：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportMiniCheckup()
+```
+
+注：以下所有接口都需在满足设备支持微体检功能才能调用
+
+### 开始微体检测量
+
+###### 前提
+
+需设备支持微体检功能
+
+###### 接口
+
+```java
+/**
+     * <ul>
+     *     <li style="color:#1055d2">start mini-checkup test</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">开始微体检测量</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if response code equals Code.REQUEST_SUCCESS means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     * @param listener
+     * <ul>
+     *    <li>The listener of mini-checkup</li>
+     *    <li>微体检测量监听</li>
+     * </ul>
+     */
+public void startMiniCheckup(BleWriteResponse bleWriteResponse, IMiniCheckupOptListener listener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                    | 描述             |
+| ---------------- | ----------------------- | ---------------- |
+| bleWriteResponse | BleWriteResponse        | 写入操作的监听   |
+| listener         | IMiniCheckupOptListener | 微体检测量的监听 |
+
+###### 数据返回
+
+**IMiniCheckupOptListener** -- 微体检测量回调
+
+```kotlin
+/**
+ * 微体检相关操作监听 (Listener for Mini Checkup Operations)
+ * 用于监听微体检测量过程中的进度、成功、失败及停止等事件。
+ */
+interface IMiniCheckupOptListener {
+
+        /**
+     * 微体检测量的进度 (Mini Checkup measurement progress)
+     * 在测量过程中周期性回调，报告当前进度。
+     * @param progress 测量进度 (Measurement progress)，范围为 1-100。
+     */
+    fun onMiniCheckupTestProgress(progress: Int)
+
+    /**
+     * app请求停止微体检测量成功 (App request to stop Mini Checkup measurement successful)
+     * 当应用发起停止操作并被成功执行后回调。
+     */
+    fun onMiniCheckupStopSuccess()
+
+    /**
+     * 微体检测量失败 (Mini Checkup measurement failed)
+     * 当测量因故中断或未能获取有效结果时回调。
+     * @param errorCode 错误码 (EMiniCheckupTestErrorCode)，详见 {@link #com.veepoo.protocol.model.enums.EMiniCheckupTestErrorCode}。
+     */
+    fun onMiniCheckupTestFailed(errorCode: EMiniCheckupTestErrorCode)
+
+    /**
+     * 微体检测量成功 (Mini Checkup measurement successful)V1
+     * 当测量流程成功完成并获取到有效结果时回调。
+     * @param testResultData 测量结果 (Measurement result)，包含所有生理指标数据。
+     */
+    fun onMiniCheckupSuccess(testResultData: MiniCheckupResultData)
+
+    /**
+     * 微体检详情测量成功 (Mini Checkup measurement successful)V2
+     * 当测量流程成功完成并获取到有效结果时回调。
+     * @param miniCheckupDetailData 测量结果 (MiniCheckupDetailData)，包含所有生理指标数据。
+     */
+    fun onMiniCheckupDetailTestSuccess(miniCheckupDetailData: MiniCheckupDetailData)
+}
+```
+
+**EMiniCheckupTestErrorCode** -- 微体检测量的错误码
+
+```kotlin
+/**
+ * 微体检测量错误码(Mini Checkup Measurement Error Codes)
+ */
+enum class EMiniCheckupTestErrorCode {
+
+    /**
+     * 暂不支持该功能
+     * Function not support
+     */
+    FUNCTION_NOT_SUPPORT,
+
+    /**
+     * 测量结束但没有结果
+     * Measurement completed, but no result data obtained
+     */
+    TEST_COMPLETE_NO_RESULT,
+
+    /**
+     * 设备正在测量其他数据
+     * The device is currently measuring other data
+     */
+    DEVICE_BUSY,
+
+    /**
+     * 设备端低电
+     * Low power on the device side
+     */
+    LOW_POWER
+}
+```
+
+**MiniCheckupResultData** -- 微体检测量结果
+
+```java
+public class MiniCheckupResultData {
+
+    /**
+     * 心率 (Heart Rate)
+     * 单位：次/分钟 (bpm)
+     */
+    private int heartRate;
+
+    /**
+     * 血氧饱和度 (Blood Oxygen Saturation)
+     * 单位：%
+     */
+    private int bloodOxygen;
+
+    /**
+     * 压力指数 (Stress Index)
+     */
+    private int stress;
+
+    /**
+     * 情绪指数 (Emotional Index / Mood)
+     * 值域：-10 到 10，-10 表示极度低落/负面，10 表示极度高昂/正面。
+     * 改功能暂未启用未赋值，请忽视（This feature is not yet enabled and has not been assigned a value; please ignore it.）
+     */
+    @Deprecated
+    private int emotion;
+
+    /**
+     * 疲劳度指数 (Fatigue Index)
+     * 改功能暂未启用未赋值，请忽视（This feature is not yet enabled and has not been assigned a value; please ignore it.）
+     */
+    @Deprecated
+    private int fatigue;
+
+    /**
+     * 血糖 (Blood Glucose)
+     * 单位：mmol/L 
+     */
+    private float bloodGlucose;
+
+    /**
+     * 体温 (Body Temperature)
+     * 单位：摄氏度 (°C)
+     */
+    private float bodyTemperature;
+
+    /**
+     * 血压 - 收缩压 (Blood Pressure - Systolic)
+     * 即高压，单位：毫米汞柱 (mmHg)
+     */
+    private int systolicBloodPressure;
+
+    /**
+     * 血压 - 舒张压 (Blood Pressure - Diastolic)
+     * 即低压，单位：毫米汞柱 (mmHg)
+     */
+    private int diastolicBloodPressure;
+
+    /**
+     * 心率变异性 (Heart Rate Variability, HRV)
+     * 用于评估自主神经系统活动的指标，单位/表示方式根据具体测量算法而定。
+     */
+    private int hrv;
+}
+```
+
+**MiniCheckupDetailData**--微体检测量结果-v2
+
+```java
+/**
+ * 微体检详情数据对象 (Mini Checkup Detail Data Object)
+ * 包含用户在微体检中获取的各项生理和心理健康指标
+ */
+public class MiniCheckupDetailData {
+
+    /**
+     * 基本的个人信息
+     */
+    private MiniCheckupBasePersonalInfo basePersonalInfo;
+
+    /**
+     * 心率 (Heart Rate)
+     * 单位：次/分钟 (bpm)
+     */
+    private int heartRate;
+
+    /**
+     * 血氧饱和度 (Blood Oxygen Saturation)
+     * 单位：%
+     */
+    private int bloodOxygen;
+
+    /**
+     * 压力指数 (Stress Index)
+     */
+    private int stress;
+
+    /**
+     * 情绪指数 (Emotional Index / Mood)
+     * 值域：-10 到 10，-10 表示极度低落/负面，10 表示极度高昂/正面。
+     * 改功能暂未启用未赋值，请忽视（This feature is not yet enabled and has not been assigned a value; please ignore it.）
+     */
+    @Deprecated
+    private int emotion;
+
+    /**
+     * 疲劳度指数 (Fatigue Index)
+     * 改功能暂未启用未赋值，请忽视（This feature is not yet enabled and has not been assigned a value; please ignore it.）
+     */
+    @Deprecated
+    private int fatigue;
+
+    /**
+     * 血糖类型：1表示显示值，2表示显示等级
+     * Blood glucose type: 1:show blood glucose value,2:show blood glucose risk level
+     */
+    private int bloodGlucoseType;
+
+    /**
+     * 血糖 (Blood Glucose)
+     * 单位：mmol/L 或 mg/dL (具体单位根据实际使用场景确定)
+     */
+    private float bloodGlucose;
+
+    /**
+     * 体温 (Body Temperature)
+     * 单位：摄氏度 (°C)
+     */
+    private float bodyTemperature = -273.15f;
+
+    /**
+     * 原始温度 (Original Temperature)
+     * 单位：摄氏度 (°C)
+     */
+    private float originalTemperature = -273.15f;
+
+    /**
+     * 气泵血压
+     * Air Pump Blood Pressure
+     */
+    private MiniCheckupBPAirPump bpAirPump;
+
+    /**
+     * 光电血压
+     * Photoelectric Blood Pressure
+     */
+    private MiniCheckupBPPhotoelectric bpPhotoelectric;
+
+    /**
+     * 心率变异性 (Heart Rate Variability, HRV) 1-210
+     * 用于评估自主神经系统活动的指标，单位/表示方式根据具体测量算法而定。
+     */
+    private int hrv;
+
+    /**
+     * 血液成分
+     * Blood Component
+     */
+    private MiniCheckupBloodComponent bloodComponent;
+
+    /**
+     * 身体成分
+     * Body Component
+     */
+    private MiniCheckupBodyComponent bodyComponent;
+
+    /**
+     * 皮电
+     * Skin Electricity
+     */
+    private MiniCheckupSkinElectricity skinElectricity;
+
+}
+
+public class MiniCheckupBasePersonalInfo {
+    /**
+     * 性别
+     * 性别 0代表 female， 1代表male
+     */
+    private int gender;
+
+    /**
+     * 年龄
+     */
+    private int age;
+
+    /**
+     * 身高， 单位cm
+     */
+    private int height;
+
+    /**
+     * 体重， 单位kg
+     */
+    private int weight;
+ }
+ 
+ /**
+ * 微体检-气泵血压
+ */
+public class MiniCheckupBPAirPump {
+    /**
+     * 血压 - 收缩压 (Blood Pressure - Systolic)
+     * 即高压，单位：毫米汞柱 (mmHg)
+     */
+    private int systolicBloodPressure;
+
+    /**
+     * 血压 - 舒张压 (Blood Pressure - Diastolic)
+     * 即低压，单位：毫米汞柱 (mmHg)
+     */
+    private int diastolicBloodPressure;
+}
+
+MiniCheckupBPPhotoelectric属性与MiniCheckupBPAirPump一致
+
+/**
+ * 微体检-血液成分
+ */
+public class MiniCheckupBloodComponent {
+    /**
+     * 尿酸
+     */
+    private float uricAcid;
+    /**
+     * 总胆固醇
+     */
+    private float tCHO;
+    /**
+     * 甘油三酸酯
+     */
+    private float tAG;
+    /**
+     * 高密度脂蛋白
+     */
+    private float hDL;
+    /**
+     * 低密度脂蛋白
+     */
+    private float lDL;
+    
+}
+public class MiniCheckupBodyComponent {
+    /**
+     * 性别
+     * 性别 0代表 female， 1代表male
+     */
+    private int gender;
+
+    /**
+     * 年龄
+     */
+    private int age;
+
+    /**
+     * 身高， 单位cm
+     */
+    private int height;
+
+    /**
+     * 体重， 单位kg
+     */
+    private int weight;
+
+    /**
+     * 有效范围【4.0，1114.0】，小端，保留一位小数，上报的值是10倍，下同
+     */
+    private float BMI;
+
+    /**
+     * 体脂率     | 2    | 有效范围【2.0，48.0】
+     */
+    private float bodyFatRate;
+
+    /**
+     * 脂肪量     | 2    | 有效范围【10.0，248.0】
+     */
+    private float fatRate;
+
+    /**
+     * 去脂体重   | 2    | 有效范围【1.0，132.0】
+     */
+    private float FFM;
+
+    /**
+     * 肌肉率     | 2    | 有效范围【39.0，90.0】
+     */
+    private float muscleRate;
+
+    /**
+     * 肌肉量     | 2    | 有效范围【9.0，248.0】
+     */
+    private float muscleMass;
+
+    /**
+     * 皮下脂肪   | 2    | 有效范围【1.0，47.0】
+     */
+    private float subcutaneousFat;
+
+    /**
+     * 体内水分   | 2    | 有效范围【28.0，79.0】
+     */
+    private float bodyWater;
+
+    /**
+     * 含水量     | 2    | 有效范围【7.0，217.0】
+     */
+    private float waterContent;
+
+    /**
+     * 骨骼肌率   | 2    | 有效范围【13.0，69.0】
+     */
+    private float skeletalMuscleRate;
+
+    /**
+     * 骨量       | 2    | 有效范围【2.3，4.8】
+     */
+    private float boneMass;
+
+    /**
+     * 蛋白质占比 | 2    | 有效范围【4.0，26.0】
+     */
+    private float proteinProportion;
+
+    /**
+     * 蛋白质量   | 2    | 有效范围【1.0，71.0】
+     */
+    private float proteinMass;
+
+    /**
+     * 基础代谢率 | 2    | 有效范围【25，14995】
+     */
+    private float basalMetabolicRate;
+}
+
+/**
+ * 微体检-皮电
+ */
+public class MiniCheckupSkinElectricity {
+    /**
+     * 情绪 [-10,10]
+     */
+    private int emotion;
+    /**
+     * 皮肤含水量 [1,99]
+     */
+    private int skinMoistureContent;
+    /**
+     * 抑郁症风险 [0,2],0:低风险，1:中风险，2:高风险
+     */
+    private int depressionRisk;
+    /**
+     * 交感神经活跃度 [1,99]
+     */
+    private int sympatheticActivity;
+    /**
+     * 皮质醇浓度,有效范围[0，500]ug/L,正常范围[0，230]ug/L
+     * 通用单位ug/dL或nmol/L，10ug/L = 1ug/dL，
+     * 1nmol/L = 0.36247ug/L， 1nmol/L = 0.036247 ug/dL
+     */
+    private int cortisolConcentration;
+}
+
+
+```
+
+
+
+###### 示例代码
+
+```java
+VPOperateManager.getInstance().startMiniCheckup(code -> {
+    if (code == Code.REQUEST_SUCCESS) {
+        appendMsg("【开始】微体检指令写入成功！");
+    } else {
+        appendMsg("【开始】微体检指令写入失败！");
+    }
+}, miniCheckupOptListener);
+```
+
+### 停止微体检测量
+
+###### 前提
+
+需设备支持微体检功能
+
+###### 接口
+
+```java
+/**
+     * <ul>
+     *     <li style="color:#1055d2">stop mini-checkup test</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">停止微体检测量</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if response code equals Code.REQUEST_SUCCESS means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     * @param listener
+     * <ul>
+     *    <li>The listener of mini-checkup</li>
+     *    <li>微体检测量监听</li>
+     * </ul>
+     */
+public void stoptMiniCheckup(BleWriteResponse bleWriteResponse, IMiniCheckupOptListener listener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                    | 描述             |
+| ---------------- | ----------------------- | ---------------- |
+| bleWriteResponse | BleWriteResponse        | 写入操作的监听   |
+| listener         | IMiniCheckupOptListener | 微体检测量的监听 |
+
+###### 示例代码
+
+```java
+VPOperateManager.getInstance().stopMiniCheckup(code -> {
+    if (code == Code.REQUEST_SUCCESS) {
+        appendMsg("【停止】微体检指令写入成功！");
+    } else {
+        appendMsg("【停止】微体检指令写入失败！");
+    }
+}, miniCheckupOptListener);
+```
+
+
+
+## 皮电功能
+
+前提：需设备支持皮电功能，判断条件如下：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportGSR()
+```
+
+注：以下所有接口都需在满足设备支持皮电功能才能调用
+
+### 开始皮电测量
+
+###### 前提
+
+需设备支持皮电功能
+
+###### 接口
+
+```java
+***
+     * <ul>
+     *     <li style="color:#1055d2">Start GSR measurement</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">开始皮电测量</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     * @param detectListener
+     * <ul>
+     *     <li style="color:#1055d2">gsr measurement callback</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">皮电测量</li>
+     * </ul>
+     */
+ public void startDetectGsr(BleWriteResponse bleWriteResponse, IGsrDetectListener detectListener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型               | 描述           |
+| ---------------- | ------------------ | -------------- |
+| bleWriteResponse | BleWriteResponse   | 写入操作的监听 |
+| listener         | IGsrDetectListener | 皮电测量的监听 |
+
+###### 数据返回
+
+**IGsrDetectListener** -- 皮电测量回调
+
+```kotlin
+interface IGsrDetectListener : IListener {
+
+    /**
+     * 皮电测量进度
+     * @param progress 进度
+     */
+    fun onGsrDetectProgress(progress:Int)
+
+    /**
+     * 皮电测量进度
+     * @param progress 进度
+     */
+    fun onGsrDetectSuccess(detectResult: GsrDetectResult)
+
+    /**
+     * 皮电测量失败
+     * @param detectAck 皮电测量（GSR/EDA）的响应码或状态
+     */
+    fun onGsrDetectFailed(detectAck: GsrDetectAck)
+
+    /**
+     * 皮电停止测量
+     */
+    fun onGsrDetectStop()
+}
+```
+
+**GsrDetectAck** -- 皮电测量的错误码
+
+```kotlin
+/**
+ * 皮电测量（GSR/EDA）的响应码或状态。
+ *
+ * @property value 对应的原始字节值（0x00 到 0x05）。
+ * @property description 状态描述。
+ */
+enum class GsrDetectAck(val value: Int, val description: String) {
+    /** 0x00: 可用，App端仅在当前状态下走正常测量流程 */
+    AVAILABLE(0x00, "可用，走正常测量流程"),
+
+    /** 0x01: 设备正在测量压力，互斥，App端显示设备正忙 */
+    BUSY_MEASURING_PRESSURE(0x01, "设备正忙：测量压力"),
+
+    /** 0x02: 设备处于低电状态 */
+    LOW_BATTERY(0x02, "设备处于低电状态"),
+
+    /** 0x03: 设备正在测量其它数据，App端显示设备正忙 */
+    BUSY_MEASURING_OTHER(0x03, "设备正忙：测量其它数据"),
+
+    /** 0x04: 设备佩戴检测未通过，App端显示异常提示 */
+    WEARING_CHECK_FAILED(0x04, "佩戴检测未通过"),
+
+    /** 0x05: 测量失败 */
+    MEASURE_FAILED(0x05, "测量失败");
+}
+```
+
+**GsrDetectResult** -- 皮电测量结果
+
+```kotlin
+/**
+ * 皮电检测（GSR）结果数据类。
+ */
+data class GsrDetectResult(
+    /** 情绪水平 [-10, 10] */
+    var emotionLevel: Int = 0,
+
+    /** 皮肤含水量 [1, 99] */
+    var skinMoisture: Int = 0,
+
+    /** 抑郁症风险 [0, 2] */
+    var depressionRisk: DepressionRisk = DepressionRisk.LOW,
+
+    /** 交感神经活跃度 [1, 99] */
+    var snsActivation: Int = 0,
+
+    /**
+     * 皮质醇浓度 (Cortisol Value)。
+     * 有效范围 [0, 500] ug/L。
+     * 注意：单位为 ug/L，方便与有效范围进行比较。
+     */
+    var cortisolValue: Int = 0
+)
+```
+
+###### 示例代码
+
+```java
+VPOperateManager.getInstance().startDetectGsr(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            }, new IGsrDetectListener() {
+                @Override
+                public void onGsrDetectProgress(int progress) {
+                    Logger.t(TAG).e("onGsrDetectProgress --》 " + progress);
+                }
+
+                @Override
+                public void onGsrDetectSuccess(@NonNull GsrDetectResult detectResult) {
+                    Logger.t(TAG).e("onGsrDetectSuccess --》 " + detectResult.toString());
+                }
+
+                @Override
+                public void onGsrDetectFailed(@NonNull GsrDetectAck detectAck) {
+                    Logger.t(TAG).e("onGsrDetectFailed --》 " + detectAck.getDescription());
+                }
+
+                @Override
+                public void onGsrDetectStop() {
+                    Logger.t(TAG).e("onGsrDetectStop --》 -- ");
+                }
+            });
+```
+
+### 停止皮电测量
+
+###### 前提
+
+需设备支持皮电功能
+
+###### 接口
+
+```java
+    /***
+     * <ul>
+     *     <li style="color:#1055d2">Start GSR measurement</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">结束皮电测量</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     */
+    public void stopDetectGsr(BleWriteResponse bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型             | 描述           |
+| ---------------- | ---------------- | -------------- |
+| bleWriteResponse | BleWriteResponse | 写入操作的监听 |
+
+###### 示例代码
+
+```java
+ VPOperateManager.getInstance().stopDetectGsr(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            });
+```
+
+
+## ZT163项目设备常灭屏功能
+
+前提：需要该设备为ZT163项目设备：
+
+注：以下所有接口都需该设备为ZT163项目设备才能调用起效
+
+### 设置ZT163设备常灭屏状态
+
+###### 接口
+
+```java
+/**
+     * [Set ZT163 Project Device Always Off Screen]
+     * <p>
+     * 设置 ZT163 项目常灭屏功能。
+     *
+     * @param isOpen           Function switch. | 是否开启：true-开启，false-关闭。
+     * @param bleWriteResponse Write operation response. | 蓝牙指令写入回调。
+     * @param listener         Operation listener. | 常灭屏功能操作监听。
+     */
+public void setZT163DeviceAlwaysOffScreen(boolean isOpen, BleWriteResponse bleWriteResponse, IZT163DeviceAlwaysOffScreenOptListener listener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型               | 描述                              |
+| ---------------- | ------------------ | --------------------------------- |
+| isOpen           | boolean            | true:开启常灭屏，false:关闭常灭屏 |
+| bleWriteResponse | BleWriteResponse   | 写入操作的监听                    |
+| listener         | IGsrDetectListener | ZT163设备常灭屏状态监听           |
+
+### 读取ZT163设备常灭屏状态
+
+###### 接口
+
+```java
+/**
+     * [Read Always-Off-Screen Status] 读取 ZT163 设备常灭屏状态
+     *
+     * @param bleWriteResponse 写入操作回调 (Success if Code.REQUEST_SUCCESS)
+     * @param listener         状态监听器 (Handles data feedback)
+     */
+public void readZT163DeviceAlwaysOffScreen(BleWriteResponse bleWriteResponse, IZT163DeviceAlwaysOffScreenOptListener listener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型               | 描述                    |
+| ---------------- | ------------------ | ----------------------- |
+| bleWriteResponse | BleWriteResponse   | 写入操作的监听          |
+| listener         | IGsrDetectListener | ZT163设备常灭屏状态监听 |
+
+###### 数据返回
+
+**IZT163DeviceAlwaysOffScreenOptListener** -- ZT163设备常灭屏操作回调
+
+```kotlin
+/**
+ * Listener for ZT163 Device Always-Off-Screen operations.
+ * ZT163 项目设备常灭屏功能操作监听。
+ */
+interface IZT163DeviceAlwaysOffScreenOptListener : IListener {
+    /**
+     * Triggered when Always-Off-Screen setting is successful.
+     * 常灭屏设置成功。
+     * @param isOpen true: Enabled, false: Disabled.
+     */
+    fun onZT163DeviceAlwaysOffScreenSettingSuccess(isOpen: Boolean)
+
+    /**
+     * Triggered when Always-Off-Screen setting fails.
+     * 常灭屏设置失败。
+     */
+    fun onZT163DeviceAlwaysOffScreenSettingFailed()
+
+    /**
+     * Callback for Always-Off-Screen status reporting from device.
+     * 设备常灭屏状态主动上报。
+     * @param isOpen true: Enabled, false: Disabled.
+     */
+    fun onZT163DeviceAlwaysOffScreenReport(isOpen: Boolean)
+
+    /**
+     * Triggered when the current device does not support this feature.
+     * 当前设备不支持此功能。
+     */
+    fun onFunctionNotSupport()
+}
+```
+
+###### 示例代码
+
+```java
+/**
+ * Activity for controlling ZT163 Device Always-Off-Screen feature.
+ * ZT163 设备常灭屏功能界面。
+ */
+public class ZT163DeviceAlwaysOffScreenActivity extends AppCompatActivity implements IZT163DeviceAlwaysOffScreenOptListener {
+
+    private TextView tvInfo;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_zt163_device_always_off_screen);
+        
+        tvInfo = findViewById(R.id.tvInfo);
+
+        // Enable Always-Off-Screen | 开启常灭屏
+        findViewById(R.id.btnOpen).setOnClickListener(v -> {
+            VPOperateManager.getInstance().setZT163DeviceAlwaysOffScreen(true, code -> {
+                // Command sent callback | 指令发送回调
+            }, this);
+        });
+
+        // Disable Always-Off-Screen | 关闭常灭屏
+        findViewById(R.id.btnClose).setOnClickListener(v -> {
+            VPOperateManager.getInstance().setZT163DeviceAlwaysOffScreen(false, code -> {
+                // Command sent callback | 指令发送回调
+            }, this);
+        });
+
+        // Read Current Status | 读取当前状态
+        findViewById(R.id.btnRead).setOnClickListener(v -> {
+            VPOperateManager.getInstance().readZT163DeviceAlwaysOffScreen(code -> {
+                // Command sent callback | 指令发送回调
+            }, this);
+        });
+    }
+
+    @Override
+    public void onZT163DeviceAlwaysOffScreenSettingSuccess(boolean isOpen) {
+        String state = isOpen ? "ON/开启" : "OFF/关闭";
+        tvInfo.setText("Setting Success | 设置成功: " + state);
+    }
+
+    @Override
+    public void onZT163DeviceAlwaysOffScreenSettingFailed() {
+        tvInfo.setText("Setting Failed | 设置失败");
+    }
+
+    @Override
+    public void onZT163DeviceAlwaysOffScreenReport(boolean isOpen) {
+        String state = isOpen ? "ON/开启" : "OFF/关闭";
+        tvInfo.setText("Status Reported | 状态上报: " + state);
+    }
+
+    @Override
+    public void onFunctionNotSupport() {
+        tvInfo.setText("Function Not Supported | 当前设备不支持该功能");
+    }
+}
+```
+
+
+
+## 健康辅助功能
+
+前提：需设备支持健康辅助功能，判断条件如下：
+
+```kotlin
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportHealthAssessment
+```
+
+注：以下所有接口都需在满足设备支持健康辅助功能才能调用
+
+#### 读取健康辅助功能设置
+
+###### 前提
+
+需设备支持健康辅助功能
+
+###### 接口
+
+```
+readFunSwitchState(bleWriteResponse, funSwitchListener)
+```
+
+###### 参数解释
+
+| 参数名            | 类型               | 描述           |
+| ----------------- | ------------------ | -------------- |
+| bleWriteResponse  | BleWriteResponse   | 写入操作的监听 |
+| funSwitchListener | IFunSwitchListener | 功能开关监听   |
+
+###### 数据返回
+
+**IFunSwitchListener** -- 功能开关监听
+
+```java
+    /**
+     * 开关状态改变
+     *
+     * @param con    命令类型  1设置  2读取  3设备主动上报
+     * @param states 功能状态,其中Int代表功能类型，详见FunSwitchFlags，EFunctionStatus代表该功能状态，有相关的FunSwitchFlags返回则代表支持，没有代表不支持
+     */
+    void onFunSwitchStatusChanged(int con, Map<Integer, EFunctionStatus> states);
+```
+
+**FunSwitchFlags**--功能类型
+
+```java
+	// 血糖
+    public static final int BLOOD_GLUCOSE = 1;
+    // 血压
+    public static final int BLOOD_PRESSURE = 2;
+    //血氧
+    public static final int BLOOD_OXYGEN = 3;
+    //体温
+    public static final int BODY_TEMPERATURE = 4;
+    //HRV
+    public static final int HRV = 5;
+    //压力
+    public static final int STRESS = 6;
+    //梅托
+    public static final int MET = 7;
+    //血液成分
+    public static final int BLOOD_COMPONENT = 8;
+    //身体成分
+    public static final int BODY_COMPONENT = 9;
+    //微体检
+    public static final int MICRO_PHYSICAL_EXAMINATION = 10;
+    //情绪
+    public static final int EMOTION = 11;
+    //疲劳度
+    public static final int FATIGUE = 12;
+    //核辐射
+    public static final int NUCLEAR_RADIATION = 13;
+    //跌倒提醒
+    public static final int FALLING_REMINDER = 14;
+    //AI问答
+    public static final int FALLING_AI_CHAT = 15;
+    //AI表盘
+    public static final int FALLING_AI_DIAL = 16;
+    //皮电测试
+    public static final int SKIN_ELECTRIC_TEST = 17;
+```
+
+**EFunctionStatus**--功能状态
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().readFunSwitchState(bleWriteResponse, funSwitchListener)
+```
+
+
+
+#### 设置健康辅助功能开关
+
+###### 前提
+
+需设备支持健康辅助功能且读取时有相关的FunSwitchFlags返回
+
+###### 接口
+
+```
+setFunSwitchState(bleWriteResponse, funSwitchListener, funSwitch, status)
+```
+
+###### 参数解释
+
+| 参数名            | 类型               | 描述                         |
+| ----------------- | ------------------ | ---------------------------- |
+| bleWriteResponse  | BleWriteResponse   | 写入操作的监听               |
+| funSwitchListener | IFunSwitchListener | 功能监听                     |
+| funSwitch         | Int                | 功能类型，详见FunSwitchFlags |
+| status            | EFunctionStatus    | 功能状态，可设置开关         |
+
+###### 数据返回
+
+**IFunSwitchListener** -- 健康辅助功能回调，同读取返回一致
+
+**funSwitch** -- 功能类型，详见FunSwitchFlags
+
+**status** -- 功能状态，可设置开关
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().setFunSwitchState(bleWriteResponse, funSwitchListener, FunSwitchFlags.BLOOD_OXYGEN, EFunctionStatus.SUPPORT_OPEN)
+```
+
+
+
+## 4G功能
+
+前提：需设备支持4G功能，判断条件如下：
+
+```kotlin
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupport4G
+```
+
+注：以下所有接口都需在满足设备支持4G功能才能调用
+
+#### 读取4G设备配置信息
+
+###### 前提
+
+需设备支持4G功能
+
+###### 接口
+
+```
+read4gServerInfo(bleWriteResponse, configListener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                       | 描述           |
+| ---------------- | -------------------------- | -------------- |
+| bleWriteResponse | BleWriteResponse           | 写入操作的监听 |
+| configListener   | INetServer4gConfigListener | 4g功能监听     |
+
+###### 数据返回
+
+**INetServer4gConfigListener** -- 4G功能监听
+
+```kotlin
+	/*读取成功*/
+    fun onReadSuccess(info:NetworkSever4gConfigInfo)
+	/*设备绑定/设置成功*/
+    fun onSettingSuccess()
+	/*设备拒绝/设置失败*/
+    fun onSettingFailed()
+```
+
+**NetworkSever4gConfigInfo**--4G配置
+
+```kotlin
+class NetworkSever4gConfigInfo {
+
+//    ip地址
+    var ipAddress:String? = null
+
+//    端口
+    var port:Int? = null
+
+//    用户名，登录账号
+    var userName:String? = null
+
+//    密码，App 随机生成的密码，非登录账号密码
+    var password:String? = null
+
+//    APP或设备最后一次同步服务器的时间戳，秒级，
+    var syncTime:Long? = null
+
+//    4G开关
+    var switch4g:Boolean? = null
+
+//    数据上传开关:4G开关为关时，应无效
+    var switchUpload:Boolean? = null
+
+//    4G上报服务器的时间间隔，分钟级别
+    var reportInterval:Int? = null
+
+//     恢复时间戳,，秒级
+    var recoveryTime:Long? = null
+
+}
+```
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().read4gServerInfo(bleWriteResponse, configListener)
+```
+
+
+
+#### 设置4g设备功能配置
+
+###### 前提
+
+需设备支持4G功能
+
+注：不支持单个参数设置，如果仅设置某一项，需将读取回来的配置修改该项后再设置下去。
+
+###### 接口
+
+```
+set4gServerInfo(config, bleWriteResponse, configListener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                       | 描述           |
+| ---------------- | -------------------------- | -------------- |
+| configListener   | NetworkSever4gConfigInfo   | 4G配置         |
+| bleWriteResponse | BleWriteResponse           | 写入操作的监听 |
+| configListener   | INetServer4gConfigListener | 4G功能监听     |
+
+###### 数据返回
+
+**NetworkSever4gConfigInfo** -- 4G配置，同读取返回一致
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().set4gServerInfo(config, bleWriteResponse, configListener)
+```
+
+
+
+#### 清除4G设备账号信息
+
+用于清除设备上的账号信息
+
+###### 前提
+
+需设备支持4G功能
+
+###### 接口
+
+```
+clear4gAccountInfo(bleWriteResponse, configListener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                       | 描述           |
+| ---------------- | -------------------------- | -------------- |
+| bleWriteResponse | BleWriteResponse           | 写入操作的监听 |
+| configListener   | INetServer4gConfigListener | 4G功能监听     |
+
+###### 数据返回
+
+**NetworkSever4gConfigInfo** -- 4G配置，同读取返回一致
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().clear4gAccountInfo(bleWriteResponse, configListener)
+```
+
