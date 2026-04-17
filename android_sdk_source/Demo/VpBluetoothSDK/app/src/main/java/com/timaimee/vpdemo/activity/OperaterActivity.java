@@ -709,6 +709,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             }, bpSetting);
         } else if (oprater.equals(PWD_COMFIRM)) {
             boolean is24Hourmodel = false;
+            titleBleInfo.setText("开始密码校验");
             VPOperateManager.getInstance().confirmDevicePwd(writeResponse,
                     new IPwdDataListener() {
                         @Override
@@ -719,6 +720,12 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                             deviceVersion = pwdData.getDeviceVersion();
                             deviceTestVersion = pwdData.getDeviceTestVersion();
                             titleBleInfo.setText("设备号：" + deviceNumber + ",版本号：" + deviceVersion + ",\n测试版本号：" + deviceTestVersion);
+                        }
+
+                        @Override
+                        public void onConnectionConfirmTimeout() {
+                            titleBleInfo.setText("错误:连接确认超时");
+                            showToast("错误:连接确认超时");
                         }
                     },
                     new IDeviceFuctionDataListener() {
@@ -776,6 +783,12 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     "0000",
                     is24Hourmodel);
 
+        }else  if (oprater.equals(NEED_COMFIRM)) {
+            VPOperateManager.getInstance().setDeviceShowConfirm(true);
+            showToast("设置需要密码确认");
+        } else  if (oprater.equals(UNNEED_COMFIRM)) {
+            VPOperateManager.getInstance().setDeviceShowConfirm(false);
+            showToast("设置无需密码确认");
         } else if (oprater.equals(PWD_COMFIRM_2_DISCONNECT)) { //发起BT立马断开
             connectBT();//连接BT
             mHandler.postDelayed(new Runnable() {
@@ -797,6 +810,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     String message = "PwdData:\n" + pwd.toString();
                     Logger.t(TAG).i(message);
                     sendMsg(message, 1);
+                }
+
+                @Override
+                public void onConnectionConfirmTimeout() {
+
                 }
             }, "0000");
         } else if (oprater.equals(SPORT_CURRENT_READ)) {
