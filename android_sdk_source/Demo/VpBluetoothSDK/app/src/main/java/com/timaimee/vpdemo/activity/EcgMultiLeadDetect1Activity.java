@@ -79,94 +79,91 @@ public class EcgMultiLeadDetect1Activity extends Activity implements View.OnClic
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        switch (id) {
-            case R.id.start:
-                if (isDetecting) {
-                    return;
+
+        if (id == R.id.start) {
+            if (isDetecting) {
+                return;
+            }
+            for (int i = 0; i < viewList.size(); i++) {
+                viewList.get(i).clearData();
+            }
+            isDetecting = true;
+            leadOffCount = 0;
+            VPOperateManager.getInstance().startMultiLeadDetectECG(writeResponse, true, new IECGMultiLeadDetectListener() {
+
+
+                @Override
+                public void onEcgDetectSuccess() {
+                    isDetecting = false;
+                    Log.e("Test", "onEcgDetectSuccess");
+                    Toast.makeText(EcgMultiLeadDetect1Activity.this, "测量成功", Toast.LENGTH_LONG).show();
                 }
-                for (int i = 0; i < viewList.size(); i++) {
-                    viewList.get(i).clearData();
+
+                @Override
+                public void onEcgDetectPreInfoChange(EcgMultiLeadPreInfo ecgDetectInfo) {
+                    Log.e("Test", "onEcgDetectPreInfoChange:" + ecgDetectInfo.toString());
+                    if (isDetecting) {
+                        tvInfo.setText("正在测量中...");
+                    }
+                    detectSeconds = 0;
                 }
-                isDetecting = true;
-                leadOffCount = 0;
-                VPOperateManager.getInstance().startMultiLeadDetectECG(writeResponse, true, new IECGMultiLeadDetectListener() {
 
-
-                    @Override
-                    public void onEcgDetectSuccess() {
-                        isDetecting = false;
-                        Log.e("Test", "onEcgDetectSuccess");
-                        Toast.makeText(EcgMultiLeadDetect1Activity.this, "测量成功", Toast.LENGTH_LONG).show();
+                @Override
+                public void onEcgDetectStateChange(EcgMultiLeadDetectState ecgDetectState) {
+                    Log.e("Test", "onEcgDetectStateChange:" + ecgDetectState.toString());
+                    tvProgress.setText(ecgDetectState.getProgress() + "%");
+                    if (isDetecting) {
+                        tvInfo.setText("正在测量中...\n心率:" + ecgDetectState.getHeart() + "   QT:" + ecgDetectState.getQt() + "   HRV:" + ecgDetectState.getHrv());
                     }
+                    detectSeconds++;
 
-                    @Override
-                    public void onEcgDetectPreInfoChange(EcgMultiLeadPreInfo ecgDetectInfo) {
-                        Log.e("Test", "onEcgDetectPreInfoChange:" + ecgDetectInfo.toString());
-                        if (isDetecting) {
-                            tvInfo.setText("正在测量中...");
-                        }
-                        detectSeconds = 0;
-                    }
-
-                    @Override
-                    public void onEcgDetectStateChange(EcgMultiLeadDetectState ecgDetectState) {
-                        Log.e("Test", "onEcgDetectStateChange:" + ecgDetectState.toString());
-                        tvProgress.setText(ecgDetectState.getProgress() + "%");
-                        if (isDetecting) {
-                            tvInfo.setText("正在测量中...\n心率:" + ecgDetectState.getHeart() + "   QT:" + ecgDetectState.getQt() + "   HRV:" + ecgDetectState.getHrv());
-                        }
-                        detectSeconds++;
-
-                        //前4秒不管脱落问题
-                        if (detectSeconds > 4) {
-                            //始测量4秒后，如果I导联不脱落继续测量；I导联脱落全部脱落;
-                            if (ecgDetectState.getLeadI() == 1) {
-                                tvInfo.setText("导联脱落");
-                                leadOffCount++;
-                                //4秒后如果脱落次数连续超过4次，则判断脱落
-                                if (leadOffCount > 4) {
-                                    isDetecting = false;
-                                    VPOperateManager.getInstance().stopMultiLeadDetectECG(writeResponse);
-                                    tvInfo.setText("导联脱落，测量结束");
-                                }
-                            } else {
-                                leadOffCount = 0;
+                    //前4秒不管脱落问题
+                    if (detectSeconds > 4) {
+                        //始测量4秒后，如果I导联不脱落继续测量；I导联脱落全部脱落;
+                        if (ecgDetectState.getLeadI() == 1) {
+                            tvInfo.setText("导联脱落");
+                            leadOffCount++;
+                            //4秒后如果脱落次数连续超过4次，则判断脱落
+                            if (leadOffCount > 4) {
+                                isDetecting = false;
+                                VPOperateManager.getInstance().stopMultiLeadDetectECG(writeResponse);
+                                tvInfo.setText("导联脱落，测量结束");
                             }
-
+                        } else {
+                            leadOffCount = 0;
                         }
+
                     }
-
-                    @Override
-                    public void onDiseaseDiagnosisResults(EcgMultiLeadDetectResult ecgDetectResult) {
-                        Log.e("Test", "onEcgDetectResultChange:" + ecgDetectResult.toString());
-                        tvInfo.setText("疾病诊断结果!\n平均心率:" + ecgDetectResult.getAvgHeart() + "   平均QT:" + ecgDetectResult.getAvgQT() + "   平均HRV:" + ecgDetectResult.getAvgHRV());
-                    }
-
-                    @Override
-                    public void onEcgDetectFail() {
-                        isDetecting = false;
-                        Log.e("Test", "onEcgDetectFail");
-                        tvInfo.setText("测量失败");
-                    }
-
-                    @Override
-                    public void onEcgADCChange(@NonNull ELeadFlag leadFlag, @NonNull int[] data, int gain, int packNum) {
-                        viewList.get(leadFlag.getValue() - 1).changeData(data, data.length);
-                    }
-
-
-                });
-                break;
-            case R.id.stop:
-                for (int i = 0; i < viewList.size(); i++) {
-                    viewList.get(i).clearData();
                 }
-                isDetecting = false;
-                VPOperateManager.getInstance().stopMultiLeadDetectECG(writeResponse);
-                break;
-            default:
-                break;
+
+                @Override
+                public void onDiseaseDiagnosisResults(EcgMultiLeadDetectResult ecgDetectResult) {
+                    Log.e("Test", "onEcgDetectResultChange:" + ecgDetectResult.toString());
+                    tvInfo.setText("疾病诊断结果!\n平均心率:" + ecgDetectResult.getAvgHeart() + "   平均QT:" + ecgDetectResult.getAvgQT() + "   平均HRV:" + ecgDetectResult.getAvgHRV());
+                }
+
+                @Override
+                public void onEcgDetectFail() {
+                    isDetecting = false;
+                    Log.e("Test", "onEcgDetectFail");
+                    tvInfo.setText("测量失败");
+                }
+
+                @Override
+                public void onEcgADCChange(@NonNull ELeadFlag leadFlag, @NonNull int[] data, int gain, int packNum) {
+                    viewList.get(leadFlag.getValue() - 1).changeData(data, data.length);
+                }
+
+
+            });
+        } else if(id == R.id.stop) {
+            for (int i = 0; i < viewList.size(); i++) {
+                viewList.get(i).clearData();
+            }
+            isDetecting = false;
+            VPOperateManager.getInstance().stopMultiLeadDetectECG(writeResponse);
         }
+
     }
 
     /**

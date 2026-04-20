@@ -177,55 +177,51 @@ public class TextImagePushActivity extends Activity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnPushText: {
-                String content = etSendContent.getText().toString();
-                if (TextUtils.isEmpty(content)) {
-                    showMsg("内容不能为空");
-                    return;
+        int id = v.getId();
+        if (id == R.id.btnPushText) {
+            String content = etSendContent.getText().toString();
+            if (TextUtils.isEmpty(content)) {
+                showMsg("内容不能为空");
+                return;
+            }
+            VPOperateManager.getInstance().pushTextMsg(content, new BleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
                 }
-                VPOperateManager.getInstance().pushTextMsg(content, new BleWriteResponse() {
-                    @Override
-                    public void onResponse(int code) {
+            }, new ITextMsgPushListener() {
+                @Override
+                public void onTextMsgPushSuccess() {
+                    tvPushInfo.setText("文本推送成功");
+                }
 
-                    }
-                }, new ITextMsgPushListener() {
-                    @Override
-                    public void onTextMsgPushSuccess() {
-                        tvPushInfo.setText("文本推送成功");
-                    }
+                @Override
+                public void onTextMsgPushFailed() {
+                    tvPushInfo.setText("文本推送失败");
+                }
 
-                    @Override
-                    public void onTextMsgPushFailed() {
-                        tvPushInfo.setText("文本推送失败");
-                    }
+                @Override
+                public void onFunctionNotSupport() {
+                    tvPushInfo.setText("不支持该功能");
+                }
+            });
+        } else if (id == R.id.btnPushImage) {
+            VPOperateManager.getInstance().pushImageMsg(pushImagePath, new IImageMsgPushListener() {
+                @Override
+                public void onImageMsgPushSuccess() {
+                    tvPushInfo.setText("图片推送成功");
+                }
 
-                    @Override
-                    public void onFunctionNotSupport() {
-                        tvPushInfo.setText("不支持该功能");
-                    }
-                });
-                break;
-            }
-            case R.id.btnPushImage: {
-                VPOperateManager.getInstance().pushImageMsg(pushImagePath, new IImageMsgPushListener() {
-                    @Override
-                    public void onImageMsgPushSuccess() {
-                        tvPushInfo.setText("图片推送成功");
-                    }
+                @Override
+                public void onImageMsgPushProgress(int currentBlock, int sumBlock, int progress) {
+                    tvPushInfo.setText("图片推送进度：" + progress + "%");
+                }
 
-                    @Override
-                    public void onImageMsgPushProgress(int currentBlock, int sumBlock, int progress) {
-                        tvPushInfo.setText("图片推送进度：" + progress + "%");
-                    }
-
-                    @Override
-                    public void onImageMsgPushFailed(ErrorCode errorCode) {
-                        tvPushInfo.setText("图片推送错误：" + errorCode.info);
-                    }
-                });
-                break;
-            }
+                @Override
+                public void onImageMsgPushFailed(ErrorCode errorCode) {
+                    tvPushInfo.setText("图片推送错误：" + errorCode.info);
+                }
+            });
         }
     }
 

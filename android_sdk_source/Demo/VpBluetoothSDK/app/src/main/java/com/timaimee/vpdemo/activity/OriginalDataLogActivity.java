@@ -215,25 +215,20 @@ public class OriginalDataLogActivity extends Activity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn1:
-                initShow(1);
-                get5MinuteOriginalData();
-                break;
-            case R.id.btn2:
-                initShow(2);
-                get5MinuteOriginalData();
-                break;
-            case R.id.btn3:
-                initShow(3);
-                get5MinuteOriginalData();
-                break;
-            case R.id.btnToTop:
-                mRecyclerView.scrollToPosition(0);
-                break;
-            case R.id.btnToBottom:
-                mRecyclerView.scrollToPosition(logs.size() == 0 ? 0 : logs.size() - 1);
-                break;
+        int id = v.getId();
+        if (id == R.id.btn1) {
+            initShow(1);
+            get5MinuteOriginalData();
+        } else if (id == R.id.btn2) {
+            initShow(2);
+            get5MinuteOriginalData();
+        } else if (id == R.id.btn3) {
+            initShow(3);
+            get5MinuteOriginalData();
+        } else if (id == R.id.btnToTop) {
+            mRecyclerView.scrollToPosition(0);
+        } else if (id == R.id.btnToBottom) {
+            mRecyclerView.scrollToPosition(logs.size() == 0 ? 0 : logs.size() - 1);
         }
     }
 

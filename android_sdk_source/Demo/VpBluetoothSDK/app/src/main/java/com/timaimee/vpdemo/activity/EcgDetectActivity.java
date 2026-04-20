@@ -48,71 +48,68 @@ public class EcgDetectActivity extends Activity implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        switch (id) {
-            case R.id.start:
-                VPOperateManager.getInstance().startDetectECG(writeResponse, true, new IECGDetectListener() {
-                    @Override
-                    public void onEcgDetectInfoChange(EcgDetectInfo ecgDetectInfo) {
-                        int ecgType = VpSpGetUtil.getVpSpVariInstance(mContext).getECGType();
-                        String message = "-onEcgDetectInfoChange-:" + ecgDetectInfo.toString()+",ecgType="+ecgType;
-                        mEcgHeartView.setEcgType(ecgType);
-                        mEcgHeartView.setDrawHz(ecgDetectInfo.getFrequency());
-                        Logger.t(TAG).i(message);
-                    }
+        if (id == R.id.start) {
+            VPOperateManager.getInstance().startDetectECG(writeResponse, true, new IECGDetectListener() {
+                @Override
+                public void onEcgDetectInfoChange(EcgDetectInfo ecgDetectInfo) {
+                    int ecgType = VpSpGetUtil.getVpSpVariInstance(mContext).getECGType();
+                    String message = "-onEcgDetectInfoChange-:" + ecgDetectInfo.toString()+",ecgType="+ecgType;
+                    mEcgHeartView.setEcgType(ecgType);
+                    mEcgHeartView.setDrawHz(ecgDetectInfo.getFrequency());
+                    Logger.t(TAG).i(message);
+                }
 
-                    @Override
-                    public void onEcgDetectStateChange(EcgDetectState ecgDetectState) {
-                        String message = "-onEcgDetectStateChange-:" + ecgDetectState.toString();
-                        Logger.t(TAG).i(message);
-                    }
+                @Override
+                public void onEcgDetectStateChange(EcgDetectState ecgDetectState) {
+                    String message = "-onEcgDetectStateChange-:" + ecgDetectState.toString();
+                    Logger.t(TAG).i(message);
+                }
 
-                    @Override
-                    public void onEcgDetectResultChange(EcgDetectResult ecgDetectResult) {
-                        String message = "-onEcgDetectResultChange-:" + ecgDetectResult.toString();
-                        Logger.t(TAG).i(message);
-                    }
+                @Override
+                public void onEcgDetectResultChange(EcgDetectResult ecgDetectResult) {
+                    String message = "-onEcgDetectResultChange-:" + ecgDetectResult.toString();
+                    Logger.t(TAG).i(message);
+                }
 
 //                    @Override
 //                    public void onEcgADCChange(int[] ecgData) {
 //                        String message = "-onEcgADCChange-:" + Arrays.toString(ecgData);
 //                        Logger.t(TAG).i(message);
-////                        mEcgHeartView.changeData(ecgData, 20);
+                ////                        mEcgHeartView.changeData(ecgData, 20);
 //                    }
 
-                    @Override
-                    public void onEcgDetectDiagnosisChange(EcgDiagnosis ecgDiagnosis) {
-                        Logger.t(TAG).i("ecg多诊断 :: = " + ecgDiagnosis.toString());
-                    }
+                @Override
+                public void onEcgDetectDiagnosisChange(EcgDiagnosis ecgDiagnosis) {
+                    Logger.t(TAG).i("ecg多诊断 :: = " + ecgDiagnosis.toString());
+                }
 
-                    @Override
-                    public void onEcgADCChange(int[] ecgData, int[] powerData) {
-                        String message = "-onEcgADCChange-:" + Arrays.toString(ecgData);
-                        Logger.t(TAG).i(message);
-                        List<Integer> filterList = new ArrayList<>();
-                        List<Integer> powerList = new ArrayList<>();
-                        for (int i = 0; i < ecgData.length; i++) {
-                            if (ecgData[i] != Integer.MAX_VALUE) {
-                                filterList.add(ecgData[i]);
-                                if (powerList.size() > 0 && i < powerList.size()) {
-                                    powerList.add(powerData[i]);
-                                } else {
-                                    powerList.add(20);
-                                }
+                @Override
+                public void onEcgADCChange(int[] ecgData, int[] powerData) {
+                    String message = "-onEcgADCChange-:" + Arrays.toString(ecgData);
+                    Logger.t(TAG).i(message);
+                    List<Integer> filterList = new ArrayList<>();
+                    List<Integer> powerList = new ArrayList<>();
+                    for (int i = 0; i < ecgData.length; i++) {
+                        if (ecgData[i] != Integer.MAX_VALUE) {
+                            filterList.add(ecgData[i]);
+                            if (powerList.size() > 0 && i < powerList.size()) {
+                                powerList.add(powerData[i]);
+                            } else {
+                                powerList.add(20);
                             }
                         }
-                        int[] filterAdc = new int[filterList.size()];
-                        int[] filterPower = new int[powerList.size()];
-                        for (int i = 0; i < filterList.size(); i++) {
-                            filterAdc[i] = filterList.get(i);
-                        }
-                        mEcgHeartView.changeData(filterAdc, filterPower,filterAdc.length);
                     }
-                });
-                break;
-            case R.id.stop:
-                mEcgHeartView.clearData();
-                VPOperateManager.getMangerInstance(mContext).stopDetectECG(writeResponse, true, null);
-                break;
+                    int[] filterAdc = new int[filterList.size()];
+                    int[] filterPower = new int[powerList.size()];
+                    for (int i = 0; i < filterList.size(); i++) {
+                        filterAdc[i] = filterList.get(i);
+                    }
+                    mEcgHeartView.changeData(filterAdc, filterPower,filterAdc.length);
+                }
+            });
+        } else if(id == R.id.stop) {
+            mEcgHeartView.clearData();
+            VPOperateManager.getMangerInstance(mContext).stopDetectECG(writeResponse, true, null);
         }
     }
 

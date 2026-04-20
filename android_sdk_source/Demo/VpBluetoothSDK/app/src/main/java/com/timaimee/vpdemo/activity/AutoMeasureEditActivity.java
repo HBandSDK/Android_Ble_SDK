@@ -36,11 +36,13 @@ public class AutoMeasureEditActivity extends AppCompatActivity implements View.O
     Button btnStartTimePicker, btnEndTimePicker, btnSetting;
     SwitchView svStatus;
 
+    private int startMinutes, endMinutes;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().hide(); // 隐藏ActionBar
+            getSupportActionBar().hide();
         }
         setContentView(R.layout.activity_auto_measure_edit);
         tvAutoMeasureType = findViewById(R.id.tvAutoMeasureType);
@@ -51,18 +53,19 @@ public class AutoMeasureEditActivity extends AppCompatActivity implements View.O
         btnEndTimePicker = findViewById(R.id.btnEndTimePicker);
         svStatus = findViewById(R.id.svStatus);
         btnSetting = findViewById(R.id.btnSetting);
+
         btnSetting.setOnClickListener(this);
         btnEndTimePicker.setOnClickListener(this);
         btnStartTimePicker.setOnClickListener(this);
         initData();
     }
 
-    private int startMinutes, endMinutes;
-
     private String getMeasureTime(AutoMeasureData autoMeasureData){
         int startTime = autoMeasureData.getSupportStartMinute();
         int endTime = autoMeasureData.getSupportEndMinute();
-        return String.format(Locale.CHINA,"支持的设置的时间段: %02d:%02d-%02d:%02d", startTime / 60,startTime % 60,endTime / 60,endTime % 60);
+        return String.format(Locale.CHINA,"支持设置的时间段: %02d:%02d-%02d:%02d",
+                startTime / 60, startTime % 60,
+                endTime / 60, endTime % 60);
     }
 
     private void initData(){
@@ -85,97 +88,82 @@ public class AutoMeasureEditActivity extends AppCompatActivity implements View.O
             etInterval.setEnabled(selectData.isIntervalModify());
         }
     }
-    TimePickerDialog timePickerDialog = null;
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnStartTimePicker :{
-                if (!selectData.isSlotModify()) {
-                    showMsg("暂不支持设置测量时间段");
-                    return;
-                }
+        // 开始时间
+        if (v.getId() == R.id.btnStartTimePicker) {
+            if (!selectData.isSlotModify()) {
+                showMsg("暂不支持设置测量时间段");
+                return;
+            }
+            new TimePickerDialog(this, (view, hourOfDay, minute) -> {
+                startMinutes = hourOfDay * 60 + minute;
+                btnStartTimePicker.setText(String.format(Locale.CHINA, "%02d:%02d", hourOfDay, minute));
+            }, startMinutes / 60, startMinutes % 60, true).show();
+        }
 
-                if (timePickerDialog != null) {
-                    timePickerDialog.dismiss();
-                    timePickerDialog = null;
-                }
-                timePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minute) -> btnStartTimePicker.setText(String.format(Locale.CHINA, "%02d:%02d:00", hourOfDay, minute)),
-                        startMinutes / 60, startMinutes % 60, true);
-                timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        btnStartTimePicker.setText(String.format(Locale.CHINA, "%02d:%02d", hourOfDay, minute));
-                        startMinutes = hourOfDay*60 + minute;
-                    }
-                }, TimeData.getSystemHour(), TimeData.getSystemMinute(), true);
-                timePickerDialog.show();
-                break;
+        // 结束时间
+        else if (v.getId() == R.id.btnEndTimePicker) {
+            if (!selectData.isSlotModify()) {
+                showMsg("暂不支持设置测量时间段");
+                return;
             }
-            case R.id.btnEndTimePicker :{
-                if (!selectData.isSlotModify()) {
-                    showMsg("暂不支持设置测量时间段");
-                    return;
-                }
-                if (timePickerDialog != null) {
-                    timePickerDialog.dismiss();
-                    timePickerDialog = null;
-                }
-                timePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minute) -> btnEndTimePicker.setText(String.format(Locale.CHINA, "%02d:%02d:00", hourOfDay, minute)),
-                        endMinutes / 60, endMinutes % 60, true);
-                timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        btnEndTimePicker.setText(String.format(Locale.CHINA, "%02d:%02d", hourOfDay, minute));
-                        endMinutes = hourOfDay*60 + minute;
-                    }
-                }, TimeData.getSystemHour(), TimeData.getSystemMinute(), true);
-                timePickerDialog.show();
-                break;
-            }
-            case R.id.btnSetting :{
-                if (!(startMinutes >= selectData.getSupportStartMinute() && endMinutes <= selectData.getCurrentEndMinute())
-                        && (selectData.getSupportStartMinute() + selectData.getCurrentEndMinute() != 0)) {
+            new TimePickerDialog(this, (view, hourOfDay, minute) -> {
+                endMinutes = hourOfDay * 60 + minute;
+                btnEndTimePicker.setText(String.format(Locale.CHINA, "%02d:%02d", hourOfDay, minute));
+            }, endMinutes / 60, endMinutes % 60, true).show();
+        }
+
+        // 保存设置
+        else if (v.getId() == R.id.btnSetting) {
+            // 修复：时间范围判断逻辑
+            if (selectData.getSupportStartMinute() != 0 || selectData.getSupportEndMinute() != 0) {
+                if (startMinutes < selectData.getSupportStartMinute() || endMinutes > selectData.getSupportEndMinute()) {
                     showMsg(getMeasureTime(selectData));
                     return;
                 }
-                selectData.setCurrentStartMinute(startMinutes);
-                selectData.setCurrentEndMinute(endMinutes);
-                String intervalStr = etInterval.getText().toString();
-                if(TextUtils.isEmpty(intervalStr)) {
-                    showMsg("时间间隔不能为空");
-                    return;
-                }
-                int interval = Integer.parseInt(intervalStr);
-                if (interval < selectData.getStepUnit() || interval %selectData.getStepUnit() != 0 ) {
-                    showMsg("间隔不能小于：" + selectData.getStepUnit() + "分钟，且为"+selectData.getStepUnit()+"的整数倍");
-                    return;
-                }
-                selectData.setMeasureInterval(interval);
-                selectData.setSwitchOpen(svStatus.isOpened());
-                VPOperateManager.getInstance().setAutoMeasureSettingData(new IBleWriteResponse() {
-                    @Override
-                    public void onResponse(int code) {
-                    }
-                }, selectData, new IAutoMeasureSettingDataListener() {
-                    @Override
-                    public void onSettingDataChange(List<AutoMeasureData> autoMeasureDataList) {
-
-                    }
-
-                    @Override
-                    public void onSettingDataChangeFail() {
-                        showMsg("设置失败");
-                    }
-
-                    @Override
-                    public void onSettingDataChangeSuccess() {
-                        showMsg("设置成功");
-                        finish();
-                    }
-                });
-                break;
             }
+
+            // 结束时间不能早于开始时间
+            if (endMinutes <= startMinutes) {
+                showMsg("结束时间必须大于开始时间");
+                return;
+            }
+
+            String intervalStr = etInterval.getText().toString();
+            if(TextUtils.isEmpty(intervalStr)) {
+                showMsg("时间间隔不能为空");
+                return;
+            }
+            int interval = Integer.parseInt(intervalStr);
+            if (interval < selectData.getStepUnit() || interval % selectData.getStepUnit() != 0 ) {
+                showMsg("间隔不能小于：" + selectData.getStepUnit() + "分钟，且为"+selectData.getStepUnit()+"的整数倍");
+                return;
+            }
+            selectData.setCurrentStartMinute(startMinutes);
+            selectData.setCurrentEndMinute(endMinutes);
+            selectData.setMeasureInterval(interval);
+            selectData.setSwitchOpen(svStatus.isOpened());
+
+            VPOperateManager.getInstance().setAutoMeasureSettingData(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {}
+            }, selectData, new IAutoMeasureSettingDataListener() {
+                @Override
+                public void onSettingDataChange(List<AutoMeasureData> autoMeasureDataList) {}
+
+                @Override
+                public void onSettingDataChangeFail() {
+                    showMsg("设置失败");
+                }
+
+                @Override
+                public void onSettingDataChangeSuccess() {
+                    showMsg("设置成功");
+                    finish();
+                }
+            });
         }
     }
 

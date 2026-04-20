@@ -143,31 +143,25 @@ public class GNSSOptActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnStartSafetyProtection: {
-                VPOperateManager.getInstance().startSafetyProtection(code -> {
 
-                });
-                break;
-            }
-            case R.id.btnStopSafetyProtection: {
-                VPOperateManager.getInstance().stopSafetyProtection(code -> {
+        if (v.getId() == R.id.btnStartSafetyProtection) {
+            VPOperateManager.getInstance().startSafetyProtection(code -> {
 
+            });
+        } else if (v.getId() == R.id.btnStartSafetyProtection) {
+            VPOperateManager.getInstance().stopSafetyProtection(code -> {
+
+            });
+        } else if (v.getId() == R.id.btnStartSafetyProtection) {
+            GnssLocationData data = getGnssLocationData();
+            EGnssOptType optType = EGnssOptType.Companion.getTypeWithCMD(function);
+            if (data != null) {
+                VPOperateManager.getInstance().pushGnssLocationData(EGnssOptType.GNSS_SPORT, data, code -> {
+                    appendMsg("+--------------------------------------+");
+                    appendMsg("| 【" + optType.getDes() + "】位置信息推送成功：");
+                    appendMsg("| ---> " + data);
+                    appendMsg("+--------------------------------------+");
                 });
-                break;
-            }
-            case R.id.btnPushGnssLocationData: {
-                GnssLocationData data = getGnssLocationData();
-                EGnssOptType optType = EGnssOptType.Companion.getTypeWithCMD(function);
-                if (data != null) {
-                    VPOperateManager.getInstance().pushGnssLocationData(EGnssOptType.GNSS_SPORT, data, code -> {
-                        appendMsg("+--------------------------------------+");
-                        appendMsg("| 【" + optType.getDes() + "】位置信息推送成功：");
-                        appendMsg("| ---> " + data);
-                        appendMsg("+--------------------------------------+");
-                    });
-                }
-                break;
             }
         }
     }

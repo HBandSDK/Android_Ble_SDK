@@ -51,19 +51,15 @@ public class UiUpdateG15ImgActivity extends Activity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnA2:
-                setG15ImgAppDownloadAppQRCode();
-                break;
-            case R.id.btnA3:
-                setG15ImgProfile();
-                break;
-            case R.id.btnA4:
-                setG15ImgTheme1();
-                break;
-            case R.id.btnA5:
-                setG15ImgTheme2();
-                break;
+        int id = v.getId();
+        if (id == R.id.btnA2) {
+            setG15ImgAppDownloadAppQRCode();
+        } else  if (id == R.id.btnA3) {
+            setG15ImgProfile();
+        } else if (id == R.id.btnA4) {
+            setG15ImgTheme1();
+        } else if (id == R.id.btnA5) {
+            setG15ImgTheme2();
         }
     }
 

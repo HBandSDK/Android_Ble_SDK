@@ -24,6 +24,8 @@ import com.veepoo.protocol.model.settings.GpsLatLongSettingFromApp;
 import com.veepoo.protocol.model.settings.KaabaSetting;
 import com.veepoo.protocol.util.VpBleByteUtil;
 
+//import static com.veepoo.protocol.profile.VPProfile.HEAD_GPS_LAT_LON;
+
 /**
  * Created by timaimee on 2017/4/24.
  */
@@ -127,100 +129,91 @@ public class GpsLatlonActivity extends Activity implements View.OnClickListener 
         }
 
         int id = v.getId();
-        switch (id) {
-            case R.id.listen_gps:
-                VPOperateManager.getMangerInstance(getApplicationContext()).settingRequestAppReportGpsDataListener(new IAppReportGpsDataListener() {
 
-                    @Override
-                    public void onReportGpsDataDataChange(ReportGpsData reportGpsData) {
-                        boolean isReport = reportGpsData.isReport();
-                        if (isReport) {
-                            Logger.t(TAG).i("请 app 开始上传 gps数据");
-                        } else {
-                            Logger.t(TAG).i("请 app 结束上传 gps数据");
+        if (id == R.id.listen_gps) {
+            VPOperateManager.getMangerInstance(getApplicationContext()).settingRequestAppReportGpsDataListener(new IAppReportGpsDataListener() {
+
+                @Override
+                public void onReportGpsDataDataChange(ReportGpsData reportGpsData) {
+                    boolean isReport = reportGpsData.isReport();
+                    if (isReport) {
+                        Logger.t(TAG).i("请 app 开始上传 gps数据");
+                    } else {
+                        Logger.t(TAG).i("请 app 结束上传 gps数据");
+                    }
+                }
+            });
+        } else if (id == R.id.set_gps_from_app) {
+            boolean isReqeustRepo = true;
+            EGpsStatus gpsStatus = EGpsStatus.SIGNAL_NORML;
+            GpsLatLongSettingFromApp gpsLatLongSettingFromApp = new GpsLatLongSettingFromApp(isReqeustRepo, gpsStatus, lon, lat, timeZon, timestam);
+            VPOperateManager.getMangerInstance(getApplicationContext()).settingGpsLatLonfromApp(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            }, gpsLatLongSettingFromApp);
+        } else if (id == R.id.gps_update) {
+            GpsLatLongSetting gpsLatLongSetting = new GpsLatLongSetting(lon, lat, timeZon, timestam, altitud);
+
+            byte[] gpsLatlongCmd = getGpsLatlongCmd(gpsLatLongSetting, (byte) 0x01);
+
+            StringBuffer stringBuffer = new StringBuffer();
+            stringBuffer.append(gpsLatLongSetting.toString());
+            stringBuffer.append("\n");
+            stringBuffer.append(VpBleByteUtil.byte2HexForShow(gpsLatlongCmd));
+            gps_send_text.setText("请求值:" + stringBuffer);
+
+            VPOperateManager.getMangerInstance(getApplicationContext()).settingGpsLatLon(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            }, new IGpsLatLonDataListener() {
+                @Override
+                public void onGpsLatLonDataChange(final GpsLatlonData gpsLatlonData) {
+                    Logger.t(TAG).i(gpsLatlonData.toString());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            gps_call_text.setText("响应值:" + gpsLatlonData.toString());
                         }
-                    }
-                });
-                break;
-            case R.id.set_gps_from_app:
-                boolean isReqeustRepo=true;
-                EGpsStatus gpsStatus= EGpsStatus.SIGNAL_NORML;
-                GpsLatLongSettingFromApp gpsLatLongSettingFromApp = new GpsLatLongSettingFromApp(isReqeustRepo,gpsStatus,lon, lat, timeZon, timestam);
-                VPOperateManager.getMangerInstance(getApplicationContext()).settingGpsLatLonfromApp(new IBleWriteResponse() {
-                    @Override
-                    public void onResponse(int code) {
+                    });
+                }
+            }, gpsLatLongSetting);
+        } else if (id == R.id.kaaba_update) {
+            KaabaSetting kaabaSetting = new KaabaSetting(lon, lat, altitud);
+            byte[] kaabaSettingCmd = getKaabaCmd(kaabaSetting, (byte) 0x03);
 
-                    }
-                }, gpsLatLongSettingFromApp);
-                break;
+            StringBuffer kaaStringBuffer = new StringBuffer();
+            kaaStringBuffer.append(kaabaSetting.toString());
+            kaaStringBuffer.append("\n");
+            kaaStringBuffer.append(VpBleByteUtil.byte2HexForShow(kaabaSettingCmd));
+            gps_send_text.setText("请求值:" + kaaStringBuffer);
 
+            VPOperateManager.getMangerInstance(getApplicationContext()).settingKaaba(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
 
-            case R.id.gps_update:
-                GpsLatLongSetting gpsLatLongSetting = new GpsLatLongSetting(lon, lat, timeZon, timestam, altitud);
-
-                byte[] gpsLatlongCmd = getGpsLatlongCmd(gpsLatLongSetting, (byte) 0x01);
-
-                StringBuffer stringBuffer = new StringBuffer();
-                stringBuffer.append(gpsLatLongSetting.toString());
-                stringBuffer.append("\n");
-                stringBuffer.append(VpBleByteUtil.byte2HexForShow(gpsLatlongCmd));
-                gps_send_text.setText("请求值:" + stringBuffer);
-
-                VPOperateManager.getMangerInstance(getApplicationContext()).settingGpsLatLon(new IBleWriteResponse() {
-                    @Override
-                    public void onResponse(int code) {
-
-                    }
-                }, new IGpsLatLonDataListener() {
-                    @Override
-                    public void onGpsLatLonDataChange(final GpsLatlonData gpsLatlonData) {
-                        Logger.t(TAG).i(gpsLatlonData.toString());
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                gps_call_text.setText("响应值:" + gpsLatlonData.toString());
-                            }
-                        });
-                    }
-                }, gpsLatLongSetting);
-                break;
-
-            case R.id.kaaba_update:
-                KaabaSetting kaabaSetting = new KaabaSetting(lon, lat, altitud);
-                byte[] kaabaSettingCmd = getKaabaCmd(kaabaSetting, (byte) 0x03);
-
-                StringBuffer kaaStringBuffer = new StringBuffer();
-                kaaStringBuffer.append(kaabaSetting.toString());
-                kaaStringBuffer.append("\n");
-                kaaStringBuffer.append(VpBleByteUtil.byte2HexForShow(kaabaSettingCmd));
-                gps_send_text.setText("请求值:" + kaaStringBuffer);
-
-                VPOperateManager.getMangerInstance(getApplicationContext()).settingKaaba(new IBleWriteResponse() {
-                    @Override
-                    public void onResponse(int code) {
-
-                    }
-                }, kaabaSetting, new IKaaBaDataListener() {
-                    @Override
-                    public void onKaaBaDataChange(final KaaBaData kaaBaData) {
-                        Logger.t(TAG).i(kaaBaData.toString());
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                gps_call_text.setText("响应值:" + kaaBaData.toString());
-                            }
-                        });
-                    }
-                });
-
-                break;
+                }
+            }, kaabaSetting, new IKaaBaDataListener() {
+                @Override
+                public void onKaaBaDataChange(final KaaBaData kaaBaData) {
+                    Logger.t(TAG).i(kaaBaData.toString());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            gps_call_text.setText("响应值:" + kaaBaData.toString());
+                        }
+                    });
+                }
+            });
         }
-
     }
 
     private byte[] getGpsLatlongCmd(GpsLatLongSetting gpslatlongsetting, byte setting) {
         byte[] cmd = new byte[20];
-        cmd[0] = (byte) 0x8F;
+//        cmd[0] = HEAD_GPS_LAT_LON;
         cmd[1] = setting;
 
         double lonv = gpslatlongsetting.getLonv();
@@ -278,7 +271,7 @@ public class GpsLatlonActivity extends Activity implements View.OnClickListener 
 
     private byte[] getKaabaCmd(KaabaSetting kaabaSetting, byte setting) {
         byte[] cmd = new byte[20];
-        cmd[0] = (byte) 0x8F;
+//        cmd[0] = HEAD_GPS_LAT_LON;
         cmd[1] = setting;
 
         double lat = kaabaSetting.getLat();

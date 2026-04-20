@@ -143,12 +143,24 @@
             android:id="@+id/btnPhotoDial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
-            android:text="照片表盘"
+            android:text="设置照片表盘"
+            android:textColor="#000"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vLine" />
+
+        <Button
+            android:id="@+id/btnSwitchPhotoDial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="30dp"
+            android:text="切换到照片表盘"
             android:textColor="#000"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/vLine" />
 
         <TextView
@@ -200,12 +212,24 @@
             android:id="@+id/btnServerDial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
-            android:text="市场表盘"
+            android:text="设置市场表盘"
+            android:textColor="#000"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vLine1" />
+
+        <Button
+            android:id="@+id/btnSwitchServerDial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="30dp"
+            android:text="切换到市场表盘"
             android:textColor="#000"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/vLine1" />
 
         <TextView

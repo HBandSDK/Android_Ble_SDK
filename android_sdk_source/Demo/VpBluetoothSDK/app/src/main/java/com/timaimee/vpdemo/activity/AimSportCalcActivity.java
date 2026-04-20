@@ -106,13 +106,10 @@ public class AimSportCalcActivity extends Activity implements RadioGroup.OnCheck
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        switch (checkedId) {
-            case R.id.aimsportcalc_person_sexm:
-                sex = ESex.MAN;
-                break;
-            case R.id.aimsportcalc_person_sexw:
-                sex = ESex.WOMEN;
-                break;
+        if (checkedId == R.id.aimsportcalc_person_sexm) {
+            sex = ESex.MAN;
+        } else {
+            sex = ESex.WOMEN;
         }
     }
 

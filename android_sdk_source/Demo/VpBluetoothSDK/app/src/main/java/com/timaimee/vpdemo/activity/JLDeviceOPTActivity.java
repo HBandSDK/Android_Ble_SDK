@@ -3,12 +3,15 @@ package com.timaimee.vpdemo.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.inuker.bluetooth.library.connect.response.BleNotifyResponse;
 import com.inuker.bluetooth.library.jieli.RcspAuthManager;
@@ -31,8 +34,9 @@ import tech.gujin.toast.ToastUtil;
 
 public class JLDeviceOPTActivity extends Activity implements View.OnClickListener {
     private static final String TAG = "JLDeviceOPTActivity";
-    Button btnOpenNotify, btnFileSystem, btnPhotoDial, btnServerDial, btnOTA, btnAuth;
-    TextView tvOpenInfo, tvFileSystemInfo, tvDialProgress, tvServerDialProgress, tvOTAProgress, tvOTAInfo, tvDialInfo, tvServerDialInfo, tvAuthInfo;
+    Button btnOpenNotify, btnFileSystem, btnPhotoDial, btnServerDial, btnSwitchPhotoDial, btnSwitchServerDial, btnOTA, btnAuth;
+    TextView tvOpenInfo, tvFileSystemInfo, tvDialProgress, tvServerDialProgress, tvOTAProgress, tvOTAInfo,
+            tvDialInfo, tvServerDialInfo, tvAuthInfo;
     ProgressBar pbPhotoDial, pbOTAProgress, pbServerDial;
 
     CustomProgressDialog loadingDialog;
@@ -43,7 +47,6 @@ public class JLDeviceOPTActivity extends Activity implements View.OnClickListene
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ToastUtil.initialize(this);
         setContentView(R.layout.activity_jl_device);
         loadingDialog = new CustomProgressDialog(this);
         btnOpenNotify = findViewById(R.id.btnOpenNotify);
@@ -64,12 +67,16 @@ public class JLDeviceOPTActivity extends Activity implements View.OnClickListene
         pbPhotoDial = findViewById(R.id.pbPhotoDial);
         pbOTAProgress = findViewById(R.id.pbOTAProgress);
         pbServerDial = findViewById(R.id.pbServerDial);
+        btnSwitchPhotoDial = findViewById(R.id.btnSwitchPhotoDial);
+        btnSwitchServerDial = findViewById(R.id.btnSwitchServerDial);
 
         btnOpenNotify.setOnClickListener(this);
         btnAuth.setOnClickListener(this);
         btnFileSystem.setOnClickListener(this);
         btnPhotoDial.setOnClickListener(this);
         btnServerDial.setOnClickListener(this);
+        btnSwitchPhotoDial.setOnClickListener(this);
+        btnSwitchServerDial.setOnClickListener(this);
         btnOTA.setOnClickListener(this);
 
         tvOpenInfo.setText(VPOperateManager.getInstance().isJLNotifyOpened() ? "通知已打开" : "通知未打开");
@@ -79,32 +86,35 @@ public class JLDeviceOPTActivity extends Activity implements View.OnClickListene
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnOpenNotify: {
-                openJLNotify();
-                break;
-            }
-            case R.id.btnAuth: {
-                startDeviceAuth();
-                break;
-            }
-            case R.id.btnFileSystem: {
-                getJLFileSystem();
-                break;
-            }
-            case R.id.btnPhotoDial: {
-                setPhotoDial();
-                break;
-            }
-            case R.id.btnOTA: {
-                startOTA();
-                break;
-            }
-            case R.id.btnServerDial: {
-                setServerDial();
-                break;
-            }
+        int id = v.getId();
+
+        if (id == R.id.btnOpenNotify) {
+            openJLNotify();
+        } else if (id == R.id.btnAuth) {
+            startDeviceAuth();
+        } else if (id == R.id.btnFileSystem) {
+            getJLFileSystem();
+        } else if (id == R.id.btnPhotoDial) {
+            setPhotoDial();
+        } else if (id == R.id.btnOTA) {
+            startOTA();
+        } else if (id == R.id.btnServerDial) {
+            setServerDial();
+        } else if (id == R.id.btnSwitchPhotoDial) {
+            switch2PhotoDial();
+        } else if (id == R.id.btnSwitchServerDial) {
+            switch2ServerDial();
         }
+    }
+
+    private void switch2PhotoDial() {
+        showMsg("切换到照片表盘");
+        JLWatchFaceManager.switch2PicDial();
+    }
+
+    private void switch2ServerDial() {
+        showMsg("切换到市场表盘");
+        JLWatchFaceManager.switch2ServerDial();
     }
 
     private void openJLNotify() {
@@ -231,7 +241,7 @@ public class JLDeviceOPTActivity extends Activity implements View.OnClickListene
                 for (FatFile serverFatFile : serverFatFiles) {
                     Logger.t(TAG).e("服务器表盘--->" + serverFatFile.toString());
                 }
-                Logger.t(TAG).e("照片表盘--->" + (picFatFile == null ? "NULL" : picFatFile.getPath()));
+                Logger.t(TAG).e("照片表盘--->" + picFatFile.toString());
                 loadingDialog.disMissDialog();
             }
 
@@ -258,6 +268,11 @@ public class JLDeviceOPTActivity extends Activity implements View.OnClickListene
         tvDialInfo.setText(dialPhotoPath);
         VPOperateManager.getInstance().setJLWatchPhotoDial(dialPhotoPath, new JLWatchFaceManager.JLTransferPicDialListener() {
             @Override
+            public void onLowPower() {
+
+            }
+
+            @Override
             public void onJLTransferPicDialStart() {
                 tvDialInfo.setText("开始传输照片表盘");
                 Logger.t(TAG).e("【杰理表盘传输】onJLTransferPicDialStart--->" + Thread.currentThread().toString());
@@ -275,6 +290,11 @@ public class JLDeviceOPTActivity extends Activity implements View.OnClickListene
             public void onScaleBGPFileTransferComplete() {
                 Logger.t(TAG).e("【杰理表盘传输】--->缩略图传输完成" + " : Thread = " + Thread.currentThread().toString());
                 tvDialInfo.setText("表盘缩略图传输完成");
+            }
+
+            @Override
+            public void onAIPreviewTransferComplete() {
+
             }
 
             @Override
@@ -298,13 +318,13 @@ public class JLDeviceOPTActivity extends Activity implements View.OnClickListene
     }
 
     /**
-     * 设置市场表盘
+     * 设置照片表盘
      */
     private void setServerDial() {
-        String localServerDialPath = "/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/hband/jlDail/watch030";
+        String localServerDialPath = "/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/hband/jlDail/watch040";
         serverDialFlag++;
         if (serverDialFlag % 2 == 0) {
-            localServerDialPath = "/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/hband/jlDail/watch064";
+            localServerDialPath = "/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/hband/jlDail/watch046";
         }
         tvServerDialInfo.setText(localServerDialPath);
         VPOperateManager.getInstance().setJLWatchDial(localServerDialPath, new JLWatchHolder.OnSetJLWatchDialListener() {
@@ -331,12 +351,13 @@ public class JLDeviceOPTActivity extends Activity implements View.OnClickListene
 
             @Override
             public void onFiled(int code, String errorMsg) {
-                tvDialInfo.setText("市场表盘传输失败，code = " + code + " , msg = " + errorMsg);
+                tvServerDialInfo.setText("市场表盘传输失败，code = " + code + " , msg = " + errorMsg);
             }
         });
     }
 
     private void startOTA() {
+//        String otaFileName = "KH32_9626_00320800_OTA_UI_230421_19.zip";
         String otaFileName = "JE51P_5057_00510064_OTA_UI_KEY_240402_15.zip";
         String otaFileName1 = "9664_00.70.01.zip";
         String firmwareFilePath = "/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/hband/jlOta/" + otaFileName;
@@ -384,5 +405,9 @@ public class JLDeviceOPTActivity extends Activity implements View.OnClickListene
                 tvOTAInfo.setText("升级失败，error: code = " + error.getSubCode() + " , msg = " + error.getMessage());
             }
         });
+    }
+
+    public void showMsg(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }

@@ -2805,6 +2805,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             String smallInPath = "/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/hband/jlDail/bgp_w000.png";
             VPOperateManager.getInstance().setJLWatchPhotoDial(bigInPath, new JLWatchFaceManager.JLTransferPicDialListener() {
                 @Override
+                public void onLowPower() {
+
+                }
+
+                @Override
                 public void onJLTransferPicDialStart() {
                     Logger.t(TAG).e("【杰理表盘传输】onJLTransferPicDialStart--->" + Thread.currentThread().toString());
                 }
@@ -2817,6 +2822,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 @Override
                 public void onScaleBGPFileTransferComplete() {
                     Logger.t(TAG).e("【杰理表盘传输】--->缩略图传输完成" + " : Thread = " + Thread.currentThread().toString());
+                }
+
+                @Override
+                public void onAIPreviewTransferComplete() {
+
                 }
 
                 @Override

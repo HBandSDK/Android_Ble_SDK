@@ -95,6 +95,7 @@ public class JH58PPGOptTestActivity extends Activity implements View.OnClickList
         rgReadPPGTestMode = findViewById(R.id.rgReadPPGTestMode);
         svInfo = findViewById(R.id.svInfo);
     }
+
     private void initData() {
         rgReadPPGTestMode.check(R.id.rbReadMode1On);
         btnDatePicker.setOnClickListener(this);
@@ -122,16 +123,12 @@ public class JH58PPGOptTestActivity extends Activity implements View.OnClickList
         });
         //设置测量模式
         rgPPGTestMode.setOnCheckedChangeListener((group, checkedId) -> {
-            switch (checkedId) {
-                case R.id.rbAllOff:
-                    ppgSwitchStatus = PPGSwitchStatus.ALL_OFF;
-                    break;
-                case R.id.rbMode1On:
-                    ppgSwitchStatus = PPGSwitchStatus.MODE1_ON;
-                    break;
-                case R.id.rbMode2On:
-                    ppgSwitchStatus = PPGSwitchStatus.MODE2_ON;
-                    break;
+            if (checkedId == R.id.rbAllOff) {
+                ppgSwitchStatus = PPGSwitchStatus.ALL_OFF;
+            } else if (checkedId == R.id.rbMode1On) {
+                ppgSwitchStatus = PPGSwitchStatus.MODE1_ON;
+            } else if (checkedId == R.id.rbMode2On) {
+                ppgSwitchStatus = PPGSwitchStatus.MODE2_ON;
             }
             /*设置PPG开关状态*/
             VPOperateManager.getInstance().setPPGSwitchStatus(ppgSwitchStatus, code -> tvPPGOptInfo.setText("设置PPG测量开关状态指令发送" + (code == Code.REQUEST_SUCCESS ? "成功" : "失败")));
@@ -188,64 +185,31 @@ public class JH58PPGOptTestActivity extends Activity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnDatePicker: {
-                if (datePickerDialog != null) {
-                    datePickerDialog.dismiss();
-                    datePickerDialog = null;
-                }
-                datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> btnDatePicker.setText(String.format(Locale.CHINA, "%04d-%02d-%02d", year, month + 1, dayOfMonth)), TimeData.getSystemYear(), TimeData.getSystemMonth(), TimeData.getSystemDay());
-                datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        btnDatePicker.setText(String.format(Locale.CHINA, "%04d-%02d-%02d", year, month + 1, dayOfMonth));
-                        timeData.setYear(year);
-                        timeData.setMonth(month + 1);
-                        timeData.setDay(dayOfMonth);
-                    }
-                }, TimeData.getSystemYear(), TimeData.getSystemMonth(), TimeData.getSystemDay());
-                datePickerDialog.show();
-                break;
-            }
-            case R.id.btnTimePicker: {
-                if (timePickerDialog != null) {
-                    timePickerDialog.dismiss();
-                    timePickerDialog = null;
-                }
-                timePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minute) -> btnTimePicker.setText(String.format(Locale.CHINA, "%02d:%02d:00", hourOfDay, minute)),
-                        timeData.hour, timeData.minute, true);
-                timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        btnTimePicker.setText(String.format(Locale.CHINA, "%02d:%02d:00", hourOfDay, minute));
-                        timeData.setHour(hourOfDay);
-                        timeData.setMinute(hourOfDay);
-                        timeData.setSecond(0);
-                    }
-                }, TimeData.getSystemHour(), TimeData.getSystemMinute(), true);
-                timePickerDialog.show();
-                break;
-            }
-            case R.id.btnReadPPGRawData: {
-                readPPGRawData();
-                break;
-            }
-            case R.id.btnShareData: {
-                shareData();
-                break;
-            }
-            case R.id.btnReadPPGTestStatus: {
-                readPPGTestStatus();
-                break;
-            }
-            case R.id.btnStartRealTimePPGRawDataTransfer: {
-                startPPGRawDataRealTimeTransfer();
-                break;
-            }
-            case R.id.btnStopRealTimePPGRawDataTransfer: {
-                stopPPGRawDataRealTimeTransfer();
-                break;
-            }
+        int id = v.getId();
+        if (id == R.id.btnDatePicker) {
+            new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+                timeData.setYear(year);
+                timeData.setMonth(month + 1);
+                timeData.setDay(dayOfMonth);
+                btnDatePicker.setText(String.format(Locale.CHINA, "%04d-%02d-%02d", year, month + 1, dayOfMonth));
+            }, TimeData.getSystemYear(), TimeData.getSystemMonth(), TimeData.getSystemDay()).show();
+        } else if (id == R.id.btnTimePicker) {
+            new TimePickerDialog(this, (view, hourOfDay, minute) -> {
+                timeData.setHour(hourOfDay);
+                timeData.setMinute(minute);
+                timeData.setSecond(0);
+                btnTimePicker.setText(String.format(Locale.CHINA, "%02d:%02d:00", hourOfDay, minute));
+            }, timeData.getHour(), timeData.getMinute(), true).show();
+        } else if (id == R.id.btnReadPPGRawData) {
+            readPPGRawData();
+        } else if (id == R.id.btnShareData) {
+            shareData();
+        } else if (id == R.id.tvAutoMeasureType) {
+            readPPGTestStatus();
+        } else if (id == R.id.btnStartRealTimePPGRawDataTransfer) {
+            startPPGRawDataRealTimeTransfer();
+        } else if (id == R.id.btnStopRealTimePPGRawDataTransfer) {
+            stopPPGRawDataRealTimeTransfer();
         }
     }
 
@@ -341,7 +305,7 @@ public class JH58PPGOptTestActivity extends Activity implements View.OnClickList
         }*/);
     }
 
-    private void shareData(){
+    private void shareData() {
         if (ppgReadData == null) {
             Toast.makeText(this, "暂无读取数据可以分享", Toast.LENGTH_SHORT).show();
             return;
@@ -378,8 +342,9 @@ public class JH58PPGOptTestActivity extends Activity implements View.OnClickList
 
     /**
      * 读取 TXT 文件内容并直接分享文本（不分享文件本身）
-     * @param context 上下文
-     * @param filePath 文件路径
+     *
+     * @param context      上下文
+     * @param filePath     文件路径
      * @param chooserTitle 分享选择器标题
      */
     public void shareTxtContent(Context context, String filePath, String chooserTitle) {
