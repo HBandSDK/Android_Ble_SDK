@@ -90,6 +90,9 @@ dependencies {
     implementation files('libs/BmpConvert_V1.6.0_10604-release.aar')
     implementation files('libs/abpartool-release.aar')
 
+    implementation 'no.nordicsemi.android:mcumgr-core:2.7.4'
+    implementation 'no.nordicsemi.android:mcumgr-ble:2.7.4'
+
     testImplementation 'junit:junit:4.12'
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
