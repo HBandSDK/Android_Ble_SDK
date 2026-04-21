@@ -3010,7 +3010,6 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         } else if (oprater.equals(SHARE_LOG)) {
             VPLocalLogger.getInstance().shareLogFile(this, "com.timaimee.vpdemo.fileProvider");
         } else if (oprater.equals(READ_BLOOD_COMPOSITION_CALIBRATION)) {
-            VPOperateManager.getInstance().startNordicOtaUpgrade();
             VPOperateManager.getInstance().readBloodComponentCalibration(writeResponse, new IBloodComponentOptListener() {
 
                 @Override
