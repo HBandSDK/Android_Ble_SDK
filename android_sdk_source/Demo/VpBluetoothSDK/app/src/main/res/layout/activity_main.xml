@@ -46,6 +46,15 @@
             android:scrollbars="none" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-
+    <TextView
+        android:id="@+id/tvTips"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textColor="@color/real_red"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:text="如无法扫描设备，请前往系统权限设置中，确认BLE与定位权限是否开启\n(附近的设备、位置信息等权限)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </RelativeLayout>

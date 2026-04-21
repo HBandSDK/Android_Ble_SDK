@@ -94,6 +94,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
     final static int MY_PERMISSIONS_REQUEST_BLUETOOTH = 0x55;
     RecyclerView mRecyclerView;
     TextView mTitleTextView;
+    TextView tvTips;
     private boolean mIsOadModel;
     BluetoothLeScannerCompat mScanner;
 
@@ -162,6 +163,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
         mSwipeRefreshLayout = (SwipeRefreshLayout) super.findViewById(R.id.mian_swipeRefreshLayout);
         mRecyclerView = (RecyclerView) super.findViewById(R.id.main_recylerlist);
         mTitleTextView = (TextView) super.findViewById(R.id.main_title);
+        tvTips = (TextView) super.findViewById(R.id.tvTips);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         bleConnectAdatpter = new BleScanViewAdapter(this, mListData);
@@ -196,7 +198,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
             return;
         }
 
-        if (Build.VERSION.SDK_INT>=31) {
+        if (Build.VERSION.SDK_INT >= 31) {
             initDialogBluetoothScan();
             checkBLEScanPermissionAboveAndroid11();
         } else {
@@ -216,6 +218,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
     public void showMsg(String msg) {
         runOnUiThread(() -> Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show());
     }
+
     private void commandSettingUI() {
         try {
             Logger.t("^^^^^").e("=========================================>>>>> commandSettingUI");
@@ -230,6 +233,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
     }
 
     private Dialog mDialogBluetoothScan;
+
     private void initDialogBluetoothScan() {
         mDialogBluetoothScan = new Dialog(this, R.style.loading_dialog);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_pop_cancelok, null);
@@ -257,6 +261,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
             }
         });
     }
+
     private boolean checkBLEScanPermissionAboveAndroid11() {
         Logger.t(TAG).e("**在Android12及以上版本检查BLE搜索权限");
         if (Build.VERSION.SDK_INT < 31) {
@@ -362,6 +367,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
         }
         if (!mListData.isEmpty()) {
             mListData.clear();
+            tvTips.setVisibility(mListData.isEmpty() ? View.VISIBLE : View.GONE);
             bleConnectAdatpter.notifyDataSetChanged();
         }
 
@@ -416,6 +422,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
                             }
                         }
                         Collections.sort(mListData, new DeviceCompare());
+                        tvTips.setVisibility(mListData.isEmpty() ? View.VISIBLE : View.GONE);
                         bleConnectAdatpter.notifyDataSetChanged();
                     }
                 });
@@ -579,6 +586,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
                         mListAddress.add(device.getAddress());
                     }
                     mListData.sort(new DeviceCompare());
+                    tvTips.setVisibility(mListData.isEmpty() ? View.VISIBLE : View.GONE);
                     bleConnectAdatpter.notifyDataSetChanged();
                 }
             });
