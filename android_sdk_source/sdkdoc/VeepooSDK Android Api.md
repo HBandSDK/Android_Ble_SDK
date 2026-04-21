@@ -28,8 +28,46 @@
 | 1.2.2 | 新增手动测量的12个返回数据文档以及设备支持的手动测量类型列表 | 2026.04.08 |
 | 1.2.3 | 新增连接确认功能                                             | 2026.04.16 |
 | 1.2.4 | 新增Nordic OTA 固件升级功能                                  | 2026.04.17 |
+| 1.2.5 | 新增导入SDK指引模块                                          | 2026.04.21 |
+
+# 导入SDK
+
+添加依赖
+
+```groovy
+/*汇顶协议库----需要可加*/
+implementation files('libs/libcomx-0.5.jar')
+/*VPSDK 核心依赖-----Start*/
+implementation files('libs/vpbluetooth-1.20.aar') 
+implementation files('libs/vpprotocol-2.3.55.15.aar') 
+implementation files('libs/gson-2.2.4.jar')
+/*VPSDK 核心依赖-----End*/
+
+implementation files('libs/AMap2DMap_6.0.0_AMapSearch_9.4.5_AMapLocation_6.2.0_20221026.jar')
+
+/*杰理BLE平台相关库-----Start*/
+implementation files('libs/JL_Watch_V1.13.1_11214-release.aar')
+implementation files('libs/jl_rcsp_V0.7.2_527-release.aar')
+implementation files('libs/jl_bt_ota_V1.10.0_10931-release.aar')
+implementation files('libs/BmpConvert_V1.6.0_10604-release.aar')
+/*杰理BLE平台相关库-----End*/
+
+/*中科BLE平台相关库-----Start*/
+implementation files('libs/abpartool-release.aar')
+/*中科BLE平台相关库-----End*/
+
+/*Nordic平台相关库-----Start*/
+implementation 'no.nordicsemi.android:mcumgr-core:2.7.4'
+implementation 'no.nordicsemi.android:mcumgr-ble:2.7.4'
+implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
+implementation 'no.nordicsemi.android.support.v18:scanner:1.4.2'
+/*Nordic平台相关库-----Start*/
+```
+
+
 
 ## 通用接口类
+
 **VPOperateManager**（SDK主入口）  
 主要操作类
 
@@ -8593,6 +8631,15 @@ private void startOTA() {
 #### Nordic平台设备OTA升级
 
 nordic OTA平台升级时因为nordic 升级内部也有可能会建立gatt连接，如果ota遇到异常现象可以尝试在设备连接断开后再调用noridc ota升级。
+
+###### 添加依赖
+
+```groovy
+implementation 'no.nordicsemi.android:mcumgr-core:2.7.4'
+implementation 'no.nordicsemi.android:mcumgr-ble:2.7.4'
+implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
+implementation 'no.nordicsemi.android.support.v18:scanner:1.4.2'
+```
 
 ###### 前提
 

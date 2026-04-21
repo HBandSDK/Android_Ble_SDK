@@ -28,8 +28,57 @@
 | 1.2.2   | Added 12 data return documents for manual measurements, as well as a list of manual measurement types supported by the device. | 2025.04.08    |
 | 1.2.3   | And connection confirmation function                         | 2025.04.16    |
 | 1.2.4   | And Nordic OTA Upgrade Function                              | 2025.04.17    |
+| 1.2.5   | Andd                                                         |               |
+
+# Import SDK
+
+### Add Dependency
+
+```groovy
+/* Goodix Protocol Library - Optional */
+implementation files('libs/libcomx-0.5.jar')
+
+/* VPSDK Core Dependencies ----- Start */
+// Core Bluetooth communication and protocol handling for Veepoo devices
+implementation files('libs/vpbluetooth-1.20.aar') 
+implementation files('libs/vpprotocol-2.3.55.15.aar') 
+// JSON parsing library
+implementation files('libs/gson-2.2.4.jar')
+/* VPSDK Core Dependencies ----- End */
+
+// AutoNavi (AMap) Map, Search, and Location services (2022-10-26 version)
+implementation files('libs/AMap2DMap_6.0.0_AMapSearch_9.4.5_AMapLocation_6.2.0_20221026.jar')
+
+/* Jerry (Zhuhai Jieli) BLE Platform Libraries ----- Start */
+// Watch UI, RCSP Protocol, OTA updates, and Bitmap conversion tools
+implementation files('libs/JL_Watch_V1.13.1_11214-release.aar')
+implementation files('libs/jl_rcsp_V0.7.2_527-release.aar')
+implementation files('libs/jl_bt_ota_V1.10.0_10931-release.aar')
+implementation files('libs/BmpConvert_V1.6.0_10604-release.aar')
+/* Jerry (Zhuhai Jieli) BLE Platform Libraries ----- End */
+
+/* Bluetrum (Zhongke Lanxun) BLE Platform Libraries ----- Start */
+// Partition and firmware management tools for Bluetrum chips
+implementation files('libs/abpartool-release.aar')
+/* Bluetrum (Zhongke Lanxun) BLE Platform Libraries ----- End */
+
+/* Nordic Semiconductor Platform Libraries ----- Start */
+// Official McuManager implementation for firmware updates (DFU) over BLE
+implementation 'no.nordicsemi.android:mcumgr-core:2.7.4'
+implementation 'no.nordicsemi.android:mcumgr-ble:2.7.4'
+// Legacy support for local broadcasts (required by older McuMgr versions)
+implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
+// Advanced BLE scanner library with better support for different Android versions
+implementation 'no.nordicsemi.android.support.v18:scanner:1.4.2'
+/* Nordic Semiconductor Platform Libraries ----- End */
+```
+
+
+
+
 
 ## Public interface class
+
 **VPOperateManager**（SDK main entry）  
 Main operation class
 
@@ -8500,6 +8549,17 @@ private void startOTA() {
 #### OTA Upgrades for Nordic Platform Devices
 
 During a Nordic OTA platform upgrade, an internal GATT connection may be established as part of the Nordic update process. If you encounter any anomalies during the OTA, you may try invoking the Nordic OTA upgrade only after the device connection has been disconnected.
+
+###### Add Dependencies
+
+```groovy
+implementation 'no.nordicsemi.android:mcumgr-core:2.7.4'
+implementation 'no.nordicsemi.android:mcumgr-ble:2.7.4'
+implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
+implementation 'no.nordicsemi.android.support.v18:scanner:1.4.2'
+```
+
+
 
 ###### Premise
 

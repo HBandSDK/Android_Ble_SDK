@@ -3,30 +3,15 @@
 buildscript {
     ext.kotlin_version = '2.1.0'
     repositories {
-//        google()
-//        jcenter()
-//        maven { url "https://jitpack.io" }
-//        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
-//        mavenCentral()
-//        mavenCentral()
-//        maven { url 'https://plugins.gradle.org/m2/' }
-//        maven { url 'http://maven.aliyun.com/nexus/content/repositories/google' }
-//        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
-//        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
-
-        jcenter()
         maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
         maven { url "https://jitpack.io" }
         mavenCentral()
         google()
     }
     dependencies {
-//        classpath 'com.android.tools.build:gradle:7.1.2'
-        classpath 'com.android.tools.build:gradle:8.2.2'
+        classpath 'com.android.tools.build:gradle:8.1.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'org.jetbrains.dokka:dokka-gradle-plugin:0.10.1'
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
     }
 
 }
@@ -34,18 +19,6 @@ buildscript {
 
 allprojects {
     repositories {
-//        google()
-//        jcenter()
-//        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
-//        maven { url "https://jitpack.io" }
-//        mavenCentral()
-//        mavenCentral()
-//        maven { url 'https://plugins.gradle.org/m2/' }
-//        maven { url 'http://maven.aliyun.com/nexus/content/repositories/google' }
-//        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
-//        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
-
-        jcenter()
         maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
         maven { url "https://jitpack.io" }
         mavenCentral()
