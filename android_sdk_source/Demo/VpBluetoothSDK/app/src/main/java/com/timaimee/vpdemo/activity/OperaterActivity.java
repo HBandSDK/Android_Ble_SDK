@@ -3214,6 +3214,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             } else {
                 showToast("当前设备不支持自动测量设置");
             }
+        } else if (oprater.equals(NRF_OTA)) {
+            startActivity(new Intent(this, NRFOtaActivity.class));
         }
     }
 
