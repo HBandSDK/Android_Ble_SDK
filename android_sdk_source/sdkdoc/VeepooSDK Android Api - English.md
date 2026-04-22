@@ -28,8 +28,8 @@
 | 1.2.2   | Added 12 data return documents for manual measurements, as well as a list of manual measurement types supported by the device. | 2025.04.08    |
 | 1.2.3   | And connection confirmation function                         | 2025.04.16    |
 | 1.2.4   | And Nordic OTA Upgrade Function                              | 2025.04.17    |
-| 1.2.5   | Andd                                                         |               |
-
+| 1.2.5   | And SDK Import                                            | 2026.04.21 |
+| 1.2.6   | Added sport control (set/read/report listener) and BLE device rename interfaces | 2026.04.22    |
 # Import SDK
 
 ### Add Dependency
@@ -72,10 +72,6 @@ implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
 implementation 'no.nordicsemi.android.support.v18:scanner:1.4.2'
 /* Nordic Semiconductor Platform Libraries ----- End */
 ```
-
-
-
-
 
 ## Public interface class
 
@@ -12030,3 +12026,72 @@ Kotlin
 ```kotlin
 VPOperateManager.getInstance().clear4gAccountInfo(bleWriteResponse, configListener)
 ```
+
+
+
+## BLE Device Rename
+
+#### BLE Device Rename
+
+Rename a BLE 4.0 device via App.
+
+###### Premise
+
+The device is connected.
+
+###### Interface
+
+```kotlin
+bleDeviceRename(deviceName, listener, bleWriteResponse)
+```
+
+###### Parameter Explanation
+
+| Parameter name   | Type                  | Describe                       |
+| ---------------- | --------------------- | ------------------------------ |
+| deviceName       | String                | Device name                    |
+| listener         | IDeviceRenameListener | Rename callback listener       |
+| bleWriteResponse | IBleWriteResponse     | Listening for write operations |
+
+###### Return data
+
+**IDeviceRenameListener**
+
+```kotlin
+/**
+ * Device rename succeeded
+ *
+ * @param deviceName device name
+ */
+fun onDeviceRenameSuccess(deviceName: String)
+
+/**
+ * Device rename failed
+ *
+ * @param error       error type
+ * @param deviceName  device name
+ */
+fun onDeviceRenameFail(error: ERenameError, deviceName: String)
+```
+
+**ERenameError** -- Rename error type enumeration
+
+| Enum Value          | Describe                                               |
+| ------------------- | ------------------------------------------------------ |
+| LENGTH_0_ERROR      | Device name cannot be empty                            |
+| LENGTH_1_8_ERROR    | Device name length is abnormal, bytes cannot exceed 8  |
+| LENGTH_1_18_ERROR   | Device name length is abnormal, bytes cannot exceed 18 |
+| DEVICE_MODIFY_ERROR | Device responded with modification failure             |
+
+###### Example Code
+
+```kotlin
+VPOperateManager.getInstance().bleDeviceRename("MyDevice", object : IDeviceRenameListener {
+    override fun onDeviceRenameSuccess(deviceName: String) {
+    }
+
+    override fun onDeviceRenameFail(error: ERenameError, deviceName: String) {
+    }
+}, bleWriteResponse)
+```
+

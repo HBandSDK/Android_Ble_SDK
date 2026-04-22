@@ -27,9 +27,9 @@
 | 1.2.1 | 微体检v2版本数据返回，新增健康提醒、4G功能相关接口           | 2026.01.09 |
 | 1.2.2 | 新增手动测量的12个返回数据文档以及设备支持的手动测量类型列表 | 2026.04.08 |
 | 1.2.3 | 新增连接确认功能                                             | 2026.04.16 |
-| 1.2.4 | 新增Nordic OTA 固件升级功能                                  | 2026.04.17 |
-| 1.2.5 | 新增导入SDK指引模块                                          | 2026.04.21 |
-
+| 1.2.4 | 新增Nordic OTA 固件升级功能                                  | 2026.04.1 |
+|1.2.5|新增导入SDK指引模块|2026.04.21|
+| 1.2.6 | 新增运动控制（设置/读取/上报监听）及蓝牙设备重命名接口       | 2026.04.22 |
 # 导入SDK
 
 添加依赖
@@ -6423,6 +6423,217 @@ VPOperateManager.getInstance()
 
 
 
+#### 设置运动控制
+
+通过App向设备发送运动控制指令（开始/暂停/继续/停止）
+
+###### 前提
+
+设备需支持app运动控制功能，判定条件下：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportAppOpenSport
+```
+
+###### 接口
+
+```kotlin
+setSportControlInfo(bleWriteResponse, controlType, sportType, optListener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                     | 备注                                                         |
+| ---------------- | ------------------------ | ------------------------------------------------------------ |
+| bleWriteResponse | IBleWriteResponse        | 写入操作的监听                                               |
+| controlType      | ESportControlType        | 运动控制类型，包括：START(开始)、PAUSE(暂停)、RESUME(继续)、STOP(停止) |
+| sportType        | ESportType               | 运动类型，详见ESportType                                     |
+| optListener      | ISportControlOptListener | 运动操作回调监听                                             |
+
+###### 返回数据
+
+**ISportControlOptListener**
+
+```kotlin
+/**
+ * 运动控制操作失败
+ */
+fun onSportControlOptFail()
+
+/**
+ * 运动控制操作成功
+ */
+fun onSportControlOptSuccess()
+
+/**
+ * 运动控制数据变化回调
+ *
+ * @param dataInfo 运动控制数据信息
+ */
+fun onSportControlDataChange(dataInfo: SportControlDataInfo)
+```
+
+**ESportControlType** -- 运动控制类型枚举
+
+```java
+public enum ESportControlType {
+    START(1),   // 开始运动
+    PAUSE(2),   // 暂停运动
+    RESUME(3),  // 继续运动
+    STOP(4);    // 停止运动
+}
+```
+
+**SportControlDataInfo** -- 运动控制数据信息
+
+| 变量          | 类型        | 备注                                                         |
+| ------------- | ----------- | ------------------------------------------------------------ |
+| sportType     | ESportType  | 运动类型                                                     |
+| opCode        | SportOpCode | 操作指令：START(0x01)、PAUSE(0x02)、RESUME(0x03)、STOP(0x04) |
+| con           | Int         | 上下文标识                                                   |
+| runState      | RunState    | 运动运行状态                                                 |
+| deviceState   | DeviceState | 设备硬件状态                                                 |
+| sportDuration | Int         | 运动时长，单位：秒                                           |
+| distance      | Int         | 运动距离，单位：米                                           |
+| heartRate     | Int         | 心率，单位：bpm                                              |
+| calories      | Int         | 卡路里，单位：卡                                             |
+| pace          | Int         | 配速，单位：秒/公里                                          |
+| speed         | Int         | 速度，单位：米/小时                                          |
+
+**RunState** -- 运动运行状态枚举
+
+| 枚举值      | 值   | 备注     |
+| ----------- | ---- | -------- |
+| NOT_STARTED | 0x00 | 未开始   |
+| RUNNING     | 0x01 | 运动中   |
+| PAUSED      | 0x02 | 暂停中   |
+| RESUMING    | 0x03 | 继续运动 |
+| FINISHED    | 0x04 | 结束     |
+
+**DeviceState** -- 设备硬件状态枚举
+
+| 枚举值         | 值   | 备注                           |
+| -------------- | ---- | ------------------------------ |
+| NORMAL         | 0x00 | 正常                           |
+| LOW_POWER      | 0x01 | 设备低电                       |
+| CHARGING       | 0x02 | 设备充电中                     |
+| MAX_LIMIT      | 0x03 | 设备单次运动时长已达到最大限制 |
+| LOW_BATTERY_10 | 0x04 | 电量小于等于10%                |
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().setSportControlInfo({
+}, ESportControlType.START, ESportType.OUTDOOR_RUNNING, object : ISportControlOptListener {
+    override fun onSportControlOptFail() {
+    }
+
+    override fun onSportControlOptSuccess() {
+    }
+
+    override fun onSportControlDataChange(dataInfo: SportControlDataInfo) {
+    }
+})
+```
+
+
+
+#### 设置运动控制主动上报监听
+
+设置设备运动控制主动上报数据的监听器，当设备主动上报运动数据时触发回调
+
+###### 前提
+
+设备需支持app运动控制功能，判定条件下：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportAppOpenSport
+```
+
+###### 接口
+
+```kotlin
+setSportControlReportListener(reportListener)
+```
+
+###### 参数解释
+
+| 参数名         | 类型                       | 备注                 |
+| -------------- | -------------------------- | -------------------- |
+| reportListener | IDeviceSportReportListener | 设备运动上报回调监听 |
+
+###### 返回数据
+
+**IDeviceSportReportListener**
+
+```kotlin
+/**
+ * 设备运动数据上报回调
+ *
+ * @param dataInfo 运动控制数据信息
+ */
+fun onSportControlDataChange(dataInfo: SportControlDataInfo)
+```
+
+**SportControlDataInfo** -- 同【[设置运动控制](#设置运动控制)】返回数据一致
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().setSportControlReportListener(object : IDeviceSportReportListener {
+    override fun onSportControlDataChange(dataInfo: SportControlDataInfo) {
+    }
+})
+```
+
+
+
+#### 读取运动控制信息
+
+通过App读取设备当前运动控制信息
+
+###### 前提
+
+设备需支持app运动控制功能，判定条件下：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportAppOpenSport
+```
+
+###### 接口
+
+```kotlin
+readSportControlInfo(bleWriteResponse, sportType, optListener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                     | 备注             |
+| ---------------- | ------------------------ | ---------------- |
+| bleWriteResponse | IBleWriteResponse        | 写入操作的监听   |
+| sportType        | ESportType               | 运动类型         |
+| optListener      | ISportControlOptListener | 运动操作回调监听 |
+
+###### 返回数据
+
+同【[设置运动控制](#设置运动控制)】返回数据一致
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().readSportControlInfo({
+}, ESportType.OUTDOOR_RUNNING, object : ISportControlOptListener {
+    override fun onSportControlOptFail() {
+    }
+
+    override fun onSportControlOptSuccess() {
+    }
+
+    override fun onSportControlDataChange(dataInfo: SportControlDataInfo) {
+    }
+})
+```
+
 
 
 ## 血氧功能
@@ -12061,5 +12272,73 @@ clear4gAccountInfo(bleWriteResponse, configListener)
 
 ```kotlin
 VPOperateManager.getInstance().clear4gAccountInfo(bleWriteResponse, configListener)
+```
+
+
+
+## 蓝牙设备重命名
+
+#### BLE设备重命名
+
+通过App修改蓝牙4.0设备的名称
+
+###### 前提
+
+设备已连接
+
+###### 接口
+
+```kotlin
+bleDeviceRename(deviceName, listener, bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                  | 备注           |
+| ---------------- | --------------------- | -------------- |
+| deviceName       | String                | 设备名称       |
+| listener         | IDeviceRenameListener | 重命名回调监听 |
+| bleWriteResponse | IBleWriteResponse     | 写入操作的监听 |
+
+###### 返回数据
+
+**IDeviceRenameListener**
+
+```kotlin
+/**
+ * 设备重命名成功
+ *
+ * @param deviceName 设备名
+ */
+fun onDeviceRenameSuccess(deviceName: String)
+
+/**
+ * 设备重命名失败
+ *
+ * @param error       错误类型
+ * @param deviceName  设备名
+ */
+fun onDeviceRenameFail(error: ERenameError, deviceName: String)
+```
+
+**ERenameError** -- 重命名错误类型枚举
+
+| 枚举值              | 备注                               |
+| ------------------- | ---------------------------------- |
+| LENGTH_0_ERROR      | 设备名不能为空                     |
+| LENGTH_1_8_ERROR    | 设备名长度异常，字节数不能超过8位  |
+| LENGTH_1_18_ERROR   | 设备名长度异常，字节数不能超过18位 |
+| DEVICE_MODIFY_ERROR | 设备端回复修改失败                 |
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().bleDeviceRename("MyDevice", object : IDeviceRenameListener {
+    override fun onDeviceRenameSuccess(deviceName: String) {
+    }
+
+    override fun onDeviceRenameFail(error: ERenameError, deviceName: String) {
+    }
+}, bleWriteResponse)
 ```
 

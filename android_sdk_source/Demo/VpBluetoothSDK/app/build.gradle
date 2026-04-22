@@ -89,7 +89,7 @@ dependencies {
     // 协议与蓝牙库 (保持原样)
     implementation files('libs/libcomx-0.5.jar')
     implementation files('libs/vpbluetooth-1.20.aar')
-    implementation files('libs/vpprotocol-2.3.56.15.aar')
+    implementation files('libs/vpprotocol-2.3.57.15.aar')
     implementation files('libs/gson-2.2.4.jar')
     implementation files('libs/AMap2DMap_6.0.0_AMapSearch_9.4.5_AMapLocation_6.2.0_20221026.jar')
 
