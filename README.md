@@ -15,6 +15,20 @@ README:
    * [gson-x.x.x.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
    * [vpprotocol_2.1.xx.xx.aar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_core)
 
+    // 杰理与中科 （JL & Bluetrum）
+    implementation files('libs/JL_Watch_V1.13.1_11214-release.aar')
+    implementation files('libs/jl_rcsp_V0.7.2_527-release.aar')
+    implementation files('libs/jl_bt_ota_V1.10.0_10931-release.aar')
+    implementation files('libs/BmpConvert_V1.6.0_10604-release.aar')
+    implementation files('libs/abpartool-release.aar')
+
+    // Nordic mcumgr
+    implementation 'no.nordicsemi.android:mcumgr-core:2.7.4'
+    implementation 'no.nordicsemi.android:mcumgr-ble:2.7.4'
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
+    implementation 'no.nordicsemi.android.support.v18:scanner:1.4.2'
+
+
 ## 可选（如果是汇顶的芯片，升级会用到如下包）| Optional (If it is a Goodix chip, the upgrade will use the following package)
 
    * [libble-0.x.aar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
