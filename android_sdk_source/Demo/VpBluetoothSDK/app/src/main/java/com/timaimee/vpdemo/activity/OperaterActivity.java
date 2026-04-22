@@ -323,6 +323,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         tv2 = (TextView) super.findViewById(R.id.tv2);
         tv3 = (TextView) super.findViewById(R.id.tv3);
         titleBleInfo = (TextView) super.findViewById(R.id.main_title_ble);
+        initDataByIntent();
         initGridView();
         listenDeviceCallbackData();
         listenCamera();
@@ -409,6 +410,21 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
     }
 
+    private void initDataByIntent(){
+        deviceVersion = getIntent().getStringExtra("deviceVersion");
+        deviceTestVersion = getIntent().getStringExtra("deviceTestVersion");
+        deviceaddress = getIntent().getStringExtra("deviceaddress");
+        deviceNumber = getIntent().getIntExtra("deviceNumber",0);
+        watchDataDay = getIntent().getIntExtra("watchDataDay",0);
+        weatherStyle = getIntent().getIntExtra("weatherStyle",0);
+        weatherStyle = getIntent().getIntExtra("weatherStyle",0);
+        contactMsgLength = getIntent().getIntExtra("contactMsgLength",0);
+        allMsgLenght = getIntent().getIntExtra("allMsgLenght",0);
+        isSleepPrecision = getIntent().getBooleanExtra("isSleepPrecision", false);
+        isNewSportCalc = getIntent().getBooleanExtra("isNewSportCalc", false);
+        isOadModel = getIntent().getBooleanExtra("isOadModel", false);
+        titleBleInfo.setText("地址：" + deviceaddress + ", 设备号：" + deviceNumber + "\n版本号：" + deviceVersion + ", 测试版本号：" + deviceTestVersion);
+    }
     @Override
     protected void onResume() {
         super.onResume();

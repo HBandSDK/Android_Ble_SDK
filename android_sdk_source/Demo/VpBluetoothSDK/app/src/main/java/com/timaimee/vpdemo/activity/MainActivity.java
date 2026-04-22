@@ -469,7 +469,7 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
                     //蓝牙与设备的连接状态
                     Logger.t(TAG).i("监听成功-可进行其他操作");
 
-                    Intent intent = new Intent(mContext, OperaterActivity.class);
+                    Intent intent = new Intent(mContext, PwdConfirmActivity.class);
                     intent.putExtra("isoadmodel", mIsOadModel);
                     intent.putExtra("deviceaddress", mac);
                     startActivity(intent);
