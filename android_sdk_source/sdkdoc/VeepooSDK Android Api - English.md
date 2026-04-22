@@ -30,6 +30,7 @@
 | 1.2.4   | And Nordic OTA Upgrade Function                              | 2025.04.17    |
 | 1.2.5   | And SDK Import                                            | 2026.04.21 |
 | 1.2.6   | Added sport control (set/read/report listener) and BLE device rename interfaces | 2026.04.22    |
+| 1.2.7 | Add  Ecg Diagnosis interface | 2026.04.22 |
 # Import SDK
 
 ### Add Dependency
@@ -2507,41 +2508,54 @@ startDetectECG(bleWriteResponse, isNeedCurve, ecgDetectListener)
 
 **IECGDetectListener**
 
-```kotlin
-/**
-* Basic information of ECG measurement (waveform frequency, sampling frequency)
-*
-* @param ecgDetectInfo
-*/
-fun onEcgDetectInfoChange(ecgDetectInfo: EcgDetectInfo?)
+```java
+    /**
+     * Callback when basic ECG measurement configuration changes
+     * Includes waveform frequency and sampling frequency
+     *
+     * @param ecgDetectInfo ECG basic measurement information
+     */
+    void onEcgDetectInfoChange(EcgDetectInfo ecgDetectInfo);
 
-/**
-* Status during ECG measurement
-*
-* @param ecgDetectState
-*/
-fun onEcgDetectStateChange(ecgDetectState: EcgDetectState?)
+    /**
+     * Callback when ECG measurement status changes during the process
+     * Such as measuring, ready, error, lead off, finished, etc.
+     *
+     * @param ecgDetectState Current ECG measurement state
+     */
+    void onEcgDetectStateChange(EcgDetectState ecgDetectState);
 
-/**
-* The final result of ECG measurement, when abnormal, that is, when there is a disease, the value will be output
-*
-* @param ecgDetectResult
-*/
-fun onEcgDetectResultChange(ecgDetectResult: EcgDetectResult?)
+    /**
+     * Callback for the final standard ECG diagnosis result
+     * Only triggered when an abnormality (disease) is detected
+     * This method is called after measurement ONLY IF ecgType != 6
+     *
+     * @param ecgDetectResult Standard ECG diagnosis result
+     */
+    void onEcgDetectResultChange(EcgDetectResult ecgDetectResult);
 
-/**
-* ECG waveform data
-*
-* @param data
-*
-* * Draw the ecg waveform on the interface using this data. When drawing, you need to convert #data into a voltage value.
-* Refer to [com.veepoo.protocol.util.EcgUtil.convertToMvWithValue] for the conversion method
-* If the array data has no value, it means that reasonable waveform data has not been generated yet. When measuring ecg, the data will be updated continuously.
-* When the data is Int.MAX_VALUE, that is, 2147483647 (hexadecimal is 0x7FFFFFFF), it is necessary to filter and not draw this point.
-* * Fatigue operation callback, return fatigue data: whether it is supported, on/off status, progress, fatigue value
-*
-*/
-fun onEcgADCChange(data: IntArray?)
+    /**
+     * Callback for multi-ECG diagnosis result
+     * Only triggered when an abnormality (disease) is detected
+     * This method is called after measurement ONLY IF ecgType == 6
+     *
+     * @param ecgDiagnosis Multi-mode ECG diagnosis result
+     */
+    void onEcgDetectDiagnosisChange(EcgDiagnosis ecgDiagnosis);
+
+    /**
+     * Callback for real-time ECG raw ADC waveform data
+     * Used to draw ECG waveform on the UI
+     *
+     * @param data ECG raw waveform data array:
+     *             <ul>
+     *                 <li>Convert to mV using {@link com.veepoo.protocol.util.EcgUtil#convertToMvWithValue(int, int, boolean, int)}</li>
+     *                 <li>Empty array means no valid waveform data available yet</li>
+     *                 <li>Value = Integer.MAX_VALUE (0x7FFFFFFF) should be filtered and not drawn</li>
+     *             </ul>
+     * @param power Fatigue-related data including support status, switch state, progress, and fatigue value
+     */
+    void onEcgADCChange(int[] data, int[] power);
 ```
 
 **EcgDetectInfo**
@@ -2613,6 +2627,44 @@ fun onEcgADCChange(data: IntArray?)
 | detectBreath        | IntArray       | Respiration rate data                     |
 | detectHrv           | IntArray       | HRV data                                  |
 | detectQT            | IntArray       | Array of measured QT values               |
+
+**EcgDiagnosis**
+
+| 变量               | 类型     | 英文备注                                                     |
+| ------------------ | -------- | ------------------------------------------------------------ |
+| isSuccess          | Boolean  | Whether the measurement is successful                        |
+| type               | Int      | 2: Manual measurement by ECG bracelet3: Auto measurement by ECG bracelet4: Manual test on App side |
+| timeBean           | TimeData | Measurement date                                             |
+| frequency          | Int      | Sampling frequency                                           |
+| drawfrequency      | Int      | Waveform frequency                                           |
+| duration           | Int      | Total measurement duration in seconds                        |
+| leadOffType        | Int      | Lead type0: Lead I1: Lead V1                                 |
+| state              | Int      | 0: Deleted by user1: Normal usage                            |
+| powers             | IntArray | Gain corresponding to the raw signal                         |
+| filterSignals      | IntArray | Raw ECG signal                                               |
+| diagnosis8         | IntArray | Disease diagnosis result2 bits per disease, level [0,3]0: No disease, 1: Mild, 2: Moderate, 3: Severe |
+| diseaseResult      | IntArray | Diagnosis result                                             |
+| heartRate          | Int      | Heart rate                                                   |
+| respRate           | Int      | Average respiration rate                                     |
+| hrv                | Int      | Average HRV                                                  |
+| qtTime             | Int      | Average QT interval                                          |
+| diseaseRisk        | Int      | Disease risk, range [1,99]                                   |
+| pressureIndex      | Int      | Pressure index, range [1,99]                                 |
+| fatigueIndex       | Int      | Fatigue index, range [1,99]                                  |
+| myocarditisRisk    | Int      | Myocarditis risk, range [1,99]                               |
+| chdRisk            | Int      | Coronary heart disease (CHD) risk, range [1,99]              |
+| angioscleroticRisk | Int      | Angiosclerosis risk, range [1,99]                            |
+| qrsTime            | Int      | QRS duration, unit: msStored as integer (float value ×100)   |
+| qrsAmp             | Int      | QRS amplitude, unit: mvStored as integer (float value ×100)  |
+| pwvMeanVal         | Int      | Real-time average PWV valueRange: [6,20] m/sAbnormal: >15 m/sStored as integer (float value ×100) |
+| stMeanAmp          | Int      | Average ST-segment amplitude, unit: mvNormal range: [-0.05, 0.1] mvStored as integer (float value ×100) |
+| diseaseSdnn        | Int      | SDNN (Standard deviation of normal-to-normal intervals)Normal: (141±39) ms |
+| diseaseRmssd       | Int      | RMSSD (Root mean square of successive RR interval differences)Normal range: (27±12) ms |
+| detectHeart        | IntArray | Heart rate array measured during the process                 |
+| detectBreath       | IntArray | Respiration rate array measured during the process           |
+| detectHrv          | IntArray | HRV value array measured during the process                  |
+| detectQT           | IntArray | QT interval array measured during the process                |
+| risk32             | IntArray | Risk levels of 32 diseases                                   |
 
 ###### Example Code
 

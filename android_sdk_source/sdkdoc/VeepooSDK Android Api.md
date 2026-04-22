@@ -30,6 +30,7 @@
 | 1.2.4 | 新增Nordic OTA 固件升级功能                                  | 2026.04.1 |
 |1.2.5|新增导入SDK指引模块|2026.04.21|
 | 1.2.6 | 新增运动控制（设置/读取/上报监听）及蓝牙设备重命名接口       | 2026.04.22 |
+| 1.2.7 | 新增ECG多诊断测量回调                                        | 2026.04.22 |
 # 导入SDK
 
 添加依赖
@@ -2521,41 +2522,49 @@ startDetectECG(bleWriteResponse, isNeedCurve, ecgDetectListener)
 
 **IECGDetectListener**
 
-```kotlin
+```java
 /**
- * ECG测量基本信息(波形频率,采样频率)
- *
- * @param ecgDetectInfo
- */
-fun onEcgDetectInfoChange(ecgDetectInfo: EcgDetectInfo?)
+     * ECG测量基本信息(波形频率,采样频率)
+     *
+     * @param ecgDetectInfo ecg测量信息
+     */
+void onEcgDetectInfoChange(EcgDetectInfo ecgDetectInfo);
 
 /**
- * ECG测量过程中的状态
- *
- * @param ecgDetectState
- */
-fun onEcgDetectStateChange(ecgDetectState: EcgDetectState?)
+     * ECG测量过程中的状态
+     *
+     * @param ecgDetectState
+     */
+void onEcgDetectStateChange(EcgDetectState ecgDetectState);
 
 /**
- * ECG测量的最终结果,异常时,即存在疾病,才会出值
- *
- * @param ecgDetectResult
- */
-fun onEcgDetectResultChange(ecgDetectResult: EcgDetectResult?)
+     * ECG测量的最终结果,异常时,即存在疾病,才会出值
+     * 当且仅当ecgType不为6时会在测量结束后回调改方法
+     *
+     * @param ecgDetectResult ecg常规诊断结果
+     */
+void onEcgDetectResultChange(EcgDetectResult ecgDetectResult);
 
 /**
- * ECG的波形数据
- *
- * @param data
- *
- *  * 界面上绘制ecg波形图使用该数据进行绘制，绘制时需要将#data转换成电压值,
- * 转换方法参考[com.veepoo.protocol.util.EcgUtil.convertToMvWithValue]
- * 如果数组data没有值则表示还没有生成合理的波形数据，测量ecg时会不停的谁更新数据，
- * 当数据为Int.MAX_VALUE 即2147483647 （16进制为0x7FFFFFFF）时需要过滤不画该点
- *  * 疲劳度操作的回调,返回疲劳度的数据:是否支持,开/关状态,进度,疲劳度值
- *
- */
-fun onEcgADCChange(data: IntArray?)
+     * ECG测量的多诊断结果,异常时,即存在疾病,才会出值
+     * 当且仅当ecgType为6时会在测量结束后回调改方法
+     *
+     * @param ecgDiagnosis ecg多诊断结果
+     */
+void onEcgDetectDiagnosisChange(EcgDiagnosis ecgDiagnosis);
+
+/**
+     * ECG的波形数据
+     *
+     * @param data <ul>
+     *             <li>界面上绘制ecg波形图使用该数据进行绘制，绘制时需要将#data转换成电压值,
+     *             转换方法参考{@link com.veepoo.protocol.util.EcgUtil#convertToMvWithValue(int, int, boolean, int)}
+     *             如果数组data没有值则表示还没有生成合理的波形数据，测量ecg时会不停的谁更新数据，
+     *             当数据为Int.MAX_VALUE 即2147483647 （16进制为0x7FFFFFFF）时需要过滤不画该点</li>
+     *             <li>疲劳度操作的回调,返回疲劳度的数据:是否支持,开/关状态,进度,疲劳度值</li>
+     *             </ul>
+     */
+void onEcgADCChange(int[] data,int[] power);
 ```
 
 **EcgDetectInfo**
@@ -2627,6 +2636,46 @@ fun onEcgADCChange(data: IntArray?)
 | detectBreath        | IntArray       | 呼吸率数据         |
 | detectHrv           | IntArray       | HRV数据            |
 | detectQT            | IntArray       | 测量的QT值数组     |
+
+**EcgDiagnosis**
+
+| 变量               | 类型     | 备注                                                         |
+| ------------------ | -------- | ------------------------------------------------------------ |
+| isSuccess          | Boolean  | 是否测量成功                                                 |
+| type               | Int      | 2: ECG手环手动测量。 3：ECG手环自动测量 。4：App端手动测试   |
+| timeBean           | TimeData | 测量日期                                                     |
+| frequency          | Int      | 采样频率                                                     |
+| drawfrequency      | Int      | 波形频率                                                     |
+| duration           | Int      | 总的秒数                                                     |
+| leadOffType        | Int      | 导联类型。0：I导联，1：V1导联                                |
+| state              | Int      | 0代表用户已经删除，1代表用户正常使用                         |
+| powers             | IntArray | 原始信号对应的增益                                           |
+| filterSignals      | IntArray | 原始信号                                                     |
+| diagnosis8         | IntArray | 疾病诊断结果，2bit表示一种疾病的等级[0, 3], 即无疾病、轻度、中度、重度 |
+| diseaseResult      | IntArray | 诊断结果                                                     |
+| heartRate          | Int      | 心率                                                         |
+| respRate           | Int      | 平均呼吸率                                                   |
+| hrv                | Int      | 平均HRV                                                      |
+| qtTime             | Int      | 平均QT                                                       |
+| diseaseRisk        | Int      | 疾病风险，[1,99]                                             |
+| pressureIndex      | Int      | 压力指数，[1,99]                                             |
+| fatigueIndex       | Int      | 疲劳指数，[1,99]                                             |
+| myocarditisRisk    | Int      | 心肌炎风险，[1,99]                                           |
+| chdRisk            | Int      | 冠心病风险，[1,99]                                           |
+| angioscleroticRisk | Int      | 血管硬化风险，[1,99]                                         |
+| qrsTime            | Int      | QRS振幅 ，单位mv 【float 软件乘100取整】                     |
+| qrsAmp             | Int      | QRS振幅 ，单位mv 【float 软件乘100取整】                     |
+| pwvMeanVal         | Int      | pwv的实时均值，测量范围[6,20]m/s,动脉粥样硬化指标，异常范围 > 15m/s 【float 软件乘100取整】 |
+| stMeanAmp          | Int      | 平均st段振幅 ，单位mv，[-0.05,0.1]mv为正常范围 【float 软件乘100取整】 |
+| diseaseSdnn        | Int      | SDNN 窦性心搏间标准差,正常值为(141±39)ms                     |
+| diseaseRmssd       | Int      | RMSSD 相邻正常心动周期差值的均方根，正常值范围为（27±12）ms  |
+| detectHeart        | IntArray | 测量的心率值数组                                             |
+| detectBreath       | IntArray | 测量的呼吸频率数组                                           |
+| detectHrv          | IntArray | 测量的Hrv值数组                                              |
+| detectQT           | IntArray | 测量的QT值数组                                               |
+| risk32             | IntArray | 32种疾病风险等级                                             |
+
+
 
 ###### 示例代码
 
