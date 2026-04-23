@@ -31,6 +31,7 @@
 |1.2.5|新增导入SDK指引模块|2026.04.21|
 | 1.2.6 | 新增运动控制（设置/读取/上报监听）及蓝牙设备重命名接口       | 2026.04.22 |
 | 1.2.7 | 新增ECG多诊断测量回调                                        | 2026.04.22 |
+| 1.2.8 | 新增app测量hrv功能 | 2026.04.23 |
 # 导入SDK
 
 添加依赖
@@ -3137,7 +3138,57 @@ VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportHRV
 
 HRV日常数据通过【[读取日常数据功能](#读取日常数据功能)】获取
 
+#### HRV APP 测量
 
+需设备支持HRV app测量功能，且设备处于空闲，判断条件如下：
+
+```kotlin
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportHrvAppDetect
+```
+
+##### 开始测量
+
+```java
+public void startDetectHrv(BleWriteResponse bleWriteResponse, IHrvDetectListener detectListener)
+```
+
+##### 结束测量
+
+```java
+public void stopDetectHrv(BleWriteResponse bleWriteResponse, IHrvDetectListener detectListener)
+```
+
+###### 参数解释
+
+| 参数名                | 类型                 | 备注           |
+| --------------------- | -------------------- | -------------- |
+| bleWriteResponse      | IBleWriteResponseInt | 写入操作的监听 |
+| sleepReadDatalistener | IHrvDetectListener   | hrv测量的监听  |
+
+###### IHrvDetectListener  hrv app测量监听
+
+```
+    /**
+     * HRV 测量值回调
+     * * Callback for HRV (Heart Rate Variability) measurement values.
+     * * @param hrv 本次的 HRV 测量数值 (ms) / The current HRV measurement value in milliseconds.
+     */
+    fun onHrvDetect(hrv: Int)
+
+    /**
+     * 测量失败回调
+     * * Callback for measurement failure.
+     * * @param detectState 失败的具体原因状态 / The specific state indicating the reason for failure.
+     */
+    fun onDetectFailed(detectState: HrvDetectState)
+
+    /**
+     * 停止测量回调
+     * * Callback when the measurement is stopped.
+     * * This is triggered when the measurement process is manually or automatically terminated.
+     */
+    fun onDetectStop()
+```
 
 
 

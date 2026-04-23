@@ -46,6 +46,7 @@ import com.veepoo.protocol.listener.data.IAllHealthDataListener;
 import com.veepoo.protocol.listener.data.IAllSetDataListener;
 import com.veepoo.protocol.listener.data.IAutoDetectOriginDataListener;
 import com.veepoo.protocol.listener.data.IBPDetectDataListener;
+import com.veepoo.protocol.listener.data.IHrvDetectListener;
 import com.veepoo.protocol.listener.data.IBPFunctionListener;
 import com.veepoo.protocol.listener.data.IBPSettingDataListener;
 import com.veepoo.protocol.listener.data.IBatteryDataListener;
@@ -207,6 +208,7 @@ import com.veepoo.protocol.model.enums.EWeatherType;
 import com.veepoo.protocol.model.enums.EWomenStatus;
 import com.veepoo.protocol.model.enums.GsrDetectAck;
 import com.veepoo.protocol.model.enums.MagneticTherapyType;
+import com.veepoo.protocol.model.enums.HrvDetectState;
 import com.veepoo.protocol.model.settings.Alarm2Setting;
 import com.veepoo.protocol.model.settings.AlarmSetting;
 import com.veepoo.protocol.model.settings.AllSetSetting;
@@ -2385,6 +2387,40 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
                 }
             }, watchDataDay);
+        } else if(oprater.equals(HRV_START_DETECT)) {
+            VPOperateManager.getInstance().startDetectHrv(writeResponse, new IHrvDetectListener() {
+                @Override
+                public void onHrvDetect(int hrv) {
+                    Toast.makeText(mContext, "app 测量hrv:" + hrv, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onDetectFailed(@NonNull HrvDetectState detectState) {
+                    Toast.makeText(mContext, "app 测量hrv异常:" + detectState, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onDetectStop() {
+                    Toast.makeText(mContext, "app 测量hrv结束", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else if(oprater.equals(HRV_STOP_DETECT)) {
+            VPOperateManager.getInstance().stopDetectHrv(writeResponse, new IHrvDetectListener() {
+                @Override
+                public void onHrvDetect(int hrv) {
+                    Toast.makeText(mContext, "app 测量hrv:" + hrv, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onDetectFailed(@NonNull HrvDetectState detectState) {
+                    Toast.makeText(mContext, "app 测量hrv异常:" + detectState, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onDetectStop() {
+                    Toast.makeText(mContext, "app 测量hrv结束", Toast.LENGTH_SHORT).show();
+                }
+            });
         } else if (oprater.equals(S22_READ_DATA)) {
             TimeData timeData = new TimeData(2017, 9, 11, 8, 13, 20);
 //            timeData.setCurrentTime();
@@ -3232,6 +3268,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             }
         } else if (oprater.equals(NRF_OTA)) {
             startActivity(new Intent(this, NRFOtaActivity.class));
+        } else if (oprater.equals(QIU_GUO_TCM)) {
+            startActivity(new Intent(this, TCMActivity.class));
         }
     }
 

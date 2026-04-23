@@ -182,6 +182,9 @@
         <activity android:name=".activity.PwdConfirmActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
+        <activity android:name=".activity.TCMActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
         <service
             android:name="com.inuker.bluetooth.library.BluetoothService"
             android:enabled="true"

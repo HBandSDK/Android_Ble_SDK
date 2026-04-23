@@ -31,6 +31,7 @@
 | 1.2.5   | And SDK Import                                            | 2026.04.21 |
 | 1.2.6   | Added sport control (set/read/report listener) and BLE device rename interfaces | 2026.04.22    |
 | 1.2.7 | Add  Ecg Diagnosis interface | 2026.04.22 |
+| 1.2.8 | Add app hrv detect function | 2026.04.23 |
 # Import SDK
 
 ### Add Dependency
@@ -3131,7 +3132,54 @@ All the following interfaces are called on the premise that the device supports 
 
 HRV daily data is obtained through [[Read daily data function](#Read daily data function)]
 
+#### HRV APP Measurement
 
+The device must support the HRV measurement function via the app and be in an idle state; the conditions for this determination are as follows:
+
+```kotlin
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportHrvAppDetect
+```
+
+##### Start hrv measurement
+
+```java
+public void startDetectHrv(BleWriteResponse bleWriteResponse, IHrvDetectListener detectListener)
+```
+
+##### Stop hrv measurement
+
+```java
+public void stopDetectHrv(BleWriteResponse bleWriteResponse, IHrvDetectListener detectListener)
+```
+
+###### Parameter Explanation
+
+| Parameter name        | Type                 | Describe                       |
+| --------------------- | -------------------- | ------------------------------ |
+| bleWriteResponse      | IBleWriteResponseInt | Listening for write operations |
+| sleepReadDatalistener | IHrvDetectListener   | Listening for hrv measurement  |
+
+###### IHrvDetectListener   listener of  app hrv measurement
+
+```
+    /**
+     * * Callback for HRV (Heart Rate Variability) measurement values.
+     * * @param hrv The current HRV measurement value in milliseconds.
+     */
+    fun onHrvDetect(hrv: Int)
+
+    /**
+     * * Callback for measurement failure.
+     * * @param detectState  The specific state indicating the reason for failure.
+     */
+    fun onDetectFailed(detectState: HrvDetectState)
+
+    /**
+     * * Callback when the measurement is stopped.
+     * * This is triggered when the measurement process is manually or automatically terminated.
+     */
+    fun onDetectStop()
+```
 
 
 
