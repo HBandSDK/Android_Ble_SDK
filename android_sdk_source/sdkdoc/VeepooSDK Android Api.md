@@ -12442,3 +12442,72 @@ VPOperateManager.getInstance().bleDeviceRename("MyDevice", object : IDeviceRenam
 }, bleWriteResponse)
 ```
 
+
+
+## 秋果JE136P中医数据设置
+
+###### 接口
+
+```java
+public void setJE136PTCMCustomData(IBleWriteResponse bleWriteResponse, Map<TCMType, Integer> tcmData, ITCMDataListener tcmDataListener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                  | 备注             |
+| ---------------- | --------------------- | ---------------- |
+| tcmData          | Map<TCMType, Integer> | 中医数据键值对   |
+| tcmDataListener  | ITCMDataListener      | 中医数据设置监听 |
+| bleWriteResponse | IBleWriteResponse     | 写入操作的监听   |
+
+###### 返回数据
+
+**TCMType** - 中医的数据类型枚举
+
+```kotlin
+/**
+ * 中医数据
+ */
+enum class TCMType(val tag: Byte, val description: String) {
+    BLOOD_STASIS(0x01.toByte(), "血瘀"),
+    DAMP_HEAT(0x02.toByte(), "湿热"),
+    SPECIAL_ALLERGY(0x03.toByte(), "特禀"),
+    YANG_DEFICIENCY(0x04.toByte(), "阳虚"),
+    YIN_DEFICIENCY(0x05.toByte(), "阴虚"),
+    PHLEGM_DAMPNESS(0x06.toByte(), "痰湿"),
+    BALANCED(0x07.toByte(), "平和"),
+    QI_STAGNATION(0x08.toByte(), "气郁"),
+    QI_DEFICIENCY(0x09.toByte(), "气虚"),
+    LARGE_INTESTINE(0x0A.toByte(), "大肠"),
+    GALLBLADDER(0x0B.toByte(), "胆"),
+    LIVER(0x0C.toByte(), "肝"),
+    SPLEEN(0x0D.toByte(), "脾"),
+    LUNG(0x0E.toByte(), "肺"),
+    SMALL_INTESTINE(0x0F.toByte(), "小肠"),
+    SANJIAO_BLADDER(0x10.toByte(), "三焦膀胱"),
+    KIDNEY(0x11.toByte(), "肾"),
+    STOMACH(0x12.toByte(), "胃"),
+    HEART(0x13.toByte(), "心脏");
+
+    companion object {
+        fun fromTag(tag: Byte): TCMType? = values().find { it.tag == tag }
+    }
+}
+```
+
+**ITCMDataListener** - 中医的数据的设置监听
+
+```kotlin
+interface ITCMDataListener {
+    /**
+     * 读取到设备返回的完整中医数据（包含时间戳和各项指标）
+     */
+    @Deprecated("该方法设备暂不支持")
+    fun onTCMDataResponse(report: TCMDataReport)
+
+    /**
+     * 设置成功回复
+     */
+    fun onTCMWriteSuccess()
+}
+```
