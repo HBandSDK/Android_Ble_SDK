@@ -3270,6 +3270,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             startActivity(new Intent(this, NRFOtaActivity.class));
         } else if (oprater.equals(QIU_GUO_TCM)) {
             startActivity(new Intent(this, TCMActivity.class));
+        } else if (oprater.equals(QX17_DATA_ACQUISITION)) {
+            startActivity(new Intent(this, QX17DataAcquisitionActivity.class));
         }
     }
 

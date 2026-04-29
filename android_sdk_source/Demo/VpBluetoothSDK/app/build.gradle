@@ -8,7 +8,7 @@ project.ext {
 
 android {
     namespace "com.timaimee.vpdemo"
-    compileSdkVersion 35
+    compileSdkVersion 34
     signingConfigs {
         release {
             keyAlias 'zhongxin'
@@ -20,7 +20,7 @@ android {
     defaultConfig {
         applicationId "com.timaimee.vpdemo"//com.timaimee.vpdemo //com.ecg.kg
         minSdkVersion 24
-        targetSdkVersion 35
+        targetSdkVersion 34
         versionCode 163
         versionName "1.6.3"
         ndk {
@@ -89,7 +89,7 @@ dependencies {
     // 协议与蓝牙库 (保持原样)
     implementation files('libs/libcomx-0.5.jar')
     implementation files('libs/vpbluetooth-1.20.aar')
-    implementation files('libs/vpprotocol-2.3.62.15.aar')
+    implementation files('libs/vpprotocol-2.3.63.15.aar')
     implementation files('libs/gson-2.2.4.jar')
     implementation files('libs/AMap2DMap_6.0.0_AMapSearch_9.4.5_AMapLocation_6.2.0_20221026.jar')
 

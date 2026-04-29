@@ -32,8 +32,8 @@
 | 1.2.6   | Added sport control (set/read/report listener) and BLE device rename interfaces | 2026.04.22    |
 | 1.2.7 | Add  Ecg Diagnosis interface | 2026.04.22 |
 | 1.2.8 | Add app hrv detect function | 2026.04.23 |
+| 1.2.9 | Added QX17 data acquisition flow control (IMU/GPS/HR real-time acquisition) and vibration motor control interfaces | 2026.04.29 |
 # Import SDK
-
 ### Add Dependency
 
 ```groovy
@@ -12195,3 +12195,298 @@ VPOperateManager.getInstance().bleDeviceRename("MyDevice", object : IDeviceRenam
 }, bleWriteResponse)
 ```
 
+
+
+
+
+## QX17 Data Acquisition
+
+QX17 project data acquisition flow control feature, supporting real-time IMU (100Hz), GPS (1Hz), and heart rate (1Hz) data acquisition. The SDK implements internal packet loss detection and automatic retransmission.
+
+#### Call Flow
+
+```mermaid
+flowchart TD
+    Start((Connected & Password Verified)) --> SetListener[setVpQX17DataAcquisitionStateListener<br/>Set Global State Listener]
+    
+    SetListener --> Condition{Current Device State}
+
+    %% Path 1
+    Condition -- Active --> Path1[vpQX17ContinueDataAcquisition<br/>Continue Acquisition 1]
+
+    %% Path 2
+    Condition -- Inactive --> Path2[Call when acquisition is needed<br/>vpQX17StartDataAcquisition 2]
+
+    %% Merging
+    Path1 --> Callback[Data Callback]
+    Path2 --> Callback
+    
+    Callback --> Stop[vpQX17StopDataAcquisition<br/>Stop Acquisition]
+```
+
+#### Prerequisites
+
+Device is connected and password verification is complete
+
+
+
+#### Set Data Acquisition State Listener
+
+Set a global state listener to receive acquisition state changes reported by the device (e.g., after disconnection and reconnection). It is recommended to call this immediately after a successful connection.
+
+###### Interface
+
+```
+setVpQX17DataAcquisitionStateListener(listener)
+```
+
+###### Parameters
+
+| Parameter | Type                              | Description                          |
+| --------- | --------------------------------- | ------------------------------------ |
+| listener  | IQX17DataAcquisitionStateListener | Data acquisition state callback      |
+
+###### Return Data
+
+**IQX17DataAcquisitionStateListener** -- Data acquisition state listener
+
+```java
+/**
+ * Device reports current acquisition state
+ *
+ * @param isOpen true=acquisition is open, false=acquisition is closed
+ */
+void onQX17DataAcquisitionStatus(boolean isOpen);
+```
+
+###### Example Code
+
+```java
+VPOperateManager.getInstance().setVpQX17DataAcquisitionStateListener(new IQX17DataAcquisitionStateListener() {
+    @Override
+    public void onQX17DataAcquisitionStatus(boolean isOpen) {
+        // isOpen=true: device is currently acquiring data
+        // isOpen=false: device acquisition is currently stopped
+    }
+});
+```
+
+
+
+#### Start Data Acquisition
+
+Start real-time IMU, GPS, and heart rate data acquisition stream. The SDK automatically opens the data channel and performs packet loss detection and retransmission.
+
+###### Interface
+
+```
+vpQX17StartDataAcquisition(bleWriteResponse, listener)
+```
+
+###### Parameters
+
+| Parameter        | Type                         | Description              |
+| ---------------- | ---------------------------- | ------------------------ |
+| bleWriteResponse | IBleWriteResponse            | BLE write response       |
+| listener         | IQX17DataAcquisitionListener | Data acquisition callback|
+
+###### Return Data
+
+**IQX17DataAcquisitionListener** -- Data acquisition callback
+
+```java
+/**
+ * Device reports current acquisition state
+ *
+ * @param isOpen true=acquisition is open, false=acquisition is closed
+ */
+void onQX17DataAcquisitionStatus(boolean isOpen);
+
+/**
+ * IMU data callback (100 samples per second)
+ *
+ * @param imuDataList IMU data list for this batch
+ */
+void onQX17IMUData(List<QX17IMUData> imuDataList);
+
+/**
+ * GPS data callback (1 sample per second)
+ *
+ * @param gpsData GPS location data
+ */
+void onQX17GPSData(QX17GPSData gpsData);
+
+/**
+ * Heart rate data callback (1 sample per second)
+ *
+ * @param heartRateData Heart rate data
+ */
+void onQX17HeartRateData(QX17HeartRateData heartRateData);
+```
+
+**QX17IMUData** -- IMU data
+
+| Variable  | Type  | Description                                    |
+| --------- | ----- | ---------------------------------------------- |
+| ax        | short | Accelerometer X-axis                           |
+| ay        | short | Accelerometer Y-axis                           |
+| az        | short | Accelerometer Z-axis                           |
+| gx        | short | Gyroscope X-axis                               |
+| gy        | short | Gyroscope Y-axis                               |
+| gz        | short | Gyroscope Z-axis                               |
+| mx        | short | Magnetometer X-axis                            |
+| my        | short | Magnetometer Y-axis                            |
+| mz        | short | Magnetometer Z-axis                            |
+| timestamp | int   | Timestamp (ms offset from acquisition start)   |
+
+**QX17GPSData** -- GPS data
+
+| Variable  | Type  | Description                                    |
+| --------- | ----- | ---------------------------------------------- |
+| latitude  | float | Latitude                                       |
+| longitude | float | Longitude                                      |
+| accuracy  | float | Accuracy (meters)                              |
+| timestamp | int   | Timestamp (ms offset from acquisition start)   |
+
+**QX17HeartRateData** -- Heart rate data
+
+| Variable  | Type  | Description                                    |
+| --------- | ----- | ---------------------------------------------- |
+| heartRate | int   | Heart rate value                               |
+| timestamp | int   | Timestamp (ms offset from acquisition start)   |
+
+###### Example Code
+
+```java
+VPOperateManager.getInstance().vpQX17StartDataAcquisition(bleWriteResponse, new IQX17DataAcquisitionListener() {
+    @Override
+    public void onQX17DataAcquisitionStatus(boolean isOpen) {
+        // Acquisition state changed
+    }
+
+    @Override
+    public void onQX17IMUData(List<QX17IMUData> imuDataList) {
+        // Receive IMU data (accelerometer, gyroscope, magnetometer)
+    }
+
+    @Override
+    public void onQX17GPSData(QX17GPSData gpsData) {
+        // Receive GPS location data
+    }
+
+    @Override
+    public void onQX17HeartRateData(QX17HeartRateData heartRateData) {
+        // Receive heart rate data
+    }
+});
+```
+
+
+
+#### Stop Data Acquisition
+
+Stop the real-time data acquisition stream.
+
+###### Interface
+
+```
+vpQX17StopDataAcquisition(bleWriteResponse)
+```
+
+###### Parameters
+
+| Parameter        | Type              | Description         |
+| ---------------- | ----------------- | ------------------- |
+| bleWriteResponse | IBleWriteResponse | BLE write response  |
+
+###### Example Code
+
+```java
+VPOperateManager.getInstance().vpQX17StopDataAcquisition(bleWriteResponse);
+```
+
+
+
+#### Continue Data Acquisition (Retransmission)
+
+Used in Bluetooth disconnection-reconnection scenarios. When the device reports via the state listener that acquisition is currently open, call this interface to resume data reception. The SDK automatically uses the last recorded timestamp to request retransmission of lost data.
+
+###### Interface
+
+```
+vpQX17ContinueDataAcquisition(bleWriteResponse, listener)
+```
+
+###### Parameters
+
+| Parameter        | Type                         | Description              |
+| ---------------- | ---------------------------- | ------------------------ |
+| bleWriteResponse | IBleWriteResponse            | BLE write response       |
+| listener         | IQX17DataAcquisitionListener | Data acquisition callback|
+
+###### Return Data
+
+Same as [Start Data Acquisition](#start-data-acquisition)
+
+###### Example Code
+
+```java
+VPOperateManager.getInstance().vpQX17ContinueDataAcquisition(bleWriteResponse, new IQX17DataAcquisitionListener() {
+    @Override
+    public void onQX17DataAcquisitionStatus(boolean isOpen) {
+    }
+
+    @Override
+    public void onQX17IMUData(List<QX17IMUData> imuDataList) {
+    }
+
+    @Override
+    public void onQX17GPSData(QX17GPSData gpsData) {
+    }
+
+    @Override
+    public void onQX17HeartRateData(QX17HeartRateData heartRateData) {
+    }
+});
+```
+
+#### Set Vibration Mode
+
+Control the device vibration motor to execute a specified vibration pattern.
+
+###### Interface
+
+```
+vpQX17SetVibrationMode(bleWriteResponse, mode, duration)
+```
+
+###### Parameters
+
+| Parameter        | Type                | Description                                     |
+| ---------------- | ------------------- | ----------------------------------------------- |
+| bleWriteResponse | IBleWriteResponse   | BLE write response                              |
+| mode             | EQX17VibrationMode  | Vibration mode enum, see vibration mode table   |
+| duration         | int                 | Duration (unit: 10ms), 0=use default pattern    |
+
+**EQX17VibrationMode** -- Vibration Mode Enum
+
+| Enum Value | Name      | Default Pattern (duration unit: ms)     |
+| ---------- | --------- | --------------------------------------- |
+| START      | Start     | Vibrate 100 → Pause 100 → Vibrate 100  |
+| END        | End       | (Vibrate 300 → Pause 150) x 3          |
+| NOTIFY     | Notify    | Vibrate 50                              |
+| ALERT      | Alert     | (Vibrate 80 → Pause 60) x 5            |
+| CONFIRM    | Confirm   | Vibrate 150                             |
+| BEAT       | Beat      | Vibrate 80                              |
+| CONNECTED  | Connected | Vibrate 100 → Pause 100 → Vibrate 100  |
+| ERROR      | Error     | Vibrate 1000                            |
+
+###### Example Code
+
+```java
+// Send "Start" vibration with default pattern
+VPOperateManager.getInstance().vpQX17SetVibrationMode(bleWriteResponse, EQX17VibrationMode.START, 0);
+
+// Send "Start" vibration with custom duration of 2550ms
+VPOperateManager.getInstance().vpQX17SetVibrationMode(bleWriteResponse, EQX17VibrationMode.START, 255);
+```

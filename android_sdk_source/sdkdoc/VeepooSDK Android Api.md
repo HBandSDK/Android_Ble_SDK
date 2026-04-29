@@ -32,8 +32,8 @@
 | 1.2.6 | 新增运动控制（设置/读取/上报监听）及蓝牙设备重命名接口       | 2026.04.22 |
 | 1.2.7 | 新增ECG多诊断测量回调                                        | 2026.04.22 |
 | 1.2.8 | 新增app测量hrv功能 | 2026.04.23 |
+| 1.2.9 | 新增QX17数据采集流控功能（IMU/GPS/心率实时采集）及振动马达控制接口 | 2026.04.29 |
 # 导入SDK
-
 添加依赖
 
 ```groovy
@@ -12443,7 +12443,6 @@ VPOperateManager.getInstance().bleDeviceRename("MyDevice", object : IDeviceRenam
 ```
 
 
-
 ## 秋果JE136P中医数据设置
 
 ###### 接口
@@ -12511,3 +12510,294 @@ interface ITCMDataListener {
     fun onTCMWriteSuccess()
 }
 ```
+
+
+
+## QX17数据采集功能
+
+QX17项目数据采集流控功能，支持IMU(100Hz)、GPS(1Hz)、心率(1Hz)实时数据采集，SDK内部实现丢包检测与自动重传机制。
+
+#### 调用流程
+
+```mermaid
+flowchart TD
+    Start((连接成功并已确认密码)) --> SetListener[setVpQX17DataAcquisitionStateListener<br/>设置全局状态监听]
+    
+    SetListener --> Condition{设备当前状态}
+
+    %% 路径 1
+    Condition -- 开启状态 --> Path1[vpQX17ContinueDataAcquisition<br/>继续采集 1]
+
+    %% 路径 2
+    Condition -- 未开启状态 --> Path2[需要采集时调用<br/>vpQX17StartDataAcquisition 2]
+
+    %% 汇总
+    Path1 --> Callback[接收数据回调]
+    Path2 --> Callback
+    
+    Callback --> Stop[vpQX17StopDataAcquisition<br/>关闭采集]
+
+```
+
+
+
+#### 前提
+
+设备已连接并完成密码校验
+
+#### 设置数据采集状态监听
+
+设置全局状态监听器，用于接收设备主动上报的采集状态变更（如断联回连后设备上报当前采集状态）。建议在连接成功后立即调用。
+
+###### 接口
+
+```
+setVpQX17DataAcquisitionStateListener(listener)
+```
+
+###### 参数解释
+
+| 参数名   | 类型                               | 描述                 |
+| -------- | ---------------------------------- | -------------------- |
+| listener | IQX17DataAcquisitionStateListener  | 数据采集状态监听回调 |
+
+###### 返回数据
+
+**IQX17DataAcquisitionStateListener** -- 数据采集状态监听
+
+```java
+/**
+ * 设备上报当前采集状态（断联回连后设备主动上报）
+ *
+ * @param isOpen true=采集已开启，false=采集已关闭
+ */
+void onQX17DataAcquisitionStatus(boolean isOpen);
+```
+
+###### 示例代码
+
+```java
+VPOperateManager.getInstance().setVpQX17DataAcquisitionStateListener(new IQX17DataAcquisitionStateListener() {
+    @Override
+    public void onQX17DataAcquisitionStatus(boolean isOpen) {
+        // isOpen=true: 设备当前处于采集开启状态
+        // isOpen=false: 设备当前处于采集关闭状态
+    }
+});
+```
+
+#### 开启数据采集
+
+开启IMU、GPS、心率实时数据采集流。SDK内部自动开启数据通道并进行丢包检测与重传。
+
+###### 接口
+
+```
+vpQX17StartDataAcquisition(bleWriteResponse, listener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                         | 描述             |
+| ---------------- | ---------------------------- | ---------------- |
+| bleWriteResponse | IBleWriteResponse            | 写入操作的监听   |
+| listener         | IQX17DataAcquisitionListener | 数据采集回调监听 |
+
+###### 返回数据
+
+**IQX17DataAcquisitionListener** -- 数据采集回调监听
+
+```java
+/**
+ * 设备上报当前采集状态
+ *
+ * @param isOpen true=采集已开启，false=采集已关闭
+ */
+void onQX17DataAcquisitionStatus(boolean isOpen);
+
+/**
+ * IMU数据回调（每秒100条采样）
+ *
+ * @param imuDataList 本批次IMU数据列表
+ */
+void onQX17IMUData(List<QX17IMUData> imuDataList);
+
+/**
+ * GPS定位数据回调（每秒1条）
+ *
+ * @param gpsData GPS定位数据
+ */
+void onQX17GPSData(QX17GPSData gpsData);
+
+/**
+ * 心率数据回调（每秒1条）
+ *
+ * @param heartRateData 心率数据
+ */
+void onQX17HeartRateData(QX17HeartRateData heartRateData);
+```
+
+**QX17IMUData** -- IMU数据
+
+| 变量      | 类型   | 描述                             |
+| --------- | ------ | -------------------------------- |
+| ax        | short  | 加速度计X轴                      |
+| ay        | short  | 加速度计Y轴                      |
+| az        | short  | 加速度计Z轴                      |
+| gx        | short  | 陀螺仪X轴                        |
+| gy        | short  | 陀螺仪Y轴                        |
+| gz        | short  | 陀螺仪Z轴                        |
+| mx        | short  | 磁力计X轴                        |
+| my        | short  | 磁力计Y轴                        |
+| mz        | short  | 磁力计Z轴                        |
+| timestamp | int    | 时间戳（相对采集启动时间的毫秒偏移） |
+
+**QX17GPSData** -- GPS定位数据
+
+| 变量      | 类型   | 描述                               |
+| --------- | ------ | ---------------------------------- |
+| latitude  | float  | 纬度                               |
+| longitude | float  | 经度                               |
+| accuracy  | float  | 定位精度（单位：米）               |
+| timestamp | int    | 时间戳（相对采集启动时间的毫秒偏移） |
+
+**QX17HeartRateData** -- 心率数据
+
+| 变量      | 类型   | 描述                               |
+| --------- | ------ | ---------------------------------- |
+| heartRate | int    | 心率值                             |
+| timestamp | int    | 时间戳（相对采集启动时间的毫秒偏移） |
+
+###### 示例代码
+
+```java
+VPOperateManager.getInstance().vpQX17StartDataAcquisition(bleWriteResponse, new IQX17DataAcquisitionListener() {
+    @Override
+    public void onQX17DataAcquisitionStatus(boolean isOpen) {
+        // 采集状态变更回调
+    }
+
+    @Override
+    public void onQX17IMUData(List<QX17IMUData> imuDataList) {
+        // 接收IMU数据（加速度计、陀螺仪、磁力计）
+    }
+
+    @Override
+    public void onQX17GPSData(QX17GPSData gpsData) {
+        // 接收GPS定位数据
+    }
+
+    @Override
+    public void onQX17HeartRateData(QX17HeartRateData heartRateData) {
+        // 接收心率数据
+    }
+});
+```
+
+#### 关闭数据采集
+
+关闭实时数据采集流。
+
+###### 接口
+
+```
+vpQX17StopDataAcquisition(bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型              | 描述           |
+| ---------------- | ----------------- | -------------- |
+| bleWriteResponse | IBleWriteResponse | 写入操作的监听 |
+
+###### 示例代码
+
+```java
+VPOperateManager.getInstance().vpQX17StopDataAcquisition(bleWriteResponse);
+```
+
+#### 继续数据采集（重传）
+
+用于蓝牙断连后重连场景。当设备通过状态监听上报当前处于采集开启状态时，调用此接口恢复数据接收。SDK内部自动使用上次记录的时间戳请求重传丢失的数据。
+
+###### 接口
+
+```
+vpQX17ContinueDataAcquisition(bleWriteResponse, listener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                         | 描述             |
+| ---------------- | ---------------------------- | ---------------- |
+| bleWriteResponse | IBleWriteResponse            | 写入操作的监听   |
+| listener         | IQX17DataAcquisitionListener | 数据采集回调监听 |
+
+###### 返回数据
+
+同【[开启数据采集](#开启数据采集)】返回的数据一致
+
+###### 示例代码
+
+```java
+VPOperateManager.getInstance().vpQX17ContinueDataAcquisition(bleWriteResponse, new IQX17DataAcquisitionListener() {
+    @Override
+    public void onQX17DataAcquisitionStatus(boolean isOpen) {
+    }
+
+    @Override
+    public void onQX17IMUData(List<QX17IMUData> imuDataList) {
+    }
+
+    @Override
+    public void onQX17GPSData(QX17GPSData gpsData) {
+    }
+
+    @Override
+    public void onQX17HeartRateData(QX17HeartRateData heartRateData) {
+    }
+});
+```
+
+
+
+#### 设置振动马达模式
+
+控制设备振动马达执行指定的振动模式。
+
+###### 接口
+
+```
+vpQX17SetVibrationMode(bleWriteResponse, mode, duration)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                  | 描述                                  |
+| ---------------- | --------------------- | ------------------------------------- |
+| bleWriteResponse | IBleWriteResponse     | 写入操作的监听                        |
+| mode             | EQX17VibrationMode    | 振动模式枚举，详见振动模式枚举表      |
+| duration         | int                   | 振动时长（单位：10ms），0=使用默认样式 |
+
+**EQX17VibrationMode** -- 振动模式枚举
+
+| 枚举值    | 模式名称 | 默认振动模式（时长单位：ms） |
+| --------- | -------- | ---------------------------- |
+| START     | 开始     | 振100→停100→振100            |
+| END       | 结束     | (振300→停150) 重复3次        |
+| NOTIFY    | 通知     | 振50                         |
+| ALERT     | 提醒     | (振80→停60) 重复5次          |
+| CONFIRM   | 确认     | 振150                        |
+| BEAT      | 节拍     | 振80                         |
+| CONNECTED | 已连接   | 振100→停100→振100            |
+| ERROR     | 错误     | 振1000                       |
+
+###### 示例代码
+
+```java
+// 发送"开始"振动，使用默认样式
+VPOperateManager.getInstance().vpQX17SetVibrationMode(bleWriteResponse, EQX17VibrationMode.START, 0);
+
+// 发送"开始"振动，自定义持续2550ms
+VPOperateManager.getInstance().vpQX17SetVibrationMode(bleWriteResponse, EQX17VibrationMode.START, 255);
+```>>>>>>> .r21745
