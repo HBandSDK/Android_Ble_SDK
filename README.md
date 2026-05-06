@@ -42,13 +42,13 @@ Android_Ble_SDK is a toolkit for quickly interacting with Bluetooth BLE. It is o
 	// Gson Library (Required) | Gson数据解析库（必选）
 	implementation files('libs/gson-2.2.4.jar') //或者 implementation 'com.google.code.gson:gson:x.x.x'  
 
-	// JL Bluetooth Protocol (Required) | 杰理蓝牙协议相关（必选）
+	// JieLi Bluetooth Protocol (Required) | 杰理蓝牙协议相关（必选）
 	implementation files('libs/JL_Watch_V1.13.1_11214-release.aar')
 	implementation files('libs/jl_rcsp_V0.7.2_527-release.aar')
 	implementation files('libs/jl_bt_ota_V1.10.0_10931-release.aar')
 	implementation files('libs/BmpConvert_V1.6.0_10604-release.aar')
 
-	// ZK Bluechip Protocol & Data Tool (Required) | 中科蓝汛蓝牙协议解析+数据处理+工具（必选）
+	// bluetrum Bluechip Protocol & Data Tool (Required) | 中科蓝汛蓝牙协议解析+数据处理+工具（必选）
 	implementation files('libs/abpartool-release.aar')
 
 	// Nordic OTA Upgrade (Required) | Nordic固件升级相关（必选）
