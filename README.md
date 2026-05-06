@@ -13,20 +13,15 @@ README:
    * API>19&&BLE 4.0  
    * [vpbluetooth_x.x.x.aar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
    * [gson-x.x.x.jar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_base)
-   * [vpprotocol_2.1.xx.xx.aar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_core)
-
-    // 杰理与中科 （JL & Bluetrum）
-    implementation files('libs/JL_Watch_V1.13.1_11214-release.aar')
-    implementation files('libs/jl_rcsp_V0.7.2_527-release.aar')
-    implementation files('libs/jl_bt_ota_V1.10.0_10931-release.aar')
-    implementation files('libs/BmpConvert_V1.6.0_10604-release.aar')
-    implementation files('libs/abpartool-release.aar')
-
-    // Nordic mcumgr
-    implementation 'no.nordicsemi.android:mcumgr-core:2.7.4'
-    implementation 'no.nordicsemi.android:mcumgr-ble:2.7.4'
-    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
-    implementation 'no.nordicsemi.android.support.v18:scanner:1.4.2'
+   * [vpprotocol_2.x.xx.xx.aar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_core)
+   * [JL_Watch_V1.13.1_11214-release.aar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_core)
+   * [jl_rcsp_V0.7.2_527-release.aar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_core)
+   * [jl_bt_ota_V1.10.0_10931-release.aar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_core)
+   * [BmpConvert_V1.6.0_10604-release.aar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_core)
+   * [abpartool-release.aar](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/jar_core)
+   * no.nordicsemi.android:mcumgr-core:2.7.4
+   * no.nordicsemi.android:mcumgr-ble:2.7.4
+   * no.nordicsemi.android.support.v18:scanner:1.4.2
 
 
 ## 可选（如果是汇顶的芯片，升级会用到如下包）| Optional (If it is a Goodix chip, the upgrade will use the following package)
@@ -40,8 +35,36 @@ README:
 
 ### 1. build.gradle
 
-    compile files('libs/vpbluetooth_x.x.x.aar')  
-    compile files('libs/gson-x.x.x.jar') 或者 compile 'com.google.code.gson:gson:x.x.x'  
+	// goodix Upgrade Library (Optional) | 汇顶升级库相关（可选）
+	implementation files('libs/libcomx-0.5.jar')
+
+	// Veepoo Protocol Library (Required) | Veepoo协议库（必选）
+	implementation files('libs/vpprotocol-2.3.63.15.aar')
+
+	// Veepoo Bluetooth Connection Library (Required) | Veepoo蓝牙连接库（必选）
+	implementation files('libs/vpbluetooth-1.20.aar')
+
+	// Gson Library (Required) | Gson数据解析库（必选）
+	implementation files('libs/gson-2.2.4.jar') //或者 implementation 'com.google.code.gson:gson:x.x.x'  
+
+	// JL Bluetooth Protocol (Required) | 杰理蓝牙协议相关（必选）
+	implementation files('libs/JL_Watch_V1.13.1_11214-release.aar')
+	implementation files('libs/jl_rcsp_V0.7.2_527-release.aar')
+	implementation files('libs/jl_bt_ota_V1.10.0_10931-release.aar')
+	implementation files('libs/BmpConvert_V1.6.0_10604-release.aar')
+
+	// ZK Bluechip Protocol & Data Tool (Required) | 中科蓝汛蓝牙协议解析+数据处理+工具（必选）
+	implementation files('libs/abpartool-release.aar')
+
+	// Nordic OTA Upgrade (Required) | Nordic固件升级相关（必选）
+	implementation 'no.nordicsemi.android:mcumgr-core:2.7.4'
+	implementation 'no.nordicsemi.android:mcumgr-ble:2.7.4'
+
+	// Nordic BLE Scanner Compat (Required) | Nordic蓝牙扫描兼容库（必选）
+	implementation 'no.nordicsemi.android.support.v18:scanner:1.4.2'
+
+	// AndroidX Local Broadcast (Required) | 本地广播适配库（必选）
+	implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
 
 ### 2. Androidmanifest.xml
 
