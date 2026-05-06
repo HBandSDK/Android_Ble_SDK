@@ -105,10 +105,10 @@ Android_Ble_SDK is a toolkit for quickly interacting with Bluetooth BLE. It is o
     <activity android:name=".oad.activity.NotificationActivity" /> //旧版本nordic升级-可选
 
 ### 3. SDK API 文档 | SDK API Documentation
-	README: 
-	* [中文版](https://github.com/HBandSDK/Android_Ble_SDK/wiki/VeepooSDK-Android-API-%E6%96%87%E6%A1%A3)  
-	* [English](https://github.com/HBandSDK/Android_Ble_SDK/wiki/VeepooSDK-Android-API-Document)
-	* [deepwiki](https://deepwiki.com/HBandSDK/Android_Ble_SDK)
+README: 
+* [中文版](https://github.com/HBandSDK/Android_Ble_SDK/wiki/VeepooSDK-Android-API-%E6%96%87%E6%A1%A3)
+* [English](https://github.com/HBandSDK/Android_Ble_SDK/wiki/VeepooSDK-Android-API-Document)
+* [deepwiki](https://deepwiki.com/HBandSDK/Android_Ble_SDK)
 	
 ### 4. 示例	| Example
     
