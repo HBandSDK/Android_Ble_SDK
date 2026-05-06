@@ -2,11 +2,6 @@
 Android_Ble_SDK是一个用于快速与蓝牙BLE交互的工具包，仅提供给我们合作的客户下载使用，方便提升客户的开发效率。
 Android_Ble_SDK is a toolkit for quickly interacting with Bluetooth BLE. It is only available to our cooperative customers for download and use to improve their development efficiency.
 
-README: 
-* [中文版](https://github.com/HBandSDK/Android_Ble_SDK/wiki/VeepooSDK-Android-API-%E6%96%87%E6%A1%A3)  
-* [English](https://github.com/HBandSDK/Android_Ble_SDK/wiki/VeepooSDK-Android-API-Document)
-* [deepwiki](https://deepwiki.com/HBandSDK/Android_Ble_SDK)
-
 ## 必要条件 | Necessary dependencies jar
 
     
@@ -68,21 +63,56 @@ README:
 
 ### 2. Androidmanifest.xml
 
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    
+	<!-- 网络权限 | Network Permission -->
+	<uses-permission android:name="android.permission.INTERNET" />
+	<!-- 模糊定位（Android 9 及以下需要，用于 WiFi + BLE 扫描）| Coarse Location (for BLE scanning below Android 9) -->
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<!-- 精确定位（Android 11 及以下 BLE 扫描强制要求）| Fine Location (required for BLE scan before Android 12) -->
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<!-- 基础蓝牙权限（Android 11 及以下使用）| Basic Bluetooth (used up to Android 11) -->	
+	<uses-permission
+   		android:name="android.permission.BLUETOOTH"
+    	android:maxSdkVersion="30" />
+	<!-- 蓝牙管理权限（Android 11 及以下使用）| Bluetooth Admin (used up to Android 11) -->
+	<uses-permission
+    	android:name="android.permission.BLUETOOTH_ADMIN"
+    	android:maxSdkVersion="30" />
+	<!-- Android 12+ 蓝牙扫描权限（不用于定位）| Bluetooth Scan (Android 12+, not for location) -->
+	<uses-permission
+    	android:name="android.permission.BLUETOOTH_SCAN"
+    	android:usesPermissionFlags="neverForLocation"
+   	 	tools:targetApi="s" />
+	<!-- Android 12+ 蓝牙广播权限 | Bluetooth Advertise (Android 12+) -->
+	<uses-permission
+    	android:name="android.permission.BLUETOOTH_ADVERTISE"
+    	tools:targetApi="s" />
+	<!-- Android 12+ 蓝牙连接权限（连接设备必备）| Bluetooth Connect (Android 12+, required for connection) -->
+	<uses-permission
+    	android:name="android.permission.BLUETOOTH_CONNECT"
+    	tools:targetApi="s" />
+	<!-- 声明设备必须支持 BLE 蓝牙 | Declare BLE hardware is required -->
+	<uses-feature
+   	 	android:name="android.hardware.bluetooth_le"
+    	android:required="true" />
+	<!-- 声明使用低功耗蓝牙功能 | Declare BLE feature is required -->
+	<uses-feature
+    	android:name="android.bluetooth.le"
+    	android:required="true" />
     <!--Activity&Service-->
     <service android:name="com.inuker.bluetooth.library.BluetoothService" />        
     <!--固件升级功能相关-->
-    <service android:name=".oad.service.DfuService" /> 
-    <activity android:name=".oad.activity.NotificationActivity" />
+    <service android:name=".oad.service.DfuService" /> //旧版本nordic升级-可选
+    <activity android:name=".oad.activity.NotificationActivity" /> //旧版本nordic升级-可选
+
+### 3. SDK API 文档 | SDK API Documentation
+	README: 
+	* [中文版](https://github.com/HBandSDK/Android_Ble_SDK/wiki/VeepooSDK-Android-API-%E6%96%87%E6%A1%A3)  
+	* [English](https://github.com/HBandSDK/Android_Ble_SDK/wiki/VeepooSDK-Android-API-Document)
+	* [deepwiki](https://deepwiki.com/HBandSDK/Android_Ble_SDK)
+	
+### 4. 示例	| Example
     
-### 3. 蓝牙通信连接 | Ble connection
+#### 1. 蓝牙通信连接 | Ble connection
 
 
     操作说明:所有的操作都只是通过VPOperateManager;
@@ -143,7 +173,7 @@ README:
 	Note 4:
 	The device does not support asynchronous operations. When multiple time-consuming operations are performed at the same time, data anomalies may occur; therefore, when interacting with the device, try to avoid multiple operations at the same time.
 
-### 4. 蓝牙数据交互说明 | Bluetooth data interaction instructions
+#### 2. 蓝牙数据交互说明 | Bluetooth data interaction instructions
 
     SDK在蓝牙数据的下发的设计是只需要调用方法,传入设置参数以及监听接口,当数据有返回时,接口会触发回调,以confirmDevicePwd为例
     The design of the SDK for sending Bluetooth data is to only call the method, pass in the setting parameters and listen to the interface. When the data is returned, the interface will trigger the callback. Take confirmDevicePwd as an example
@@ -175,7 +205,7 @@ README:
                  }
             }, pwdStr, is24Hourmodel);
             
-### 5. 固件升级说明 | Firmware Upgrade Instructions
+#### 3. 固件升级说明 | Firmware Upgrade Instructions
 
     注意：已兼容noric的芯片以及汇顶的芯片
     固件升级的作用主要是针对设备的软件功能进行升级,此操作要求非常严谨，升级出错会给用户带来非常不好的体验。  
@@ -230,7 +260,7 @@ README:
 	3. Call the official upgrade program
 	startOad() under OadActivity is generally called after the findOadDevice method of the OnFindOadDeviceListener interface is called back.
 
-### 6. 更换表盘说明（UI升级）| Instructions for changing the dial (UI upgrade)
+### 4. 更换表盘说明（UI升级）| Instructions for changing the dial (UI upgrade)
 	
 	设备现在进行更换表盘操作，设备的表盘分为三部分（默认自带的表盘（多个）+可以编辑的表盘（1个）+服务器的表盘（1个））
 
