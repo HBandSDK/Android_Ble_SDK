@@ -4,22 +4,22 @@
     package="com.timaimee.vpdemo">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
 
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
         android:name="android.permission.ACCESS_NETWORK_STATE"
         tools:node="merge" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
-
-
-    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
-
     <!--允许程序访问WiFi网络信息-->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!--允许程序读写手机状态和身份-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
+
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <!-- Android 12以下才需要定位权限， Android 9以下官方建议申请ACCESS_COARSE_LOCATION -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /><!--模糊定位基于wifi-蓝牙4.0 5.0搜索需要-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /><!--精准定位-蓝牙4.0 5.0搜索需要-->

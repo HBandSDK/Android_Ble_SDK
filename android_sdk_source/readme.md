@@ -1,5 +1,5 @@
 ﻿# SDK 最新版本
-## [Version:2.1.71.15](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/jar_core) 
+## [Version:2.3.63.15](https://github.com/HBandSDK/Android_Ble_SDK/blob/master/android_sdk_source/jar_core) 
 
 # 目录说明  
 
@@ -48,7 +48,7 @@ allprojects {
       implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   }
   
-```
+ ```
 
 ## 注意：由2.1.56.15及以上的版本，java_core的jar包文件变成了aar文件&&java_base的jar包升级到1.0.4了
 

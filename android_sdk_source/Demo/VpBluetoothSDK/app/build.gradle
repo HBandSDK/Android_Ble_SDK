@@ -74,34 +74,41 @@ repositories {
 dependencies {
     implementation fileTree(include: ['*.jar','*.aar'], dir: 'libs')
 
+    // Kotlin (务必保持版本一致)
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
     // 基础库
     implementation 'androidx.appcompat:appcompat:1.6.1' // 升级
     implementation 'androidx.recyclerview:recyclerview:1.3.0' // 升级
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4' // 升级
     implementation 'com.google.android.material:material:1.9.0' // 替换 support:design
 
-    // Kotlin (务必保持版本一致)
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-
-    // 协议与蓝牙库 (保持原样)
-    implementation files('libs/libcomx-0.5.jar')
-    implementation files('libs/vpbluetooth-1.20.aar')
-    implementation files('libs/vpprotocol-2.3.63.15.aar')
-    implementation files('libs/gson-2.2.4.jar')
     implementation files('libs/AMap2DMap_6.0.0_AMapSearch_9.4.5_AMapLocation_6.2.0_20221026.jar')
 
-    // 杰理与中科 (保持原样)
+    //汇顶升级库相关（可选）
+    implementation files('libs/libcomx-0.5.jar')
+    //Veepoo协议库（必选）
+    implementation files('libs/vpprotocol-2.3.63.15.aar')
+    //Veepoo蓝牙连接库（必选）
+    implementation files('libs/vpbluetooth-1.20.aar')
+    //Gson库（必选）
+    implementation files('libs/gson-2.2.4.jar')
+
+    //杰理蓝牙协议相关（必选）
     implementation files('libs/JL_Watch_V1.13.1_11214-release.aar')
     implementation files('libs/jl_rcsp_V0.7.2_527-release.aar')
     implementation files('libs/jl_bt_ota_V1.10.0_10931-release.aar')
     implementation files('libs/BmpConvert_V1.6.0_10604-release.aar')
+    //中科蓝汛蓝牙协议解析+数据处理+工具（必选）
     implementation files('libs/abpartool-release.aar')
 
-    // Nordic 相关
+    //Nordic相关升级相关（必选）
     implementation 'no.nordicsemi.android:mcumgr-core:2.7.4'
     implementation 'no.nordicsemi.android:mcumgr-ble:2.7.4'
-    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
+    //Nordic蓝牙扫描兼容库（必选）
     implementation 'no.nordicsemi.android.support.v18:scanner:1.4.2'
+    //本地广播适配（必选）
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
 
     // 工具类
     implementation 'com.orhanobut:logger:1.15'
