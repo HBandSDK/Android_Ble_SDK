@@ -125,6 +125,6 @@ Veepoo android sdk api文档请参考以下链接
 
 - [Demo code](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/Demo)   
 
-- [Apk](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/app_debug.apk)
+- [Apk](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/app-debug.apk)
 
   

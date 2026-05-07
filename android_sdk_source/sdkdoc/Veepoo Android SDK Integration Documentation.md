@@ -125,4 +125,4 @@ Please refer to the Demo code and the APK.
 
 - [Demo code](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/Demo)   
 
-- [Apk](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/app_debug.apk)
+- [Apk](https://github.com/HBandSDK/Android_Ble_SDK/tree/master/android_sdk_source/app-debug.apk)
