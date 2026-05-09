@@ -1,8 +1,12 @@
 package com.timaimee.vpdemo.activity;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,20 +17,23 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.inuker.bluetooth.library.Code;
 import com.inuker.bluetooth.library.connect.response.BleWriteResponse;
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
+import com.timaimee.vpdemo.activity.image_selector.ImageVideoSelectorManager;
+import com.timaimee.vpdemo.activity.image_selector.MediaInfo;
 import com.timaimee.vpdemo.utils.ImageUtils;
 import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.data.IImageMsgPushListener;
 import com.veepoo.protocol.listener.data.ITextMsgPushListener;
 import com.veepoo.protocol.listener.data.IUIBaseInfoFormImagePushListener;
 import com.veepoo.protocol.model.datas.UIDataImagePush;
-import com.veepoo.protocol.shareprence.VpSpGetUtil;
 import com.veepoo.protocol.util.UiUpdateUtil;
-//import com.veepoo.protocol.util.thread.HBThreadPools;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,16 +41,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class TextImagePushActivity extends Activity implements View.OnClickListener {
+public class TextImagePushActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "-图文推送-";
 
     EditText etSendContent;
     Button btnPushText;
     Button btnPushImage;
+    Button btnSelectImage;
 
     ImageView imagePush01;
     ImageView imagePush02;
     RadioGroup rbImageSelect;
+    EditText etWidth;
+    EditText etHeight;
 
     TextView tvPushInfo;
 
@@ -51,25 +61,46 @@ public class TextImagePushActivity extends Activity implements View.OnClickListe
     private String pushImagePath = null;
 
     private String selectImage = "image_push_01.png";
-    private static final String SUB_PATH = "imageMsgPush";
+    public static final String SUB_PATH = "imageMsgPush";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ImageVideoSelectorManager.launch(this);
         setContentView(R.layout.activity_text_image_push);
-        VpSpGetUtil.getVpSpVariInstance(this).isSupportTextImagePush();
         initView();
         initData();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ImageVideoSelectorManager.handlerActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        ImageVideoSelectorManager.handleRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImageVideoSelectorManager.release();
     }
 
     private void initView() {
         etSendContent = findViewById(R.id.etSendContent);
         btnPushText = findViewById(R.id.btnPushText);
         btnPushImage = findViewById(R.id.btnPushImage);
-        imagePush01 = findViewById(R.id.ivImagePush01);
-        imagePush02 = findViewById(R.id.ivImagePush02);
+        imagePush01 = findViewById(R.id.ivWatchFace1);
+        imagePush02 = findViewById(R.id.ivWatchFace2);
         rbImageSelect = findViewById(R.id.rbImageSelect);
+        btnSelectImage = findViewById(R.id.btnSelectImage);
         tvPushInfo = findViewById(R.id.tvPushInfo);
+        etWidth = findViewById(R.id.etWidth);
+        etHeight = findViewById(R.id.etHeight);
     }
 
     private void initData() {
@@ -91,7 +122,61 @@ public class TextImagePushActivity extends Activity implements View.OnClickListe
                 tvPushInfo.setText("图片本地地址：\n" + pushImagePath);
             }
         });
+
+        btnSelectImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (uiDataImage == null) {
+                    showMsg("手表尺寸无法获取");
+                    return;
+                }
+                String widthStr = etWidth.getText().toString();
+                String heightStr = etHeight.getText().toString();
+                if (TextUtils.isEmpty(widthStr) || TextUtils.isEmpty(heightStr)) {
+                    selectAndCropPicture(uiDataImage.getWidth(), uiDataImage.getHeight());
+                } else {
+                    selectAndCropPicture(Integer.parseInt(widthStr), Integer.parseInt(heightStr));
+                }
+            }
+        });
     }
+
+    private void selectAndCropPicture(int aspectRatioX, int aspectRatioY) {
+        Logger.t(TAG).i("selectAndCropPicture 选择和裁剪照片 aspectRatioX = " + aspectRatioX + " , aspectRatioY = " + aspectRatioY);
+        ImageVideoSelectorManager
+                .getInstance()
+                .width(aspectRatioX)
+                .height(aspectRatioY)
+                .isCircle(false)
+                .selectAndCropSingleImage(new ImageVideoSelectorManager.OnSingleImageSelectionListener() {
+                    @Override
+                    public void onSingleImageSelected(MediaInfo info) {
+
+                    }
+
+                    @Override
+                    public void onCropSuccess(String cropFileName, String outputPath, Bitmap bitmap, Uri cropFileUri) {
+                        Drawable drawable = new BitmapDrawable(null, bitmap);
+                        Logger.t(TAG).e("-onCropSuccess-  cropFileName = " + cropFileName);
+                        Logger.t(TAG).e("-onCropSuccess-  outputPath = " + outputPath);
+                        Logger.t(TAG).e("-onCropSuccess-  bitmap = " + bitmap.getByteCount());
+                        imagePush01.setImageBitmap(bitmap);
+                        pushImagePath = outputPath;
+                    }
+
+                    @Override
+                    public void onCropFailed(String errorMsg) {
+
+                    }
+
+                    @Override
+                    public void onError(String message) {
+
+                    }
+                });
+    }
+
+    UIDataImagePush uiDataImage = null;
 
     private void copyImage2Local() {
         File externalFilesDir = getExternalFilesDir(null);
@@ -100,69 +185,43 @@ public class TextImagePushActivity extends Activity implements View.OnClickListe
             boolean ret = targetDir.mkdirs();
             Logger.t(TAG).e("-文件夹-: | " + ret);
         }
+        Logger.t(TAG).e("-文件夹-: | >>" + targetDir.getAbsolutePath());
+
         imageMsgPushDirPath = targetDir.getAbsolutePath();
         UiUpdateUtil.getInstance().init(this);
         UiUpdateUtil.getInstance().getImagePushUiInfo(new IUIBaseInfoFormImagePushListener() {
             @Override
             public void onBaseUiInfoFormImagePush(UIDataImagePush uiDataImage) {
+                TextImagePushActivity.this.uiDataImage = uiDataImage;
                 Logger.t(TAG).e("-获取图片推送信息-: | " + uiDataImage);
                 int width = uiDataImage.getWidth();
                 int height = uiDataImage.getHeight();
+                etWidth.setText(width + "");
+                etHeight.setText(height + "");
 
-                new Thread(() -> {
-                    copyAssetFileToExternalFilesDir(TextImagePushActivity.this, "img_push1.jpg", SUB_PATH);
-                    copyAssetFileToExternalFilesDir(TextImagePushActivity.this, "img_push2.jpg", SUB_PATH);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        copyAssetFileToExternalFilesDir(TextImagePushActivity.this, "img_push1.jpg", SUB_PATH);
+                        copyAssetFileToExternalFilesDir(TextImagePushActivity.this, "img_push2.jpg", SUB_PATH);
 
-                    ImageUtils.centerCropAndSave(imageMsgPushDirPath + File.separator + "img_push1.jpg",
-                            imageMsgPushDirPath + File.separator + "image_push_01.png", width, height);
+                        ImageUtils.centerCropAndSave(imageMsgPushDirPath + File.separator + "img_push1.jpg",
+                                imageMsgPushDirPath + File.separator + "image_push_01.png", width, height);
 
-                    ImageUtils.centerCropAndSave(imageMsgPushDirPath + File.separator + "img_push2.jpg",
-                            imageMsgPushDirPath + File.separator + "image_push_02.png", width, height);
+                        ImageUtils.centerCropAndSave(imageMsgPushDirPath + File.separator + "img_push2.jpg",
+                                imageMsgPushDirPath + File.separator + "image_push_02.png", width, height);
 
-                    Logger.t(TAG).e("-copyImage2Local-: | 文件夹路径 = " + imageMsgPushDirPath);
-                    runOnUiThread(() -> {
-                        imagePush01.setImageBitmap(BitmapFactory.decodeFile(imageMsgPushDirPath + File.separator + "image_push_01.png"));
-                        imagePush02.setImageBitmap(BitmapFactory.decodeFile(imageMsgPushDirPath + File.separator + "image_push_02.png"));
-                    });
+                        Logger.t(TAG).e("-copyImage2Local-: | 文件夹路径 = " + imageMsgPushDirPath);
+                        runOnUiThread(() -> {
+                            imagePush01.setImageBitmap(BitmapFactory.decodeFile(imageMsgPushDirPath + File.separator + "image_push_01.png"));
+                            imagePush02.setImageBitmap(BitmapFactory.decodeFile(imageMsgPushDirPath + File.separator + "image_push_02.png"));
+                        });
+                    }
                 }).start();
+
             }
         });
 
-//        HBThreadPools.getInstance().execute(() -> {
-//            copyAssetFileToExternalFilesDir(this, "img_push1.jpg", SUB_PATH);
-//            copyAssetFileToExternalFilesDir(this, "img_push2.jpg", SUB_PATH);
-//
-//            ImageUtils.centerCropAndSave(imageMsgPushDirPath + File.separator + "img_push1.jpg",
-//                    imageMsgPushDirPath + File.separator + "image_push_01.png", 390, 450);
-//
-//            ImageUtils.centerCropAndSave(imageMsgPushDirPath + File.separator + "img_push2.jpg",
-//                    imageMsgPushDirPath + File.separator + "image_push_02.png", 390, 450);
-//
-//            Logger.t(TAG).e("-copyImage2Local-: | 文件夹路径 = " + imageMsgPushDirPath);
-//            runOnUiThread(() -> {
-//                imagePush01.setImageBitmap(BitmapFactory.decodeFile(imageMsgPushDirPath + File.separator + "image_push_01.png"));
-//                imagePush02.setImageBitmap(BitmapFactory.decodeFile(imageMsgPushDirPath + File.separator + "image_push_02.png"));
-//            });
-//        });
-
-
-//        File file1 = new File(targetDir, "image_push_01.png");
-//        File file2 = new File(targetDir, "image_push_02.png");
-//        boolean isFileExists = file1.exists() && file2.exists();
-//        if (isFileExists) {
-//            imagePush01.setImageBitmap(BitmapFactory.decodeFile(imageMsgPushDirPath + File.separator + "image_push_01.png"));
-//            imagePush02.setImageBitmap(BitmapFactory.decodeFile(imageMsgPushDirPath + File.separator + "image_push_02.png"));
-//        } else {
-//            HBThreadPools.getInstance().execute(() -> {
-//                copyAssetFileToExternalFilesDir(this,"image_push_01.png", SUB_PATH);
-//                copyAssetFileToExternalFilesDir(this,"image_push_02.png", SUB_PATH);
-//                Logger.t(TAG).e("-copyImage2Local-: | 文件夹路径 = " + imageMsgPushDirPath);
-//                runOnUiThread(() -> {
-//                    imagePush01.setImageBitmap(BitmapFactory.decodeFile(imageMsgPushDirPath + File.separator + "image_push_01.png"));
-//                    imagePush02.setImageBitmap(BitmapFactory.decodeFile(imageMsgPushDirPath + File.separator + "image_push_02.png"));
-//                });
-//            });
-//        }
     }
 
     @Override
@@ -171,23 +230,21 @@ public class TextImagePushActivity extends Activity implements View.OnClickListe
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public void onClick(View v) {
-        int id = v.getId();
-        if (id == R.id.btnPushText) {
+
+        if (v.getId() == R.id.btnPushText) {
             String content = etSendContent.getText().toString();
             if (TextUtils.isEmpty(content)) {
                 showMsg("内容不能为空");
                 return;
             }
+            tvPushInfo.setText("开始文本推送");
             VPOperateManager.getInstance().pushTextMsg(content, new BleWriteResponse() {
                 @Override
                 public void onResponse(int code) {
-
+                    if (code != Code.REQUEST_SUCCESS) {
+                        tvPushInfo.setText("蓝牙数据发送失败");
+                    }
                 }
             }, new ITextMsgPushListener() {
                 @Override
@@ -205,7 +262,8 @@ public class TextImagePushActivity extends Activity implements View.OnClickListe
                     tvPushInfo.setText("不支持该功能");
                 }
             });
-        } else if (id == R.id.btnPushImage) {
+        } else if (v.getId() == R.id.btnPushImage) {
+            tvPushInfo.setText("开始图片推送");
             VPOperateManager.getInstance().pushImageMsg(pushImagePath, new IImageMsgPushListener() {
                 @Override
                 public void onImageMsgPushSuccess() {

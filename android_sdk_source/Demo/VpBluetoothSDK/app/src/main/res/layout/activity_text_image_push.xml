@@ -1,133 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/tvTextImagePush"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:gravity="center"
-        android:background="#000"
         android:layout_centerInParent="true"
+        android:background="#000"
+        android:gravity="center"
         android:text="图文推送"
         android:textColor="@android:color/white"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvPushText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTextImagePush"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:text="推送文本"
         android:textColor="@color/real_red"
-        android:textStyle="bold"
         android:textSize="20sp"
-        android:layout_margin="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTextImagePush" />
+
     <EditText
         android:id="@+id/etSendContent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvPushText"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="请输入您推送的文本信息"
         android:textSize="18sp"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvPushText" />
 
     <Button
         android:id="@+id/btnPushText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etSendContent"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="40dp"
         android:text="推送文本"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etSendContent" />
 
     <TextView
         android:id="@+id/tvPushImage"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnPushText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:text="推送图片"
         android:textColor="@color/real_red"
-        android:textStyle="bold"
         android:textSize="20sp"
-        android:layout_margin="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    
-    <ImageView
-        android:id="@+id/ivImagePush01"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPushImage"
-        app:layout_constraintEnd_toStartOf="@id/ivImagePush02"
-        android:layout_marginTop="10dp"
-        android:layout_width="156dp"
-        android:layout_height="180dp"/>
+        app:layout_constraintTop_toBottomOf="@id/btnPushText" />
 
     <ImageView
-        android:id="@+id/ivImagePush02"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/ivImagePush01"
-        app:layout_constraintTop_toBottomOf="@+id/tvPushImage"
-        android:layout_marginTop="10dp"
+        android:id="@+id/ivWatchFace1"
         android:layout_width="156dp"
-        android:layout_height="180dp"/>
+        android:layout_height="180dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toStartOf="@id/ivWatchFace2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPushImage" />
+
+    <ImageView
+        android:id="@+id/ivWatchFace2"
+        android:layout_width="156dp"
+        android:layout_height="180dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivWatchFace1"
+        app:layout_constraintTop_toBottomOf="@+id/tvPushImage" />
 
     <RadioGroup
         android:id="@+id/rbImageSelect"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivImagePush01"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivWatchFace1">
 
         <RadioButton
             android:id="@+id/rbImage01"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
+            android:layout_height="wrap_content"
             android:layout_marginStart="100dp"
-            android:layout_height="wrap_content"/>
+            android:layout_weight="1"
+            android:gravity="center" />
 
         <RadioButton
             android:id="@+id/rbImage02"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
+            android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
-            android:layout_height="wrap_content"/>
+            android:layout_weight="1"
+            android:gravity="center" />
 
     </RadioGroup>
 
+    <EditText
+        android:id="@+id/etWidth"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/etHeight"
+        app:layout_constraintTop_toBottomOf="@id/rbImageSelect"
+        android:inputType="number"
+        android:hint="请输入裁剪宽"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/etHeight"
+        app:layout_constraintStart_toEndOf="@id/etWidth"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rbImageSelect"
+        android:inputType="number"
+        android:hint="请输入裁剪高"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnSelectImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="40dp"
+        android:text="相册选择"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etWidth" />
+
     <Button
         android:id="@+id/btnPushImage"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rbImageSelect"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="40dp"
         android:text="推送图片"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnSelectImage" />
 
     <TextView
         android:id="@+id/tvPushInfo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnPushImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000"
         android:padding="10dp"
         android:text="推送图文信息"
-        android:background="#000"
         android:textColor="#fff"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnPushImage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

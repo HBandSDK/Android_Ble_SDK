@@ -2,6 +2,13 @@ package com.timaimee.vpdemo.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 
 import java.io.File;
@@ -93,7 +100,7 @@ public class ImageUtils {
     /**
      * 将 Bitmap 保存到本地文件。
      */
-    private static boolean saveBitmap(Bitmap bitmap, String outputPath) {
+    public static boolean saveBitmap(Bitmap bitmap, String outputPath) {
         FileOutputStream out = null;
         try {
             File outputFile = new File(outputPath);
@@ -120,9 +127,57 @@ public class ImageUtils {
                 }
             }
             // 释放最终的Bitmap
-            if (bitmap != null && !bitmap.isRecycled()) {
-                bitmap.recycle();
-            }
+//            if (bitmap != null && !bitmap.isRecycled()) {
+//                bitmap.recycle();
+//            }
         }
+    }
+
+    /**
+     * 获得圆角图片的方法
+     *
+     * @param bitmap
+     * @param roundPx 一般设成14
+     * @return
+     */
+    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, float roundPx) {
+
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        return output;
+    }
+
+    public static Bitmap getCircularBitmap(Bitmap bitmap) {
+        // 创建一个与原始 Bitmap 相同大小的空白 Bitmap
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        // 创建画布来绘制 Bitmap
+        Canvas canvas = new Canvas(output);
+        // 设置画笔
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);  // 开启抗锯齿
+        // 创建一个圆形路径
+        Path path = new Path();
+        path.addCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
+                Math.min(bitmap.getWidth(), bitmap.getHeight()) / 2, Path.Direction.CCW);
+        // 裁剪画布
+        canvas.clipPath(path);
+        // 在画布上绘制原始 Bitmap
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+        return output;
     }
 }

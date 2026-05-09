@@ -20,8 +20,8 @@ android {
         applicationId "com.timaimee.vpdemo"//com.timaimee.vpdemo //com.ecg.kg
         minSdkVersion 24
         targetSdkVersion 35
-        versionCode 163
-        versionName "1.6.3"
+        versionCode 166
+        versionName "1.6.6"
         ndk {
             //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86","x86_64"
@@ -37,10 +37,6 @@ android {
         debug {
             buildConfigField("boolean", "IS_DEBUG", "true")
         }
-//        release {
-//            minifyEnabled false
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//        }
     }
     sourceSets {
         main {
@@ -72,6 +68,13 @@ repositories {
 }
 
 dependencies {
+
+    configurations {
+        all {
+            exclude group: 'com.google.code.gson', module: 'gson'
+        }
+    }
+
     implementation fileTree(include: ['*.jar','*.aar'], dir: 'libs')
 
     // Kotlin (务必保持版本一致)
@@ -119,4 +122,6 @@ dependencies {
 
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     testImplementation 'junit:junit:4.13.2'
+
+    implementation 'io.github.lucksiege:ucrop:v3.11.2'
 }

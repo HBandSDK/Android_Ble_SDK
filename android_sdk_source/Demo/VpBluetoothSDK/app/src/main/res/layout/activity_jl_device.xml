@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -139,6 +140,47 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvFileSystemInfo" />
 
+        <ImageView
+            android:id="@+id/ivWatchFace"
+            android:layout_width="156dp"
+            android:layout_height="180dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vLine" />
+
+
+        <EditText
+            android:id="@+id/etWidth"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/etHeight"
+            app:layout_constraintTop_toBottomOf="@id/ivWatchFace"
+            android:inputType="number"
+            android:hint="请输入裁剪宽"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/etHeight"
+            app:layout_constraintStart_toEndOf="@id/etWidth"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivWatchFace"
+            android:inputType="number"
+            android:hint="请输入裁剪高"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btnSelectImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="40dp"
+            android:text="相册选择"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etWidth" />
+
         <Button
             android:id="@+id/btnPhotoDial"
             android:layout_width="wrap_content"
@@ -149,7 +191,7 @@
             android:textColor="#000"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/vLine" />
+            app:layout_constraintTop_toBottomOf="@id/btnSelectImage" />
 
         <Button
             android:id="@+id/btnSwitchPhotoDial"
@@ -161,7 +203,7 @@
             android:textColor="#000"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/vLine" />
+            app:layout_constraintTop_toBottomOf="@id/btnSelectImage" />
 
         <TextView
             android:id="@+id/tvDialInfo"
