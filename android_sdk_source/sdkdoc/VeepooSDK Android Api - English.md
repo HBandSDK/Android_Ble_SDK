@@ -10955,39 +10955,36 @@ public void startMiniCheckup(BleWriteResponse bleWriteResponse, IMiniCheckupOptL
 | bleWriteResponse | BleWriteResponse        | Listener for write operations  |
 | listener         | IMiniCheckupOptListener | Listener for mini-checkup test |
 
-**IMiniCheckupOptListener** -- 微体检测量回调
+**IMiniCheckupOptListener** -- listener of mini-checkup
 
 ```kotlin
 /**
- * 微体检相关操作监听 (Listener for Mini Checkup Operations)
- * 用于监听微体检测量过程中的进度、成功、失败及停止等事件。
+ * 微体检操作监听器 | Listener for mini physical checkup operations
+ * 用于监听微体检测量流程中的进度、成功、失败、停止等状态回调
+ * Used to listen for status callbacks such as progress, success, failure and stop during measurement
  */
 interface IMiniCheckupOptListener {
 
     /**
-     * 微体检测量的进度 (Mini Checkup measurement progress)
-     * 在测量过程中周期性回调，报告当前进度。
-     * @param progress 测量进度 (Measurement progress)，范围为 1-100。
+     * 微体检测量进度回调 | Measurement progress callback
+     * @param progress 测量进度，取值范围 1–100 | Measurement progress, value range: 1–100
      */
     fun onMiniCheckupTestProgress(progress: Int)
 
     /**
-     * app请求停止微体检测量成功 (App request to stop Mini Checkup measurement successful)
-     * 当应用发起停止操作并被成功执行后回调。
+     * APP 主动停止测量成功 | Callback when APP actively stops measurement successfully
      */
     fun onMiniCheckupStopSuccess()
 
     /**
-     * 微体检测量失败 (Mini Checkup measurement failed)
-     * 当测量因故中断或未能获取有效结果时回调。
-     * @param errorCode 错误码 (Error code)，详见 EMiniCheckupTestErrorCode。
+     * 微体检测量失败 | Measurement failed callback
+     * @param errorCode 测量错误码，参考 EMiniCheckupTestErrorCode | Error code, see EMiniCheckupTestErrorCode for details
      */
     fun onMiniCheckupTestFailed(errorCode: EMiniCheckupTestErrorCode)
 
     /**
-     * 微体检测量成功 (Mini Checkup measurement successful)
-     * 当测量流程成功完成并获取到有效结果时回调。
-     * @param testResultData 测量结果 (Measurement result)，包含所有生理指标数据。
+     * 微体检测量完成并获取有效结果 | Measurement completed with valid result
+     * @param testResultData 微体检最终测量数据 | Final measurement result data
      */
     fun onMiniCheckupSuccess(testResultData: MiniCheckupResultData)
 }
@@ -11033,367 +11030,402 @@ enum class EMiniCheckupTestErrorCode {
 public class MiniCheckupResultData {
 
     /**
-     * 心率 (Heart Rate)
-     * 单位：次/分钟 (bpm)
+     * 心率 | Heart Rate
+     * 单位：次/分钟 | Unit: bpm
      */
     private int heartRate;
 
     /**
-     * 血氧饱和度 (Blood Oxygen Saturation)
-     * 单位：%
+     * 血氧饱和度 | Blood Oxygen Saturation
+     * 单位：% | Unit: %
      */
     private int bloodOxygen;
 
     /**
-     * 压力指数 (Stress Index)
+     * 压力指数 | Stress Index
      */
     private int stress;
 
     /**
-     * 情绪指数 (Emotional Index / Mood)
-     * 值域：-10 到 10，-10 表示极度低落/负面，10 表示极度高昂/正面。
-     * 改功能暂未启用未赋值，请忽视（This feature is not yet enabled and has not been assigned a value; please ignore it.）
+     * 情绪指数 | Emotional Index
+     * 值域：-10 ~ 10；-10=极度低落，10=极度高昂
+     * 【暂未启用，请勿使用】| Not enabled yet, please ignore
      */
     @Deprecated
     private int emotion;
 
     /**
-     * 疲劳度指数 (Fatigue Index)
-     * 改功能暂未启用未赋值，请忽视（This feature is not yet enabled and has not been assigned a value; please ignore it.）
+     * 疲劳度指数 | Fatigue Index
+     * 【暂未启用，请勿使用】| Not enabled yet, please ignore
      */
     @Deprecated
     private int fatigue;
 
     /**
-     * 血糖 (Blood Glucose)
-     * 单位：mmol/L 
+     * 血糖 | Blood Glucose
+     * 单位：mmol/L | Unit: mmol/L
      */
     private float bloodGlucose;
 
     /**
-     * 体温 (Body Temperature)
-     * 单位：摄氏度 (°C)
+     * 体温 | Body Temperature
+     * 单位：摄氏度 | Unit: °C
      */
     private float bodyTemperature;
 
     /**
-     * 血压 - 收缩压 (Blood Pressure - Systolic)
-     * 即高压，单位：毫米汞柱 (mmHg)
+     * 收缩压（高压）| Systolic Blood Pressure
+     * 单位：mmHg | Unit: mmHg
      */
     private int systolicBloodPressure;
 
     /**
-     * 血压 - 舒张压 (Blood Pressure - Diastolic)
-     * 即低压，单位：毫米汞柱 (mmHg)
+     * 舒张压（低压）| Diastolic Blood Pressure
+     * 单位：mmHg | Unit: mmHg
      */
     private int diastolicBloodPressure;
 
     /**
-     * 心率变异性 (Heart Rate Variability, HRV)
-     * 用于评估自主神经系统活动的指标，单位/表示方式根据具体测量算法而定。
+     * 心率变异性 | Heart Rate Variability (HRV)
+     * 自主神经系统评估指标
      */
     private int hrv;
 }
 ```
 
-MiniCheckupDetailData**--微体检测量结果-v2
+**MiniCheckupDetailData**--The result of mini-checkup test**(v2)**
 
 ```java
 /**
- * 微体检详情数据对象 (Mini Checkup Detail Data Object)
- * 包含用户在微体检中获取的各项生理和心理健康指标
+ * 微体检详情数据 | Mini Checkup Detail Data
+ * 包含微体检全流程生理与心理健康指标 | Includes physiological and psychological health indicators covering the entire micro-health checkup process.
  */
 public class MiniCheckupDetailData {
 
     /**
-     * 基本的个人信息
+     * 基础个人信息 | Basic Personal Information
      */
     private MiniCheckupBasePersonalInfo basePersonalInfo;
 
     /**
-     * 心率 (Heart Rate)
-     * 单位：次/分钟 (bpm)
+     * 心率 | Heart Rate
+     * 单位：次/分钟 | Unit: bpm
      */
     private int heartRate;
 
     /**
-     * 血氧饱和度 (Blood Oxygen Saturation)
-     * 单位：%
+     * 血氧饱和度 | Blood Oxygen Saturation
+     * 单位：百分比 | Unit: %
      */
     private int bloodOxygen;
 
     /**
-     * 压力指数 (Stress Index)
+     * 压力指数 | Stress Index
      */
     private int stress;
 
     /**
-     * 情绪指数 (Emotional Index / Mood)
-     * 值域：-10 到 10，-10 表示极度低落/负面，10 表示极度高昂/正面。
-     * 改功能暂未启用未赋值，请忽视（This feature is not yet enabled and has not been assigned a value; please ignore it.）
+     * 情绪指数 | Emotional Index
+     * 值域：-10 ~ 10；-10=极度低落，10=极度高昂 | Range: -10 ~ 10
      */
-    @Deprecated
     private int emotion;
 
     /**
-     * 疲劳度指数 (Fatigue Index)
-     * 改功能暂未启用未赋值，请忽视（This feature is not yet enabled and has not been assigned a value; please ignore it.）
+     * 疲劳度指数 | Fatigue Index
      */
-    @Deprecated
     private int fatigue;
 
     /**
-     * 血糖类型：1表示显示值，2表示显示等级
-     * Blood glucose type: 1:show blood glucose value,2:show blood glucose risk level
+     * 血糖显示类型 | Blood Glucose Display Type
+     * 1=显示数值，2=显示风险等级 | 1=Show value, 2=Show risk level
      */
     private int bloodGlucoseType;
 
     /**
-     * 血糖 (Blood Glucose)
-     * 单位：mmol/L 或 mg/dL (具体单位根据实际使用场景确定)
+     * 血糖 | Blood Glucose
+     * 单位：mmol/L 或 mg/dL | Unit: mmol/L or mg/dL
      */
     private float bloodGlucose;
 
     /**
-     * 体温 (Body Temperature)
-     * 单位：摄氏度 (°C)
+     * 体温 | Body Temperature
+     * 单位：摄氏度 | Unit: °C
      */
     private float bodyTemperature = -273.15f;
 
     /**
-     * 原始温度 (Original Temperature)
-     * 单位：摄氏度 (°C)
+     * 原始温度 | Original Temperature
+     * 单位：摄氏度 | Unit: °C
      */
     private float originalTemperature = -273.15f;
 
     /**
-     * 气泵血压
-     * Air Pump Blood Pressure
+     * 气泵式血压 | Air Pump Blood Pressure
      */
     private MiniCheckupBPAirPump bpAirPump;
 
     /**
-     * 光电血压
-     * Photoelectric Blood Pressure
+     * 光电式血压 | Photoelectric Blood Pressure
      */
     private MiniCheckupBPPhotoelectric bpPhotoelectric;
 
     /**
-     * 心率变异性 (Heart Rate Variability, HRV) 1-210
-     * 用于评估自主神经系统活动的指标，单位/表示方式根据具体测量算法而定。
+     * 心率变异性 | Heart Rate Variability (HRV)
+     * 值域：1 ~ 210 | Range: 1 ~ 210
      */
     private int hrv;
 
     /**
-     * 血液成分
-     * Blood Component
+     * 血液成分 | Blood Component
      */
     private MiniCheckupBloodComponent bloodComponent;
 
     /**
-     * 身体成分
-     * Body Component
+     * 身体成分 | Body Component
      */
     private MiniCheckupBodyComponent bodyComponent;
 
     /**
-     * 皮电
-     * Skin Electricity
+     * 皮电指标 | Skin Electricity Index
      */
     private MiniCheckupSkinElectricity skinElectricity;
-
 }
 
+/**
+ * 微体检基础个人信息 | Mini Checkup Basic Personal Info
+ */
 public class MiniCheckupBasePersonalInfo {
     /**
-     * 性别
-     * 性别 0代表 female， 1代表male
+     * 性别 | Gender
+     * 0=女性，1=男性 | 0=Female, 1=Male
      */
     private int gender;
 
     /**
-     * 年龄
+     * 年龄 | Age
+     * 单位：岁 | Unit: year
      */
     private int age;
 
     /**
-     * 身高， 单位cm
+     * 身高 | Height
+     * 单位：厘米 | Unit: cm
      */
     private int height;
 
     /**
-     * 体重， 单位kg
+     * 体重 | Weight
+     * 单位：千克 | Unit: kg
      */
     private int weight;
- }
- 
- /**
- * 微体检-气泵血压
+}
+
+/**
+ * 微体检-气泵式血压 | Mini Checkup - Air Pump Blood Pressure
  */
 public class MiniCheckupBPAirPump {
     /**
-     * 血压 - 收缩压 (Blood Pressure - Systolic)
-     * 即高压，单位：毫米汞柱 (mmHg)
+     * 收缩压(高压) | Systolic Blood Pressure
+     * 单位：毫米汞柱 | Unit: mmHg
      */
     private int systolicBloodPressure;
 
     /**
-     * 血压 - 舒张压 (Blood Pressure - Diastolic)
-     * 即低压，单位：毫米汞柱 (mmHg)
+     * 舒张压(低压) | Diastolic Blood Pressure
+     * 单位：毫米汞柱 | Unit: mmHg
      */
     private int diastolicBloodPressure;
 }
 
-MiniCheckupBPPhotoelectric属性与MiniCheckupBPAirPump一致
+/**
+ * 微体检-光电式血压 | Mini Checkup - Photoelectric Blood Pressure
+ * 字段结构与气泵式血压一致 | Field structure is consistent with air pump blood pressure
+ */
+public class MiniCheckupBPPhotoelectric {
+    private int systolicBloodPressure;
+    private int diastolicBloodPressure;
+}
 
 /**
- * 微体检-血液成分
+ * 微体检-血液成分 | Mini Checkup - Blood Component
  */
 public class MiniCheckupBloodComponent {
     /**
-     * 尿酸
+     * 尿酸 | Uric Acid
      */
     private float uricAcid;
+
     /**
-     * 总胆固醇
+     * 总胆固醇 | Total Cholesterol (TCHO)
      */
     private float tCHO;
+
     /**
-     * 甘油三酸酯
+     * 甘油三酯 | Triglyceride (TAG)
      */
     private float tAG;
+
     /**
-     * 高密度脂蛋白
+     * 高密度脂蛋白 | High Density Lipoprotein (HDL)
      */
     private float hDL;
+
     /**
-     * 低密度脂蛋白
+     * 低密度脂蛋白 | Low Density Lipoprotein (LDL)
      */
     private float lDL;
-    
 }
+
+/**
+ * 微体检-身体成分 | Mini Checkup - Body Component
+ */
 public class MiniCheckupBodyComponent {
     /**
-     * 性别
-     * 性别 0代表 female， 1代表male
+     * 性别 | Gender
+     * 0=女性，1=男性 | 0=Female, 1=Male
      */
     private int gender;
 
     /**
-     * 年龄
+     * 年龄 | Age
      */
     private int age;
 
     /**
-     * 身高， 单位cm
+     * 身高 | Height
+     * 单位：厘米 | Unit: cm
      */
     private int height;
 
     /**
-     * 体重， 单位kg
+     * 体重 | Weight
+     * 单位：千克 | Unit: kg
      */
     private int weight;
 
     /**
-     * 有效范围【4.0，1114.0】，小端，保留一位小数，上报的值是10倍，下同
+     * 身体质量指数 | Body Mass Index (BMI)
+     * 有效范围：4.0 ~ 1114.0；小端序；上报值为实际值放大10倍
+     * Valid range: 4.0 ~ 1114.0; little-endian; reported value ×10
      */
     private float BMI;
 
     /**
-     * 体脂率     | 2    | 有效范围【2.0，48.0】
+     * 体脂率 | Body Fat Rate
+     * 有效范围：2.0 ~ 48.0 | Valid range: 2.0 ~ 48.0
      */
     private float bodyFatRate;
 
     /**
-     * 脂肪量     | 2    | 有效范围【10.0，248.0】
+     * 脂肪量 | Fat Mass
+     * 有效范围：10.0 ~ 248.0 | Valid range: 10.0 ~ 248.0
      */
     private float fatRate;
 
     /**
-     * 去脂体重   | 2    | 有效范围【1.0，132.0】
+     * 去脂体重 | Fat Free Mass (FFM)
+     * 有效范围：1.0 ~ 132.0 | Valid range: 1.0 ~ 132.0
      */
     private float FFM;
 
     /**
-     * 肌肉率     | 2    | 有效范围【39.0，90.0】
+     * 肌肉率 | Muscle Rate
+     * 有效范围：39.0 ~ 90.0 | Valid range: 39.0 ~ 90.0
      */
     private float muscleRate;
 
     /**
-     * 肌肉量     | 2    | 有效范围【9.0，248.0】
+     * 肌肉量 | Muscle Mass
+     * 有效范围：9.0 ~ 248.0 | Valid range: 9.0 ~ 248.0
      */
     private float muscleMass;
 
     /**
-     * 皮下脂肪   | 2    | 有效范围【1.0，47.0】
+     * 皮下脂肪 | Subcutaneous Fat
+     * 有效范围：1.0 ~ 47.0 | Valid range: 1.0 ~ 47.0
      */
     private float subcutaneousFat;
 
     /**
-     * 体内水分   | 2    | 有效范围【28.0，79.0】
+     * 体内水分 | Body Water
+     * 有效范围：28.0 ~ 79.0 | Valid range: 28.0 ~ 79.0
      */
     private float bodyWater;
 
     /**
-     * 含水量     | 2    | 有效范围【7.0，217.0】
+     * 含水量 | Water Content
+     * 有效范围：7.0 ~ 217.0 | Valid range: 7.0 ~ 217.0
      */
     private float waterContent;
 
     /**
-     * 骨骼肌率   | 2    | 有效范围【13.0，69.0】
+     * 骨骼肌率 | Skeletal Muscle Rate
+     * 有效范围：13.0 ~ 69.0 | Valid range: 13.0 ~ 69.0
      */
     private float skeletalMuscleRate;
 
     /**
-     * 骨量       | 2    | 有效范围【2.3，4.8】
+     * 骨量 | Bone Mass
+     * 有效范围：2.3 ~ 4.8 | Valid range: 2.3 ~ 4.8
      */
     private float boneMass;
 
     /**
-     * 蛋白质占比 | 2    | 有效范围【4.0，26.0】
+     * 蛋白质占比 | Protein Proportion
+     * 有效范围：4.0 ~ 26.0 | Valid range: 4.0 ~ 26.0
      */
     private float proteinProportion;
 
     /**
-     * 蛋白质量   | 2    | 有效范围【1.0，71.0】
+     * 蛋白质量 | Protein Mass
+     * 有效范围：1.0 ~ 71.0 | Valid range: 1.0 ~ 71.0
      */
     private float proteinMass;
 
     /**
-     * 基础代谢率 | 2    | 有效范围【25，14995】
+     * 基础代谢率 | Basal Metabolic Rate (BMR)
+     * 有效范围：25 ~ 14995 | Valid range: 25 ~ 14995
      */
     private float basalMetabolicRate;
 }
 
 /**
- * 微体检-皮电
+ * 微体检-皮电指标 | Mini Checkup - Skin Electricity
  */
 public class MiniCheckupSkinElectricity {
     /**
-     * 情绪 [-10,10]
+     * 情绪值 | Emotion Value
+     * 值域：-10 ~ 10 | Range: -10 ~ 10
      */
     private int emotion;
+
     /**
-     * 皮肤含水量 [1,99]
+     * 皮肤含水量 | Skin Moisture Content
+     * 值域：1 ~ 99 | Range: 1 ~ 99
      */
     private int skinMoistureContent;
+
     /**
-     * 抑郁症风险 [0,2],0:低风险，1:中风险，2:高风险
+     * 抑郁症风险 | Depression Risk Level
+     * 0=低风险，1=中风险，2=高风险 | 0=Low, 1=Medium, 2=High
      */
     private int depressionRisk;
+
     /**
-     * 交感神经活跃度 [1,99]
+     * 交感神经活跃度 | Sympathetic Nerve Activity
+     * 值域：1 ~ 99 | Range: 1 ~ 99
      */
     private int sympatheticActivity;
+
     /**
-     * 皮质醇浓度,有效范围[0，500]ug/L,正常范围[0，230]ug/L
-     * 通用单位ug/dL或nmol/L，10ug/L = 1ug/dL，
-     * 1nmol/L = 0.36247ug/L， 1nmol/L = 0.036247 ug/dL
+     * 皮质醇浓度 | Cortisol Concentration
+     * 单位：微克/升 | Unit: ug/L
+     * 有效范围：0 ~ 500 ug/L | Valid range: 0 ~ 500 ug/L
+     * 正常参考范围：0 ~ 230 ug/L | Normal range: 0 ~ 230 ug/L
+     * 换算：10 ug/L = 1 ug/dL；1 nmol/L = 0.36247 ug/L
      */
     private int cortisolConcentration;
 }
-
-
 ```
 
 ###### Example Code

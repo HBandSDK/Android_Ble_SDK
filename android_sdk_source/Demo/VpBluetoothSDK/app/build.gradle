@@ -91,7 +91,7 @@ dependencies {
     //汇顶升级库相关（可选）
     implementation files('libs/libcomx-0.5.jar')
     //Veepoo协议库（必选）
-    implementation files('libs/vpprotocol-2.3.63.15.aar')
+    implementation files('libs/vpprotocol-2.3.64.15.aar')
     //Veepoo蓝牙连接库（必选）
     implementation files('libs/vpbluetooth-1.20.aar')
     //Gson库（必选）

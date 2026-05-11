@@ -11399,16 +11399,12 @@ public class MiniCheckupDetailData {
     /**
      * 情绪指数 (Emotional Index / Mood)
      * 值域：-10 到 10，-10 表示极度低落/负面，10 表示极度高昂/正面。
-     * 改功能暂未启用未赋值，请忽视（This feature is not yet enabled and has not been assigned a value; please ignore it.）
      */
-    @Deprecated
     private int emotion;
 
     /**
      * 疲劳度指数 (Fatigue Index)
-     * 改功能暂未启用未赋值，请忽视（This feature is not yet enabled and has not been assigned a value; please ignore it.）
      */
-    @Deprecated
     private int fatigue;
 
     /**
@@ -12800,4 +12796,3 @@ VPOperateManager.getInstance().vpQX17SetVibrationMode(bleWriteResponse, EQX17Vib
 
 // 发送"开始"振动，自定义持续2550ms
 VPOperateManager.getInstance().vpQX17SetVibrationMode(bleWriteResponse, EQX17VibrationMode.START, 255);
-```>>>>>>> .r21745
