@@ -148,6 +148,7 @@ public class PwdConfirmActivity extends AppCompatActivity {
             public void onConnectionConfirmTimeout() {
                 tvPwdInfo.setText("错误:连接确认超时");
                 btn2Function.setEnabled(false);
+                btnConfirm.setEnabled(true);
             }
         }, new IDeviceFuctionDataListener() {
             @Override

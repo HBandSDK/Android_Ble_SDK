@@ -17,6 +17,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -40,6 +41,7 @@ import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.base.IBleNotifyResponse;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.data.AbsBloodGlucoseChangeListener;
+import com.veepoo.protocol.listener.data.AbsDeviceManualDetectDataListener;
 import com.veepoo.protocol.listener.data.IAlarm2DataListListener;
 import com.veepoo.protocol.listener.data.IAlarmDataListener;
 import com.veepoo.protocol.listener.data.IAllHealthDataListener;
@@ -109,6 +111,7 @@ import com.veepoo.protocol.listener.data.ISpo2hOriginDataListener;
 import com.veepoo.protocol.listener.data.ISportDataListener;
 import com.veepoo.protocol.listener.data.ISportModelOriginListener;
 import com.veepoo.protocol.listener.data.ISportModelStateListener;
+import com.veepoo.protocol.listener.data.ITcmDiagnosisDetectListener;
 import com.veepoo.protocol.listener.data.ITemptureDataListener;
 import com.veepoo.protocol.listener.data.ITemptureDetectDataListener;
 import com.veepoo.protocol.listener.data.ITextAlarmDataListener;
@@ -124,6 +127,7 @@ import com.veepoo.protocol.model.datas.AutoDetectStateData;
 import com.veepoo.protocol.model.datas.BTInfo;
 import com.veepoo.protocol.model.datas.BatteryData;
 import com.veepoo.protocol.model.datas.BloodComponent;
+import com.veepoo.protocol.model.datas.BloodPressureManualData;
 import com.veepoo.protocol.model.datas.BodyComponent;
 import com.veepoo.protocol.model.datas.BpData;
 import com.veepoo.protocol.model.datas.BpFunctionData;
@@ -137,6 +141,7 @@ import com.veepoo.protocol.model.datas.DeviceFunctionPackage3;
 import com.veepoo.protocol.model.datas.DeviceFunctionPackage4;
 import com.veepoo.protocol.model.datas.DeviceFunctionPackage5;
 import com.veepoo.protocol.model.datas.DrinkData;
+import com.veepoo.protocol.model.datas.EcgDetectInfo;
 import com.veepoo.protocol.model.datas.EcgDetectResult;
 import com.veepoo.protocol.model.datas.EcgDiagnosis;
 import com.veepoo.protocol.model.datas.FatigueData;
@@ -174,6 +179,8 @@ import com.veepoo.protocol.model.datas.SportModelGPSWatchOriginHeadData;
 import com.veepoo.protocol.model.datas.SportModelOriginHeadData;
 import com.veepoo.protocol.model.datas.SportModelOriginItemData;
 import com.veepoo.protocol.model.datas.SportModelStateData;
+import com.veepoo.protocol.model.datas.TcmDiagnosis;
+import com.veepoo.protocol.model.datas.TcmDiagnosisDetectState;
 import com.veepoo.protocol.model.datas.TemptureData;
 import com.veepoo.protocol.model.datas.TemptureDetectData;
 import com.veepoo.protocol.model.datas.TextAlarmData;
@@ -185,6 +192,7 @@ import com.veepoo.protocol.model.datas.weather.WeatherData;
 import com.veepoo.protocol.model.datas.weather.WeatherEvery3Hour;
 import com.veepoo.protocol.model.datas.weather.WeatherEveryDay;
 import com.veepoo.protocol.model.enums.DetectState;
+import com.veepoo.protocol.model.enums.DeviceManualDataType;
 import com.veepoo.protocol.model.enums.EAllSetType;
 import com.veepoo.protocol.model.enums.EBPDetectModel;
 import com.veepoo.protocol.model.enums.EBloodComponentDetectState;
@@ -237,6 +245,10 @@ import com.veepoo.protocol.util.VPLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -245,6 +257,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import tech.gujin.toast.ToastUtil;
 
@@ -262,6 +275,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
     boolean isSleepPrecision = false;
     Message msg;
     boolean isBloodCompositionOpen = false;
+    private List<PwvPatData> pwvPatDatas = new ArrayList<>();
+
     Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
@@ -3187,6 +3202,74 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 //                }
 //            });
             startActivity(new Intent(this, MagneticTherapyActivity.class));
+        } else if (oprater.equals(READ_MANUAL_DATA)) {
+            List<DeviceManualDataType> typeList = new ArrayList<>();
+            typeList.add(DeviceManualDataType.ALL);
+            VPOperateManager.getInstance().readDeviceManualData(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            }, 0, typeList, typeList, new AbsDeviceManualDetectDataListener() {
+                @Override
+                public void onBloodPressureDataChange(List<BloodPressureManualData> bloodPressureManualDataList) {
+                    super.onBloodPressureDataChange(bloodPressureManualDataList);
+                    Logger.t(TAG).e("onBloodPressureDataChange --》 " + bloodPressureManualDataList.toString());
+                }
+
+                @Override
+                public void onReadComplete() {
+                    super.onReadComplete();
+                    Logger.t(TAG).e("onReadComplete -- ");
+                }
+            });
+        } else if (oprater.equals(TCM_DIAGNOSIS_START)) {
+            String filePath = mContext.getApplicationContext().getExternalFilesDir(null) + File.separator + "TestData";
+            File file = new File(filePath);
+            deleteFolder(file);
+            file.mkdirs();
+            pwvPatDatas.clear();
+            VPOperateManager.getInstance().startDetectTcmDiagnosis(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            }, new ITcmDiagnosisDetectListener() {
+                @Override
+                public void onTcmDiagnosisDetectInfoChange(EcgDetectInfo ecgDetectInfo) {
+                    Logger.t(TAG).e("onTcmDiagnosisDetectInfoChange --》 " + ecgDetectInfo.toString());
+
+                }
+
+                @Override
+                public void onTcmDiagnosisDetectStateChange(TcmDiagnosisDetectState detectState) {
+                    long time = System.currentTimeMillis() / 1000;
+                    pwvPatDatas.add(new PwvPatData(time, detectState.getPwv(), detectState.getPat()));
+                    Logger.t(TAG).e("onTcmDiagnosisDetectStateChange --》 " + detectState.toString());
+                }
+
+                @Override
+                public void onTcmDiagnosisDiagnosisChange(TcmDiagnosis diagnosis) {
+                    Logger.t(TAG).e("onTcmDiagnosisDiagnosisChange --》 " + diagnosis.toString());
+                }
+
+                @Override
+                public void onEcgADCChange(int type, int[] adcData, int power, int pkgNum) {
+                    Logger.t(TAG).e("onEcgADCChange --》 type=" + type + ",adc length=" + adcData.length + ",power=" + power);
+                    if (type == 3) {
+                        writeIntListWithBufferedWriter(adcData, false, pkgNum);
+                    } else {
+                        writeIntListWithBufferedWriter(adcData, true, pkgNum);
+                    }
+                }
+            });
+        } else if (oprater.equals(TCM_DIAGNOSIS_STOP)) {
+            VPOperateManager.getInstance().stopDetectTcmDiagnosis(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            });
         } else if (oprater.equals(TEXT_IMAGE_MSG_PUSH)) {
             startActivity(new Intent(this, TextImagePushActivity.class));
         }  else if (oprater.equals(JH58_PPG)) {
@@ -4205,6 +4288,90 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 showToast("BT连接超时");
             }
         });
+    }
+
+    class PwvPatData {
+        private long timeStamp;
+        private float pwv, pat;
+
+        public long getTimeStamp() {
+            return timeStamp;
+        }
+
+        public void setTimeStamp(long timeStamp) {
+            this.timeStamp = timeStamp;
+        }
+
+        public float getPwv() {
+            return pwv;
+        }
+
+        public void setPwv(float pwv) {
+            this.pwv = pwv;
+        }
+
+        public float getPat() {
+            return pat;
+        }
+
+        public void setPat(float pat) {
+            this.pat = pat;
+        }
+
+        public PwvPatData(long timeStamp, float pwv, float pat) {
+            this.timeStamp = timeStamp;
+            this.pwv = pwv;
+            this.pat = pat;
+        }
+
+        @Override
+        public String toString() {
+            return "PwvPatData{" +
+                    "timeStamp=" + timeStamp +
+                    ", pwv=" + pwv +
+                    ", pat=" + pat +
+                    '}';
+        }
+    }
+
+    public static void deleteFolder(File file) {
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files != null) {
+                for (File child : files) {
+                    deleteFolder(child); // 递归删除子目录
+                }
+            }
+        }
+        if (file.delete()) {
+            Log.d("Delete", "成功删除：" + file.getAbsolutePath());
+        }
+    }
+
+    private static final String FILE_PATH = "data.txt";
+    String filePath = "";
+
+    private void writeIntListWithBufferedWriter(int[] intArray, boolean isGreen, int pkgNum) {
+        String filePath = "";
+        if (isGreen) {
+            filePath = mContext.getApplicationContext().getExternalFilesDir(null) + File.separator + "TestData" + File.separator + "deal_green.txt";
+        } else {
+            filePath = mContext.getApplicationContext().getExternalFilesDir(null) + File.separator + "TestData" + File.separator + "deal_ecg.txt";
+        }
+        try (BufferedWriter writer = new BufferedWriter(
+                new FileWriter(filePath, true))) {  // true表示追加模式
+
+            // 将List转换为字符串
+            String line = Arrays.stream(intArray)
+                    .mapToObj(String::valueOf)
+                    .collect(Collectors.joining(" "));
+
+            writer.write(pkgNum + "-->:" + line);
+            writer.newLine();  // 写入换行符，使每次追加在新行
+            System.out.println("数据追加成功");
+        } catch (IOException e) {
+            System.err.println("追加数据时出错: " + e.getMessage());
+        }
     }
 
 }
