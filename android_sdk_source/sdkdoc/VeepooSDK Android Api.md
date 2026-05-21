@@ -33,6 +33,7 @@
 | 1.2.7 | 新增ECG多诊断测量回调                                        | 2026.04.22 |
 | 1.2.8 | 新增app测量hrv功能 | 2026.04.23 |
 | 1.2.9 | 新增QX17数据采集流控功能（IMU/GPS/心率实时采集）及振动马达控制接口 | 2026.04.29 |
+| 1.3.0 | 新增中科ota文档 | 2026.05.21 |
 # 导入SDK
 添加依赖
 
@@ -9038,6 +9039,109 @@ public interface OnMcuMgrOtaListener {
      */
     void onUploadProgressChanged(int bytesSent, int imageSize, long timestamp);
 
+}
+```
+
+#### 中科平台设备OTA升级
+
+###### 前提
+
+需设备为中科设备。判断接口如下：
+
+```java
+VpSpGetUtil.getVpSpVariInstance(mContext).isZKDevice()
+```
+
+###### 接口
+
+```
+VPOperateManager.getInstance().startZkOtaUpgrade(firmwareFilePath, listener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                  | 描述                      |
+| ---------------- | --------------------- | ------------------------- |
+| firmwareFilePath | String                | 本地存放的OTA升级文件路径 |
+| listener         | IZkOtaUpgradeListener | 中科设备OTA监听           |
+
+###### 返回数据
+
+IZkOtaUpgradeListener：中科OTA升级监听
+
+```java
+package com.veepoo.protocol.zk;
+
+/**
+ * 中科OTA升级监听接口
+ * ZK OTA Upgrade Listener
+ *
+ * @author KYM
+ * @date 2025/3/27
+ */
+public interface IZkOtaUpgradeListener {
+
+    /**
+     * OTA升级准备完成
+     * OTA upgrade is ready
+     */
+    void onOtaUpgradeReady();
+
+    /**
+     * OTA升级开始
+     * OTA upgrade started
+     */
+    void onOtaUpgradeStart();
+
+    /**
+     * OTA升级进度回调
+     * OTA upgrade progress callback
+     *
+     * @param progress 升级进度（0-100）| upgrade progress (0-100)
+     */
+    void onOtaUpgradeUpdating(int progress);
+
+    /**
+     * OTA升级已暂停
+     * OTA upgrade paused
+     */
+    void onOtaUpgradePause();
+
+    /**
+     * OTA升级继续
+     * OTA upgrade continued
+     */
+    void onOtaUpgradeContinue();
+
+    /**
+     * OTA升级成功
+     * OTA upgrade success
+     */
+    void onOtaUpgradeSuccess();
+
+    /**
+     * OTA升级等待完成（数据传输完毕，设备即将重启）
+     * OTA upgrade waiting for finish (data transfer completed, device will restart automatically)
+     */
+    void onOtaUpgradeWaitFinish();
+
+    /**
+     * OTA升级失败
+     * OTA upgrade failed
+     *
+     * @param code 错误码 | error code
+     *             601：未初始化               | Not initialized
+     *             602：读取文件失败           | Read file failed
+     *             1001：设备拒绝升级          | Device refused upgrade
+     *             1003：接收超时              | Receive timeout
+     *             1004：TWS已断开，停止升级    | TWS disconnected, upgrade stopped
+     *             1：固件相同，无需升级        | Firmware version is the same
+     *             2：Key不匹配                | Key mismatch
+     *             3：CRC校验错误              | CRC error
+     *
+     * @param msg 错误描述信息 | error message
+     */
+    void onOtaUpgradeFail(int code, String msg);
 }
 ```
 

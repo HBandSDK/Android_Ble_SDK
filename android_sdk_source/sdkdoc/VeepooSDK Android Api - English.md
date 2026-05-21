@@ -33,6 +33,7 @@
 | 1.2.7 | Add  Ecg Diagnosis interface | 2026.04.22 |
 | 1.2.8 | Add app hrv detect function | 2026.04.23 |
 | 1.2.9 | Added QX17 data acquisition flow control (IMU/GPS/HR real-time acquisition) and vibration motor control interfaces | 2026.04.29 |
+| 1.3.0 | Add Bluetrum Device OTA Upgrade | 2026.05.21 |
 # Import SDK
 ### Add Dependency
 
@@ -8528,11 +8529,11 @@ void onNetOadDetailInfo(OadFileBean oadFileBean,boolean netIsNew);
 
 According to the new firmware download address obtained, perform normal network download
 
-#### Jier platform device OTA upgrade
+#### JieLi platform device OTA upgrade
 
 Note that the Jier OTA upgrade process is generally longer, about 10-20 minutes. During the upgrade process, the watch phone needs to be fully charged, and the APP is in the foreground during the upgrade. (Some Android systems will regard the Bluetooth operation of the app in the background as power consumption, and may suspend the Bluetooth transmission, resulting in OTA upgrade failure)
 
-The Jier OTA process is divided into three stages,
+The JieLi  OTA process is divided into three stages,
 The first stage: OTA file transfer, the upgrade duration of this process depends on the size of the upgrade file. Under normal circumstances, the progress value of the onProgress method ranges from 0.00 to 99.9
 
 Phase 2: Internal file copy, onProgress will quickly increase from 0.00 to 99.9
@@ -8543,7 +8544,7 @@ The SDK will automatically search for and reconnect the DFULang device. After th
 
 ###### Premise
 
-The device must be a JLI device and has completed [[Open JieLi File System](#Open JieLi File System)], and the new firmware has been downloaded
+The device must be a JieLi device and has completed [[Open JieLi File System](#Open JieLi File System)], and the new firmware has been downloaded
 
 ###### Interface
 
@@ -8556,11 +8557,11 @@ VPOperateManager.getInstance().startJLDeviceOTAUpgrade(firmwareFilePath, listene
 | Parameter name   | Type                              | Description                          |
 | ---------------- | --------------------------------- | ------------------------------------ |
 | firmwareFilePath | String                            | Locally stored OTA upgrade file path |
-| listener         | JLOTAHolder.OnJLDeviceOTAListener | JLI device OTA listener              |
+| listener         | JLOTAHolder.OnJLDeviceOTAListener | JieLI device OTA listener            |
 
 ###### Return data
 
-OnJLDeviceOTAListener: JLI OTA upgrade listener
+OnJLDeviceOTAListener: JieLI OTA upgrade listener
 
 ```java
 public interface OnJLDeviceOTAListener {
@@ -8747,6 +8748,96 @@ public interface OnMcuMgrOtaListener {
 ```
 
 
+
+#### OTA Upgrades for Bluetrum Platform Devices
+
+###### Premise
+
+The required device must be a Bluetrum device. The interface for this check is as follows：
+
+```java
+VpSpGetUtil.getVpSpVariInstance(mContext).isZKDevice()
+```
+
+###### Interface
+
+```
+VPOperateManager.getInstance().startZkOtaUpgrade(firmwareFilePath, listener)
+```
+
+###### Parameter Explanation
+
+| Parameter name   | Type                  | Description                          |
+| ---------------- | --------------------- | ------------------------------------ |
+| firmwareFilePath | String                | Locally stored OTA upgrade file path |
+| listener         | IZkOtaUpgradeListener | Bluetrum Device OTA listener         |
+
+###### Return data
+
+IZkOtaUpgradeListener：Bluetrum OTA upgrade listener
+
+```java
+
+
+/**
+ * Bluetrum OTA Upgrade Listener
+ */
+public interface IZkOtaUpgradeListener {
+
+    /**
+     * OTA upgrade is ready
+     */
+    void onOtaUpgradeReady();
+
+    /**
+     * OTA upgrade started
+     */
+    void onOtaUpgradeStart();
+
+    /**
+     * OTA upgrade progress callback
+     *
+     * @param progress 升级进度（0-100）| upgrade progress (0-100)
+     */
+    void onOtaUpgradeUpdating(int progress);
+
+    /**
+     * OTA upgrade paused
+     */
+    void onOtaUpgradePause();
+
+    /**
+     * OTA upgrade continued
+     */
+    void onOtaUpgradeContinue();
+
+    /**
+     * OTA upgrade success
+     */
+    void onOtaUpgradeSuccess();
+
+    /**
+     * OTA upgrade waiting for finish (data transfer completed, device will restart automatically)
+     */
+    void onOtaUpgradeWaitFinish();
+
+    /**
+     * OTA upgrade failed
+     *
+     * @param code 错误码 | error code
+     *             601：未初始化               | Not initialized
+     *             602：读取文件失败            | Read file failed
+     *             1001：设备拒绝升级           | Device refused upgrade
+     *             1003：接收超时              | Receive timeout
+     *             1004：TWS已断开，停止升级     | TWS disconnected, upgrade stopped
+     *             1：固件相同，无需升级         | Firmware version is the same
+     *             2：Key不匹配                | Key mismatch
+     *             3：CRC校验错误              | CRC error
+     *
+     * @param msg 错误描述信息 | error message
+     */
+    void onOtaUpgradeFail(int code, String msg);
+```
 
 
 
