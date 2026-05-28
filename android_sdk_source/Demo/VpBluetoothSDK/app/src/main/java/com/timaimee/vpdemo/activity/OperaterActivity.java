@@ -35,6 +35,8 @@ import com.jieli.jl_fatfs.model.FatFile;
 import com.jieli.jl_rcsp.model.base.BaseError;
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
+import com.timaimee.vpdemo.activity.v2.custom.PSAIMHealthDataActivity;
+import com.timaimee.vpdemo.activity.v2.health.HealthDataReadActivity;
 import com.timaimee.vpdemo.adapter.GridAdatper;
 import com.timaimee.vpdemo.oad.activity.OadActivity;
 import com.veepoo.protocol.VPOperateManager;
@@ -2258,6 +2260,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
                 }
             }, watchDataDay);
+        } else if (oprater.equals(READ_HEALTH_V2)) {
+            startActivity(new Intent(this, HealthDataReadActivity.class));
         } else if (oprater.equals(OAD)) {
             if (deviceNumber < 0) {
                 Toast.makeText(mContext, "请先通过密码验证，获取版本号!", Toast.LENGTH_LONG).show();
@@ -3355,6 +3359,8 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             startActivity(new Intent(this, TCMActivity.class));
         } else if (oprater.equals(QX17_DATA_ACQUISITION)) {
             startActivity(new Intent(this, QX17DataAcquisitionActivity.class));
+        } else if (oprater.equals(QH15_HEALTH_DATA)) {
+            startActivity(new Intent(this, PSAIMHealthDataActivity.class));
         }
     }
 

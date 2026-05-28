@@ -71,13 +71,26 @@ public class JLDeviceOPTActivity extends AppCompatActivity implements View.OnCli
     int serverDialFlag = 0;
     int photoDialFlag = 0;
     UIDataCustom mUIDataCustom = null;
+
+    String selectImage = "";
     String pushImagePath = "";
+    String imageMsgPushDirPath = "/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/imageMsgPush";
+
+    String firmwareFilePath = "";
+
+    public static final String KEY_FIRMWARE_FILE_PATH = "FIRMWARE_FILE_PATH";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ImageVideoSelectorManager.launch(this);
         setContentView(R.layout.activity_jl_device);
+        File dir = new File(imageMsgPushDirPath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        firmwareFilePath = getIntent().getStringExtra(KEY_FIRMWARE_FILE_PATH);
+
         loadingDialog = new CustomProgressDialog(this);
         btnOpenNotify = findViewById(R.id.btnOpenNotify);
         btnFileSystem = findViewById(R.id.btnFileSystem);
@@ -116,12 +129,6 @@ public class JLDeviceOPTActivity extends AppCompatActivity implements View.OnCli
 
         tvOpenInfo.setText(VPOperateManager.getInstance().isJLNotifyOpened() ? "通知已打开" : "通知未打开");
         tvAuthInfo.setText(RcspAuthManager.getInstance().isAuthPass() ? "设备认证已通过" : "设备认证未通过");
-
-        File dir = new File("/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/imageMsgPush/");
-        if(!dir.exists()) {
-            dir.mkdirs();
-        }
-
         readUIInfo();
         btnSelectImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,7 +233,6 @@ public class JLDeviceOPTActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         int id = v.getId();
-
         if (id == R.id.btnOpenNotify) {
             openJLNotify();
         } else if (id == R.id.btnAuth) {
@@ -410,7 +416,7 @@ public class JLDeviceOPTActivity extends AppCompatActivity implements View.OnCli
         }
 
         File dialFile = new File(pushImagePath);
-        if (!dialFile.exists() || !dialFile.isFile() || dialFile.length() <=100) {
+        if (!dialFile.exists() || !dialFile.isFile() || dialFile.length() <= 100) {
             showMsg("照片表盘不存在");
             return;
         }
@@ -509,10 +515,16 @@ public class JLDeviceOPTActivity extends AppCompatActivity implements View.OnCli
 
     private void startOTA() {
 //        String otaFileName = "KH32_9626_00320800_OTA_UI_230421_19.zip";
-        String otaFileName = "JE51P_5057_00510064_OTA_UI_KEY_240402_15.zip";
-        String otaFileName1 = "9664_00.70.01.zip";
-        String firmwareFilePath = "/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/hband/jlOta/" + otaFileName;
+//        String otaFileName = "JE51P_5057_00510064_OTA_UI_KEY_240402_15.zip";
+//        String otaFileName1 = "9664_00.70.01.zip";
+//        String firmwareFilePath = "/storage/emulated/0/Android/data/com.timaimee.vpdemo/files/hband/jlOta/" + otaFileName;
+
+        if (TextUtils.isEmpty(firmwareFilePath)) {
+            showMsg("请设置固件地址");
+            return;
+        }
         tvOTAInfo.setText(firmwareFilePath);
+
         VPOperateManager.getInstance().startJLDeviceOTAUpgrade(firmwareFilePath, new JLOTAHolder.OnJLDeviceOTAListener() {
             @Override
             public void onOTAStart() {

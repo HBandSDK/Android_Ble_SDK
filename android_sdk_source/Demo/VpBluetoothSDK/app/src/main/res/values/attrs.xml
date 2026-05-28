@@ -12,4 +12,18 @@
         <attr name="ratioAspect" format="float"/>
         <attr name="isOpened" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="CollapseCardView">
+        <!-- 卡片标题文字 -->
+        <attr name="collapseTitle" format="string"/>
+        <!-- 标题文字颜色 -->
+        <attr name="collapseTitleColor" format="color"/>
+        <!-- 标题文字大小 -->
+        <attr name="collapseTitleSize" format="dimension"/>
+        <!-- 默认是否展开 -->
+        <attr name="collapseDefaultExpand" format="boolean"/>
+        <!-- 卡片背景色 -->
+        <attr name="collapseCardBg" format="color"/>
+    </declare-styleable>
+
 </resources>

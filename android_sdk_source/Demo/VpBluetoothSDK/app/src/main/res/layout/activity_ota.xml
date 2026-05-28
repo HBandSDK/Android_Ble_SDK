@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvDeviceType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:textColor="#08f"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:text="设备类型:中科"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTitle" />
+
+    <TextView
+        android:id="@+id/tvOTAFilePath"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:textColor="#222"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:text="升级文件路径：（此处用户自行修改）"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvDeviceType" />
+
+    <Button
+        android:id="@+id/btnSelectFirmwareFile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:paddingStart="40dp"
+        android:paddingEnd="40dp"
+        android:text="选择固件"
+        android:textColor="#FFF"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:background="@drawable/btn_common"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvOTAFilePath" />
+
+    <TextView
+        android:id="@+id/tvUpgradeInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="等待升级"
+        android:textColor="#ee00f0"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnSelectFirmwareFile" />
+
+    <Button
+        android:id="@+id/btnStartNRFOta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:paddingStart="40dp"
+        android:paddingEnd="40dp"
+        android:text="开始升级"
+        android:textColor="#FFF"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:background="@drawable/btn_common"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvUpgradeInfo" />
+</androidx.constraintlayout.widget.ConstraintLayout>

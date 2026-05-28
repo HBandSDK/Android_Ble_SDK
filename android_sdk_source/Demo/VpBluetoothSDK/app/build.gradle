@@ -20,8 +20,8 @@ android {
         applicationId "com.timaimee.vpdemo"//com.timaimee.vpdemo //com.ecg.kg
         minSdkVersion 24
         targetSdkVersion 35
-        versionCode 166
-        versionName "1.6.6"
+        versionCode 168
+        versionName "1.6.8"
         ndk {
             //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86","x86_64"
@@ -91,7 +91,7 @@ dependencies {
     //汇顶升级库相关（可选）
     implementation files('libs/libcomx-0.5.jar')
     //Veepoo协议库（必选）
-    implementation files('libs/vpprotocol-2.3.66.15.aar')
+    implementation files('libs/vpprotocol-2.3.67.15.aar')
     //Veepoo蓝牙连接库（必选）
     implementation files('libs/vpbluetooth-1.20.aar')
     //Gson库（必选）
@@ -124,4 +124,14 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
 
     implementation 'io.github.lucksiege:ucrop:v3.11.2'
+    implementation 'com.github.nbsp-team:MaterialFilePicker:master-SNAPSHOT'
+    implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
+}
+
+configurations.all {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == 'androidx.lifecycle') {
+            details.useVersion "2.5.1"
+        }
+    }
 }

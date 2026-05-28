@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- 根 ScrollView 包裹所有内容 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="20dp">
+
+            <ScrollView
+                android:id="@+id/svTestInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/text_info_bg"
+                android:minHeight="200dp">
+
+                <TextView
+                    android:id="@+id/tvTestInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="酸🥕别吃、酸！🍋"
+                    android:textColor="#fff"
+                    android:textSize="14dp"/>
+
+            </ScrollView>
+
+            <TextView
+                android:id="@+id/tvDetectProcessStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:textColor="#f720f9"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:visibility="gone"/>
+
+            <com.timaimee.vpdemo.utils.CollapseCardView
+                android:id="@+id/ccvSettingPSAIMHealthData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="visible"
+                app:collapseDefaultExpand="false"
+                app:collapseTitle="血糖私人模式"
+                app:collapseTitleColor="#E53935"
+                app:collapseTitleSize="15sp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="15dp"
+                        android:paddingEnd="15dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="血糖校准值："
+                            android:textColor="#E53935"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+                        <EditText
+                            android:id="@+id/etBloodGlucoseCalibration"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint=""
+                            android:textSize="14sp"/>
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btnSettingBloodGlucosePrivate"
+                        style="@style/vpButton"
+                        android:text="血糖私人模式设置"/>
+
+                    <Button
+                        android:id="@+id/btnReadBloodGlucosePrivate"
+                        style="@style/vpButton"
+                        android:text="血糖私人模式读取"/>
+                </LinearLayout>
+
+            </com.timaimee.vpdemo.utils.CollapseCardView>
+
+            <com.timaimee.vpdemo.utils.CollapseCardView
+                android:id="@+id/ccvSettingComplianceEvent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="visible"
+                app:collapseDefaultExpand="false"
+                app:collapseTitle="血糖多校准"
+                app:collapseTitleColor="#E53935"
+                app:collapseTitleSize="15sp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clSettingBloodGlucoseMultipleCalibration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
+
+                    <LinearLayout
+                        android:id="@+id/llBreakfastBefore"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="早餐前:"
+                            android:textColor="#000000"
+                            android:textSize="15sp"/>
+
+                        <Button
+                            android:id="@+id/btnBreakfastTimeBefore"
+                            android:layout_width="100dp"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="10dp"
+                            android:background="@drawable/btn_common"
+                            android:text="8:00"
+                            android:textColor="#FFFFFF"/>
+
+                        <EditText
+                            android:id="@+id/etBreakfastBefore"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:inputType="numberDecimal"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llBreakfastAfter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/llBreakfastBefore">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="早餐后:"
+                            android:textColor="#000000"
+                            android:textSize="15sp"/>
+
+                        <Button
+                            android:id="@+id/btnBreakfastTimeAfter"
+                            android:layout_width="100dp"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="10dp"
+                            android:background="@drawable/btn_common"
+                            android:text="8:00"
+                            android:textColor="#FFFFFF"/>
+
+                        <EditText
+                            android:id="@+id/etBreakfastAfter"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:inputType="numberDecimal"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llLunchBefore"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/llBreakfastAfter">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="午餐前:"
+                            android:textColor="#000000"
+                            android:textSize="15sp"/>
+
+                        <Button
+                            android:id="@+id/btnLunchTimeBefore"
+                            android:layout_width="100dp"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="10dp"
+                            android:background="@drawable/btn_common"
+                            android:text="8:00"
+                            android:textColor="#FFFFFF"/>
+
+                        <EditText
+                            android:id="@+id/etLunchBefore"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:inputType="numberDecimal"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llLunchAfter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/llLunchBefore">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="午餐后:"
+                            android:textColor="#000000"
+                            android:textSize="15sp"/>
+
+                        <Button
+                            android:id="@+id/btnLunchTimeAfter"
+                            android:layout_width="100dp"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="10dp"
+                            android:background="@drawable/btn_common"
+                            android:text="8:00"
+                            android:textColor="#FFFFFF"/>
+
+                        <EditText
+                            android:id="@+id/etLunchAfter"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:inputType="numberDecimal"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llDinnerBefore"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/llLunchAfter">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="晚餐前:"
+                            android:textColor="#000000"
+                            android:textSize="15sp"/>
+
+                        <Button
+                            android:id="@+id/btnDinnerTimeBefore"
+                            android:layout_width="100dp"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="10dp"
+                            android:background="@drawable/btn_common"
+                            android:text="8:00"
+                            android:textColor="#FFFFFF"/>
+
+                        <EditText
+                            android:id="@+id/etDinnerBefore"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:inputType="numberDecimal"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llDinnerAfter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/llDinnerBefore">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="晚餐后:"
+                            android:textColor="#000000"
+                            android:textSize="15sp"/>
+
+                        <Button
+                            android:id="@+id/btnDinnerTimeAfter"
+                            android:layout_width="100dp"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="10dp"
+                            android:background="@drawable/btn_common"
+                            android:text="8:00"
+                            android:textColor="#FFFFFF"/>
+
+                        <EditText
+                            android:id="@+id/etDinnerAfter"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:inputType="numberDecimal"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvIsOpen"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="是否开启:"
+                        android:textColor="#4A3F35"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/llLunchAfter"/>
+
+                    <RadioGroup
+                        android:id="@+id/rgIsOpen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="@id/tvIsOpen"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvIsOpen">
+
+                        <RadioButton
+                            android:id="@+id/rbOpen"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="开启"/>
+
+                        <RadioButton
+                            android:id="@+id/rbYes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="关闭"/>
+
+                    </RadioGroup>
+
+                    <Button
+                        android:id="@+id/btnSettingBloodGlucoseMultipleCalibration"
+                        style="@style/vpButton"
+                        android:text="血糖多校准设置"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvIsOpen"/>
+
+                    <Button
+                        android:id="@+id/btnReadBloodGlucoseMultipleCalibration"
+                        style="@style/vpButton"
+                        android:text="血糖多校准读取"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/btnSettingBloodGlucoseMultipleCalibration"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.timaimee.vpdemo.utils.CollapseCardView>
+
+            <com.timaimee.vpdemo.utils.CollapseCardView
+                android:id="@+id/ccvGetRefreshTimeAndSteps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="visible"
+                app:collapseDefaultExpand="false"
+                app:collapseTitle="血糖测量"
+                app:collapseTitleColor="#E53935"
+                app:collapseTitleSize="15sp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
+
+                    <Button
+                        android:id="@+id/btnStartDetect"
+                        style="@style/vpButton"
+                        android:text="开始测量"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/btnStopDetect"
+                        style="@style/vpButton"
+                        android:text="停止测量"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/btnStartDetect"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.timaimee.vpdemo.utils.CollapseCardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

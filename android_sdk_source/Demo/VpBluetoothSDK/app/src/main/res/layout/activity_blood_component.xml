@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ScrollView
+        android:id="@+id/svTestInfo"
+        android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTitle"
+        app:layout_constraintBottom_toTopOf="@id/tvDetectProcessStatus"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/text_info_bg"
+        android:layout_height="0dp">
+        <TextView
+            android:id="@+id/tvTestInfo"
+            android:padding="10dp"
+            android:text="酸🥕别吃、酸！🍋"
+            android:textSize="14dp"
+            android:textColor="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/tvDetectProcessStatus"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ccvSettingBloodCompositionCalibration"
+        android:layout_marginBottom="10dp"
+        android:textColor="#f720f9"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <com.timaimee.vpdemo.utils.CollapseCardView
+        android:id="@+id/ccvSettingBloodCompositionCalibration"
+        app:collapseTitle="设置血液成分校准值"
+        app:collapseDefaultExpand="false"
+        app:collapseTitleSize="15sp"
+        app:collapseTitleColor="#E53935"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnReadBloodCompositionCalibration">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:orientation="vertical">
+
+            <!--            **尿酸值：**μmol/L，值域[90.0, 1000.0]，上报值域[900, 10000]-->
+            <!--            **总胆固醇：**mmol/L，值域[0.01, 100.00]，上报值域[1, 10000]-->
+            <!--            **甘油三酯：**mmol/L，值域[0.01, 100.00]-->
+            <!--            **高密度脂蛋白：**mmol/L，值域[0.01, 100.00]-->
+            <!--            **低密度脂蛋白：**mmol/L，值域[0.01, 100.00]-->
+            <!--            * @param uricAcid 尿酸-->
+            <!--            * @param tCHO 总胆固醇-->
+            <!--            * @param tAG 甘油三酯-->
+            <!--            * @param hDL 高密度脂蛋白-->
+            <!--            * @param lDL 低密度脂蛋白-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="尿酸值(μmol/L)："
+                    android:textColor="#E53935"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/etUricAcid"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:hint="值域[90.0, 1000.0]"
+                    android:textSize="14sp"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="总胆固醇(mmol/L)："
+                    android:textColor="#E53935"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/etTCHO"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textSize="14sp"
+                    android:hint="值域[0.01, 100.00]"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="甘油三酯(mmol/L)："
+                    android:textColor="#E53935"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/etTAG"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textSize="14sp"
+                    android:hint="值域[0.01, 100.00]"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="高密度脂蛋白(mmol/L)："
+                    android:textColor="#E53935"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/ethDL"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textSize="14sp"
+                    android:hint="值域[0.01, 100.00]"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="低密度脂蛋白(mmol/L)："
+                    android:textColor="#E53935"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/etLDL"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textSize="14sp"
+                    android:hint="值域[0.01, 100.00]"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <RadioGroup
+                android:id="@+id/rgIsOpen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rbOpen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="开启"/>
+
+                <RadioButton
+                    android:id="@+id/rbClose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="关闭"/>
+
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/btnSettingBloodCompositionCalibration"
+                style="@style/vpButton"
+                android:text="设置血液成分校准值" />
+        </LinearLayout>
+
+    </com.timaimee.vpdemo.utils.CollapseCardView>
+
+    <Button
+        android:id="@+id/btnReadBloodCompositionCalibration"
+        style="@style/vpButton"
+        android:text="读取血液成分校准值"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@id/btnDetect" />
+
+    <Button
+        android:id="@+id/btnDetect"
+        style="@style/vpButton"
+        android:text="血液成分测量"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

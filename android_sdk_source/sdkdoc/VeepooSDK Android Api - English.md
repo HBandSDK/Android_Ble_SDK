@@ -34,7 +34,8 @@
 | 1.2.8 | Add app hrv detect function | 2026.04.23 |
 | 1.2.9 | Added QX17 data acquisition flow control (IMU/GPS/HR real-time acquisition) and vibration motor control interfaces | 2026.04.29 |
 | 1.3.0 | Add Bluetrum Device OTA Upgrade | 2026.05.21 |
-# Import SDK
+| 1.3.1 | Added QH15 health data function | 2026.05.28 |
+## Import SDK
 ### Add Dependency
 
 ```groovy
@@ -10641,365 +10642,6 @@ VPOperateManager.getInstance().pushImageMsg(pushImagePath, new IImageMsgPushList
 
 
 
-## Customized Project JH58 PPG Test Function
-
-Prerequisites：This functionality is currently only available for the customized JH58 project; other projects can ignore it.
-
-###  Add PPG Test Switch Listener
-
-###### Interface
-
-```java
-    /**
-     * <ul>
-     *     <li style="color:#1055d2">Add ppg test swtich status change listener</li>
-     *     <li><br/></li>
-     *     <li style="color:#555555">添加PPG测量开关状态监听</li>
-     * </ul>
-     *
-     * @param listener
-     * <ul>
-     *    <li>PPG switch status operation monitoring</li>
-     *    <li>PPG开关状态操作监听</li>
-     * </ul>
-     */
-    public void addPPGTestSwitchStatusListener(IPPGSwitchOperaterListener listener)
-```
-
-###### Parameter Explanation
-
-| Parameter Name | Type                       | Description                |
-| -------------- | -------------------------- | -------------------------- |
-| listener       | IPPGSwitchOperaterListener | PPG switch status listener |
-
-**IPPGSwitchOperaterListener**--PPG switch status monitoring
-
-```kotlin
-/**
- * PPG开关操作监听类 (PPG Switch Operation Listener Class)
- */
-interface IPPGSwitchOperaterListener : IListener {
-    /**
-     * ppg开关状态读取结果 (Result of reading the PPG switch status)
-     */
-    fun onPPGSwitchStatusRead(switchStatus: PPGSwitchStatus)
-
-    /**
-     * ppg开关状态设置结果 (Result of setting the PPG switch status)
-     */
-    fun onPPGSwitchStatusSetting(switchStatus: PPGSwitchStatus)
-
-    /**
-     * ppg开关状态上报结果 (Result of reporting the PPG switch status)
-     * // Note: 'Reporting' usually means the device actively sends the status to the application.
-     */
-    fun onPPGSwitchStatusReport(switchStatus: PPGSwitchStatus)
-}
-```
-
-### Read PPG measurement status switch
-
-The settings will be called back in the addPPGTestSwitchStatusListener(IPPGSwitchOperatorListener listener) listener.
-
-###### Interface
-
-```java
- /***
-     * <ul>
-     *     <li style="color:#1055d2">read ppg test swtich status</li>
-     *     <li><br/></li>
-     *     <li style="color:#555555">读取PPG测量开关状态</li>
-     * </ul>
-     * @param bleWriteResponse
-     * <ul>
-     *    <li>the response of write oprate,if response code equals Code.REQUEST_SUCCESS means write cmd success,otherwise means write cmd fail</li>
-     *    <li>写入操作的监听</li>
-     * </ul>
-     */
-    public void readPPGSwitchStatus(BleWriteResponse bleWriteResponse)
-```
-
-###### Example Code
-
-```java
-VPOperateManager.getInstance().readPPGSwitchStatus(code -> tvPPGOptInfo.setText("读取PPG测量开关状态指令发送" + (code == Code.REQUEST_SUCCESS ? "成功" : "失败")));
-```
-
-### Set PPG measurement status switch
-
-The settings will be called back in the addPPGTestSwitchStatusListener(IPPGSwitchOperatorListener listener) listener.
-
-###### Interface
-
-```java
-/***
-     * <ul>
-     *     <li style="color:#1055d2">set ppg test switch status</li>
-     *     <li><br/></li>
-     *     <li style="color:#555555">设置PPG测量开关状态</li>
-     * </ul>
-     * @param ppgSwitchStatus
-     * <ul>
-     *    <li>Set the PPG measurement switch status</li>
-     *    <li>设置的PPG测量开关状态</li>
-     * </ul>
-     * @param bleWriteResponse
-     * <ul>
-     *    <li>the response of write oprate,if response code equals Code.REQUEST_SUCCESS means write cmd success,otherwise means write cmd fail</li>
-     *    <li>写入操作的监听</li>
-     * </ul>
-     */
-public void setPPGSwitchStatus(PPGSwitchStatus ppgSwitchStatus, BleWriteResponse bleWriteResponse)
-```
-
-###### Example Code
-
-```java
-VPOperateManager.getInstance().setPPGSwitchStatus(ppgSwitchStatus, code -> tvPPGOptInfo.setText("设置PPG测量开关状态指令发送" + (code == Code.REQUEST_SUCCESS ? "成功" : "失败")));
-```
-
-
-
-### Read PPG raw data
-
-###### Interface
-
-```java
-    /***
-     * <ul>
-     *     <li style="color:#1055d2">read ppg test raw data</li>
-     *     <li><br/></li>
-     *     <li style="color:#555555">读取PPG测量原始数据</li>
-     * </ul>
-     * @param startTime
-     * <ul>
-     *    <li>Start time for reading PPG raw data</li>
-     *    <li>读取PPG原始数据的开始时间</li>
-     * </ul>
-     * @param testMode
-     * <ul>
-     *    <li>Read PPG raw data in this mode</li>
-     *    <li>读取该模式下的PPG原始数据</li>
-     * </ul>
-     * @param bleWriteResponse
-     * <ul>
-     *    <li>the response of write oprate,if response code equals Code.REQUEST_SUCCESS means write cmd success,otherwise means write cmd fail</li>
-     *    <li>写入操作的监听</li>
-     * </ul>
-     * @param listener
-     * <ul>
-     *    <li>Monitor PPG raw data reading and reporting</li>
-     *    <li>PPG原始数据读取上报的监听</li>
-     * </ul>
-     */
-    public void readPPGRawData(TimeData startTime, PPGTestMode testMode, BleWriteResponse bleWriteResponse, IPPGRawDataReadListener listener) 
-```
-
-###### Parameter Explanation
-
-| Parameter Name   | Type                    | Description                                                  |
-| ---------------- | ----------------------- | ------------------------------------------------------------ |
-| startTime        | TimeData                | The device will report data from that time onwards based on the time it reads the raw PPG data. |
-| testMode         | PPGTestMode             | Start time for reading PPG raw data,The device will report data from this timestamp onwards. |
-| bleWriteResponse | BleWriteResponse        | Listener for write operations                                |
-| listener         | IPPGRawDataReadListener | Listening for PPG raw data reading and reporting             |
-
-PPGTestMode
-
-```kotlin
-enum class PPGTestMode(val value: Byte, val des: String) {
-    MODE1(0x01, "每15分钟采集10秒时长，绿光+加速度原始数据"),
-    MODE2(0x02, "每5分钟采集1分钟时长，绿光+加速度原始数据"), ;
-
-    companion object {
-        fun toTestMode(@IntRange(from = 1, to = 2) value: Int): PPGTestMode {
-            return PPGTestMode.values().findLast {
-                it.value.toInt() == value
-            }!!
-        }
-    }
-}
-```
-
-**TimeData**
-
-```java
-public class TimeData {
-
-    public int year;
-    public int day;
-    public int month;
-    public int hour;
-    public int minute;
-    public int second;
-    /* 星期几 **/
-    public int weekDay;
-......
-}
-```
-
-**IPPGRawDataReadListener** -- Listening for PPG raw data reading and reporting
-
-```kotlin
-/**
- * PPG原始数据的读取监听 (PPG Raw Data Read Listener)
- */
-interface IPPGRawDataReadListener : IListener {
-    /**
-     * 开始读取PPG数据 (Start reading PPG data)
-     * @param count ppg数据的总组数 (Total number of PPG data groups/sets)
-     */
-    fun onPPGReadStart(count: Int)
-
-    /**
-     * 一组PPG原始数据读取监听 (Listener for reading one set/group of PPG raw data)
-     * @param index 第几组 (Which group/set number)
-     * @param count 总组数 (Total number of groups/sets)
-     * @param ppgRawData 该组的PPG原始数据 (The PPG raw data for this group/set)
-     */
-    fun onPPGRawDataRead(index: Int, count: Int, ppgRawData: PPGRawData)
-
-    /**
-     * 所有PPG原始数据均已读取完成 (All PPG raw data has been read completely)
-     * @param ppgReadData ppg原始数据 (The collected PPG raw data)
-     */
-    fun onPPGRawDataReadComplete(ppgReadData: PPGReadData)
-
-    /**
-     * PPG原始数据读取终止 (PPG raw data reading terminated/stopped)
-     */
-    fun onPPGRawDataReadStop()
-}
-```
-
-###### Example Code
-
-```java
-private void readPPGRawData() {
-    sb.setLength(0);
-    appendMsg("【读取】PPG原始数据");
-    VPOperateManager.getInstance().readPPGRawData(timeData, ppgTestMode, new BleWriteResponse() {
-        @Override
-        public void onResponse(int code) {
-            appendMsg("【读取PPG测量开关状态指令发送" + (code == Code.REQUEST_SUCCESS ? "成功】" : "失败】"));
-        }
-    }, new IPPGRawDataReadListener() {
-        @Override
-        public void onPPGReadStart(int count) {
-            appendMsg("开始读取PPG原始数据。\n一共" + count + "组数据");
-        }
-
-        @Override
-        public void onPPGRawDataRead(int index, int count, @NonNull PPGRawData ppgRawData) {
-            appendMsg("PPG原始数据读取中。\n[" + index + "/" + count + "] --> " + ppgRawData.toString());
-        }
-
-        @Override
-        public void onPPGRawDataReadComplete(@NonNull PPGReadData ppgReadData) {
-            appendMsg("PPG原始数据读取完成。\n" + ppgReadData);
-        }
-
-        @Override
-        public void onPPGRawDataReadStop() {
-            String content = tvPPGOptInfo.getText().toString();
-            appendMsg(content + "\nPPG原始数据读取停止。");
-        }
-    });
-}
-```
-
-
-
-### PPG raw signal real-time transmission
-
-#### Add PPG raw signal monitoring
-
-###### Interface
-
-```java
-/**
-     * 设置PPG高频实时传输监听
-     * Configure PPG high-frequency real-time transmission monitoring
-     * @param listener
-     */
-public void addDevicePPGRealTimeTransferListener(IPPGRealTimeTransmissionListener listener)
-```
-
-###### IPPGRealTimeTransmissionListener
-
-```kotlin
-interface IPPGRealTimeTransmissionListener {
-
-
-    /**
-     * （手环请求）高频实时传输请求 (High-frequency real-time transfer request (from device/band))
-     * @param isRequestOpen 是否请求开启高频传输 (Whether the request is to enable high-frequency transmission)
-     */
-    fun onDeviceRequestPPGRealTimeTransfer(isRequestOpen: Boolean)
-
-    /**
-     * （App请求）高频实时传输请求 (High-frequency real-time transfer request (from App))
-     * @param isSuccess 是否成功 (Whether the request was successful)
-     */
-    fun onAppRequestPPGRealTimeTransfer(isSuccess: Boolean)
-
-
-    /**
-     * 绿光原始数据上报 (Green light raw data reporting)
-     * // Note: 'Reporting' typically means data actively sent from the device to the application.
-     */
-    fun onGreenLightDataReport(greenLightDataList: MutableList<Int>)
-
-    /**
-     * 加速度数据上报 (Acceleration data reporting)
-     * // Note: 'Reporting' typically means data actively sent from the device to the application.
-     */
-    fun onAccelerationDataReport(accDataList: MutableList<AccelerationData>)
-
-}
-```
-
-###### AccelerationData
-
-```kotlin
-/**
- * 加速度数据 (Acceleration Data)
- * @param x X轴加速度 (X-axis acceleration)
- * @param y Y轴加速 (Y-axis acceleration)
- * @param z Z轴加速 (Z-axis acceleration)
- */
-data class AccelerationData(val x: Int, val y: Int, val z: Int)
-```
-
-#### The app actively enabled PPG real-time transmission.
-
-###### Interface
-
-```java
-/**
- * app请求开始PPG实时传输 (App requests to start PPG real-time transmission)
- *
- * @param bleWriteResponse   指令写入结果回调 (Callback for the command write result)
- * @param transmissionListener  PPG实时传输监听 (PPG real-time transmission listener)
- */
-public void startPPGRealTimeTransmission(BleWriteResponse bleWriteResponse, IPPGRealTimeTransmissionListener transmissionListener)
-```
-
-#### The app actively stopped PPG real-time transmission.
-
-###### Interface
-
-```java
-/**
- * app请求停止PPG实时传输 (App requests to stop PPG real-time transmission)
- *
- * @param bleWriteResponse 指令写入结果回调 (Callback for the command write result)
- */
-public void stopPPGRealTimeTransmission(BleWriteResponse bleWriteResponse)
-```
-
-
-
 ## Mini-Checkup Function
 
 Prerequisite: Device must support mini-checkup function. Judgment condition:
@@ -11790,162 +11432,6 @@ The device must support GSR functionality.
             });
 ```
 
-
-
-## ZT163 Project Device-Always-Off-Screen function
-
-Prerequisite: The device must be a ZT163 project device.
-
-Note: All the following interfaces will only work if the device is a ZT163 project device.
-
-### Set ZT163 Device-Always-Off-Screen statue
-
-###### Interface
-
-```java
-/**
-     * [Set ZT163 Project Device Always Off Screen]
-     * <p>
-     * 设置 ZT163 项目常灭屏功能。
-     *
-     * @param isOpen           Function switch. | 是否开启：true-开启，false-关闭。
-     * @param bleWriteResponse Write operation response. | 蓝牙指令写入回调。
-     * @param listener         Operation listener. | 常灭屏功能操作监听。
-     */
-public void setZT163DeviceAlwaysOffScreen(boolean isOpen, BleWriteResponse bleWriteResponse, IZT163DeviceAlwaysOffScreenOptListener listener)
-```
-
-###### Parameter Description
-
-| Parameter Name   | Type               | Description                                       |
-| ---------------- | ------------------ | ------------------------------------------------- |
-| isOpen           | boolean            | true:open the function，false: close the function |
-| bleWriteResponse | BleWriteResponse   | Write operation listener                          |
-| listener         | IGsrDetectListener | ZT163 Device-Always-Off-Screen operation callback |
-
-### Read ZT163 Device-Always-Off-Screen statue
-
-###### Interface
-
-```java
-/**
-     * [Read Always-Off-Screen Status] 读取 ZT163 设备常灭屏状态
-     *
-     * @param bleWriteResponse 写入操作回调 (Success if Code.REQUEST_SUCCESS)
-     * @param listener         状态监听器 (Handles data feedback)
-     */
-public void readZT163DeviceAlwaysOffScreen(BleWriteResponse bleWriteResponse, IZT163DeviceAlwaysOffScreenOptListener listener)
-```
-
-###### Parameter Description
-
-| Parameter Name   | Type               | Description                                       |
-| ---------------- | ------------------ | ------------------------------------------------- |
-| bleWriteResponse | BleWriteResponse   | Write operation listener                          |
-| listener         | IGsrDetectListener | ZT163 Device-Always-Off-Screen operation callback |
-
-**IZT163DeviceAlwaysOffScreenOptListener** -- ZT163 Device-Always-Off-Screen operation callback
-
-```kotlin
-/**
- * Listener for ZT163 Device Always-Off-Screen operations.
- * ZT163 项目设备常灭屏功能操作监听。
- */
-interface IZT163DeviceAlwaysOffScreenOptListener : IListener {
-    /**
-     * Triggered when Always-Off-Screen setting is successful.
-     * 常灭屏设置成功。
-     * @param isOpen true: Enabled, false: Disabled.
-     */
-    fun onZT163DeviceAlwaysOffScreenSettingSuccess(isOpen: Boolean)
-
-    /**
-     * Triggered when Always-Off-Screen setting fails.
-     * 常灭屏设置失败。
-     */
-    fun onZT163DeviceAlwaysOffScreenSettingFailed()
-
-    /**
-     * Callback for Always-Off-Screen status reporting from device.
-     * 设备常灭屏状态主动上报。
-     * @param isOpen true: Enabled, false: Disabled.
-     */
-    fun onZT163DeviceAlwaysOffScreenReport(isOpen: Boolean)
-
-    /**
-     * Triggered when the current device does not support this feature.
-     * 当前设备不支持此功能。
-     */
-    fun onFunctionNotSupport()
-}
-```
-
-###### Example Code
-
-```java
-/**
- * Activity for controlling ZT163 Device Always-Off-Screen feature.
- * ZT163 设备常灭屏功能界面。
- */
-public class ZT163DeviceAlwaysOffScreenActivity extends AppCompatActivity implements IZT163DeviceAlwaysOffScreenOptListener {
-
-    private TextView tvInfo;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_zt163_device_always_off_screen);
-        
-        tvInfo = findViewById(R.id.tvInfo);
-
-        // Enable Always-Off-Screen | 开启常灭屏
-        findViewById(R.id.btnOpen).setOnClickListener(v -> {
-            VPOperateManager.getInstance().setZT163DeviceAlwaysOffScreen(true, code -> {
-                // Command sent callback | 指令发送回调
-            }, this);
-        });
-
-        // Disable Always-Off-Screen | 关闭常灭屏
-        findViewById(R.id.btnClose).setOnClickListener(v -> {
-            VPOperateManager.getInstance().setZT163DeviceAlwaysOffScreen(false, code -> {
-                // Command sent callback | 指令发送回调
-            }, this);
-        });
-
-        // Read Current Status | 读取当前状态
-        findViewById(R.id.btnRead).setOnClickListener(v -> {
-            VPOperateManager.getInstance().readZT163DeviceAlwaysOffScreen(code -> {
-                // Command sent callback | 指令发送回调
-            }, this);
-        });
-    }
-
-    @Override
-    public void onZT163DeviceAlwaysOffScreenSettingSuccess(boolean isOpen) {
-        String state = isOpen ? "ON/开启" : "OFF/关闭";
-        tvInfo.setText("Setting Success | 设置成功: " + state);
-    }
-
-    @Override
-    public void onZT163DeviceAlwaysOffScreenSettingFailed() {
-        tvInfo.setText("Setting Failed | 设置失败");
-    }
-
-    @Override
-    public void onZT163DeviceAlwaysOffScreenReport(boolean isOpen) {
-        String state = isOpen ? "ON/开启" : "OFF/关闭";
-        tvInfo.setText("Status Reported | 状态上报: " + state);
-    }
-
-    @Override
-    public void onFunctionNotSupport() {
-        tvInfo.setText("Function Not Supported | 当前设备不支持该功能");
-    }
-}
-```
-
-
-
 ## Health Auxiliary Functions
 
 **Prerequisite:** The device must support health auxiliary functions. The judging condition is as follows:
@@ -12318,15 +11804,522 @@ VPOperateManager.getInstance().bleDeviceRename("MyDevice", object : IDeviceRenam
 }, bleWriteResponse)
 ```
 
+## Custom Project Features
+
+### JH58 PPG Test Function
+
+Prerequisites：This functionality is currently only available for the customized JH58 project; other projects can ignore it.
+
+####  Add PPG Test Switch Listener
+
+###### Interface
+
+```java
+    /**
+     * <ul>
+     *     <li style="color:#1055d2">Add ppg test swtich status change listener</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">添加PPG测量开关状态监听</li>
+     * </ul>
+     *
+     * @param listener
+     * <ul>
+     *    <li>PPG switch status operation monitoring</li>
+     *    <li>PPG开关状态操作监听</li>
+     * </ul>
+     */
+    public void addPPGTestSwitchStatusListener(IPPGSwitchOperaterListener listener)
+```
+
+###### Parameter Explanation
+
+| Parameter Name | Type                       | Description                |
+| -------------- | -------------------------- | -------------------------- |
+| listener       | IPPGSwitchOperaterListener | PPG switch status listener |
+
+**IPPGSwitchOperaterListener**--PPG switch status monitoring
+
+```kotlin
+/**
+ * PPG开关操作监听类 (PPG Switch Operation Listener Class)
+ */
+interface IPPGSwitchOperaterListener : IListener {
+    /**
+     * ppg开关状态读取结果 (Result of reading the PPG switch status)
+     */
+    fun onPPGSwitchStatusRead(switchStatus: PPGSwitchStatus)
+
+    /**
+     * ppg开关状态设置结果 (Result of setting the PPG switch status)
+     */
+    fun onPPGSwitchStatusSetting(switchStatus: PPGSwitchStatus)
+
+    /**
+     * ppg开关状态上报结果 (Result of reporting the PPG switch status)
+     * // Note: 'Reporting' usually means the device actively sends the status to the application.
+     */
+    fun onPPGSwitchStatusReport(switchStatus: PPGSwitchStatus)
+}
+```
+
+#### Read PPG measurement status switch
+
+The settings will be called back in the addPPGTestSwitchStatusListener(IPPGSwitchOperatorListener listener) listener.
+
+###### Interface
+
+```java
+ /***
+     * <ul>
+     *     <li style="color:#1055d2">read ppg test swtich status</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">读取PPG测量开关状态</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if response code equals Code.REQUEST_SUCCESS means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     */
+    public void readPPGSwitchStatus(BleWriteResponse bleWriteResponse)
+```
+
+###### Example Code
+
+```java
+VPOperateManager.getInstance().readPPGSwitchStatus(code -> tvPPGOptInfo.setText("读取PPG测量开关状态指令发送" + (code == Code.REQUEST_SUCCESS ? "成功" : "失败")));
+```
+
+#### Set PPG measurement status switch
+
+The settings will be called back in the addPPGTestSwitchStatusListener(IPPGSwitchOperatorListener listener) listener.
+
+###### Interface
+
+```java
+/***
+     * <ul>
+     *     <li style="color:#1055d2">set ppg test switch status</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">设置PPG测量开关状态</li>
+     * </ul>
+     * @param ppgSwitchStatus
+     * <ul>
+     *    <li>Set the PPG measurement switch status</li>
+     *    <li>设置的PPG测量开关状态</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if response code equals Code.REQUEST_SUCCESS means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     */
+public void setPPGSwitchStatus(PPGSwitchStatus ppgSwitchStatus, BleWriteResponse bleWriteResponse)
+```
+
+###### Example Code
+
+```java
+VPOperateManager.getInstance().setPPGSwitchStatus(ppgSwitchStatus, code -> tvPPGOptInfo.setText("设置PPG测量开关状态指令发送" + (code == Code.REQUEST_SUCCESS ? "成功" : "失败")));
+```
 
 
 
+#### Read PPG raw data
 
-## QX17 Data Acquisition
+###### Interface
+
+```java
+    /***
+     * <ul>
+     *     <li style="color:#1055d2">read ppg test raw data</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">读取PPG测量原始数据</li>
+     * </ul>
+     * @param startTime
+     * <ul>
+     *    <li>Start time for reading PPG raw data</li>
+     *    <li>读取PPG原始数据的开始时间</li>
+     * </ul>
+     * @param testMode
+     * <ul>
+     *    <li>Read PPG raw data in this mode</li>
+     *    <li>读取该模式下的PPG原始数据</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if response code equals Code.REQUEST_SUCCESS means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     * @param listener
+     * <ul>
+     *    <li>Monitor PPG raw data reading and reporting</li>
+     *    <li>PPG原始数据读取上报的监听</li>
+     * </ul>
+     */
+    public void readPPGRawData(TimeData startTime, PPGTestMode testMode, BleWriteResponse bleWriteResponse, IPPGRawDataReadListener listener) 
+```
+
+###### Parameter Explanation
+
+| Parameter Name   | Type                    | Description                                                  |
+| ---------------- | ----------------------- | ------------------------------------------------------------ |
+| startTime        | TimeData                | The device will report data from that time onwards based on the time it reads the raw PPG data. |
+| testMode         | PPGTestMode             | Start time for reading PPG raw data,The device will report data from this timestamp onwards. |
+| bleWriteResponse | BleWriteResponse        | Listener for write operations                                |
+| listener         | IPPGRawDataReadListener | Listening for PPG raw data reading and reporting             |
+
+PPGTestMode
+
+```kotlin
+enum class PPGTestMode(val value: Byte, val des: String) {
+    MODE1(0x01, "每15分钟采集10秒时长，绿光+加速度原始数据"),
+    MODE2(0x02, "每5分钟采集1分钟时长，绿光+加速度原始数据"), ;
+
+    companion object {
+        fun toTestMode(@IntRange(from = 1, to = 2) value: Int): PPGTestMode {
+            return PPGTestMode.values().findLast {
+                it.value.toInt() == value
+            }!!
+        }
+    }
+}
+```
+
+**TimeData**
+
+```java
+public class TimeData {
+
+    public int year;
+    public int day;
+    public int month;
+    public int hour;
+    public int minute;
+    public int second;
+    /* 星期几 **/
+    public int weekDay;
+......
+}
+```
+
+**IPPGRawDataReadListener** -- Listening for PPG raw data reading and reporting
+
+```kotlin
+/**
+ * PPG原始数据的读取监听 (PPG Raw Data Read Listener)
+ */
+interface IPPGRawDataReadListener : IListener {
+    /**
+     * 开始读取PPG数据 (Start reading PPG data)
+     * @param count ppg数据的总组数 (Total number of PPG data groups/sets)
+     */
+    fun onPPGReadStart(count: Int)
+
+    /**
+     * 一组PPG原始数据读取监听 (Listener for reading one set/group of PPG raw data)
+     * @param index 第几组 (Which group/set number)
+     * @param count 总组数 (Total number of groups/sets)
+     * @param ppgRawData 该组的PPG原始数据 (The PPG raw data for this group/set)
+     */
+    fun onPPGRawDataRead(index: Int, count: Int, ppgRawData: PPGRawData)
+
+    /**
+     * 所有PPG原始数据均已读取完成 (All PPG raw data has been read completely)
+     * @param ppgReadData ppg原始数据 (The collected PPG raw data)
+     */
+    fun onPPGRawDataReadComplete(ppgReadData: PPGReadData)
+
+    /**
+     * PPG原始数据读取终止 (PPG raw data reading terminated/stopped)
+     */
+    fun onPPGRawDataReadStop()
+}
+```
+
+###### Example Code
+
+```java
+private void readPPGRawData() {
+    sb.setLength(0);
+    appendMsg("【读取】PPG原始数据");
+    VPOperateManager.getInstance().readPPGRawData(timeData, ppgTestMode, new BleWriteResponse() {
+        @Override
+        public void onResponse(int code) {
+            appendMsg("【读取PPG测量开关状态指令发送" + (code == Code.REQUEST_SUCCESS ? "成功】" : "失败】"));
+        }
+    }, new IPPGRawDataReadListener() {
+        @Override
+        public void onPPGReadStart(int count) {
+            appendMsg("开始读取PPG原始数据。\n一共" + count + "组数据");
+        }
+
+        @Override
+        public void onPPGRawDataRead(int index, int count, @NonNull PPGRawData ppgRawData) {
+            appendMsg("PPG原始数据读取中。\n[" + index + "/" + count + "] --> " + ppgRawData.toString());
+        }
+
+        @Override
+        public void onPPGRawDataReadComplete(@NonNull PPGReadData ppgReadData) {
+            appendMsg("PPG原始数据读取完成。\n" + ppgReadData);
+        }
+
+        @Override
+        public void onPPGRawDataReadStop() {
+            String content = tvPPGOptInfo.getText().toString();
+            appendMsg(content + "\nPPG原始数据读取停止。");
+        }
+    });
+}
+```
+
+
+
+#### PPG raw signal real-time transmission
+
+##### Add PPG raw signal monitoring
+
+###### Interface
+
+```java
+/**
+     * 设置PPG高频实时传输监听
+     * Configure PPG high-frequency real-time transmission monitoring
+     * @param listener
+     */
+public void addDevicePPGRealTimeTransferListener(IPPGRealTimeTransmissionListener listener)
+```
+
+###### IPPGRealTimeTransmissionListener
+
+```kotlin
+interface IPPGRealTimeTransmissionListener {
+
+
+    /**
+     * （手环请求）高频实时传输请求 (High-frequency real-time transfer request (from device/band))
+     * @param isRequestOpen 是否请求开启高频传输 (Whether the request is to enable high-frequency transmission)
+     */
+    fun onDeviceRequestPPGRealTimeTransfer(isRequestOpen: Boolean)
+
+    /**
+     * （App请求）高频实时传输请求 (High-frequency real-time transfer request (from App))
+     * @param isSuccess 是否成功 (Whether the request was successful)
+     */
+    fun onAppRequestPPGRealTimeTransfer(isSuccess: Boolean)
+
+
+    /**
+     * 绿光原始数据上报 (Green light raw data reporting)
+     * // Note: 'Reporting' typically means data actively sent from the device to the application.
+     */
+    fun onGreenLightDataReport(greenLightDataList: MutableList<Int>)
+
+    /**
+     * 加速度数据上报 (Acceleration data reporting)
+     * // Note: 'Reporting' typically means data actively sent from the device to the application.
+     */
+    fun onAccelerationDataReport(accDataList: MutableList<AccelerationData>)
+
+}
+```
+
+###### AccelerationData
+
+```kotlin
+/**
+ * 加速度数据 (Acceleration Data)
+ * @param x X轴加速度 (X-axis acceleration)
+ * @param y Y轴加速 (Y-axis acceleration)
+ * @param z Z轴加速 (Z-axis acceleration)
+ */
+data class AccelerationData(val x: Int, val y: Int, val z: Int)
+```
+
+##### The app actively enabled PPG real-time transmission.
+
+###### Interface
+
+```java
+/**
+ * app请求开始PPG实时传输 (App requests to start PPG real-time transmission)
+ *
+ * @param bleWriteResponse   指令写入结果回调 (Callback for the command write result)
+ * @param transmissionListener  PPG实时传输监听 (PPG real-time transmission listener)
+ */
+public void startPPGRealTimeTransmission(BleWriteResponse bleWriteResponse, IPPGRealTimeTransmissionListener transmissionListener)
+```
+
+##### The app actively stopped PPG real-time transmission.
+
+###### Interface
+
+```java
+/**
+ * app请求停止PPG实时传输 (App requests to stop PPG real-time transmission)
+ *
+ * @param bleWriteResponse 指令写入结果回调 (Callback for the command write result)
+ */
+public void stopPPGRealTimeTransmission(BleWriteResponse bleWriteResponse)
+```
+
+### ZT163 Project Device-Always-Off-Screen function
+
+Prerequisite: The device must be a ZT163 project device.
+
+Note: All the following interfaces will only work if the device is a ZT163 project device.
+
+#### Set ZT163 Device-Always-Off-Screen statue
+
+###### Interface
+
+```java
+/**
+     * [Set ZT163 Project Device Always Off Screen]
+     * <p>
+     * 设置 ZT163 项目常灭屏功能。
+     *
+     * @param isOpen           Function switch. | 是否开启：true-开启，false-关闭。
+     * @param bleWriteResponse Write operation response. | 蓝牙指令写入回调。
+     * @param listener         Operation listener. | 常灭屏功能操作监听。
+     */
+public void setZT163DeviceAlwaysOffScreen(boolean isOpen, BleWriteResponse bleWriteResponse, IZT163DeviceAlwaysOffScreenOptListener listener)
+```
+
+###### Parameter Description
+
+| Parameter Name   | Type               | Description                                       |
+| ---------------- | ------------------ | ------------------------------------------------- |
+| isOpen           | boolean            | true:open the function，false: close the function |
+| bleWriteResponse | BleWriteResponse   | Write operation listener                          |
+| listener         | IGsrDetectListener | ZT163 Device-Always-Off-Screen operation callback |
+
+#### Read ZT163 Device-Always-Off-Screen statue
+
+###### Interface
+
+```java
+/**
+     * [Read Always-Off-Screen Status] 读取 ZT163 设备常灭屏状态
+     *
+     * @param bleWriteResponse 写入操作回调 (Success if Code.REQUEST_SUCCESS)
+     * @param listener         状态监听器 (Handles data feedback)
+     */
+public void readZT163DeviceAlwaysOffScreen(BleWriteResponse bleWriteResponse, IZT163DeviceAlwaysOffScreenOptListener listener)
+```
+
+###### Parameter Description
+
+| Parameter Name   | Type               | Description                                       |
+| ---------------- | ------------------ | ------------------------------------------------- |
+| bleWriteResponse | BleWriteResponse   | Write operation listener                          |
+| listener         | IGsrDetectListener | ZT163 Device-Always-Off-Screen operation callback |
+
+**IZT163DeviceAlwaysOffScreenOptListener** -- ZT163 Device-Always-Off-Screen operation callback
+
+```kotlin
+/**
+ * Listener for ZT163 Device Always-Off-Screen operations.
+ * ZT163 项目设备常灭屏功能操作监听。
+ */
+interface IZT163DeviceAlwaysOffScreenOptListener : IListener {
+    /**
+     * Triggered when Always-Off-Screen setting is successful.
+     * 常灭屏设置成功。
+     * @param isOpen true: Enabled, false: Disabled.
+     */
+    fun onZT163DeviceAlwaysOffScreenSettingSuccess(isOpen: Boolean)
+
+    /**
+     * Triggered when Always-Off-Screen setting fails.
+     * 常灭屏设置失败。
+     */
+    fun onZT163DeviceAlwaysOffScreenSettingFailed()
+
+    /**
+     * Callback for Always-Off-Screen status reporting from device.
+     * 设备常灭屏状态主动上报。
+     * @param isOpen true: Enabled, false: Disabled.
+     */
+    fun onZT163DeviceAlwaysOffScreenReport(isOpen: Boolean)
+
+    /**
+     * Triggered when the current device does not support this feature.
+     * 当前设备不支持此功能。
+     */
+    fun onFunctionNotSupport()
+}
+```
+
+###### Example Code
+
+```java
+/**
+ * Activity for controlling ZT163 Device Always-Off-Screen feature.
+ * ZT163 设备常灭屏功能界面。
+ */
+public class ZT163DeviceAlwaysOffScreenActivity extends AppCompatActivity implements IZT163DeviceAlwaysOffScreenOptListener {
+
+    private TextView tvInfo;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_zt163_device_always_off_screen);
+        
+        tvInfo = findViewById(R.id.tvInfo);
+
+        // Enable Always-Off-Screen | 开启常灭屏
+        findViewById(R.id.btnOpen).setOnClickListener(v -> {
+            VPOperateManager.getInstance().setZT163DeviceAlwaysOffScreen(true, code -> {
+                // Command sent callback | 指令发送回调
+            }, this);
+        });
+
+        // Disable Always-Off-Screen | 关闭常灭屏
+        findViewById(R.id.btnClose).setOnClickListener(v -> {
+            VPOperateManager.getInstance().setZT163DeviceAlwaysOffScreen(false, code -> {
+                // Command sent callback | 指令发送回调
+            }, this);
+        });
+
+        // Read Current Status | 读取当前状态
+        findViewById(R.id.btnRead).setOnClickListener(v -> {
+            VPOperateManager.getInstance().readZT163DeviceAlwaysOffScreen(code -> {
+                // Command sent callback | 指令发送回调
+            }, this);
+        });
+    }
+
+    @Override
+    public void onZT163DeviceAlwaysOffScreenSettingSuccess(boolean isOpen) {
+        String state = isOpen ? "ON/开启" : "OFF/关闭";
+        tvInfo.setText("Setting Success | 设置成功: " + state);
+    }
+
+    @Override
+    public void onZT163DeviceAlwaysOffScreenSettingFailed() {
+        tvInfo.setText("Setting Failed | 设置失败");
+    }
+
+    @Override
+    public void onZT163DeviceAlwaysOffScreenReport(boolean isOpen) {
+        String state = isOpen ? "ON/开启" : "OFF/关闭";
+        tvInfo.setText("Status Reported | 状态上报: " + state);
+    }
+
+    @Override
+    public void onFunctionNotSupport() {
+        tvInfo.setText("Function Not Supported | 当前设备不支持该功能");
+    }
+}
+```
+
+### QX17 Data Acquisition
 
 QX17 project data acquisition flow control feature, supporting real-time IMU (100Hz), GPS (1Hz), and heart rate (1Hz) data acquisition. The SDK implements internal packet loss detection and automatic retransmission.
 
-#### Call Flow
+##### Call Flow
 
 ```mermaid
 flowchart TD
@@ -12347,7 +12340,7 @@ flowchart TD
     Callback --> Stop[vpQX17StopDataAcquisition<br/>Stop Acquisition]
 ```
 
-#### Prerequisites
+##### Prerequisites
 
 Device is connected and password verification is complete
 
@@ -12365,9 +12358,9 @@ setVpQX17DataAcquisitionStateListener(listener)
 
 ###### Parameters
 
-| Parameter | Type                              | Description                          |
-| --------- | --------------------------------- | ------------------------------------ |
-| listener  | IQX17DataAcquisitionStateListener | Data acquisition state callback      |
+| Parameter | Type                              | Description                     |
+| --------- | --------------------------------- | ------------------------------- |
+| listener  | IQX17DataAcquisitionStateListener | Data acquisition state callback |
 
 ###### Return Data
 
@@ -12408,10 +12401,10 @@ vpQX17StartDataAcquisition(bleWriteResponse, listener)
 
 ###### Parameters
 
-| Parameter        | Type                         | Description              |
-| ---------------- | ---------------------------- | ------------------------ |
-| bleWriteResponse | IBleWriteResponse            | BLE write response       |
-| listener         | IQX17DataAcquisitionListener | Data acquisition callback|
+| Parameter        | Type                         | Description               |
+| ---------------- | ---------------------------- | ------------------------- |
+| bleWriteResponse | IBleWriteResponse            | BLE write response        |
+| listener         | IQX17DataAcquisitionListener | Data acquisition callback |
 
 ###### Return Data
 
@@ -12449,34 +12442,34 @@ void onQX17HeartRateData(QX17HeartRateData heartRateData);
 
 **QX17IMUData** -- IMU data
 
-| Variable  | Type  | Description                                    |
-| --------- | ----- | ---------------------------------------------- |
-| ax        | short | Accelerometer X-axis                           |
-| ay        | short | Accelerometer Y-axis                           |
-| az        | short | Accelerometer Z-axis                           |
-| gx        | short | Gyroscope X-axis                               |
-| gy        | short | Gyroscope Y-axis                               |
-| gz        | short | Gyroscope Z-axis                               |
-| mx        | short | Magnetometer X-axis                            |
-| my        | short | Magnetometer Y-axis                            |
-| mz        | short | Magnetometer Z-axis                            |
-| timestamp | int   | Timestamp (ms offset from acquisition start)   |
+| Variable  | Type  | Description                                  |
+| --------- | ----- | -------------------------------------------- |
+| ax        | short | Accelerometer X-axis                         |
+| ay        | short | Accelerometer Y-axis                         |
+| az        | short | Accelerometer Z-axis                         |
+| gx        | short | Gyroscope X-axis                             |
+| gy        | short | Gyroscope Y-axis                             |
+| gz        | short | Gyroscope Z-axis                             |
+| mx        | short | Magnetometer X-axis                          |
+| my        | short | Magnetometer Y-axis                          |
+| mz        | short | Magnetometer Z-axis                          |
+| timestamp | int   | Timestamp (ms offset from acquisition start) |
 
 **QX17GPSData** -- GPS data
 
-| Variable  | Type  | Description                                    |
-| --------- | ----- | ---------------------------------------------- |
-| latitude  | float | Latitude                                       |
-| longitude | float | Longitude                                      |
-| accuracy  | float | Accuracy (meters)                              |
-| timestamp | int   | Timestamp (ms offset from acquisition start)   |
+| Variable  | Type  | Description                                  |
+| --------- | ----- | -------------------------------------------- |
+| latitude  | float | Latitude                                     |
+| longitude | float | Longitude                                    |
+| accuracy  | float | Accuracy (meters)                            |
+| timestamp | int   | Timestamp (ms offset from acquisition start) |
 
 **QX17HeartRateData** -- Heart rate data
 
-| Variable  | Type  | Description                                    |
-| --------- | ----- | ---------------------------------------------- |
-| heartRate | int   | Heart rate value                               |
-| timestamp | int   | Timestamp (ms offset from acquisition start)   |
+| Variable  | Type | Description                                  |
+| --------- | ---- | -------------------------------------------- |
+| heartRate | int  | Heart rate value                             |
+| timestamp | int  | Timestamp (ms offset from acquisition start) |
 
 ###### Example Code
 
@@ -12518,9 +12511,9 @@ vpQX17StopDataAcquisition(bleWriteResponse)
 
 ###### Parameters
 
-| Parameter        | Type              | Description         |
-| ---------------- | ----------------- | ------------------- |
-| bleWriteResponse | IBleWriteResponse | BLE write response  |
+| Parameter        | Type              | Description        |
+| ---------------- | ----------------- | ------------------ |
+| bleWriteResponse | IBleWriteResponse | BLE write response |
 
 ###### Example Code
 
@@ -12542,10 +12535,10 @@ vpQX17ContinueDataAcquisition(bleWriteResponse, listener)
 
 ###### Parameters
 
-| Parameter        | Type                         | Description              |
-| ---------------- | ---------------------------- | ------------------------ |
-| bleWriteResponse | IBleWriteResponse            | BLE write response       |
-| listener         | IQX17DataAcquisitionListener | Data acquisition callback|
+| Parameter        | Type                         | Description               |
+| ---------------- | ---------------------------- | ------------------------- |
+| bleWriteResponse | IBleWriteResponse            | BLE write response        |
+| listener         | IQX17DataAcquisitionListener | Data acquisition callback |
 
 ###### Return Data
 
@@ -12585,24 +12578,24 @@ vpQX17SetVibrationMode(bleWriteResponse, mode, duration)
 
 ###### Parameters
 
-| Parameter        | Type                | Description                                     |
-| ---------------- | ------------------- | ----------------------------------------------- |
-| bleWriteResponse | IBleWriteResponse   | BLE write response                              |
-| mode             | EQX17VibrationMode  | Vibration mode enum, see vibration mode table   |
-| duration         | int                 | Duration (unit: 10ms), 0=use default pattern    |
+| Parameter        | Type               | Description                                   |
+| ---------------- | ------------------ | --------------------------------------------- |
+| bleWriteResponse | IBleWriteResponse  | BLE write response                            |
+| mode             | EQX17VibrationMode | Vibration mode enum, see vibration mode table |
+| duration         | int                | Duration (unit: 10ms), 0=use default pattern  |
 
 **EQX17VibrationMode** -- Vibration Mode Enum
 
-| Enum Value | Name      | Default Pattern (duration unit: ms)     |
-| ---------- | --------- | --------------------------------------- |
-| START      | Start     | Vibrate 100 → Pause 100 → Vibrate 100  |
-| END        | End       | (Vibrate 300 → Pause 150) x 3          |
-| NOTIFY     | Notify    | Vibrate 50                              |
-| ALERT      | Alert     | (Vibrate 80 → Pause 60) x 5            |
-| CONFIRM    | Confirm   | Vibrate 150                             |
-| BEAT       | Beat      | Vibrate 80                              |
-| CONNECTED  | Connected | Vibrate 100 → Pause 100 → Vibrate 100  |
-| ERROR      | Error     | Vibrate 1000                            |
+| Enum Value | Name      | Default Pattern (duration unit: ms)   |
+| ---------- | --------- | ------------------------------------- |
+| START      | Start     | Vibrate 100 → Pause 100 → Vibrate 100 |
+| END        | End       | (Vibrate 300 → Pause 150) x 3         |
+| NOTIFY     | Notify    | Vibrate 50                            |
+| ALERT      | Alert     | (Vibrate 80 → Pause 60) x 5           |
+| CONFIRM    | Confirm   | Vibrate 150                           |
+| BEAT       | Beat      | Vibrate 80                            |
+| CONNECTED  | Connected | Vibrate 100 → Pause 100 → Vibrate 100 |
+| ERROR      | Error     | Vibrate 1000                          |
 
 ###### Example Code
 
@@ -12613,3 +12606,201 @@ VPOperateManager.getInstance().vpQX17SetVibrationMode(bleWriteResponse, EQX17Vib
 // Send "Start" vibration with custom duration of 2550ms
 VPOperateManager.getInstance().vpQX17SetVibrationMode(bleWriteResponse, EQX17VibrationMode.START, 255);
 ```
+
+### QH15 Health Data Function
+
+QH15 health data encompasses all health data settings, retrieval of the timestamp for the last data transmission, step count reading, and goal achievement settings.
+
+#### Set All Health Data
+
+###### Interface
+
+```
+void setQH15HealthData(QH15HealthData data, IBleWriteResponse bleWriteResponse, IQH15HealthDataOptListener listener)
+```
+
+###### Parameters
+
+| Parameter        | Type                       | Description                          |
+| ---------------- | -------------------------- | ------------------------------------ |
+| bleWriteResponse | IBleWriteResponse          | BLE write response                   |
+| data             | QH15HealthData             | QH15 Health Data                     |
+| listener         | IQH15HealthDataOptListener | QH15 Health Data Operation Listeners |
+
+**QH15HealthData** -- QH15 Health Data
+
+| **Variable**                  | **Type**     | **Description**                                 |
+| ----------------------------- | ------------ | ----------------------------------------------- |
+| **biosAge**                   | Int          | BIOS Age （0~120）                              |
+| **heartAge**                  | Int          | Heart Age（0~120）                              |
+| **fitnessAge**                | Int          | Fitness Age（0~120）                            |
+| **biosAgeStatus**             | HealthStatus | BIOS Age Status                                 |
+| **heartAgeStatus**            | HealthStatus | Heart Age Status                                |
+| **fitnessAgeStatus**          | HealthStatus | Fitness Age Status                              |
+| **biosAgeChange**             | Int          | BIOS Age Change Value（0~99）                   |
+| **heartAgeChange**            | Int          | Heart Age Change Value（0~99）                  |
+| **fitnessAgeChange**          | Int          | Fitness Age Change Value（0~99）                |
+| **biosAge90Days**             | IntArray     | 90 days data of BIOS age （0~120）              |
+| **heartAge90Days**            | IntArray     | 90 days data of heart age（0~120）              |
+| **fitnessAge90Days**          | IntArray     | 90 days data of fitness age（0~120）            |
+| **biosAgeLastMonth**          | Int          | Last month BIOS age data（0~120）               |
+| **heartAgeLastMonth**         | Int          | Last month heart age data（0~120）              |
+| **fitnessAgeLastMonth**       | Int          | Last month fitness age data（0~120）            |
+| **biosAgeLastYear**           | Int          | Last year BIOS age data（0~120）                |
+| **heartAgeLastYear**          | Int          | Last year heart age data（0~120）               |
+| **fitnessAgeLastYear**        | Int          | Last year fitness age data（0~120）             |
+| **biosAgeLastMonthStatus**    | HealthStatus | Last month BIOS age status                      |
+| **heartAgeLastMonthStatus**   | HealthStatus | Last month heart age status                     |
+| **fitnessAgeLastMonthStatus** | HealthStatus | Last month fitness age status                   |
+| **biosAgeLastYearStatus**     | HealthStatus | Last year BIOS age status                       |
+| **heartAgeLastYearStatus**    | HealthStatus | Last year heart age status                      |
+| **fitnessAgeLastYearStatus**  | HealthStatus | Last year fitness age status                    |
+| **biosAgeLastMonthChange**    | Int          | Last month BIOS age change value（0~99）        |
+| **heartAgeLastMonthChange**   | Int          | Last month heart age change value（0~99）       |
+| **fitnessAgeLastMonthChange** | Int          | Last month fitness age change value（0~99）     |
+| **biosAgeLastYearChange**     | Int          | Last year BIOS age change value（0~99）         |
+| **heartAgeLastYearChange**    | Int          | Last year heart age change value（0~99）        |
+| **fitnessAgeLastYearChange**  | Int          | Last year fitness age change value（0~99）      |
+| **cardiovascularRisk**        | Int          | Cardiovascular disease risk（0~100）            |
+| **dementiaRisk**              | Int          | Dementia risk（0~100）                          |
+| **diabetesRisk**              | Int          | Diabetes risk（0~100）                          |
+| **cardiovascularRiskStatus**  | HealthStatus | Cardiovascular risk status                      |
+| **dementiaRiskStatus**        | HealthStatus | Dementia risk status                            |
+| **diabetesRiskStatus**        | HealthStatus | Diabetes risk status                            |
+| **cardiovascularRiskChange**  | Int          | Cardiovascular risk change value（0~100）       |
+| **dementiaRiskChange**        | Int          | Dementia risk change value（0~100）             |
+| **diabetesRiskChange**        | Int          | Diabetes risk change value（0~100）             |
+| **heartAttackRisk**           | Int          | Heart attack risk（0~100）                      |
+| **strokeRisk**                | Int          | Stroke risk（0~100）                            |
+| **heartFailureRisk**          | Int          | Heart failure risk（0~100）                     |
+| **heartAttackRiskStatus**     | HealthStatus | Heart attack risk status                        |
+| **strokeRiskStatus**          | HealthStatus | Stroke risk status                              |
+| **heartFailureRiskStatus**    | HealthStatus | Heart failure risk status                       |
+| **heartAttackRiskChange**     | Int          | Heart attack risk change value（0~100）         |
+| **strokeRiskChange**          | Int          | Stroke risk change value（0~100）               |
+| **heartFailureRiskChange**    | Int          | Heart failure risk change value（0~100）        |
+| **memoryLossRisk**            | Int          | Memory decline risk（0~100）                    |
+| **fallInjuryRisk**            | Int          | Fall and injury risk（0~100）                   |
+| **loseIndependentRisk**       | Int          | Loss of self-care ability risk（0~100）         |
+| **memoryLossRiskStatus**      | HealthStatus | Memory decline risk status                      |
+| **fallInjuryRiskStatus**      | HealthStatus | Fall and injury risk status                     |
+| **loseIndependentRiskStatus** | HealthStatus | Loss of self-care ability risk status           |
+| **memoryLossRiskChange**      | Int          | Memory decline risk change value（0~100）       |
+| **fallInjuryRiskChange**      | Int          | Fall and injury risk change value（0~100）      |
+| **loseIndependentRiskChange** | Int          | Loss of self-care ability change value（0~100） |
+| **kidneyDiseaseRisk**         | Int          | Kidney disease risk（0~100）                    |
+| **nerveDamageRisk**           | Int          | Nerve damage risk（0~100）                      |
+| **visionLossRisk**            | Int          | Vision loss risk（0~100）                       |
+| **kidneyDiseaseRiskStatus**   | HealthStatus | Kidney disease risk status                      |
+| **nerveDamageRiskStatus**     | HealthStatus | Nerve damage risk status                        |
+| **visionLossRiskStatus**      | HealthStatus | Vision loss risk status                         |
+| **kidneyDiseaseRiskChange**   | Int          | Kidney disease risk change value（0~100）       |
+| **nerveDamageRiskChange**     | Int          | Nerve damage risk change value（0~100）         |
+| **visionLossRiskChange**      | Int          | Vision loss risk change value（0~100）          |
+| **nutritionStatus**           | Int          | Nutrition status（0~100）                       |
+| **goalStatus**                | Int          | Health goal status（0~100）                     |
+| **timestamp**                 | Int          | Downlink data timestamp                         |
+
+**HealthStatus** - Enum of Health Status Trends
+
+| Enum Value | Description               |
+| ---------- | ------------------------- |
+| INCREASE   | Health status is increase |
+| STABLE     | Health status is stable   |
+| DECREASE   | Health status is decrease |
+
+**IQH15HealthDataOptListener** -- QH15 Health Data Operation Listeners
+
+```java
+nterface IQH15HealthDataOptListener : IListener {
+
+    /**
+     * Step count report callback
+     * Triggered when actively reading step data or when step count reaches the target
+     * @param timestamp Current timestamp
+     * @param step Current step count
+     * @param id Current ID
+     */
+    fun onStepReport(timestamp: Long, step: Int, id: Int)
+
+    /**
+     * Callback for reading the timestamp of last health data
+     * @param timestamp Timestamp of the last health data, returns 0 if no data exists
+     */
+    fun onLastHealthDataTimestampRead(timestamp: Long)
+
+    /**
+     * Callback for successful data setting
+     */
+    fun onDataSettingSuccess()
+
+    /**
+     * Callback for failed data setting
+     */
+    fun onDataSettingFailed()
+}
+```
+
+#### Retrieve the Timestamp of the Last Set Health Data
+
+Users can use this timestamp to determine whether a data refresh is required. The result will be returned via the **IQH15HealthDataOptListener.onLastHealthDataTimestampRead** callback.
+
+###### Interface
+
+```java
+void getQH15HealthDataTimestamp(IBleWriteResponse bleWriteResponse, IQH15HealthDataOptListener listener)
+```
+
+###### Parameters
+
+| Parameter        | Type                       | Description                          |
+| ---------------- | -------------------------- | ------------------------------------ |
+| bleWriteResponse | IBleWriteResponse          | BLE write response                   |
+| listener         | IQH15HealthDataOptListener | QH15 Health Data Operation Listeners |
+
+#### Reading Step Count Data
+
+Users can use this interface to retrieve current step count data. The results will be returned via the **IQH15HealthDataOptListener.onStepReport** callback.
+
+###### Interface
+
+```java
+void readQH15StepData(IBleWriteResponse bleWriteResponse, IQH15HealthDataOptListener listener)
+```
+
+###### Parameters
+
+| Parameter        | Type                       | Description                          |
+| ---------------- | -------------------------- | ------------------------------------ |
+| bleWriteResponse | IBleWriteResponse          | BLE write response                   |
+| listener         | IQH15HealthDataOptListener | QH15 Health Data Operation Listeners |
+
+#### Set Health Goal Achievement Events
+
+Users can use this interface to set the current health goal achievement events on the device. The success or failure of the operation will be reported via the callbacks **IQH15HealthDataOptListener.onDataSettingSuccess** and **onDataSettingFailed**.
+
+###### Interface
+
+```java
+void setQH15ComplianceEvent(EQH15ComplianceType type, IBleWriteResponse bleWriteResponse, IQH15HealthDataOptListener listener)
+```
+
+###### Parameters
+
+| Parameter        | Type                       | Description                          |
+| ---------------- | -------------------------- | ------------------------------------ |
+| type             | EQH15ComplianceType        | Compliance Type Enum                 |
+| bleWriteResponse | IBleWriteResponse          | BLE write response                   |
+| listener         | IQH15HealthDataOptListener | QH15 Health Data Operation Listeners |
+
+**EQH15ComplianceType** --Compliance Type Enum
+
+| Enum Value         | Description        |
+| ------------------ | ------------------ |
+| BIOS_AGE           | BIOS AGE           |
+| HEART_AGE          | Heart Age          |
+| FITNESS_AGE        | Fitness Age        |
+| STEPS_GOAL         | Steps goal         |
+| NUTRITION_GOAL     | Nutrition goal     |
+| ALL_GOALS_ACHIEVED | All goals achieved |
+| NEW_FITNESS_GOAL   | New fitness goals  |

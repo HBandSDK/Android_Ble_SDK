@@ -189,6 +189,76 @@
             android:name=".activity.QX17DataAcquisitionActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.DeviceFunctionMenuActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.HealthFunctionActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.OTAActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.HealthDataReadActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.HealthDataReadOptActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.HeartRateDetectActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.BodyTemperatureDetectActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.BloodComponentActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.BloodComponentDetectActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.BloodGlucoseActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.DeviceManualTestDataActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.custom.CustomFunctionActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.custom.PSAIMHealthDataActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name="com.nbsp.materialfilepicker.ui.FilePickerActivity"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
+            tools:replace="android:theme"/>
         <service
             android:name="com.inuker.bluetooth.library.BluetoothService"
             android:enabled="true"

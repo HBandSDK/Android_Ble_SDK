@@ -1,0 +1,815 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:clipToPadding="false"
+            android:paddingBottom="40dp">
+
+            <com.timaimee.vpdemo.utils.CollapseCardLogView
+                android:id="@+id/ccvSettingPSAIMHealthData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:collapseDefaultExpand="false"
+                app:collapseTitle="健康数据调试面板"
+                app:collapseTitleSize="15sp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:id="@+id/hdrAge"
+                        style="@style/ProtocolSectionHeader"
+                        android:text="一、年龄主包参数"
+                        android:layout_marginTop="5dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/groupBiosAge"
+                        style="@style/ProtocolConfigGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@id/hdrAge">
+
+                        <TextView android:id="@+id/lblBiosAge" style="@style/ProtocolLabel" android:text="BIOS年龄:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbBiosAge" app:layout_constraintBottom_toBottomOf="@id/sbBiosAge"/>
+                        <SeekBar android:id="@+id/sbBiosAge" style="@style/ProtocolSeekBar" android:max="120" android:progress="35" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblBiosAge" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+                        <TextView android:id="@+id/tvBiosAgeVal" style="@style/ProtocolValue" android:text="35" app:layout_constraintEnd_toEndOf="@id/sbBiosAge" app:layout_constraintTop_toTopOf="@id/sbBiosAge" android:layout_marginEnd="8dp" android:visibility="gone"/> <TextView android:id="@+id/lblBiosAgeStatus" style="@style/ProtocolLabel" android:text="状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spBiosAgeStatus" app:layout_constraintBottom_toBottomOf="@id/spBiosAgeStatus"/>
+                        <Spinner android:id="@+id/spBiosAgeStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblBiosAgeStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbBiosAge" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblBiosAgeChange" style="@style/ProtocolLabel" android:text="变化值:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbBiosAgeChange" app:layout_constraintBottom_toBottomOf="@id/sbBiosAgeChange"/>
+                        <SeekBar android:id="@+id/sbBiosAgeChange" style="@style/ProtocolSeekBar" android:max="99" android:progress="2" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblBiosAgeChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spBiosAgeStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvBiosAgeChangeVal" style="@style/ProtocolValue" android:text="2" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbBiosAgeChange" app:layout_constraintBottom_toBottomOf="@id/sbBiosAgeChange" android:visibility="gone"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/groupHeartAge"
+                        style="@style/ProtocolConfigGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@id/groupBiosAge">
+                        <TextView android:id="@+id/lblHeartAge" style="@style/ProtocolLabel" android:text="心脏年龄:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartAge" app:layout_constraintBottom_toBottomOf="@id/sbHeartAge"/>
+                        <SeekBar android:id="@+id/sbHeartAge" style="@style/ProtocolSeekBar" android:max="120" android:progress="32" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblHeartAge" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+                        <TextView android:id="@+id/tvHeartAgeVal" style="@style/ProtocolValue" android:text="32" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartAge" app:layout_constraintBottom_toBottomOf="@id/sbHeartAge" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblHeartAgeStatus" style="@style/ProtocolLabel" android:text="状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spHeartAgeStatus" app:layout_constraintBottom_toBottomOf="@id/spHeartAgeStatus"/>
+                        <Spinner android:id="@+id/spHeartAgeStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblHeartAgeStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbHeartAge" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblHeartAgeChange" style="@style/ProtocolLabel" android:text="变化值:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartAgeChange" app:layout_constraintBottom_toBottomOf="@id/sbHeartAgeChange"/>
+                        <SeekBar android:id="@+id/sbHeartAgeChange" style="@style/ProtocolSeekBar" android:max="99" android:progress="0" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblHeartAgeChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spHeartAgeStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvHeartAgeChangeVal" style="@style/ProtocolValue" android:text="0" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartAgeChange" app:layout_constraintBottom_toBottomOf="@id/sbHeartAgeChange" android:visibility="gone"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/groupFitnessAge"
+                        style="@style/ProtocolConfigGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@id/groupHeartAge">
+                        <TextView android:id="@+id/lblFitnessAge" style="@style/ProtocolLabel" android:text="健身年龄:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbFitnessAge" app:layout_constraintBottom_toBottomOf="@id/sbFitnessAge"/>
+                        <SeekBar android:id="@+id/sbFitnessAge" style="@style/ProtocolSeekBar" android:max="120" android:progress="28" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblFitnessAge" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+                        <TextView android:id="@+id/tvFitnessAgeVal" style="@style/ProtocolValue" android:text="28" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbFitnessAge" app:layout_constraintBottom_toBottomOf="@id/sbFitnessAge" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblFitnessAgeStatus" style="@style/ProtocolLabel" android:text="状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spFitnessAgeStatus" app:layout_constraintBottom_toBottomOf="@id/spFitnessAgeStatus"/>
+                        <Spinner android:id="@+id/spFitnessAgeStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblFitnessAgeStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbFitnessAge" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblFitnessAgeChange" style="@style/ProtocolLabel" android:text="变化值:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbFitnessAgeChange" app:layout_constraintBottom_toBottomOf="@id/sbFitnessAgeChange"/>
+                        <SeekBar android:id="@+id/sbFitnessAgeChange" style="@style/ProtocolSeekBar" android:max="99" android:progress="4" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblFitnessAgeChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spFitnessAgeStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvFitnessAgeChangeVal" style="@style/ProtocolValue" android:text="4" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbFitnessAgeChange" app:layout_constraintBottom_toBottomOf="@id/sbFitnessAgeChange" android:visibility="gone"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <TextView
+                        android:id="@+id/hdrTrend"
+                        style="@style/ProtocolSectionHeader"
+                        android:text="二、90天趋势流大数组"
+                        app:layout_constraintTop_toBottomOf="@id/groupFitnessAge"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="12dp"/>
+
+                    <LinearLayout
+                        android:id="@+id/groupTrend"
+                        style="@style/ProtocolConfigGroup"
+                        android:background="#ECEFF1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@id/hdrTrend"
+                        android:layout_marginTop="4dp">
+                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="💡 提示：系统将依滑块值自动生成序列。用户可以自己在代码中修改" android:textSize="11sp" android:textColor="#546E7A" android:layout_marginBottom="5dp"/>
+                        <EditText android:visibility="gone" android:id="@+id/etBiosAge90Days" style="@style/ProtocolEditText" android:hint="BIOS年龄90天趋势 - 留空则动态自动生成"/>
+                        <EditText android:visibility="gone" android:id="@+id/etHeartAge90Days" style="@style/ProtocolEditText" android:hint="心脏年龄90天趋势 - 留空则动态自动生成" android:layout_marginTop="6dp"/>
+                        <EditText android:visibility="gone" android:id="@+id/etFitnessAge90Days" style="@style/ProtocolEditText" android:hint="健身年龄90天趋势 - 留空则动态自动生成" android:layout_marginTop="6dp"/>
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/hdrCompare"
+                        style="@style/ProtocolSectionHeader"
+                        android:text="三、月度/年度对比报告参数"
+                        app:layout_constraintTop_toBottomOf="@id/groupTrend"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="12dp"/>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/groupMonthReport"
+                        style="@style/ProtocolConfigGroup"
+                        android:background="#F1F8E9"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintTop_toBottomOf="@id/hdrCompare">
+
+                        <TextView android:id="@+id/lblMonthTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="● 上月单点与月度变化报告" android:textSize="12sp" android:textStyle="bold" android:textColor="#33691E" app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent" android:layout_marginBottom="6dp"/>
+
+                        <TextView android:id="@+id/lblBiosMonth" style="@style/ProtocolLabel" android:text="BIOS月单点:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbBiosMonth" app:layout_constraintBottom_toBottomOf="@id/sbBiosMonth" />
+                        <SeekBar android:id="@+id/sbBiosMonth" style="@style/ProtocolSeekBar" android:max="120" android:progress="36" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblBiosMonth" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/lblMonthTitle" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvBiosMonthVal" style="@style/ProtocolValue" android:text="36" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbBiosMonth" app:layout_constraintBottom_toBottomOf="@id/sbBiosMonth" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblBiosMonthStatus" style="@style/ProtocolLabel" android:text="BIOS月状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spBiosMonthStatus" app:layout_constraintBottom_toBottomOf="@id/spBiosMonthStatus"/>
+                        <Spinner android:id="@+id/spBiosMonthStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblBiosMonthStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbBiosMonth" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblBiosMonthChange" style="@style/ProtocolLabel" android:text="BIOS月变化:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbBiosMonthChange" app:layout_constraintBottom_toBottomOf="@id/sbBiosMonthChange"/>
+                        <SeekBar android:id="@+id/sbBiosMonthChange" style="@style/ProtocolSeekBar" android:max="99" android:progress="1" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblBiosMonthChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spBiosMonthStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvBiosMonthChangeVal" style="@style/ProtocolValue" android:text="1" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbBiosMonthChange" app:layout_constraintBottom_toBottomOf="@id/sbBiosMonthChange" android:visibility="gone"/>
+
+                        <View android:id="@+id/divMonth1" style="@style/ProtocolDividerLine" android:layout_width="match_parent" app:layout_constraintTop_toBottomOf="@id/sbBiosMonthChange" android:layout_marginTop="6dp"/>
+
+                        <TextView android:id="@+id/lblHeartMonth" style="@style/ProtocolLabel" android:text="心脏月单点:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartMonth" app:layout_constraintBottom_toBottomOf="@id/sbHeartMonth" />
+                        <SeekBar android:id="@+id/sbHeartMonth" style="@style/ProtocolSeekBar" android:max="120" android:progress="33" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblHeartMonth" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/divMonth1" android:layout_marginTop="6dp"/>
+                        <TextView android:id="@+id/tvHeartMonthVal" style="@style/ProtocolValue" android:text="33" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartMonth" app:layout_constraintBottom_toBottomOf="@id/sbHeartMonth" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblHeartMonthStatus" style="@style/ProtocolLabel" android:text="心脏月状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spHeartMonthStatus" app:layout_constraintBottom_toBottomOf="@id/spHeartMonthStatus"/>
+                        <Spinner android:id="@+id/spHeartMonthStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblHeartMonthStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbHeartMonth" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblHeartMonthChange" style="@style/ProtocolLabel" android:text="心脏月变化:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartMonthChange" app:layout_constraintBottom_toBottomOf="@id/sbHeartMonthChange"/>
+                        <SeekBar android:id="@+id/sbHeartMonthChange" style="@style/ProtocolSeekBar" android:max="99" android:progress="1" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblHeartMonthChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spHeartMonthStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvHeartMonthChangeVal" style="@style/ProtocolValue" android:text="1" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartMonthChange" app:layout_constraintBottom_toBottomOf="@id/sbHeartMonthChange" android:visibility="gone"/>
+
+                        <View android:id="@+id/divMonth2" style="@style/ProtocolDividerLine" android:layout_width="match_parent" app:layout_constraintTop_toBottomOf="@id/sbHeartMonthChange" android:layout_marginTop="6dp"/>
+
+                        <TextView android:id="@+id/lblFitnessMonth" style="@style/ProtocolLabel" android:text="健身月单点:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbFitnessMonth" app:layout_constraintBottom_toBottomOf="@id/sbFitnessMonth" />
+                        <SeekBar android:id="@+id/sbFitnessMonth" style="@style/ProtocolSeekBar" android:max="120" android:progress="27" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblFitnessMonth" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/divMonth2" android:layout_marginTop="6dp"/>
+                        <TextView android:id="@+id/tvFitnessMonthVal" style="@style/ProtocolValue" android:text="27" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbFitnessMonth" app:layout_constraintBottom_toBottomOf="@id/sbFitnessMonth" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblFitnessMonthStatus" style="@style/ProtocolLabel" android:text="健身月状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spFitnessMonthStatus" app:layout_constraintBottom_toBottomOf="@id/spFitnessMonthStatus"/>
+                        <Spinner android:id="@+id/spFitnessMonthStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblFitnessMonthStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbFitnessMonth" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblFitnessMonthChange" style="@style/ProtocolLabel" android:text="健身月变化:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbFitnessMonthChange" app:layout_constraintBottom_toBottomOf="@id/sbFitnessMonthChange"/>
+                        <SeekBar android:id="@+id/sbFitnessMonthChange" style="@style/ProtocolSeekBar" android:max="99" android:progress="2" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblFitnessMonthChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spFitnessMonthStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvFitnessMonthChangeVal" style="@style/ProtocolValue" android:text="2" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbFitnessMonthChange" app:layout_constraintBottom_toBottomOf="@id/sbFitnessMonthChange" android:visibility="gone"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/groupYearReport"
+                        style="@style/ProtocolConfigGroup"
+                        android:background="#FFFDE7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@id/groupMonthReport">
+
+                        <TextView android:id="@+id/lblYearTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="● 去年单点与年度变化报告" android:textSize="12sp" android:textStyle="bold" android:textColor="#F57F17" app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent" android:layout_marginBottom="6dp"/>
+
+                        <TextView android:id="@+id/lblBiosYear" style="@style/ProtocolLabel" android:text="BIOS年单点:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbBiosYear" app:layout_constraintBottom_toBottomOf="@id/sbBiosYear" />
+                        <SeekBar android:id="@+id/sbBiosYear" style="@style/ProtocolSeekBar" android:max="120" android:progress="38" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblBiosYear" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/lblYearTitle" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvBiosYearVal" style="@style/ProtocolValue" android:text="38" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbBiosYear" app:layout_constraintBottom_toBottomOf="@id/sbBiosYear" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblBiosYearStatus" style="@style/ProtocolLabel" android:text="BIOS年状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spBiosYearStatus" app:layout_constraintBottom_toBottomOf="@id/spBiosYearStatus"/>
+                        <Spinner android:id="@+id/spBiosYearStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblBiosYearStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbBiosYear" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblBiosYearChange" style="@style/ProtocolLabel" android:text="BIOS年变化:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbBiosYearChange" app:layout_constraintBottom_toBottomOf="@id/sbBiosYearChange"/>
+                        <SeekBar android:id="@+id/sbBiosYearChange" style="@style/ProtocolSeekBar" android:max="99" android:progress="3" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblBiosYearChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spBiosYearStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvBiosYearChangeVal" style="@style/ProtocolValue" android:text="38" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbBiosYearChange" app:layout_constraintBottom_toBottomOf="@id/sbBiosYearChange" android:visibility="gone"/>
+
+                        <View android:id="@+id/divYear1" style="@style/ProtocolDividerLine" android:layout_width="match_parent" app:layout_constraintTop_toBottomOf="@id/sbBiosYearChange" android:layout_marginTop="6dp"/>
+
+                        <TextView android:id="@+id/lblHeartYear" style="@style/ProtocolLabel" android:text="心脏年单点:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartYear" app:layout_constraintBottom_toBottomOf="@id/sbHeartYear" />
+                        <SeekBar android:id="@+id/sbHeartYear" style="@style/ProtocolSeekBar" android:max="120" android:progress="35" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblHeartYear" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/divYear1" android:layout_marginTop="6dp"/>
+                        <TextView android:id="@+id/tvHeartYearVal" style="@style/ProtocolValue" android:text="35" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartYear" app:layout_constraintBottom_toBottomOf="@id/sbHeartYear" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblHeartYearStatus" style="@style/ProtocolLabel" android:text="心脏年状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spHeartYearStatus" app:layout_constraintBottom_toBottomOf="@id/spHeartYearStatus"/>
+                        <Spinner android:id="@+id/spHeartYearStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblHeartYearStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbHeartYear" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblHeartYearChange" style="@style/ProtocolLabel" android:text="心脏年变化:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartYearChange" app:layout_constraintBottom_toBottomOf="@id/sbHeartYearChange"/>
+                        <SeekBar android:id="@+id/sbHeartYearChange" style="@style/ProtocolSeekBar" android:max="99" android:progress="3" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblHeartYearChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spHeartYearStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvHeartYearChangeVal" style="@style/ProtocolValue" android:text="3" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartYearChange" app:layout_constraintBottom_toBottomOf="@id/sbHeartYearChange" android:visibility="gone"/>
+
+                        <View android:id="@+id/divYear2" style="@style/ProtocolDividerLine" android:layout_width="match_parent" app:layout_constraintTop_toBottomOf="@id/sbHeartYearChange" android:layout_marginTop="6dp"/>
+
+                        <TextView android:id="@+id/lblFitnessYear" style="@style/ProtocolLabel" android:text="健身年单点:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbFitnessYear" app:layout_constraintBottom_toBottomOf="@id/sbFitnessYear" />
+                        <SeekBar android:id="@+id/sbFitnessYear" style="@style/ProtocolSeekBar" android:max="120" android:progress="30" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblFitnessYear" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/divYear2" android:layout_marginTop="6dp"/>
+                        <TextView android:id="@+id/tvFitnessYearVal" style="@style/ProtocolValue" android:text="30" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbFitnessYear" app:layout_constraintBottom_toBottomOf="@id/sbFitnessYear" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblFitnessYearStatus" style="@style/ProtocolLabel" android:text="健身年状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spFitnessYearStatus" app:layout_constraintBottom_toBottomOf="@id/spFitnessYearStatus"/>
+                        <Spinner android:id="@+id/spFitnessYearStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblFitnessYearStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbFitnessYear" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblFitnessYearChange" style="@style/ProtocolLabel" android:text="健身年变化:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbFitnessYearChange" app:layout_constraintBottom_toBottomOf="@id/sbFitnessYearChange"/>
+                        <SeekBar android:id="@+id/sbFitnessYearChange" style="@style/ProtocolSeekBar" android:max="99" android:progress="5" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblFitnessYearChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spFitnessYearStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvFitnessYearChangeVal" style="@style/ProtocolValue" android:text="5" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbFitnessYearChange" app:layout_constraintBottom_toBottomOf="@id/sbFitnessYearChange" android:visibility="gone"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <TextView
+                        android:id="@+id/hdrChronic"
+                        style="@style/ProtocolSectionHeader"
+                        android:text="四、三大慢病综合风险控制"
+                        app:layout_constraintTop_toBottomOf="@id/groupYearReport"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="12dp"/>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/groupCardioRisk"
+                        style="@style/ProtocolConfigGroup"
+                        android:background="#E0F7FA"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintTop_toBottomOf="@id/hdrChronic">
+                        <TextView android:id="@+id/lblCardioRisk" style="@style/ProtocolLabel" android:text="心血管风险:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbCardioRisk" app:layout_constraintBottom_toBottomOf="@id/sbCardioRisk"/>
+                        <SeekBar android:id="@+id/sbCardioRisk" style="@style/ProtocolSeekBar" android:max="100" android:progress="15" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblCardioRisk" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+                        <TextView android:id="@+id/tvCardioRiskVal" style="@style/ProtocolValue" android:text="15%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbCardioRisk" app:layout_constraintBottom_toBottomOf="@id/sbCardioRisk" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblCardioRiskStatus" style="@style/ProtocolLabel" android:text="状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spCardioRiskStatus" app:layout_constraintBottom_toBottomOf="@id/spCardioRiskStatus"/>
+                        <Spinner android:id="@+id/spCardioRiskStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblCardioRiskStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbCardioRisk" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblCardioRiskChange" style="@style/ProtocolLabel" android:text="变化值:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbCardioRiskChange" app:layout_constraintBottom_toBottomOf="@id/sbCardioRiskChange"/>
+                        <SeekBar android:id="@+id/sbCardioRiskChange" style="@style/ProtocolSeekBar" android:max="100" android:progress="2" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblCardioRiskChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spCardioRiskStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvCardioRiskChangeVal" style="@style/ProtocolValue" android:text="2%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbCardioRiskChange" app:layout_constraintBottom_toBottomOf="@id/sbCardioRiskChange" android:visibility="gone"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/groupDementiaRisk"
+                        style="@style/ProtocolConfigGroup"
+                        android:background="#E0F7FA"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        app:layout_constraintTop_toBottomOf="@id/groupCardioRisk">
+                        <TextView android:id="@+id/lblDementiaRisk" style="@style/ProtocolLabel" android:text="痴呆风险:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbDementiaRisk" app:layout_constraintBottom_toBottomOf="@id/sbDementiaRisk"/>
+                        <SeekBar android:id="@+id/sbDementiaRisk" style="@style/ProtocolSeekBar" android:max="100" android:progress="8" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblDementiaRisk" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+                        <TextView android:id="@+id/tvDementiaRiskVal" style="@style/ProtocolValue" android:text="8%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbDementiaRisk" app:layout_constraintBottom_toBottomOf="@id/sbDementiaRisk" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblDementiaRiskStatus" style="@style/ProtocolLabel" android:text="状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spDementiaRiskStatus" app:layout_constraintBottom_toBottomOf="@id/spDementiaRiskStatus"/>
+                        <Spinner android:id="@+id/spDementiaRiskStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblDementiaRiskStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbDementiaRisk" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblDementiaRiskChange" style="@style/ProtocolLabel" android:text="变化值:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbDementiaRiskChange" app:layout_constraintBottom_toBottomOf="@id/sbDementiaRiskChange"/>
+                        <SeekBar android:id="@+id/sbDementiaRiskChange" style="@style/ProtocolSeekBar" android:max="100" android:progress="1" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblDementiaRiskChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spDementiaRiskStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvDementiaRiskChangeVal" style="@style/ProtocolValue" android:text="1%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbDementiaRiskChange" app:layout_constraintBottom_toBottomOf="@id/sbDementiaRiskChange" android:visibility="gone"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/groupDiabetesRisk"
+                        style="@style/ProtocolConfigGroup"
+                        android:background="#E0F7FA"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        app:layout_constraintTop_toBottomOf="@id/groupDementiaRisk">
+                        <TextView android:id="@+id/lblDiabetesRisk" style="@style/ProtocolLabel" android:text="糖尿病风险:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbDiabetesRisk" app:layout_constraintBottom_toBottomOf="@id/sbDiabetesRisk"/>
+                        <SeekBar android:id="@+id/sbDiabetesRisk" style="@style/ProtocolSeekBar" android:max="100" android:progress="22" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblDiabetesRisk" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+                        <TextView android:id="@+id/tvDiabetesRiskVal" style="@style/ProtocolValue" android:text="22%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbDiabetesRisk" app:layout_constraintBottom_toBottomOf="@id/sbDiabetesRisk" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblDiabetesRiskStatus" style="@style/ProtocolLabel" android:text="状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spDiabetesRiskStatus" app:layout_constraintBottom_toBottomOf="@id/spDiabetesRiskStatus"/>
+                        <Spinner android:id="@+id/spDiabetesRiskStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblDiabetesRiskStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbDiabetesRisk" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblDiabetesRiskChange" style="@style/ProtocolLabel" android:text="变化值:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbDiabetesRiskChange" app:layout_constraintBottom_toBottomOf="@id/sbDiabetesRiskChange"/>
+                        <SeekBar android:id="@+id/sbDiabetesRiskChange" style="@style/ProtocolSeekBar" android:max="100" android:progress="5" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblDiabetesRiskChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spDiabetesRiskStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvDiabetesRiskChangeVal" style="@style/ProtocolValue" android:text="5%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbDiabetesRiskChange" app:layout_constraintBottom_toBottomOf="@id/sbDiabetesRiskChange" android:visibility="gone"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <TextView
+                        android:id="@+id/hdrCardioDetail"
+                        style="@style/ProtocolSectionHeader"
+                        android:text="五、心血管细化子项风险"
+                        app:layout_constraintTop_toBottomOf="@id/groupDiabetesRisk"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="12dp"/>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/groupCardioDetail"
+                        style="@style/ProtocolConfigGroup"
+                        android:background="#E8EAF6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintTop_toBottomOf="@id/hdrCardioDetail">
+
+                        <TextView android:id="@+id/lblHeartAttackRisk" style="@style/ProtocolLabel" android:text="心脏发作:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartAttackRisk" app:layout_constraintBottom_toBottomOf="@id/sbHeartAttackRisk"/>
+                        <SeekBar android:id="@+id/sbHeartAttackRisk" style="@style/ProtocolSeekBar" android:max="100" android:progress="12" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblHeartAttackRisk" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+                        <TextView android:id="@+id/tvHeartAttackRiskVal" style="@style/ProtocolValue" android:text="12%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartAttackRisk" app:layout_constraintBottom_toBottomOf="@id/sbHeartAttackRisk" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblHeartAttackRiskStatus" style="@style/ProtocolLabel" android:text="状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spHeartAttackRiskStatus" app:layout_constraintBottom_toBottomOf="@id/spHeartAttackRiskStatus"/>
+                        <Spinner android:id="@+id/spHeartAttackRiskStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblHeartAttackRiskStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbHeartAttackRisk" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblHeartAttackChange" style="@style/ProtocolLabel" android:text="变化值:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartAttackChange" app:layout_constraintBottom_toBottomOf="@id/sbHeartAttackChange"/>
+                        <SeekBar android:id="@+id/sbHeartAttackChange" style="@style/ProtocolSeekBar" android:max="100" android:progress="1" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblHeartAttackChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spHeartAttackRiskStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvHeartAttackChangeVal" style="@style/ProtocolValue" android:text="1%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartAttackChange" app:layout_constraintBottom_toBottomOf="@id/sbHeartAttackChange" android:visibility="gone"/>
+
+                        <View android:id="@+id/divCardio1" style="@style/ProtocolDividerLine" android:layout_width="match_parent" app:layout_constraintTop_toBottomOf="@id/sbHeartAttackChange" android:layout_marginTop="6dp"/>
+
+                        <TextView android:id="@+id/lblStrokeRisk" style="@style/ProtocolLabel" android:text="中风风险:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbStrokeRisk" app:layout_constraintBottom_toBottomOf="@id/sbStrokeRisk"/>
+                        <SeekBar android:id="@+id/sbStrokeRisk" style="@style/ProtocolSeekBar" android:max="100" android:progress="14" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblStrokeRisk" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/divCardio1" android:layout_marginTop="6dp"/>
+                        <TextView android:id="@+id/tvStrokeRiskVal" style="@style/ProtocolValue" android:text="14%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbStrokeRisk" app:layout_constraintBottom_toBottomOf="@id/sbStrokeRisk" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblStrokeRiskStatus" style="@style/ProtocolLabel" android:text="状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spStrokeRiskStatus" app:layout_constraintBottom_toBottomOf="@id/spStrokeRiskStatus"/>
+                        <Spinner android:id="@+id/spStrokeRiskStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblStrokeRiskStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbStrokeRisk" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblStrokeChange" style="@style/ProtocolLabel" android:text="变化值:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbStrokeChange" app:layout_constraintBottom_toBottomOf="@id/sbStrokeChange"/>
+                        <SeekBar android:id="@+id/sbStrokeChange" style="@style/ProtocolSeekBar" android:max="100" android:progress="0" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblStrokeChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spStrokeRiskStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvStrokeChangeVal" style="@style/ProtocolValue" android:text="0%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbStrokeChange" app:layout_constraintBottom_toBottomOf="@id/sbStrokeChange" android:visibility="gone"/>
+
+                        <View android:id="@+id/divCardio2" style="@style/ProtocolDividerLine" android:layout_width="match_parent" app:layout_constraintTop_toBottomOf="@id/sbStrokeChange" android:layout_marginTop="6dp"/>
+
+                        <TextView android:id="@+id/lblHeartFailureRisk" style="@style/ProtocolLabel" android:text="心衰风险:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartFailureRisk" app:layout_constraintBottom_toBottomOf="@id/sbHeartFailureRisk"/>
+                        <SeekBar android:id="@+id/sbHeartFailureRisk" style="@style/ProtocolSeekBar" android:max="100" android:progress="6" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblHeartFailureRisk" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/divCardio2" android:layout_marginTop="6dp"/>
+                        <TextView android:id="@+id/tvHeartFailureRiskVal" style="@style/ProtocolValue" android:text="6%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartFailureRisk" app:layout_constraintBottom_toBottomOf="@id/sbHeartFailureRisk" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblHeartFailureRiskStatus" style="@style/ProtocolLabel" android:text="状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spHeartFailureRiskStatus" app:layout_constraintBottom_toBottomOf="@id/spHeartFailureRiskStatus"/>
+                        <Spinner android:id="@+id/spHeartFailureRiskStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblHeartFailureRiskStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbHeartFailureRisk" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblHeartFailureChange" style="@style/ProtocolLabel" android:text="变化值:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartFailureChange" app:layout_constraintBottom_toBottomOf="@id/sbHeartFailureChange"/>
+                        <SeekBar android:id="@+id/sbHeartFailureChange" style="@style/ProtocolSeekBar" android:max="100" android:progress="2" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblHeartFailureChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spHeartFailureRiskStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvHeartFailureChangeVal" style="@style/ProtocolValue" android:text="2%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbHeartFailureChange" app:layout_constraintBottom_toBottomOf="@id/sbHeartFailureChange" android:visibility="gone"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <TextView
+                        android:id="@+id/hdrLifeQuality"
+                        style="@style/ProtocolSectionHeader"
+                        android:text="六、生活质量与机能损伤风险"
+                        app:layout_constraintTop_toBottomOf="@id/groupCardioDetail"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="12dp"/>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/groupLifeQuality"
+                        style="@style/ProtocolConfigGroup"
+                        android:background="#E1F5FE"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintTop_toBottomOf="@id/hdrLifeQuality">
+
+                        <TextView android:id="@+id/lblMemoryRisk" style="@style/ProtocolLabel" android:text="记忆衰退:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbMemoryRisk" app:layout_constraintBottom_toBottomOf="@id/sbMemoryRisk"/>
+                        <SeekBar android:id="@+id/sbMemoryRisk" style="@style/ProtocolSeekBar" android:max="100" android:progress="25" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblMemoryRisk" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+                        <TextView android:id="@+id/tvMemoryRiskVal" style="@style/ProtocolValue" android:text="25%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbMemoryRisk" app:layout_constraintBottom_toBottomOf="@id/sbMemoryRisk" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblMemoryStatus" style="@style/ProtocolLabel" android:text="状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spMemoryStatus" app:layout_constraintBottom_toBottomOf="@id/spMemoryStatus"/>
+                        <Spinner android:id="@+id/spMemoryStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblMemoryStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbMemoryRisk" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblMemoryChange" style="@style/ProtocolLabel" android:text="变化值:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbMemoryChange" app:layout_constraintBottom_toBottomOf="@id/sbMemoryChange"/>
+                        <SeekBar android:id="@+id/sbMemoryChange" style="@style/ProtocolSeekBar" android:max="100" android:progress="4" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblMemoryChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spMemoryStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvMemoryChangeVal" style="@style/ProtocolValue" android:text="4%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbMemoryChange" app:layout_constraintBottom_toBottomOf="@id/sbMemoryChange" android:visibility="gone"/>
+
+                        <View android:id="@+id/divLife1" style="@style/ProtocolDividerLine" android:layout_width="match_parent" app:layout_constraintTop_toBottomOf="@id/sbMemoryChange" android:layout_marginTop="6dp"/>
+
+                        <TextView android:id="@+id/lblFallRisk" style="@style/ProtocolLabel" android:text="跌倒受伤:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbFallRisk" app:layout_constraintBottom_toBottomOf="@id/sbFallRisk"/>
+                        <SeekBar android:id="@+id/sbFallRisk" style="@style/ProtocolSeekBar" android:max="100" android:progress="18" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblFallRisk" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/divLife1" android:layout_marginTop="6dp"/>
+                        <TextView android:id="@+id/tvFallRiskVal" style="@style/ProtocolValue" android:text="18%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbFallRisk" app:layout_constraintBottom_toBottomOf="@id/sbFallRisk" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblFallStatus" style="@style/ProtocolLabel" android:text="状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spFallStatus" app:layout_constraintBottom_toBottomOf="@id/spFallStatus"/>
+                        <Spinner android:id="@+id/spFallStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblFallStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbFallRisk" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblFallChange" style="@style/ProtocolLabel" android:text="变化值:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbFallChange" app:layout_constraintBottom_toBottomOf="@id/sbFallChange"/>
+                        <SeekBar android:id="@+id/sbFallChange" style="@style/ProtocolSeekBar" android:max="100" android:progress="1" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblFallChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spFallStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvFallChangeVal" style="@style/ProtocolValue" android:text="1%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbFallChange" app:layout_constraintBottom_toBottomOf="@id/sbFallChange" android:visibility="gone"/>
+
+                        <View android:id="@+id/divLife2" style="@style/ProtocolDividerLine" android:layout_width="match_parent" app:layout_constraintTop_toBottomOf="@id/sbFallChange" android:layout_marginTop="6dp"/>
+
+                        <TextView android:id="@+id/lblIndependenceRisk" style="@style/ProtocolLabel" android:text="独立丧失:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbIndependenceRisk" app:layout_constraintBottom_toBottomOf="@id/sbIndependenceRisk"/>
+                        <SeekBar android:id="@+id/sbIndependenceRisk" style="@style/ProtocolSeekBar" android:max="100" android:progress="30" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblIndependenceRisk" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/divLife2" android:layout_marginTop="6dp"/>
+                        <TextView android:id="@+id/tvIndependenceRiskVal" style="@style/ProtocolValue" android:text="30%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbIndependenceRisk" app:layout_constraintBottom_toBottomOf="@id/sbIndependenceRisk" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblIndependenceStatus" style="@style/ProtocolLabel" android:text="状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spIndependenceStatus" app:layout_constraintBottom_toBottomOf="@id/spIndependenceStatus"/>
+                        <Spinner android:id="@+id/spIndependenceStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblIndependenceStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbIndependenceRisk" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblIndependenceChange" style="@style/ProtocolLabel" android:text="变化值:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbIndependenceChange" app:layout_constraintBottom_toBottomOf="@id/sbIndependenceChange"/>
+                        <SeekBar android:id="@+id/sbIndependenceChange" style="@style/ProtocolSeekBar" android:max="100" android:progress="6" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblIndependenceChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spIndependenceStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvIndependenceChangeVal" style="@style/ProtocolValue" android:text="6%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbIndependenceChange" app:layout_constraintBottom_toBottomOf="@id/sbIndependenceChange" android:visibility="gone"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <TextView
+                        android:id="@+id/hdrDiabetesDetail"
+                        style="@style/ProtocolSectionHeader"
+                        android:text="七、糖尿病专项并发症风险"
+                        app:layout_constraintTop_toBottomOf="@id/groupLifeQuality"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="12dp"/>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/groupDiabetesDetail"
+                        style="@style/ProtocolConfigGroup"
+                        android:background="#F3E5F5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintTop_toBottomOf="@id/hdrDiabetesDetail">
+
+                        <TextView android:id="@+id/lblKidneyRisk" style="@style/ProtocolLabel" android:text="肾脏疾病:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbKidneyRisk" app:layout_constraintBottom_toBottomOf="@id/sbKidneyRisk"/>
+                        <SeekBar android:id="@+id/sbKidneyRisk" style="@style/ProtocolSeekBar" android:max="100" android:progress="11" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblKidneyRisk" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+                        <TextView android:id="@+id/tvKidneyRiskVal" style="@style/ProtocolValue" android:text="11%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbKidneyRisk" app:layout_constraintBottom_toBottomOf="@id/sbKidneyRisk" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblKidneyStatus" style="@style/ProtocolLabel" android:text="状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spKidneyStatus" app:layout_constraintBottom_toBottomOf="@id/spKidneyStatus"/>
+                        <Spinner android:id="@+id/spKidneyStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblKidneyStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbKidneyRisk" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblKidneyChange" style="@style/ProtocolLabel" android:text="变化值:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbKidneyChange" app:layout_constraintBottom_toBottomOf="@id/sbKidneyChange"/>
+                        <SeekBar android:id="@+id/sbKidneyChange" style="@style/ProtocolSeekBar" android:max="100" android:progress="2" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblKidneyChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spKidneyStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvKidneyChangeVal" style="@style/ProtocolValue" android:text="2%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbKidneyChange" app:layout_constraintBottom_toBottomOf="@id/sbKidneyChange" android:visibility="gone"/>
+
+                        <View android:id="@+id/divDiabetes1" style="@style/ProtocolDividerLine" android:layout_width="match_parent" app:layout_constraintTop_toBottomOf="@id/sbKidneyChange" android:layout_marginTop="6dp"/>
+
+                        <TextView android:id="@+id/lblNerveRisk" style="@style/ProtocolLabel" android:text="神经损伤:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbNerveRisk" app:layout_constraintBottom_toBottomOf="@id/sbNerveRisk"/>
+                        <SeekBar android:id="@+id/sbNerveRisk" style="@style/ProtocolSeekBar" android:max="100" android:progress="16" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblNerveRisk" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/divDiabetes1" android:layout_marginTop="6dp"/>
+                        <TextView android:id="@+id/tvNerveRiskVal" style="@style/ProtocolValue" android:text="16%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbNerveRisk" app:layout_constraintBottom_toBottomOf="@id/sbNerveRisk" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblNerveStatus" style="@style/ProtocolLabel" android:text="状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spNerveStatus" app:layout_constraintBottom_toBottomOf="@id/spNerveStatus"/>
+                        <Spinner android:id="@+id/spNerveStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblNerveStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbNerveRisk" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblNerveChange" style="@style/ProtocolLabel" android:text="变化值:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbNerveChange" app:layout_constraintBottom_toBottomOf="@id/sbNerveChange"/>
+                        <SeekBar android:id="@+id/sbNerveChange" style="@style/ProtocolSeekBar" android:max="100" android:progress="0" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblNerveChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spNerveStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvNerveChangeVal" style="@style/ProtocolValue" android:text="0%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbNerveChange" app:layout_constraintBottom_toBottomOf="@id/sbNerveChange" android:visibility="gone"/>
+
+                        <View android:id="@+id/divDiabetes2" style="@style/ProtocolDividerLine" android:layout_width="match_parent" app:layout_constraintTop_toBottomOf="@id/sbNerveChange" android:layout_marginTop="6dp"/>
+
+                        <TextView android:id="@+id/lblVisionRisk" style="@style/ProtocolLabel" android:text="视力丧失:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbVisionRisk" app:layout_constraintBottom_toBottomOf="@id/sbVisionRisk"/>
+                        <SeekBar android:id="@+id/sbVisionRisk" style="@style/ProtocolSeekBar" android:max="100" android:progress="5" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblVisionRisk" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/divDiabetes2" android:layout_marginTop="6dp"/>
+                        <TextView android:id="@+id/tvVisionRiskVal" style="@style/ProtocolValue" android:text="5%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbVisionRisk" app:layout_constraintBottom_toBottomOf="@id/sbVisionRisk" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblVisionStatus" style="@style/ProtocolLabel" android:text="状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/spVisionStatus" app:layout_constraintBottom_toBottomOf="@id/spVisionStatus"/>
+                        <Spinner android:id="@+id/spVisionStatus" style="@style/ProtocolSpinner" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblVisionStatus" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbVisionRisk" android:layout_marginTop="4dp"/>
+
+                        <TextView android:id="@+id/lblVisionChange" style="@style/ProtocolLabel" android:text="变化值:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbVisionChange" app:layout_constraintBottom_toBottomOf="@id/sbVisionChange"/>
+                        <SeekBar android:id="@+id/sbVisionChange" style="@style/ProtocolSeekBar" android:max="100" android:progress="1" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblVisionChange" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/spVisionStatus" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvVisionChangeVal" style="@style/ProtocolValue" android:text="1%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbVisionChange" app:layout_constraintBottom_toBottomOf="@id/sbVisionChange" android:visibility="gone"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <TextView
+                        android:id="@+id/hdrSummary"
+                        style="@style/ProtocolSectionHeader"
+                        android:text="八、整体健康评估摘要指数"
+                        app:layout_constraintTop_toBottomOf="@id/groupDiabetesDetail"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="12dp"/>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/groupSummary"
+                        style="@style/ProtocolConfigGroup"
+                        android:background="#FFF3E0"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintTop_toBottomOf="@id/hdrSummary">
+                        <TextView android:id="@+id/lblNutritionScore" style="@style/ProtocolLabel" android:text="营养状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbNutritionScore" app:layout_constraintBottom_toBottomOf="@id/sbNutritionScore"/>
+                        <SeekBar android:id="@+id/sbNutritionScore" style="@style/ProtocolSeekBar" android:max="100" android:progress="88" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblNutritionScore" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+                        <TextView android:id="@+id/tvNutritionScoreVal" style="@style/ProtocolValue" android:text="88%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbNutritionScore" app:layout_constraintBottom_toBottomOf="@id/sbNutritionScore" android:visibility="gone"/>
+
+                        <TextView android:id="@+id/lblTargetScore" style="@style/ProtocolLabel" android:text="目标状态:" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/sbTargetScore" app:layout_constraintBottom_toBottomOf="@id/sbTargetScore"/>
+                        <SeekBar android:id="@+id/sbTargetScore" style="@style/ProtocolSeekBar" android:max="100" android:progress="79" android:layout_width="0dp" app:layout_constraintStart_toEndOf="@id/lblTargetScore" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@id/sbNutritionScore" android:layout_marginTop="4dp"/>
+                        <TextView android:id="@+id/tvTargetScoreVal" style="@style/ProtocolValue" android:text="79%" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/sbTargetScore" app:layout_constraintBottom_toBottomOf="@id/sbTargetScore" android:visibility="gone"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <TextView
+                        android:id="@+id/hdrAuth"
+                        style="@style/ProtocolSectionHeader"
+                        android:text="九、鉴权与同步校验标志位"
+                        app:layout_constraintTop_toBottomOf="@id/groupSummary"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="12dp"/>
+
+                    <LinearLayout
+                        android:id="@+id/groupAuth"
+                        style="@style/ProtocolConfigGroup"
+                        android:background="#FAFAFA"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toBottomOf="@id/hdrAuth"
+                        android:layout_marginTop="4dp">
+                        <EditText android:id="@+id/etDataTimestamp" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2" android:hint="Unix时间戳(秒级)" android:textSize="13sp" android:inputType="number" android:background="@android:drawable/editbox_background"/>
+                        <Button android:id="@+id/btnGenerateTimestamp" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textSize="11sp" android:text="生成当前" android:layout_marginStart="8dp"/>
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btnSettingHealthData"
+                        style="@style/vpButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="一键打包生成全量下发数据流"
+                        app:layout_constraintTop_toBottomOf="@id/groupAuth" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.timaimee.vpdemo.utils.CollapseCardLogView>
+
+            <com.timaimee.vpdemo.utils.CollapseCardLogView
+                android:id="@+id/ccvSettingComplianceEvent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:collapseDefaultExpand="false"
+                app:collapseTitle="设置健康达标事件"
+                app:collapseTitleColor="#E53935"
+                app:collapseTitleSize="15sp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="事件达标类型:"
+                            android:textColor="#000000"
+                            android:textSize="14sp"/>
+                        <Spinner
+                            android:id="@+id/spComplianceType"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="10dp" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btnSettingComplianceEvent"
+                        style="@style/vpButton"
+                        android:text="发送达标事件"/>
+                </LinearLayout>
+            </com.timaimee.vpdemo.utils.CollapseCardLogView>
+
+            <com.timaimee.vpdemo.utils.CollapseCardLogView
+                android:id="@+id/ccvGetRefreshTimeAndSteps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:collapseDefaultExpand="false"
+                app:collapseTitle="获取计步以及健康数据刷新事件"
+                app:collapseTitleColor="#E53935"
+                app:collapseTitleSize="15sp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <Button
+                        android:id="@+id/btnGetSteps"
+                        style="@style/vpButton"
+                        android:text="获取计步" />
+
+                    <Button
+                        android:id="@+id/btnGetRefreshTimestamp"
+                        style="@style/vpButton"
+                        android:text="获取健康数据刷新时间"/>
+                </LinearLayout>
+            </com.timaimee.vpdemo.utils.CollapseCardLogView>
+
+            <com.timaimee.vpdemo.utils.CollapseCardLogView
+                android:id="@+id/ccvGetDeviceManualTestData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:collapseDefaultExpand="false"
+                app:collapseTitle="获取设备测量数据"
+                app:collapseTitleColor="#E53935"
+                app:collapseTitleSize="15sp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <CheckBox
+                        app:layout_constraintTop_toTopOf="@id/cbHeartRate"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/cbHeartRate"
+                        app:layout_constraintBottom_toBottomOf="@id/cbHeartRate"
+                        android:id="@+id/cbBloodPress"
+                        android:text="血压"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <CheckBox
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/cbHeartRate"
+                        android:text="心率"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <CheckBox
+                        app:layout_constraintTop_toTopOf="@id/cbHeartRate"
+                        app:layout_constraintStart_toEndOf="@id/cbHeartRate"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@id/cbHeartRate"
+                        android:id="@+id/cbBloodGlucose"
+                        android:text="血糖"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <CheckBox
+                        app:layout_constraintTop_toTopOf="@id/cbBloodOxygen"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/cbBloodOxygen"
+                        app:layout_constraintBottom_toBottomOf="@id/cbBloodOxygen"
+                        android:id="@+id/cbStress"
+                        android:text="血压"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <CheckBox
+                        app:layout_constraintTop_toBottomOf="@id/cbHeartRate"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/cbBloodOxygen"
+                        android:text="血氧"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <CheckBox
+                        app:layout_constraintTop_toTopOf="@id/cbBloodOxygen"
+                        app:layout_constraintStart_toEndOf="@id/cbBloodOxygen"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@id/cbBloodOxygen"
+                        android:id="@+id/cbBodyTemperature"
+                        android:text="体温"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <CheckBox
+                        app:layout_constraintTop_toTopOf="@id/cbHrv"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/cbHrv"
+                        app:layout_constraintBottom_toBottomOf="@id/cbHrv"
+                        android:id="@+id/cbMeto"
+                        android:text="梅脱"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <CheckBox
+                        app:layout_constraintTop_toBottomOf="@id/cbBloodOxygen"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/cbHrv"
+                        android:text="HRV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <CheckBox
+                        app:layout_constraintTop_toTopOf="@id/cbHrv"
+                        app:layout_constraintStart_toEndOf="@id/cbHrv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@id/cbHrv"
+                        android:id="@+id/cbBloodComponent"
+                        android:text="血液成分"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <CheckBox
+                        app:layout_constraintTop_toTopOf="@id/cbEmotion"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/cbEmotion"
+                        app:layout_constraintBottom_toBottomOf="@id/cbEmotion"
+                        android:id="@+id/cbMiniCheckup"
+                        android:text="微体检"
+                        android:checked="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <CheckBox
+                        app:layout_constraintTop_toBottomOf="@id/cbHrv"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/cbEmotion"
+                        android:text="情绪"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <CheckBox
+                        app:layout_constraintTop_toTopOf="@id/cbEmotion"
+                        app:layout_constraintStart_toEndOf="@id/cbEmotion"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@id/cbEmotion"
+                        android:id="@+id/cbFatigue"
+                        android:text="疲劳度"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <CheckBox
+                        app:layout_constraintTop_toTopOf="@id/cbAll"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/cbAll"
+                        android:id="@+id/cbEDA"
+                        android:text="皮电"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <CheckBox
+                        app:layout_constraintTop_toBottomOf="@id/cbEmotion"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/cbAll"
+                        android:text="全部"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/tvStartReadTimestamp"
+                        android:layout_width="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/cbAll"
+                        android:padding="10dp"
+                        android:text="开始读取的时间位置↓"
+                        android:layout_height="wrap_content"/>
+
+                    <Button
+                        android:id="@+id/btnDatePicker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:layout_marginStart="20dp"
+                        android:background="@drawable/date_time_btn_bg"
+                        android:padding="10dp"
+                        android:layout_marginTop="6dp"
+                        android:text="2025-10-30"
+                        app:layout_constraintEnd_toStartOf="@id/tv_"
+                        app:layout_constraintTop_toBottomOf="@id/tvStartReadTimestamp" />
+
+                    <TextView
+                        android:id="@+id/tv_"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="  -  "
+                        app:layout_constraintBottom_toBottomOf="@id/btnDatePicker"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/btnDatePicker" />
+
+                    <Button
+                        android:id="@+id/btnTimePicker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:background="@drawable/date_time_btn_bg"
+                        android:padding="10dp"
+                        android:layout_marginTop="6dp"
+                        android:text="12:30:00"
+                        app:layout_constraintStart_toEndOf="@id/tv_"
+                        app:layout_constraintTop_toBottomOf="@id/tvStartReadTimestamp" />
+
+
+                    <Button
+                        android:id="@+id/btnGetDeviceManualTestData"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/btnDatePicker"
+                        style="@style/vpButton"
+                        android:text="读取设备测量数据"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.timaimee.vpdemo.utils.CollapseCardLogView>
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

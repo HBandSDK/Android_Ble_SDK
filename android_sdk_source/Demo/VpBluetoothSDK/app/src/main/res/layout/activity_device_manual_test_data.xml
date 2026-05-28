@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.timaimee.vpdemo.utils.CollapseCardLogView
+        android:id="@+id/ccvGetDeviceManualTestData"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:collapseDefaultExpand="true"
+        app:collapseTitle="获取设备手动测量数据"
+        app:collapseTitleColor="#E53935"
+        app:collapseTitleSize="15sp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <CheckBox
+                app:layout_constraintTop_toTopOf="@id/cbHeartRate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/cbHeartRate"
+                app:layout_constraintBottom_toBottomOf="@id/cbHeartRate"
+                android:id="@+id/cbBloodPress"
+                android:text="血压"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/cbHeartRate"
+                android:text="心率"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                app:layout_constraintTop_toTopOf="@id/cbHeartRate"
+                app:layout_constraintStart_toEndOf="@id/cbHeartRate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/cbHeartRate"
+                android:id="@+id/cbBloodGlucose"
+                android:text="血糖"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                app:layout_constraintTop_toTopOf="@id/cbBloodOxygen"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/cbBloodOxygen"
+                app:layout_constraintBottom_toBottomOf="@id/cbBloodOxygen"
+                android:id="@+id/cbStress"
+                android:text="血压"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                app:layout_constraintTop_toBottomOf="@id/cbHeartRate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/cbBloodOxygen"
+                android:text="血氧"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                app:layout_constraintTop_toTopOf="@id/cbBloodOxygen"
+                app:layout_constraintStart_toEndOf="@id/cbBloodOxygen"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/cbBloodOxygen"
+                android:id="@+id/cbBodyTemperature"
+                android:text="体温"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                app:layout_constraintTop_toTopOf="@id/cbHrv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/cbHrv"
+                app:layout_constraintBottom_toBottomOf="@id/cbHrv"
+                android:id="@+id/cbMeto"
+                android:text="梅脱"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                app:layout_constraintTop_toBottomOf="@id/cbBloodOxygen"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/cbHrv"
+                android:text="HRV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                app:layout_constraintTop_toTopOf="@id/cbHrv"
+                app:layout_constraintStart_toEndOf="@id/cbHrv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/cbHrv"
+                android:id="@+id/cbBloodComponent"
+                android:text="血液成分"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                app:layout_constraintTop_toTopOf="@id/cbEmotion"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/cbEmotion"
+                app:layout_constraintBottom_toBottomOf="@id/cbEmotion"
+                android:id="@+id/cbMiniCheckup"
+                android:text="微体检"
+                android:checked="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                app:layout_constraintTop_toBottomOf="@id/cbHrv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/cbEmotion"
+                android:text="情绪"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                app:layout_constraintTop_toTopOf="@id/cbEmotion"
+                app:layout_constraintStart_toEndOf="@id/cbEmotion"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/cbEmotion"
+                android:id="@+id/cbFatigue"
+                android:text="疲劳度"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                app:layout_constraintTop_toTopOf="@id/cbAll"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/cbAll"
+                android:id="@+id/cbEDA"
+                android:text="皮电"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <CheckBox
+                app:layout_constraintTop_toBottomOf="@id/cbEmotion"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/cbAll"
+                android:text="全部"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tvStartReadTimestamp"
+                android:layout_width="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cbAll"
+                android:padding="10dp"
+                android:text="开始读取的时间位置↓"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btnDatePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/date_time_btn_bg"
+                android:padding="10dp"
+                android:layout_marginTop="6dp"
+                android:text="2025-10-30"
+                app:layout_constraintEnd_toStartOf="@id/tv_"
+                app:layout_constraintTop_toBottomOf="@id/tvStartReadTimestamp" />
+
+            <TextView
+                android:id="@+id/tv_"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  -  "
+                app:layout_constraintBottom_toBottomOf="@id/btnDatePicker"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/btnDatePicker" />
+
+            <Button
+                android:id="@+id/btnTimePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:background="@drawable/date_time_btn_bg"
+                android:padding="10dp"
+                android:layout_marginTop="6dp"
+                android:text="12:30:00"
+                app:layout_constraintStart_toEndOf="@id/tv_"
+                app:layout_constraintTop_toBottomOf="@id/tvStartReadTimestamp" />
+
+
+            <Button
+                android:id="@+id/btnGetDeviceManualTestData"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnDatePicker"
+                style="@style/vpButton"
+                android:text="读取设备测量数据"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.timaimee.vpdemo.utils.CollapseCardLogView>
+</androidx.constraintlayout.widget.ConstraintLayout>

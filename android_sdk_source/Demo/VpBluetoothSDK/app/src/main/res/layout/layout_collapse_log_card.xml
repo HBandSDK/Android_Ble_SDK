@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- 固定的头部标题点击触发区域 -->
+    <LinearLayout
+        android:id="@+id/layoutTitleRoot"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/tvCollapseTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="这个是测试项"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/ivCollapseArrow"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@android:drawable/ic_menu_more"
+            android:tint="#000000"
+            tools:ignore="UseAppTint" />
+    </LinearLayout>
+
+    <!-- 统一折叠/展开的大容器 -->
+    <LinearLayout
+        android:id="@+id/layoutContentRootAnim"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <!-- 新增核心：每个测试卡片内部专属的控制台 -->
+        <ScrollView
+            android:id="@+id/svInternalTestInfo"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/text_info_bg"
+            android:fillViewport="true">
+
+            <TextView
+                android:id="@+id/tvInternalTestInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="酸🥕别吃、酸！🍋\n"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:fontFamily="monospace"/>
+        </ScrollView>
+
+        <!-- 外部XML中声明的业务按钮和EditText会被自动动态注入到这个容器中 -->
+        <LinearLayout
+            android:id="@+id/layoutContentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:orientation="vertical" />
+    </LinearLayout>
+</LinearLayout>
