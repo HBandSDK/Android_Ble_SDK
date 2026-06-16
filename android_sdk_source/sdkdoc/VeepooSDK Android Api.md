@@ -35,6 +35,7 @@
 | 1.2.9 | 新增QX17数据采集流控功能（IMU/GPS/心率实时采集）及振动马达控制接口 | 2026.04.29 |
 | 1.3.0 | 新增中科ota文档 | 2026.05.21 |
 | 1.3.1 | 新增QH15健康数据相关接口 | 2026.05.28 |
+| 1.3.2 | 新增提醒事件以及运动状态 | 2026.06.16 |
 ## 导入SDK
 添加依赖
 
@@ -600,9 +601,18 @@ public interface IDeviceFuctionDataListener extends IListener {
 
 **DeviceFunctionPackage5** -- 第五包设备功能状态[是否支持]
 
-| 变量          | 类型            | 备注         |
-| ------------- | --------------- | ------------ |
-| textImagePush | EFunctionStatus | 图文推送功能 |
+| 变量                         | 类型            | 备注                                                         |
+| ---------------------------- | --------------- | ------------------------------------------------------------ |
+| textImagePush                | EFunctionStatus | 图文推送功能                                                 |
+| GSR                          | EFunctionStatus | 皮电功能                                                     |
+| safetyProtection             | EFunctionStatus | 安全守护功能                                                 |
+| screenType                   | Int             | 屏幕类型* * 0x01 无屏手环 * * 0x02 戒指 * * 0x03 方屏 * * 0x04 圆屏 |
+| barometer                    | EFunctionStatus | 气压计                                                       |
+| touchICType                  | EFunctionStatus | 触摸IC类型功能                                               |
+| newProductionTestProtocolTag | EFunctionStatus | 触摸IC类型功能                                               |
+| pttControl                   | EFunctionStatus | PTT 控制功能                                                 |
+| sportStatus                  | EFunctionStatus | 运动状态功能                                                 |
+| remindEvent                  | EFunctionStatus | 提醒事件功能                                                 |
 
 
 
@@ -1261,22 +1271,23 @@ fun onOriginSpo2OriginListDataChange(originSpo2hDataList:List<Spo2hOriginData>)
 
 **OriginData3** -- 5分钟日常数据(继承OriginData，原基础上增加多了一下数据返回)
 
-| 变量           | 类型           | 备注                 |
-| -------------- | -------------- | -------------------- |
-| gesture        | IntArray       | 佩戴姿态类型         |
-| ppgs           | IntArray       | 5分钟脉率值          |
-| ecgs           | IntArray       | 5分钟心率值          |
-| resRates       | IntArray       | 5分钟呼吸率值        |
-| sleepStates    | IntArray       | 5分钟睡眠状态值      |
-| oxygens        | IntArray       | 5分钟血氧值          |
-| apneaResults   | IntArray       | 呼吸暂停次数数组     |
-| hypoxiaTimes   | IntArray       | 缺氧时间数组         |
-| cardiacLoads   | IntArray       | 心脏负荷数组         |
-| isHypoxias     | IntArray       | 呼吸暂停结果数组     |
-| corrects       | IntArray       | 血氧矫正值字符串数组 |
-| bloodGlucose   | Int            | 血糖值               |
-| bloodComponent | BloodComponent | 血液成分             |
-|                |                |                      |
+| 变量               | 类型           | 备注                                                         |
+| ------------------ | -------------- | ------------------------------------------------------------ |
+| gesture            | IntArray       | 佩戴姿态类型                                                 |
+| ppgs               | IntArray       | 5分钟脉率值                                                  |
+| ecgs               | IntArray       | 5分钟心率值                                                  |
+| resRates           | IntArray       | 5分钟呼吸率值                                                |
+| sleepStates        | IntArray       | 5分钟睡眠状态值                                              |
+| oxygens            | IntArray       | 5分钟血氧值                                                  |
+| apneaResults       | IntArray       | 呼吸暂停次数数组                                             |
+| hypoxiaTimes       | IntArray       | 缺氧时间数组                                                 |
+| cardiacLoads       | IntArray       | 心脏负荷数组                                                 |
+| isHypoxias         | IntArray       | 呼吸暂停结果数组                                             |
+| corrects           | IntArray       | 血氧矫正值字符串数组                                         |
+| bloodGlucose       | Int            | 血糖值                                                       |
+| bloodComponent     | BloodComponent | 血液成分                                                     |
+| sportStatusVersion | Int            | 运动状态版本，默认为1， 0表示不支持                          |
+| sportStatus        | IntArray       | 5分钟运动状态.  `0x00` 未知，0x01` 走路， `0x02` 跑步， `0x03 静息 |
 
 **BloodComponent** --血液成分
 
@@ -12017,6 +12028,75 @@ VPOperateManager.getInstance().bleDeviceRename("MyDevice", object : IDeviceRenam
     }
 }, bleWriteResponse)
 ```
+
+## 提醒事件功能
+
+在使用提醒事件功能之前，需判断设备是否支持提醒事件功能
+
+判断条件：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportRemindEvent()
+```
+
+#### 读取提醒事件
+
+###### 接口
+
+```kotlin
+readHistoricalDataReminderEvents(IBleWriteResponse bleWriteResponse, ERemindEvent event, long timestampSeconds)
+```
+
+###### 参数解释
+
+| 参数名           | 类型              | 备注                 |
+| ---------------- | ----------------- | -------------------- |
+| event            | ERemindEvent      | 提醒事件类型         |
+| timestampSeconds | long              | 需要读取事件的时间戳 |
+| bleWriteResponse | IBleWriteResponse | 写入操作监听         |
+
+**ERemindEvent** --- 提醒事件类型
+
+| 参数名    | 备注          |
+| --------- | ------------- |
+| ALL       | 所有提醒      |
+| FALL      | 跌倒提醒事件  |
+| SEDENTARY | 久坐提醒 事件 |
+
+#### 监听提醒事件
+
+###### 接口
+
+```kotlin
+setReminderEventReportListener(IRemindEventListener listener)
+```
+
+###### 参数解释
+
+| 参数名   | 类型                 | 备注                         |
+| -------- | -------------------- | ---------------------------- |
+| listener | IRemindEventListener | 提醒事件读取以及主动上报监听 |
+
+**IRemindEventListener** -- 健康提醒数据监听
+
+```kotlin
+interface IRemindEventListener {
+
+    /**
+     * 提醒事件读取结果回调
+     * Callback for remind event read result
+     */
+    fun onRemindEventRead(data: ArrayList<RemindEvent>)
+
+    /**
+     * 提醒事件触发主动回调
+     * Active callback triggered when remind event occurs
+     */
+    fun onRemindEventReport(data: ArrayList<RemindEvent>)
+}
+```
+
+
 
 ## 定制项目功能
 

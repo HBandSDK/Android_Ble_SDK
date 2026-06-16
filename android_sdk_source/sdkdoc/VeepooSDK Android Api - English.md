@@ -35,6 +35,7 @@
 | 1.2.9 | Added QX17 data acquisition flow control (IMU/GPS/HR real-time acquisition) and vibration motor control interfaces | 2026.04.29 |
 | 1.3.0 | Add Bluetrum Device OTA Upgrade | 2026.05.21 |
 | 1.3.1 | Added QH15 health data function | 2026.05.28 |
+| 1.3.2 | Added Remind event function, sport status function | 2026.06.16 |
 ## Import SDK
 ### Add Dependency
 
@@ -594,11 +595,18 @@ public interface IDeviceFuctionDataListener extends IListener {
 
 **DeviceFunctionPackage5** -- Fifth package device functional status[Supported/Unsupported].
 
-| Parameter name | Type            | Describe                        |
-| -------------- | --------------- | ------------------------------- |
-| textImagePush  | EFunctionStatus | Text$Image push function status |
-
-
+| Parameter name               | Type            | Describe                                                     |
+| ---------------------------- | --------------- | ------------------------------------------------------------ |
+| textImagePush                | EFunctionStatus | Text$Image push function status                              |
+| GSR                          | EFunctionStatus | GSR function status                                          |
+| safetyProtection             | EFunctionStatus | Safety Protection function status                            |
+| screenType                   | Int             | The type of screen(0x01 Screenless wristband<br/>0x02 Ring<br/>0x03 Square screen<br/>0x04 Round screen) |
+| barometer                    | EFunctionStatus | barometer                                                    |
+| touchICType                  | EFunctionStatus | Touch IC Functional Types                                    |
+| newProductionTestProtocolTag | EFunctionStatus | /                                                            |
+| pttControl                   | EFunctionStatus | PTT Control function                                         |
+| sportStatus                  | EFunctionStatus | Sport status function status                                 |
+| remindEvent                  | EFunctionStatus | remind event function status                                 |
 
 
 
@@ -11803,6 +11811,79 @@ VPOperateManager.getInstance().bleDeviceRename("MyDevice", object : IDeviceRenam
     }
 }, bleWriteResponse)
 ```
+
+
+
+## Remind event function
+
+Before using the reminder event function, it is necessary to determine whether the device supports it.
+
+Condition：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportRemindEvent()
+```
+
+#### Read remind event
+
+###### interface
+
+```kotlin
+readHistoricalDataReminderEvents(IBleWriteResponse bleWriteResponse, ERemindEvent event, long timestampSeconds)
+```
+
+###### Parameter Explanation
+
+| Parameter name   | Type              | Describe                                      |
+| ---------------- | ----------------- | --------------------------------------------- |
+| event            | ERemindEvent      | The enum of remind event                      |
+| timestampSeconds | long              | The timestamp of remind event which need read |
+| bleWriteResponse | IBleWriteResponse | Listening for write operations                |
+
+**ERemindEvent** --- The type of remind event
+
+| Enum Value | Describe         |
+| ---------- | ---------------- |
+| ALL        | All remind event |
+| FALL       | fall event       |
+| SEDENTARY  | Sedentary event  |
+
+#### Set Listener of Remind Event
+
+###### interface
+
+```kotlin
+setReminderEventReportListener(IRemindEventListener listener)
+```
+
+###### Parameter Explanation
+
+| Parameter name | Type                 | Describe                                                     |
+| -------------- | -------------------- | ------------------------------------------------------------ |
+| listener       | IRemindEventListener | Reading of reminder events and monitoring for proactive reporting. |
+
+**IRemindEventListener** -- Reading of reminder events and monitoring for proactive reporting.
+
+```kotlin
+interface IRemindEventListener {
+
+    /**
+     * 提醒事件读取结果回调
+     * Callback for remind event read result
+     */
+    fun onRemindEventRead(data: ArrayList<RemindEvent>)
+
+    /**
+     * 提醒事件触发主动回调
+     * Active callback triggered when remind event occurs
+     */
+    fun onRemindEventReport(data: ArrayList<RemindEvent>)
+}
+```
+
+
+
+
 
 ## Custom Project Features
 
