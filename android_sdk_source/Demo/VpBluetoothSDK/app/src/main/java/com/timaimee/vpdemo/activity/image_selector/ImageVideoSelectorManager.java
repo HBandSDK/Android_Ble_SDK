@@ -54,14 +54,22 @@ public class ImageVideoSelectorManager {
      * 页面销毁的时候调用
      */
     public void onRelease() {
-        MediaPickerHelper.getInstance().release();
-        CameraPhotoHelper.getInstance().release();
-        this.activity.clear();
-        this.activity = null;
+        try {
+            MediaPickerHelper.getInstance().release();
+            CameraPhotoHelper.getInstance().release();
+            this.activity.clear();
+            this.activity = null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void release() {
-        getInstance().onRelease();
+        try {
+            getInstance().onRelease();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -36,6 +36,7 @@
 | 1.3.0 | 新增中科ota文档 | 2026.05.21 |
 | 1.3.1 | 新增QH15健康数据相关接口 | 2026.05.28 |
 | 1.3.2 | 新增提醒事件以及运动状态 | 2026.06.16 |
+| 1.3.3 | 新增读取设备IMEI号 | 2026.06.18 |
 ## 导入SDK
 添加依赖
 
@@ -11961,6 +11962,35 @@ clear4gAccountInfo(bleWriteResponse, configListener)
 VPOperateManager.getInstance().clear4gAccountInfo(bleWriteResponse, configListener)
 ```
 
+#### 读取设备IMEI码
+
+###### 接口
+
+```kotlin
+void readIMEIInfo(IBleWriteResponse bleWriteResponse, IReadIMEIInfoListener readIMEIInfoListener)
+```
+
+###### 参数解释
+
+| 参数名               | 类型                  | 备注               |
+| -------------------- | --------------------- | ------------------ |
+| readIMEIInfoListener | IReadIMEIInfoListener | IMEI码读取回调监听 |
+| bleWriteResponse     | IBleWriteResponse     | 写入操作监听       |
+
+**IReadIMEIInfoListener** --- IMEI码读取回调监听
+
+```java
+public interface IReadIMEIInfoListener extends IListener {
+    /**
+     * IMEI码读取返回结果
+     * The result of read device IMEI info
+     *
+     * @param IMEI IMEI
+     */
+    void onIMEIInfoRead(String IMEI);
+}
+```
+
 
 
 ## 蓝牙设备重命名
@@ -12095,8 +12125,6 @@ interface IRemindEventListener {
     fun onRemindEventReport(data: ArrayList<RemindEvent>)
 }
 ```
-
-
 
 ## 定制项目功能
 

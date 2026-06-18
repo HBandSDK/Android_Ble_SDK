@@ -11,9 +11,9 @@ fun <T> Boolean.toObj(trueObj:T, falseObj:T) = if(this) trueObj else falseObj
 fun <T> Boolean.switch(trueObj:T, falseObj:T) = if(this) trueObj else falseObj
 
 fun EFunctionStatus.toDes() = when(this) {
-    EFunctionStatus.UNSUPPORT -> "不支持"
-    EFunctionStatus.SUPPORT -> "支持"
-    EFunctionStatus.SUPPORT_OPEN -> "开启"
-    EFunctionStatus.SUPPORT_CLOSE -> "关闭"
-    EFunctionStatus.UNKONW -> "未知"
+    EFunctionStatus.UNSUPPORT -> "???"
+    EFunctionStatus.SUPPORT -> "??"
+    EFunctionStatus.SUPPORT_OPEN -> "??"
+    EFunctionStatus.SUPPORT_CLOSE -> "??"
+    EFunctionStatus.UNKONW -> "??"
 }

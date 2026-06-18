@@ -20,13 +20,17 @@ import com.veepoo.protocol.listener.data.IDeviceFunctionStatusChangeListener
 import com.veepoo.protocol.listener.data.IFatigueDataListener
 import com.veepoo.protocol.listener.data.IFindDeviceDatalistener
 import com.veepoo.protocol.listener.data.IFunSwitchListener
+import com.veepoo.protocol.listener.data.IReadIMEIInfoListener
+import com.veepoo.protocol.listener.data.IRemindEventListener
 import com.veepoo.protocol.model.datas.FunSwitchFlags
+import com.veepoo.protocol.model.datas.RemindEvent
 import com.veepoo.protocol.model.enums.ECameraStatus
 import com.veepoo.protocol.model.enums.ECheckWear
 import com.veepoo.protocol.model.enums.EDeviceStatus
 import com.veepoo.protocol.model.enums.EFindDeviceStatus
 import com.veepoo.protocol.model.enums.EFunctionStatus
 import com.veepoo.protocol.model.settings.CheckWearSetting
+
 
 class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
 
@@ -116,6 +120,12 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
                 ccvTest.setSubTitle("目前支持DeviceFunction枚举类型")
                 setRadioGroupShow(false)
             }
+            DeviceMenu.Other.DEVICE_4G_READ_IMEI -> {
+                btnStartDetect.text = "读取设备IMEI码"
+                btnStopDetect.visibility = View.GONE
+                ccvTest.setSubTitle("前提:设备支持4G功能")
+                setRadioGroupShow(false)
+            }
             DeviceMenu.Switch.HEALTH_SUPPORT -> {
                 btnStartDetect.text = "健康辅助设置"
                 btnStopDetect.text = "健康辅助读取"
@@ -161,6 +171,7 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
                 DeviceMenu.Switch.HEALTH_SUPPORT -> vpBleManager.setFunSwitchState(defaultResponse, funSwitchListener, spFun.selectedItemPosition, isOpen().switch(
                     EFunctionStatus.SUPPORT_OPEN, EFunctionStatus.SUPPORT_CLOSE))
                 DeviceMenu.Switch.SWITCH_STATUS_LISTENER -> vpBleManager.setDeviceFunctionStatusChangeListener(deviceFunctionStatusChange)
+                DeviceMenu.Other.DEVICE_4G_READ_IMEI -> vpBleManager.readIMEIInfo(defaultResponse, readIMEIInfoListener)
 
             }
         }
@@ -319,6 +330,11 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
         }
     }
 
+    /**
+     * 设备IMEI读取监听
+     */
+    private val readIMEIInfoListener = IReadIMEIInfoListener { IMEI -> ccvTest.appendResult("✅️IMEI读取成功:$IMEI") }
+
     override fun onCMDWriteFailed(cmdTag: Int) {
         super.onCMDWriteFailed(cmdTag)
         when(cmdTag) {
@@ -360,6 +376,7 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
         DeviceMenu.Health.Fatigue -> "⏯️开始疲劳度测试..."
         DeviceMenu.Other.PHOTOGRAPH ->  "⏯️进入拍照模式..."
         DeviceMenu.Other.CHECK_WEAR ->  "⏯️开启佩戴检测.."
+        DeviceMenu.Other.DEVICE_4G_READ_IMEI ->  "⏯️开启读取IMEI码.."
         DeviceMenu.Other.DEVICE_ANTI_LOSS ->  "⏯️${if(isOpen()) "开启" else "关闭"}设备防丢.."
         DeviceMenu.Switch.HEALTH_SUPPORT ->  "⏯️${if(isOpen()) "开启${spFun.selectedItem as String}" else "关闭${spFun.selectedItem as String}"}健康辅助.."
         else -> "开始${functionName}"
@@ -382,6 +399,7 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
             DeviceMenu.Other.DEVICE_ANTI_LOSS -> fCheck.checkFindDevice()
             DeviceMenu.Other.CHECK_WEAR -> fCheck.checkCheckWear()
             DeviceMenu.Switch.HEALTH_SUPPORT -> fCheck.checkHealthAssessment()
+            DeviceMenu.Other.DEVICE_4G_READ_IMEI -> fCheck.check4g()
             else -> true
         }
 

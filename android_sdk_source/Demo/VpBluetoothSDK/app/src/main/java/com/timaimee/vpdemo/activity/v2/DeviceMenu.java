@@ -46,7 +46,7 @@ public interface DeviceMenu {
     }
 
     String[] OtherMenu = {Other.CONTACT, Other.ALARM, Other.MUSIC, Other.MESSAGE_PUSH, Other.IMG_TXT_PUSH, Other.WORLD_CLOCK, Other.WEATHER, Other.PHOTOGRAPH,
-            Other.LANGUAGE_BATTER, Other.CHECK_WEAR, Other.DEVICE_ANTI_LOSS, Other.DEVICE_4G, Other.MAGNETIC};
+            Other.LANGUAGE_BATTER, Other.CHECK_WEAR, Other.DEVICE_ANTI_LOSS, Other.DEVICE_4G, Other.DEVICE_4G_READ_IMEI, Other.MAGNETIC};
 
     interface Other {
         String CONTACT = "联系人";
@@ -61,8 +61,9 @@ public interface DeviceMenu {
         String LANGUAGE_BATTER = "🔋电量&语言";
         String CHECK_WEAR = "佩戴检测";
         String DEVICE_ANTI_LOSS = "设备防丢";
-        String DEVICE_4G = "4G功能";
+        String DEVICE_4G = "4G功能-🌐网络配置";
         String MAGNETIC = "磁疗";
+        String DEVICE_4G_READ_IMEI = "4G功能-读取IMEI";
     }
 
     String[] SwitchMenu = {Switch.MSG_PUSH, Switch.CUSTOM_SETTNG, Switch.HEALTH_SUPPORT, Switch.SWITCH_STATUS_LISTENER};

@@ -197,7 +197,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".activity.TextImagePushActivity"
+            android:name=".activity.v2.other.TextImagePushActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
         <activity

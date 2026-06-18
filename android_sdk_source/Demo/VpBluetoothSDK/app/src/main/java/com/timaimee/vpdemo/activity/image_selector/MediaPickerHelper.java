@@ -1,6 +1,6 @@
 package com.timaimee.vpdemo.activity.image_selector;
 
-import static com.timaimee.vpdemo.activity.TextImagePushActivity.SUB_PATH;
+import static com.timaimee.vpdemo.activity.v2.other.TextImagePushActivity.SUB_PATH;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

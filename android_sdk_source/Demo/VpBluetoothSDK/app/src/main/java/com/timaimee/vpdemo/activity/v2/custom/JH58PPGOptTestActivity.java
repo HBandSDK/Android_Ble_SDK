@@ -29,6 +29,7 @@ import com.veepoo.protocol.model.datas.PPGSecondData;
 import com.veepoo.protocol.model.datas.TimeData;
 import com.veepoo.protocol.model.enums.PPGSwitchStatus;
 import com.veepoo.protocol.model.enums.PPGTestMode;
+import com.veepoo.protocol.util.thread.HBThreadPools;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -287,31 +288,28 @@ public class JH58PPGOptTestActivity extends BaseVPBLETestActivity implements Vie
             return;
         }
         String fileName = "JH58PPG原生数据读取.txt";
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                StringBuilder sb = new StringBuilder();
-                sb.append("数据总数:").append(ppgReadData.getDataCount()).append("组\n");
-                for (PPGRawData ppgRawData : ppgReadData.getPpgRawDataList()) {
-                    sb.append("第【").append(ppgRawData.getIndex()).append("/").append(ppgReadData.getDataCount()).append("】组:")
-                            .append(TimeData.getTimeBeanByTimestampSecond((int) ppgRawData.getTimestamp()).toFullDateTimeString())
-                            .append(", 数据量=").append(ppgRawData.getCount()).append(",一共").append(ppgRawData.getPpgSecondDataList().size()).append("秒数据。\n");
-                    for (PPGSecondData ppgSecondData : ppgRawData.getPpgSecondDataList()) {
-                        sb.append(ppgSecondData.toDataStr()).append("\n");
-                    }
+        HBThreadPools.getInstance().execute(() -> {
+            StringBuilder sb = new StringBuilder();
+            sb.append("数据总数:").append(ppgReadData.getDataCount()).append("组\n");
+            for (PPGRawData ppgRawData : ppgReadData.getPpgRawDataList()) {
+                sb.append("第【").append(ppgRawData.getIndex()).append("/").append(ppgReadData.getDataCount()).append("】组:")
+                        .append(TimeData.getTimeBeanByTimestampSecond((int) ppgRawData.getTimestamp()).toFullDateTimeString())
+                        .append(", 数据量=").append(ppgRawData.getCount()).append(",一共").append(ppgRawData.getPpgSecondDataList().size()).append("秒数据。\n");
+                for (PPGSecondData ppgSecondData : ppgRawData.getPpgSecondDataList()) {
+                    sb.append(ppgSecondData.toDataStr()).append("\n");
                 }
-                appendTextToExternalFilesDir(JH58PPGOptTestActivity.this, fileName, sb.toString());
-                runOnUiThread(() -> {
-                    File externalFilesDir = getExternalFilesDir(null);
-                    if (externalFilesDir == null) {
-                        Log.e("FileSave", "无法获取外部存储目录");
-                        return;
-                    }
-                    File targetFile = new File(externalFilesDir, fileName);
-                    shareTxtContent(JH58PPGOptTestActivity.this, targetFile.getAbsolutePath(), "分享PPG读取的原始数据");
-                });
             }
-        }).start();
+            appendTextToExternalFilesDir(JH58PPGOptTestActivity.this, fileName, sb.toString());
+            runOnUiThread(() -> {
+                File externalFilesDir = getExternalFilesDir(null);
+                if (externalFilesDir == null) {
+                    Log.e("FileSave", "无法获取外部存储目录");
+                    return;
+                }
+                File targetFile = new File(externalFilesDir, fileName);
+                shareTxtContent(JH58PPGOptTestActivity.this, targetFile.getAbsolutePath(), "分享PPG读取的原始数据");
+            });
+        });
     }
 
     public void shareTxtContent(Context context, String filePath, String chooserTitle) {

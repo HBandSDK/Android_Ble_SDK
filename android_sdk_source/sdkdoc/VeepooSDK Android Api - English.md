@@ -36,6 +36,7 @@
 | 1.3.0 | Add Bluetrum Device OTA Upgrade | 2026.05.21 |
 | 1.3.1 | Added QH15 health data function | 2026.05.28 |
 | 1.3.2 | Added Remind event function, sport status function | 2026.06.16 |
+| 1.3.3 | Add read device IMEI Info function | 2026.06.18 |
 ## Import SDK
 ### Add Dependency
 
@@ -11744,6 +11745,34 @@ Kotlin
 VPOperateManager.getInstance().clear4gAccountInfo(bleWriteResponse, configListener)
 ```
 
+#### Read device's IMEI Code
+
+###### interface
+
+```kotlin
+void readIMEIInfo(IBleWriteResponse bleWriteResponse, IReadIMEIInfoListener readIMEIInfoListener)
+```
+
+###### Parameter Explanation
+
+| Parameter name       | Type                  | Describe                              |
+| -------------------- | --------------------- | ------------------------------------- |
+| readIMEIInfoListener | IReadIMEIInfoListener | Listening for read device's IMEI Code |
+| bleWriteResponse     | IBleWriteResponse     | Listening for write operations        |
+
+**IReadIMEIInfoListener** --- Listening for read device's IMEI Code
+
+```java
+public interface IReadIMEIInfoListener extends IListener {
+    /**
+     * The result of read device IMEI code
+     *
+     * @param IMEI IMEI code
+     */
+    void onIMEIInfoRead(String IMEI);
+}
+```
+
 
 
 ## BLE Device Rename
@@ -11880,10 +11909,6 @@ interface IRemindEventListener {
     fun onRemindEventReport(data: ArrayList<RemindEvent>)
 }
 ```
-
-
-
-
 
 ## Custom Project Features
 
