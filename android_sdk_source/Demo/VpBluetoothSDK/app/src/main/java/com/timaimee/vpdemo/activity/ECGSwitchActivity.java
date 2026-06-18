@@ -55,7 +55,6 @@ public class ECGSwitchActivity extends Activity implements IECGSwitchListener {
                 VPOperateManager.getMangerInstance(ECGSwitchActivity.this).closeECGSwitch(writeResponse, ECGSwitchActivity.this);
             }
         });
-
     }
 
     @Override

@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- 根 ScrollView 包裹所有内容 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <com.timaimee.vpdemo.utils.CollapseCardLogView
+                android:id="@+id/ccvBLE"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="visible"
+                app:collapseDefaultExpand="false"
+                app:collapseTitle="蓝牙低功耗BLE"
+                app:collapseTitleColor="#E53935"
+                app:collapseTitleSize="15sp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
+
+                    <EditText
+                        android:id="@+id/etMacAddress"
+                        style="@style/ProtocolEditText"
+                        android:hint="请输入蓝牙MAC地址"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"/>
+
+                    <Button
+                        android:id="@+id/btnBLEConnect"
+                        style="@style/vpButton"
+                        android:text="连接"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etMacAddress" />
+
+                    <Button
+                        android:id="@+id/btnBLEDisconnect"
+                        style="@style/vpButton"
+                        android:text="断开"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/btnBLEConnect"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.timaimee.vpdemo.utils.CollapseCardLogView>
+
+            <com.timaimee.vpdemo.utils.CollapseCardLogView
+                android:id="@+id/ccvBT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="visible"
+                app:collapseDefaultExpand="false"
+                app:collapseTitle="经典蓝牙BT"
+                app:collapseTitleColor="#E53935"
+                app:collapseTitleSize="15sp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tvConnectModel"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="模式:"
+                        android:textColor="#4A3F35"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/rgConnectModel"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <RadioGroup
+                        android:id="@+id/rgConnectModel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="@id/tvConnectModel"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvConnectModel"
+                        app:layout_constraintTop_toTopOf="@id/tvConnectModel">
+
+                        <RadioButton
+                            android:id="@+id/rbDefault"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="默认"/>
+
+                        <RadioButton
+                            android:id="@+id/rbDual"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="双模"/>
+
+                        <RadioButton
+                            android:id="@+id/rbLE"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="单模"/>
+
+                    </RadioGroup>
+
+                    <Button
+                        android:id="@+id/btnBTConnect"
+                        style="@style/vpButton"
+                        android:text="BT连接"
+                        app:layout_constraintTop_toBottomOf="@id/tvConnectModel"/>
+
+                    <Button
+                        android:id="@+id/btnBTDisconnect"
+                        style="@style/vpButton"
+                        android:text="BT断开"
+                        app:layout_constraintTop_toBottomOf="@id/btnBTConnect"/>
+
+                    <TextView
+                        android:id="@+id/tvIsDeviceAutoConnect"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="设备是否自动回连:"
+                        android:textColor="#4A3F35"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/rgDeviceAutoConnect"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/btnBTDisconnect"/>
+
+                    <RadioGroup
+                        android:id="@+id/rgDeviceAutoConnect"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="@id/tvIsDeviceAutoConnect"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvIsDeviceAutoConnect"
+                        app:layout_constraintTop_toTopOf="@id/tvIsDeviceAutoConnect">
+
+                        <RadioButton
+                            android:id="@+id/rbDACYes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="是"/>
+
+                        <RadioButton
+                            android:id="@+id/rbDACNo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="否"/>
+
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/tvIsOpenBT"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="是否打开设备BT:"
+                        android:textColor="#4A3F35"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/rgOpenBT"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvIsDeviceAutoConnect"/>
+
+                    <RadioGroup
+                        android:id="@+id/rgOpenBT"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="@id/tvIsOpenBT"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvIsOpenBT"
+                        app:layout_constraintTop_toTopOf="@id/tvIsOpenBT">
+
+                        <RadioButton
+                            android:id="@+id/rbBTOpen"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="是"/>
+
+                        <RadioButton
+                            android:id="@+id/rbBTClose"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="否"/>
+
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/tvIsAudioOpen"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="是否打开设备BT:"
+                        android:textColor="#4A3F35"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/rgOpenAudio"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvIsOpenBT"/>
+
+                    <RadioGroup
+                        android:id="@+id/rgOpenAudio"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="@id/tvIsAudioOpen"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvIsAudioOpen"
+                        app:layout_constraintTop_toTopOf="@id/tvIsAudioOpen">
+
+                        <RadioButton
+                            android:id="@+id/rbAudioOpen"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="是"/>
+
+                        <RadioButton
+                            android:id="@+id/rbAudioClose"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="否"/>
+
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/tvIsClearPairInfo"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="是否清楚配对信息:"
+                        android:textColor="#4A3F35"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/rgClearPairInfo"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvIsAudioOpen"/>
+
+                    <RadioGroup
+                        android:id="@+id/rgClearPairInfo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="@id/tvIsClearPairInfo"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvIsClearPairInfo"
+                        app:layout_constraintTop_toTopOf="@id/tvIsClearPairInfo">
+
+                        <RadioButton
+                            android:id="@+id/rbCPIYes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="是"/>
+
+                        <RadioButton
+                            android:id="@+id/rbCPINo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="否"/>
+
+                    </RadioGroup>
+
+                    <Button
+                        android:id="@+id/btnSettingBTStatus"
+                        style="@style/vpButton"
+                        android:text="设置BT状态"
+                        app:layout_constraintTop_toBottomOf="@id/tvIsClearPairInfo"/>
+
+                    <Button
+                        android:id="@+id/btnReadBTStatus"
+                        style="@style/vpButton"
+                        android:text="读取BT状态"
+                        app:layout_constraintTop_toBottomOf="@id/btnSettingBTStatus"/>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.timaimee.vpdemo.utils.CollapseCardLogView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -65,7 +65,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
                 return;
             }
             final View child = parent.getChildAt(i);
-            RecyclerView v = new RecyclerView(parent.getContext());
+            androidx.recyclerview.widget.RecyclerView v = new androidx.recyclerview.widget.RecyclerView(parent.getContext());
             final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
                     .getLayoutParams();
             final int top = child.getBottom() + params.bottomMargin;

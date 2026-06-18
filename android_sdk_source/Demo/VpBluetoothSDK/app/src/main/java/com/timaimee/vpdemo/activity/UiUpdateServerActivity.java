@@ -6,19 +6,24 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import androidx.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
+import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
+import com.veepoo.protocol.listener.data.IScreenStyleListener;
 import com.veepoo.protocol.listener.data.IUIBaseInfoFormServerListener;
 import com.veepoo.protocol.listener.data.IUiUpdateListener;
 import com.veepoo.protocol.listener.oad.OnDownLoadListener;
 import com.veepoo.protocol.model.TUiTheme;
+import com.veepoo.protocol.model.datas.ScreenStyleData;
 import com.veepoo.protocol.model.datas.UIDataServer;
 import com.veepoo.protocol.model.enums.EUIFromType;
 import com.veepoo.protocol.model.enums.EUiUpdateError;
@@ -29,6 +34,7 @@ import com.veepoo.protocol.util.VPLogger;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -90,13 +96,33 @@ public class UiUpdateServerActivity extends Activity {
 
     UIDataServer mUiDataServer;
 
-    public void readBaseInfoFromServer(View view) {
-        UiUpdateUtil.getInstance().getServerWatchUiInfo(new IUIBaseInfoFormServerListener() {
+    private List<Integer> unShowUIList = new ArrayList<>();
 
+    public void readBaseInfoFromServer(View view) {
+
+
+        VPOperateManager.getInstance().readScreenStyle(new IBleWriteResponse() {
             @Override
-            public void onBaseUiInfoFormServer(UIDataServer uiDataServer) {
-                mUiDataServer = uiDataServer;
-                mUiServerBaseInfoTV.setText("2.服务器的表盘基本信息 uiDataServer:" + uiDataServer.toString());
+            public void onResponse(int code) {
+
+            }
+        }, new IScreenStyleListener() {
+            @Override
+            public void onScreenStyleDataChange(ScreenStyleData screenStyleData) {
+                int[] watchIDArr = screenStyleData.getWatchIDArr();
+                for (int i = 0; i < watchIDArr.length; i++) {
+                    if (watchIDArr[i] != 0){
+                        unShowUIList.add(watchIDArr[i]);
+                    }
+                }
+                UiUpdateUtil.getInstance().getServerWatchUiInfo(new IUIBaseInfoFormServerListener() {
+
+                    @Override
+                    public void onBaseUiInfoFormServer(UIDataServer uiDataServer) {
+                        mUiDataServer = uiDataServer;
+                        mUiServerBaseInfoTV.setText("2.服务器的表盘基本信息 uiDataServer:" + uiDataServer.toString());
+                    }
+                });
             }
         });
     }
@@ -104,6 +130,7 @@ public class UiUpdateServerActivity extends Activity {
 
     TUiTheme tUiThemeDown;
     List<TUiTheme> themeInfoList;
+
     /**
      * demo为了方便，直接选中的是服务器第1个，
      */
@@ -115,6 +142,8 @@ public class UiUpdateServerActivity extends Activity {
                 String appPackName = "com.timaimee.watch";
                 String appVersion = "3.1.9";
                 themeInfoList = uiUpdateCheckOprate.getThemeInfo(mUiDataServer, deviceNumber, deviceTestVersion, appPackName, appVersion);
+                List<TUiTheme> newList = dealUiInfoList(themeInfoList);
+                themeInfoList = newList;
                 final StringBuffer stringBuffer = new StringBuffer();
                 for (TUiTheme tUiTheme : themeInfoList) {
                     Logger.t(TAG).i("tUiTheme item:" + tUiTheme.toString());
@@ -132,6 +161,16 @@ public class UiUpdateServerActivity extends Activity {
                 }
             }
         }).start();
+    }
+
+    private List<TUiTheme> dealUiInfoList(List<TUiTheme> themeInfoList) {
+        List<TUiTheme> newList = new ArrayList<>();
+        for (int i = 0; i < themeInfoList.size(); i++) {
+            if (!unShowUIList.contains(Integer.valueOf(themeInfoList.get(i).getCrc()))){
+                newList.add(themeInfoList.get(i));
+            }
+        }
+        return newList;
     }
 
     File mUpdatefile;

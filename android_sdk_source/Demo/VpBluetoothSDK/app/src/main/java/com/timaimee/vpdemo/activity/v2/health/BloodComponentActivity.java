@@ -65,7 +65,6 @@ public class BloodComponentActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void initData() {
-
     }
 
     @Override

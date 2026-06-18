@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- 根 ScrollView 包裹所有内容 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <com.timaimee.vpdemo.utils.CollapseCardLogView
+                android:id="@+id/ccvBloodPressDetect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="visible"
+                app:collapseDefaultExpand="false"
+                app:collapseTitle="血压测量"
+                app:collapseTitleColor="#E53935"
+                app:collapseTitleSize="15sp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
+
+                    <TextView
+                        android:id="@+id/tvTestMode"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="测量模式:"
+                        android:textColor="#4A3F35"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <RadioGroup
+                        android:id="@+id/rgTestMode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="@id/tvTestMode"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvTestMode">
+
+                        <RadioButton
+                            android:id="@+id/rbModeNormal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="通用模式"/>
+
+                        <RadioButton
+                            android:id="@+id/rbModePrivate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="私人模式"/>
+
+                    </RadioGroup>
+
+                    <Button
+                        android:id="@+id/btnStartDetect"
+                        style="@style/vpButton"
+                        android:text="开始测量"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvTestMode" />
+
+                    <Button
+                        android:id="@+id/btnStopDetect"
+                        style="@style/vpButton"
+                        android:text="停止测量"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/btnStartDetect"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.timaimee.vpdemo.utils.CollapseCardLogView>
+
+            <com.timaimee.vpdemo.utils.CollapseCardLogView
+                android:id="@+id/ccvBloodPressTestModeSetting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="visible"
+                app:collapseDefaultExpand="false"
+                app:collapseTitle="血压测量模式设置"
+                app:collapseTitleColor="#E53935"
+                app:collapseTitleSize="15sp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tvHigh"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:text="高压:"
+                        android:textColor="#4A3F35"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <EditText
+                        android:id="@+id/etHigh"
+                        style="@style/ProtocolEditText"
+                        android:inputType="number"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toEndOf="@id/tvHigh"
+                        app:layout_constraintBottom_toBottomOf="@id/tvHigh"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvHigh"/>
+
+                    <TextView
+                        android:id="@+id/tvLow"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="低压:"
+                        android:textColor="#4A3F35"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvHigh"/>
+
+                    <EditText
+                        android:id="@+id/etLow"
+                        style="@style/ProtocolEditText"
+                        android:inputType="number"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toEndOf="@id/tvLow"
+                        app:layout_constraintBottom_toBottomOf="@id/tvLow"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvLow"/>
+
+
+                    <TextView
+                        android:id="@+id/tvDynamicCalibration"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="动态血压校准:"
+                        android:textColor="#4A3F35"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvLow"/>
+
+                    <RadioGroup
+                        android:id="@+id/rgDynamicCalibration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="@id/tvDynamicCalibration"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvDynamicCalibration">
+
+                        <RadioButton
+                            android:id="@+id/rbDCOpen"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="开启"/>
+
+                        <RadioButton
+                            android:id="@+id/rbDCClose"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="关闭"/>
+
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/tvPrivateModel"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="私人模式:"
+                        android:textColor="#4A3F35"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvDynamicCalibration"/>
+
+                    <RadioGroup
+                        android:id="@+id/rgPrivateModel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="@id/tvPrivateModel"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvPrivateModel">
+
+                        <RadioButton
+                            android:id="@+id/rbPMOpen"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="开启"/>
+
+                        <RadioButton
+                            android:id="@+id/rbPMClose"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="关闭"/>
+
+                    </RadioGroup>
+
+                    <Button
+                        android:id="@+id/btnBPPMSetting"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/btn_common"
+                        android:text="设置血压测量私人模式"
+                        android:textColor="#fff"
+                        android:textSize="17sp"
+                        app:layout_constraintTop_toBottomOf="@id/tvPrivateModel"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.timaimee.vpdemo.utils.CollapseCardLogView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -137,4 +137,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <Button
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:id="@+id/btnLogShare"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="日志分享"
+        android:textColor="#FFF"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:background="@drawable/btn_red"
+        app:layout_constraintTop_toBottomOf="@id/btnCustomFunction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

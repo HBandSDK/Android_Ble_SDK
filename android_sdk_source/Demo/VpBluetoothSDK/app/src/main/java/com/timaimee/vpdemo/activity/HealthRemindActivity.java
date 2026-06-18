@@ -1,18 +1,14 @@
 package com.timaimee.vpdemo.activity;
 
-import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.timaimee.vpdemo.R;
+import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity;
 import com.timaimee.vpdemo.adapter.HealthRemindAdapter;
-import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.IHealthRemindListener;
-import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.model.datas.HealthRemind;
 import com.veepoo.protocol.model.enums.HealthRemindType;
 
@@ -21,22 +17,34 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HealthRemindActivity extends AppCompatActivity implements HealthRemindAdapter.OnHealthRemindToggleChangeListener, IHealthRemindListener {
+public class HealthRemindActivity extends BaseVPBLETestActivity implements HealthRemindAdapter.OnHealthRemindToggleChangeListener, IHealthRemindListener {
     RecyclerView mRecyclerView;
     HealthRemindAdapter mAdapter;
     List<HealthRemind> mSettings = new ArrayList<>();
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_health_remind);
-        initHealthRemindView();
-        VPOperateManager.getInstance().readHealthRemind(HealthRemindType.ALL, this, new IBleWriteResponse() {
-            @Override
-            public void onResponse(int code) {
+    public int getLayoutID() {
+        return R.layout.activity_health_remind;
+    }
 
-            }
-        });
+    @Override
+    public String pageTitle() {
+        return "健康提醒";
+    }
+
+    @Override
+    public void initView() {
+        initHealthRemindView();
+    }
+
+    @Override
+    public void initData() {
+        vpBleManager.readHealthRemind(HealthRemindType.ALL, this, defaultResponse);
+    }
+
+    @Override
+    public void initEvent() {
+
     }
 
     private void initHealthRemindView() {
@@ -54,12 +62,7 @@ public class HealthRemindActivity extends AppCompatActivity implements HealthRem
 
     @Override
     public void onToggleChanged(HealthRemind setting) {
-        VPOperateManager.getInstance().settingHealthRemind(setting, this, new IBleWriteResponse() {
-            @Override
-            public void onResponse(int code) {
-
-            }
-        });
+        vpBleManager.settingHealthRemind(setting, this, defaultResponse);
     }
 
     @Override

@@ -2,27 +2,26 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:gravity="center"
-        android:textStyle="bold"
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textSize="20sp"
-        android:background="#cccccc"
-        android:text="G15发送二维码"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/tvType"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintTop_toBottomOf="@id/vTitle"
         app:layout_constraintStart_toStartOf="parent"
         android:text="二维码类型："
         android:layout_marginTop="20dp"
         android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black_80"
+        android:layout_marginStart="6dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <RadioGroup
@@ -47,6 +46,7 @@
             android:layout_weight="1"
             android:text="收款二维码"/>
     </RadioGroup>
+
     <TextView
         android:id="@+id/tvContent"
         app:layout_constraintTop_toBottomOf="@id/rgQRCode"
@@ -54,17 +54,23 @@
         android:text="二维码内容："
         android:layout_marginTop="20dp"
         android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black_80"
+        android:layout_marginStart="6dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+
     <EditText
         android:id="@+id/etContent"
+        style="@style/ProtocolEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvContent"
         android:layout_margin="10dp"
         android:hint="内容长度不能超过50个字节"
         android:text="脑子有问题，里面全是水，需要治疗"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="42dp"/>
+
     <TextView
         android:id="@+id/tvName"
         app:layout_constraintTop_toBottomOf="@id/etContent"
@@ -72,17 +78,23 @@
         android:text="姓名："
         android:layout_marginTop="20dp"
         android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black_80"
+        android:layout_marginStart="6dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+
     <EditText
         android:id="@+id/etName"
+        style="@style/ProtocolEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvName"
         android:layout_margin="10dp"
         android:hint="内容长度不能超过30个字节"
         android:text="玛勒格碧"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="42dp"/>
+
     <TextView
         android:id="@+id/tvGroup"
         app:layout_constraintTop_toBottomOf="@id/etName"
@@ -90,38 +102,49 @@
         android:text="组别："
         android:layout_marginTop="20dp"
         android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black_80"
+        android:layout_marginStart="6dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+
     <EditText
         android:id="@+id/etGroup"
+        style="@style/ProtocolEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvGroup"
         android:layout_margin="10dp"
         android:hint="内容长度不能超过30个字节"
         android:text="精神病组"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="42dp"/>
+
     <TextView
         android:id="@+id/tvNumber"
         app:layout_constraintTop_toBottomOf="@id/etGroup"
         app:layout_constraintStart_toStartOf="parent"
         android:text="编号："
+        android:textStyle="bold"
+        android:textColor="@color/black_80"
+        android:layout_marginStart="6dp"
         android:layout_marginTop="20dp"
         android:textSize="18sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <EditText
         android:id="@+id/etNumber"
+        style="@style/ProtocolEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvNumber"
         android:layout_margin="10dp"
         android:hint="内容长度不能超过30个字节"
         android:text="9527"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="42dp"/>
 
     <Button
         android:id="@+id/btnSend"
+        style="@style/vpButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"

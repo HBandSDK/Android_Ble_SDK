@@ -2,6 +2,7 @@ package com.timaimee.vpdemo.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import android.text.TextUtils;
@@ -17,7 +18,10 @@ import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
-import com.timaimee.vpdemo.adapter.GridAdatper;
+import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity;
+import com.timaimee.vpdemo.activity.v2.function_switch.MessagePushSwitchActivity;
+import com.timaimee.vpdemo.adapter.MessagePushSwitchAdapter;
+import com.timaimee.vpdemo.bean.NotificationFunction;
 import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.data.IG15MessageListener;
@@ -32,14 +36,13 @@ import com.veepoo.protocol.model.settings.ContentSocailSetting;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Author: YWX
  * Date: 2021/12/7 15:43
  * Description: 通知消息设置
  */
-public class NotificationSettingsActivity extends Activity {
+public class NotificationSettingsActivity extends BaseVPBLETestActivity {
     public static final String TAG = NotificationSettingsActivity.class.getSimpleName();
 
     GridView mGridView;
@@ -48,17 +51,25 @@ public class NotificationSettingsActivity extends Activity {
     List<NotificationFunction> functions;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notification_settings);
+    public int getLayoutID() {
+        return R.layout.activity_notification_settings;
+    }
+
+    @Override
+    public String pageTitle() {
+        return "消息通知推送";
+    }
+
+    @Override
+    public void initView() {
         mGridView = findViewById(R.id.gvNotification);
         mInput = findViewById(R.id.etInput);
-        VPOperateManager.getInstance().readSocialMsg(new IBleWriteResponse() {
-            @Override
-            public void onResponse(int code) {
+    }
 
-            }
-        }, new ISocialMsgDataListener() {
+    @Override
+    public void initData() {
+        ivSetting.setVisibility(View.VISIBLE);
+        vpBleManager.readSocialMsg(defaultResponse, new ISocialMsgDataListener() {
             @Override
             public void onSocialMsgSupportDataChange(FunctionSocailMsgData socailMsgData) {
                 String message = " 社交信息提醒1-读取:\n" + socailMsgData.toString();
@@ -75,6 +86,17 @@ public class NotificationSettingsActivity extends Activity {
                 initGridView();
             }
         });
+    }
+
+    @Override
+    public void initEvent() {
+
+    }
+
+    @Override
+    public void onRightIconClick() {
+        super.onRightIconClick();
+        startActivity(new Intent(this, MessagePushSwitchActivity.class));
     }
 
     private void initGridView() {
@@ -108,6 +130,7 @@ public class NotificationSettingsActivity extends Activity {
                         Toast.makeText(mGridView.getContext(), "设备端消息开关好像没有打开！", Toast.LENGTH_SHORT).show();
                     }
                 }
+
             }
         });
     }
@@ -129,58 +152,44 @@ public class NotificationSettingsActivity extends Activity {
 
     private List<NotificationFunction> getNotificationFunctionList(FunctionSocailMsgData socailMsgData) {
         List<NotificationFunction> functions = new ArrayList<>();
-        functions.add(new NotificationFunction(ESocailMsg.WECHAT, socailMsgData.getWechat(), "微信"));
-        functions.add(new NotificationFunction(ESocailMsg.QQ, socailMsgData.getQq(), "QQ"));
-        functions.add(new NotificationFunction(ESocailMsg.DINGDING, socailMsgData.getDingding(), "钉钉"));
-        functions.add(new NotificationFunction(ESocailMsg.SINA, socailMsgData.getSina(), "新浪"));
-        functions.add(new NotificationFunction(ESocailMsg.FACEBOOK, socailMsgData.getFacebook(), "非死不可"));
 
-        functions.add(new NotificationFunction(ESocailMsg.TWITTER, socailMsgData.getTwitter(), "X(原推特)"));
-        functions.add(new NotificationFunction(ESocailMsg.TIKTOK, socailMsgData.getTikTok(), "TikTok"));
-        functions.add(new NotificationFunction(ESocailMsg.FLICKR, socailMsgData.getFlickr(), "Flickr"));
-        functions.add(new NotificationFunction(ESocailMsg.TELEGRAM, socailMsgData.getTelegram(), "Telegram"));
-        functions.add(new NotificationFunction(ESocailMsg.GMAIL, socailMsgData.getGmail(), "Gmail"));
-
-        functions.add(new NotificationFunction(ESocailMsg.INSTAGRAM, socailMsgData.getInstagram(), "Instagram"));
         functions.add(new NotificationFunction(ESocailMsg.PHONE, socailMsgData.getPhone(), "电话"));
         functions.add(new NotificationFunction(ESocailMsg.SMS, socailMsgData.getMsg(), "短信"));
-        functions.add(new NotificationFunction(ESocailMsg.MESSENGER, socailMsgData.getMessenger(), "MESSENGER"));
+
+        functions.add(new NotificationFunction(ESocailMsg.WECHAT, socailMsgData.getWechat(), "微信"));
+        functions.add(new NotificationFunction(ESocailMsg.QQ, socailMsgData.getQq(), "QQ"));
+        functions.add(new NotificationFunction(ESocailMsg.SINA, socailMsgData.getSina(), "新浪"));
+        functions.add(new NotificationFunction(ESocailMsg.FACEBOOK, socailMsgData.getFacebook(), "非死不可"));
+        functions.add(new NotificationFunction(ESocailMsg.TWITTER, socailMsgData.getTwitter(), "X(原推特)"));
+
+        functions.add(new NotificationFunction(ESocailMsg.FLICKR, socailMsgData.getFlickr(), "Flickr"));
+        functions.add(new NotificationFunction(ESocailMsg.LINKIN, socailMsgData.getLinkin(), "Linkin"));
+        functions.add(new NotificationFunction(ESocailMsg.WHATS, socailMsgData.getWhats(), "Whats"));
+        functions.add(new NotificationFunction(ESocailMsg.LINE, socailMsgData.getLine(), "Line"));
+        functions.add(new NotificationFunction(ESocailMsg.INSTAGRAM, socailMsgData.getInstagram(), "Instagram"));
+
+        functions.add(new NotificationFunction(ESocailMsg.SNAPCHAT, socailMsgData.getSnapchat(), "Snapchat"));
+        functions.add(new NotificationFunction(ESocailMsg.SKYPE, socailMsgData.getSkype(), "Skype"));
+        functions.add(new NotificationFunction(ESocailMsg.GMAIL, socailMsgData.getGmail(), "Gmail"));
+        functions.add(new NotificationFunction(ESocailMsg.DINGDING, socailMsgData.getDingding(), "钉钉"));
         functions.add(new NotificationFunction(ESocailMsg.WXWORK, socailMsgData.getWxWork(), "企业微信"));
+
+        functions.add(new NotificationFunction(ESocailMsg.OTHER, socailMsgData.getOther(), "其他"));
+        functions.add(new NotificationFunction(ESocailMsg.TIKTOK, socailMsgData.getTikTok(), "TikTok"));
+        functions.add(new NotificationFunction(ESocailMsg.TELEGRAM, socailMsgData.getTelegram(), "Telegram"));
+        functions.add(new NotificationFunction(ESocailMsg.CONNECTED2_ME, socailMsgData.getConnected2_me(), "Connected2me"));
         functions.add(new NotificationFunction(ESocailMsg.KAKAO_TALK, socailMsgData.getKakaoTalk(), "Kakao Talk"));
 
-        functions.add(new NotificationFunction(ESocailMsg.LINKIN, socailMsgData.getLinkin(), "Linkin"));
-        functions.add(new NotificationFunction(ESocailMsg.LINE, socailMsgData.getLine(), "Line"));
-        functions.add(new NotificationFunction(ESocailMsg.CONNECTED2_ME, socailMsgData.getConnected2_me(), "Connected2me"));
-        functions.add(new NotificationFunction(ESocailMsg.SKYPE, socailMsgData.getSkype(), "Skype"));
-        functions.add(new NotificationFunction(ESocailMsg.SNAPCHAT, socailMsgData.getSnapchat(), "Snapchat"));
-
         functions.add(new NotificationFunction(ESocailMsg.SHIELD_POLICE, socailMsgData.getShieldPolice(), "警右"));
-        functions.add(new NotificationFunction(ESocailMsg.WHATS, socailMsgData.getWhats(), "Whats"));
+        functions.add(new NotificationFunction(ESocailMsg.MESSENGER, socailMsgData.getMessenger(), "MESSENGER"));
+        functions.add(new NotificationFunction(ESocailMsg.ZALO, socailMsgData.getZalo(), "Zalo"));
+        functions.add(new NotificationFunction(ESocailMsg.VIBER, socailMsgData.getViber(), "Viber"));
+
         functions.add(new NotificationFunction(ESocailMsg.G15MSG, socailMsgData.getWhats(), "G-15"));
+
         return functions;
     }
 
-
-    static class NotificationFunction {
-        public EFunctionStatus status;
-        public String label;
-        public ESocailMsg type;
-
-        public NotificationFunction(ESocailMsg type, EFunctionStatus status, String label) {
-            this.type = type;
-            this.status = status;
-            this.label = label;
-        }
-
-        @Override
-        public String toString() {
-            return "NotificationFunction{" +
-                    "status=" + status +
-                    ", label='" + label + '\'' +
-                    ", type=" + type +
-                    '}';
-        }
-    }
 
     public class NotificationSettingsAdapter extends BaseAdapter {
 

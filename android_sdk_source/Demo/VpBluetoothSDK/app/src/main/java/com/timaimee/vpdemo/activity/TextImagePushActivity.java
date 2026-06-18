@@ -27,6 +27,7 @@ import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.activity.image_selector.ImageVideoSelectorManager;
 import com.timaimee.vpdemo.activity.image_selector.MediaInfo;
+import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity;
 import com.timaimee.vpdemo.utils.ImageUtils;
 import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.data.IImageMsgPushListener;
@@ -40,8 +41,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Base64;
 
-public class TextImagePushActivity extends AppCompatActivity implements View.OnClickListener {
+public class TextImagePushActivity extends BaseVPBLETestActivity implements View.OnClickListener {
     private static final String TAG = "-图文推送-";
 
     EditText etSendContent;
@@ -63,13 +65,15 @@ public class TextImagePushActivity extends AppCompatActivity implements View.OnC
     private String selectImage = "image_push_01.png";
     public static final String SUB_PATH = "imageMsgPush";
 
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ImageVideoSelectorManager.launch(this);
-        setContentView(R.layout.activity_text_image_push);
-        initView();
-        initData();
+    public int getLayoutID() {
+        return R.layout.activity_text_image_push;
+    }
+
+    @Override
+    public String pageTitle() {
+        return "图文推送";
     }
 
     @Override
@@ -90,7 +94,7 @@ public class TextImagePushActivity extends AppCompatActivity implements View.OnC
         ImageVideoSelectorManager.release();
     }
 
-    private void initView() {
+    public void initView() {
         etSendContent = findViewById(R.id.etSendContent);
         btnPushText = findViewById(R.id.btnPushText);
         btnPushImage = findViewById(R.id.btnPushImage);
@@ -103,7 +107,7 @@ public class TextImagePushActivity extends AppCompatActivity implements View.OnC
         etHeight = findViewById(R.id.etHeight);
     }
 
-    private void initData() {
+    public void initData() {
         btnPushText.setOnClickListener(this);
         btnPushImage.setOnClickListener(this);
         copyImage2Local();
@@ -139,6 +143,11 @@ public class TextImagePushActivity extends AppCompatActivity implements View.OnC
                 }
             }
         });
+    }
+
+    @Override
+    public void initEvent() {
+
     }
 
     private void selectAndCropPicture(int aspectRatioX, int aspectRatioY) {
@@ -198,7 +207,6 @@ public class TextImagePushActivity extends AppCompatActivity implements View.OnC
                 int height = uiDataImage.getHeight();
                 etWidth.setText(width + "");
                 etHeight.setText(height + "");
-
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -218,10 +226,44 @@ public class TextImagePushActivity extends AppCompatActivity implements View.OnC
                         });
                     }
                 }).start();
-
             }
         });
 
+//        HBThreadPools.getInstance().execute(() -> {
+//            copyAssetFileToExternalFilesDir(this, "img_push1.jpg", SUB_PATH);
+//            copyAssetFileToExternalFilesDir(this, "img_push2.jpg", SUB_PATH);
+//
+//            ImageUtils.centerCropAndSave(imageMsgPushDirPath + File.separator + "img_push1.jpg",
+//                    imageMsgPushDirPath + File.separator + "image_push_01.png", 390, 450);
+//
+//            ImageUtils.centerCropAndSave(imageMsgPushDirPath + File.separator + "img_push2.jpg",
+//                    imageMsgPushDirPath + File.separator + "image_push_02.png", 390, 450);
+//
+//            Logger.t(TAG).e("-copyImage2Local-: | 文件夹路径 = " + imageMsgPushDirPath);
+//            runOnUiThread(() -> {
+//                imagePush01.setImageBitmap(BitmapFactory.decodeFile(imageMsgPushDirPath + File.separator + "image_push_01.png"));
+//                imagePush02.setImageBitmap(BitmapFactory.decodeFile(imageMsgPushDirPath + File.separator + "image_push_02.png"));
+//            });
+//        });
+
+
+//        File file1 = new File(targetDir, "image_push_01.png");
+//        File file2 = new File(targetDir, "image_push_02.png");
+//        boolean isFileExists = file1.exists() && file2.exists();
+//        if (isFileExists) {
+//            imagePush01.setImageBitmap(BitmapFactory.decodeFile(imageMsgPushDirPath + File.separator + "image_push_01.png"));
+//            imagePush02.setImageBitmap(BitmapFactory.decodeFile(imageMsgPushDirPath + File.separator + "image_push_02.png"));
+//        } else {
+//            HBThreadPools.getInstance().execute(() -> {
+//                copyAssetFileToExternalFilesDir(this,"image_push_01.png", SUB_PATH);
+//                copyAssetFileToExternalFilesDir(this,"image_push_02.png", SUB_PATH);
+//                Logger.t(TAG).e("-copyImage2Local-: | 文件夹路径 = " + imageMsgPushDirPath);
+//                runOnUiThread(() -> {
+//                    imagePush01.setImageBitmap(BitmapFactory.decodeFile(imageMsgPushDirPath + File.separator + "image_push_01.png"));
+//                    imagePush02.setImageBitmap(BitmapFactory.decodeFile(imageMsgPushDirPath + File.separator + "image_push_02.png"));
+//                });
+//            });
+//        }
     }
 
     @Override

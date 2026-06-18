@@ -17,6 +17,9 @@ import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
 import com.veepoo.protocol.util.EcgUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * ECG报告测量页面
@@ -80,7 +83,7 @@ public class EcgHeartRealthView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        Logger.t(TAG).i("onMeasure onPagerSetting");
+        Logger.t(TAG).i("onMeasure");
         mWidth = MeasureSpec.getSize(widthMeasureSpec);
         mHeight = MeasureSpec.getSize(heightMeasureSpec);
 

@@ -15,6 +15,7 @@ import com.veepoo.protocol.model.datas.EcgDetectInfo;
 import com.veepoo.protocol.model.datas.EcgDetectResult;
 import com.veepoo.protocol.model.datas.EcgDetectState;
 import com.veepoo.protocol.model.datas.EcgDiagnosis;
+import com.veepoo.protocol.model.enums.EAdcType;
 
 import java.util.Arrays;
 
@@ -53,12 +54,12 @@ public class PttActivity extends Activity {
         }
 
         @Override
-        public void onEcgADCChange(int[] ints, int[] ints1) {
+        public void onEcgADCChange(final int[] data,final int[] power) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Logger.t(TAG).i("PTT的波形数据:" + Arrays.toString(ints));
-                    ecgHeartRealthView.changeData(ints, ints1, 25);
+                    Logger.t(TAG).i("PTT的波形数据:" + Arrays.toString(data));
+                    ecgHeartRealthView.changeData(data, power, 25);
                 }
             });
         }
@@ -107,12 +108,12 @@ public class PttActivity extends Activity {
     public void enter(View view) {
         ecgHeartRealthView.clearData();
         Logger.t(TAG).i("读取ptt信号");
-        VPOperateManager.getInstance().startReadPttSignData(writeResponse, true, iPttDetectListener);
+        VPOperateManager.getInstance().startReadPttSignData(writeResponse, EAdcType.ADC_DATA_FILTERING, iPttDetectListener);
     }
 
     public void exitModel(View view) {
         Logger.t(TAG).i("关闭ptt信号");
-        VPOperateManager.getInstance().stopReadPttSignData(writeResponse, false, iPttDetectListener);
+        VPOperateManager.getInstance().stopReadPttSignData(writeResponse, EAdcType.ADC_DATA_FILTERING, iPttDetectListener);
     }
 
     /**

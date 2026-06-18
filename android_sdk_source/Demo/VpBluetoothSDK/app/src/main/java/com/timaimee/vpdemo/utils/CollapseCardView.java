@@ -55,12 +55,12 @@ public class CollapseCardView extends CardView {
         layoutContentContainer = findViewById(R.id.layoutContentContainer);
 
         // 读取自定义属性
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.CollapseCardView);
-        String title = ta.getString(R.styleable.CollapseCardView_collapseTitle);
-        int titleColor = ta.getColor(R.styleable.CollapseCardView_collapseTitleColor, 0xFFE53935);
-        float titleSize = ta.getDimension(R.styleable.CollapseCardView_collapseTitleSize, 15);
-        boolean defaultExpand = ta.getBoolean(R.styleable.CollapseCardView_collapseDefaultExpand, false);
-        int cardBg = ta.getColor(R.styleable.CollapseCardView_collapseCardBg, 0xFFFFFBEB);
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.CollapseCardLogView);
+        String title = ta.getString(R.styleable.CollapseCardLogView_collapseTitle);
+        int titleColor = ta.getColor(R.styleable.CollapseCardLogView_collapseTitleColor, 0xFFE53935);
+        float titleSize = ta.getDimension(R.styleable.CollapseCardLogView_collapseTitleSize, 15);
+        boolean defaultExpand = ta.getBoolean(R.styleable.CollapseCardLogView_collapseDefaultExpand, false);
+        int cardBg = ta.getColor(R.styleable.CollapseCardLogView_collapseCardBg, 0xFFFFFBEB);
         ta.recycle();
 
         // 设置样式 —— 【修复字体大小问题】

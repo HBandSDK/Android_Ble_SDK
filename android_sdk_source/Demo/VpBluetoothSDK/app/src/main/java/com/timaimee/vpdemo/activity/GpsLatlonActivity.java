@@ -213,7 +213,7 @@ public class GpsLatlonActivity extends Activity implements View.OnClickListener 
 
     private byte[] getGpsLatlongCmd(GpsLatLongSetting gpslatlongsetting, byte setting) {
         byte[] cmd = new byte[20];
-//        cmd[0] = HEAD_GPS_LAT_LON;
+        cmd[0] = (byte) 0x8F;
         cmd[1] = setting;
 
         double lonv = gpslatlongsetting.getLonv();
@@ -271,7 +271,7 @@ public class GpsLatlonActivity extends Activity implements View.OnClickListener 
 
     private byte[] getKaabaCmd(KaabaSetting kaabaSetting, byte setting) {
         byte[] cmd = new byte[20];
-//        cmd[0] = HEAD_GPS_LAT_LON;
+        cmd[0] = (byte) 0x8F;
         cmd[1] = setting;
 
         double lat = kaabaSetting.getLat();

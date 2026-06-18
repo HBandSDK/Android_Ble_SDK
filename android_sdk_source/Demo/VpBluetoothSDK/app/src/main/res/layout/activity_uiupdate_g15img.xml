@@ -2,17 +2,25 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="20dp">
+    android:layout_height="match_parent">
+
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
         android:id="@+id/ivRed"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="#F830A0"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toBottomOf="@id/vTitle" />
 
     <ImageView
         android:id="@+id/ivBlue"
@@ -20,9 +28,9 @@
         android:layout_height="100dp"
         android:background="#0FC2FF"
         android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivRed" />
-
 
     <ImageView
         android:id="@+id/ivGreen"
@@ -30,6 +38,7 @@
         android:layout_height="100dp"
         android:background="#5F80FF"
         android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivBlue" />
 
@@ -39,46 +48,55 @@
         android:layout_height="100dp"
         android:background="#8F205F"
         android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivGreen" />
 
     <Button
         android:id="@+id/btnA3"
+        style="@style/vpButton"
         app:layout_constraintTop_toTopOf="@id/ivRed"
         app:layout_constraintBottom_toBottomOf="@id/ivRed"
-        app:layout_constraintLeft_toRightOf="@id/ivRed"
+        app:layout_constraintStart_toEndOf="@id/ivRed"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="20dp"
         android:text="赛米加G15定制项目个人信息"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/btnA4"
+        style="@style/vpButton"
         app:layout_constraintTop_toTopOf="@id/ivBlue"
         app:layout_constraintBottom_toBottomOf="@id/ivBlue"
-        app:layout_constraintLeft_toRightOf="@id/ivBlue"
+        app:layout_constraintStart_toEndOf="@id/ivBlue"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="20dp"
         android:text="赛米加G15定制项目图片主题1"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/btnA5"
+        style="@style/vpButton"
         app:layout_constraintTop_toTopOf="@id/ivGreen"
         app:layout_constraintBottom_toBottomOf="@id/ivGreen"
-        app:layout_constraintLeft_toRightOf="@id/ivGreen"
+        app:layout_constraintStart_toEndOf="@id/ivGreen"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="20dp"
         android:text="图片主题2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/btnA2"
+        style="@style/vpButton"
         app:layout_constraintTop_toTopOf="@id/ivPink"
         app:layout_constraintBottom_toBottomOf="@id/ivPink"
-        app:layout_constraintLeft_toRightOf="@id/ivPink"
+        app:layout_constraintStart_toEndOf="@id/ivPink"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="20dp"
         android:text="下载App二维码信息"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

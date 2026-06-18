@@ -1,15 +1,18 @@
 package com.timaimee.vpdemo.adapter;
 
+import androidx.annotation.NonNull;
+
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.iielse.switchbutton.SwitchView;
 import com.timaimee.vpdemo.R;
-import com.timaimee.vpdemo.activity.SwitchView;
 import com.veepoo.protocol.model.datas.HealthRemind;
 
 import java.util.List;
@@ -45,25 +48,36 @@ public class HealthRemindAdapter extends RecyclerView.Adapter<HealthRemindAdapte
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvHealthRemindInfo;
-        TextView tvHealthTime;
+        TextView tvHealthRemindName;
+        TextView tvHealthRemindTime;
         SwitchView sv;
+        EditText etInterval;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            tvHealthRemindInfo = itemView.findViewById(R.id.tvHealthInfo);
-            tvHealthTime = itemView.findViewById(R.id.tvTime);
+            tvHealthRemindName = itemView.findViewById(R.id.tvHealthRemindName);
+            tvHealthRemindTime = itemView.findViewById(R.id.tvHealthRemindTime);
+            etInterval = itemView.findViewById(R.id.etInterval);
             sv = itemView.findViewById(R.id.sv);
         }
 
         public void updateUI(final HealthRemind setting, final OnHealthRemindToggleChangeListener listener) {
-            tvHealthRemindInfo.setText(setting.getRemindType().getDes() + "提醒 间隔（分钟）：" + setting.getInterval());
-            tvHealthTime.setText("时间范围：" + setting.getStartTime().getClock() + "-" + setting.getEndTime().getClock());
+            etInterval.setText("" + setting.getInterval());
+            tvHealthRemindName.setText(setting.getRemindType().getDes());
+            tvHealthRemindTime.setText("时间范围：" + setting.getStartTime().getClock() + "-" + setting.getEndTime().getClock());
             sv.setOpened(setting.getStatus());
             sv.setOnStateChangedListener(new SwitchView.OnStateChangedListener() {
                 @Override
                 public void toggleToOn(SwitchView view) {
                     setting.setStatus(true);
+                    String intervalStr = etInterval.getText().toString();
+                    if(!TextUtils.isEmpty(intervalStr)) {
+                       int interval = Integer.parseInt(intervalStr);
+                       if(interval == 0) {
+                           interval = setting.getInterval();
+                       }
+                       setting.setInterval(interval);
+                    }
                     view.setOpened(true);
                     if (listener != null) {
                         listener.onToggleChanged(setting);
@@ -73,6 +87,14 @@ public class HealthRemindAdapter extends RecyclerView.Adapter<HealthRemindAdapte
                 @Override
                 public void toggleToOff(SwitchView view) {
                     setting.setStatus(false);
+                    String intervalStr = etInterval.getText().toString();
+                    if(!TextUtils.isEmpty(intervalStr)) {
+                        int interval = Integer.parseInt(intervalStr);
+                        if(interval == 0) {
+                            interval = setting.getInterval();
+                        }
+                        setting.setInterval(interval);
+                    }
                     view.setOpened(false);
                     if (listener != null) {
                         listener.onToggleChanged(setting);

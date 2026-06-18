@@ -26,6 +26,7 @@ import com.veepoo.protocol.model.datas.OriginHalfHourData;
 import com.veepoo.protocol.model.datas.Spo2hOriginData;
 import com.veepoo.protocol.model.settings.ReadOriginSetting;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class HealthDataReadActivity extends BaseActivity implements IOriginData3Listener {
@@ -309,7 +310,9 @@ public class HealthDataReadActivity extends BaseActivity implements IOriginData3
                 + ": 心率=" + data3.getRateValue()
                 + " , 步数=" + data3.getStepValue()
                 + " , 高压=" + data3.getHighValue()
-                + " , 低压=" + data3.getLowValue();
+                + " , 低压=" + data3.getLowValue()
+                + " , 运动状态版本=" + data3.getSportStatusVersion()
+                + " , 运动状态=" + Arrays.toString(data3.getSportStatus());
     }
 
     @Override

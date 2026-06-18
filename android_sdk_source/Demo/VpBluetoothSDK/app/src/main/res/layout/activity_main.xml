@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <RelativeLayout
         android:id="@+id/main_head"
@@ -22,23 +24,24 @@
             android:id="@+id/scan"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             android:onClick="onClick"
-            android:src="@drawable/refresh"
-            android:visibility="gone" />
+            android:src="@android:drawable/ic_popup_sync"
+            android:visibility="visible"
+            app:tint="@color/white" />
     </RelativeLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/mian_swipeRefreshLayout"
+        android:id="@+id/swRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/main_head"
         android:background="#ffffff">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/main_recylerlist"
+            android:id="@+id/rvBleDevice"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
@@ -46,6 +49,14 @@
             android:scrollbars="none" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/rvBleDevice"-->
+<!--        android:layout_below="@id/main_head"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:scrollbars="none" />-->
+
     <TextView
         android:id="@+id/tvTips"
         android:layout_centerInParent="true"
@@ -54,7 +65,8 @@
         android:textColor="@color/real_red"
         android:textStyle="bold"
         android:textSize="18sp"
-        android:text="如无法扫描设备，请前往系统权限设置中，确认BLE与定位权限是否开启\n(附近的设备、位置信息等权限)"
+        android:text="如无法扫描设备，请前往系统权限设置中，确认BLE与定位权限是否开启\n(附近的设备、位置信息等权限以及精准位置开关)"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
 </RelativeLayout>

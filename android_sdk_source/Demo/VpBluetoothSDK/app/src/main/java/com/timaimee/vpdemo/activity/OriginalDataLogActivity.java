@@ -62,7 +62,6 @@ public class OriginalDataLogActivity extends Activity implements View.OnClickLis
         mProgressBar.setVisibility(View.GONE);
     }
 
-
     private void initHRVLog(List<HRVOriginData> originHrvDataList) {
         clearLogData();
         for (HRVOriginData data : originHrvDataList) {

@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/tvHealthType"
@@ -15,7 +23,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/vTitle" />
 
     <Spinner
         android:id="@+id/spHealthType"
@@ -32,7 +40,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="区间上限："
-        android:textColor="#12f071"
+        android:textColor="#52e071"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,8 +48,9 @@
 
     <EditText
         android:id="@+id/etSX"
+        style="@style/ProtocolEditText"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="42dp"
         android:gravity="center_vertical|start"
         android:inputType="numberDecimal"
         app:layout_constraintBottom_toBottomOf="@id/tvSX"
@@ -55,7 +64,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="区间下限："
-        android:textColor="#12f071"
+        android:textColor="#52e071"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,8 +72,9 @@
 
     <EditText
         android:id="@+id/etXX"
+        style="@style/ProtocolEditText"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="42dp"
         android:gravity="center_vertical|start"
         android:inputType="numberDecimal"
         app:layout_constraintBottom_toBottomOf="@id/tvXX"
@@ -84,6 +94,7 @@
 
     <Button
         android:id="@+id/btnSetting"
+        style="@style/vpButton"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -128,6 +139,7 @@
 
     <Button
         android:id="@+id/btnRead"
+        style="@style/vpButton"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"

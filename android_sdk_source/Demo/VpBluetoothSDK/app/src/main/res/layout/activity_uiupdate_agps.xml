@@ -81,14 +81,37 @@
 
 
             <Button
+                android:id="@+id/ui_agps_download"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="3.下载AGPS"
+                android:onClick="downloadAgps"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_download_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_margin="10dp"
+                android:text="进度:0%"
+                android:textColor="@color/colorAccent"
+                android:textSize="8sp" />
+
+
+            <Button
                 android:id="@+id/ui_agps_change_img_set"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:text="4.设置AGPS"
                 android:onClick="setAgps"
-                android:text="3.设置AGPS"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp" />
+
+
 
             <TextView
                 android:id="@+id/ui_agps_progress"

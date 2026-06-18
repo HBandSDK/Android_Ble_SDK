@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -18,8 +19,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <TextView
-        android:id="@+id/tvReadPPGTestSwitch"
+        android:id="@+id/tvAutoMeasureTypeTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
@@ -32,22 +40,22 @@
         app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
     <Button
-        android:id="@+id/btnReadPPGTestStatus"
+        android:id="@+id/tvAutoMeasureType"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:text="读取PPG测量模式"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvReadPPGTestSwitch" />
+        app:layout_constraintTop_toBottomOf="@id/tvAutoMeasureTypeTitle" />
 
     <TextView
-        android:id="@+id/tvPPGTestStatus"
+        android:id="@+id/tvAutoMeasureStatusTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="start|center_vertical"
-        app:layout_constraintBottom_toBottomOf="@id/btnReadPPGTestStatus"
+        app:layout_constraintBottom_toBottomOf="@id/tvAutoMeasureType"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btnReadPPGTestStatus"
-        app:layout_constraintTop_toTopOf="@id/btnReadPPGTestStatus" />
+        app:layout_constraintStart_toEndOf="@id/tvAutoMeasureType"
+        app:layout_constraintTop_toTopOf="@id/tvAutoMeasureType" />
 
     <TextView
         android:id="@+id/tvSetPPGTestSwitch"
@@ -60,7 +68,7 @@
         android:textSize="18sp"
         android:textStyle="bold|italic"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnReadPPGTestStatus" />
+        app:layout_constraintTop_toBottomOf="@id/tvAutoMeasureType" />
 
     <RadioGroup
         android:id="@+id/rgPPGTestMode"

@@ -3,27 +3,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <!-- 固定的头部标题点击触发区域 -->
     <LinearLayout
         android:id="@+id/layoutTitleRoot"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
         android:background="?android:attr/selectableItemBackground"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="12dp">
 
-        <TextView
-            android:id="@+id/tvCollapseTitle"
+        <!-- 左边：主标题 + 副标题 垂直容器 -->
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="这个是测试项"
-            android:ellipsize="marquee"
-            android:singleLine="true"
-            android:textStyle="bold" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvCollapseTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="这个是测试项"
+                android:textStyle="bold"
+                android:textSize="15sp"/>
+
+            <!-- 副标题 新增 -->
+            <TextView
+                android:id="@+id/tvCollapseSubTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="副标题描述信息"
+                android:textSize="12sp"
+                android:textColor="#757575"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/ivClearLog"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/icon_general_trash_default_ltmode"
+            android:layout_marginEnd="10dp"
+            tools:ignore="UseAppTint" />
 
         <ImageView
             android:id="@+id/ivCollapseArrow"
@@ -35,22 +63,25 @@
     </LinearLayout>
 
     <!-- 统一折叠/展开的大容器 -->
-    <LinearLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutContentRootAnim"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:visibility="gone">
 
-        <!-- 新增核心：每个测试卡片内部专属的控制台 -->
         <ScrollView
             android:id="@+id/svInternalTestInfo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="300dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="2dp"
+            android:padding="6dp"
             android:background="@drawable/text_info_bg"
             android:fillViewport="true">
 
@@ -65,12 +96,41 @@
                 android:fontFamily="monospace"/>
         </ScrollView>
 
-        <!-- 外部XML中声明的业务按钮和EditText会被自动动态注入到这个容器中 -->
         <LinearLayout
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/svInternalTestInfo"
             android:id="@+id/layoutContentContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:orientation="vertical" />
-    </LinearLayout>
+        
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/maskView"
+            android:background="#99000000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone"
+            android:focusable="true"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+
+            <TextView
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="⚠️当前功能不可用！"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#FF2222"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </LinearLayout>

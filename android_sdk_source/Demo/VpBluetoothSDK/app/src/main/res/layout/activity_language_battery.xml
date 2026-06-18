@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- 根 ScrollView 包裹所有内容 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <com.timaimee.vpdemo.utils.CollapseCardLogView
+                android:id="@+id/ccvBattery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="visible"
+                app:collapseDefaultExpand="true"
+                app:collapseTitle="🔋电量"
+                app:collapseTitleColor="#E53935"
+                app:collapseTitleSize="15sp">
+
+                <Button
+                    android:id="@+id/btnReadBattery"
+                    style="@style/vpButton"
+                    android:text="读取🔋电量"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp" />
+
+            </com.timaimee.vpdemo.utils.CollapseCardLogView>
+
+            <com.timaimee.vpdemo.utils.CollapseCardLogView
+                android:id="@+id/ccvLanguage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="visible"
+                app:collapseDefaultExpand="false"
+                app:collapseTitle="语言"
+                app:collapseTitleColor="#E53935"
+                app:collapseTitleSize="15sp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
+
+                    <TextView
+                        android:id="@+id/tvChoiceLanguage"
+                        android:text="选择语言："
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"/>
+
+                    <Spinner
+                        android:id="@+id/spLanguage"
+                        app:layout_constraintStart_toEndOf="@id/tvChoiceLanguage"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvChoiceLanguage"
+                        app:layout_constraintBottom_toBottomOf="@id/tvChoiceLanguage"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+
+                    <Button
+                        android:id="@+id/btnSettingLanguage"
+                        style="@style/vpButton"
+                        android:text="设置设备语言"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginTop="20dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvChoiceLanguage" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.timaimee.vpdemo.utils.CollapseCardLogView>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -25,39 +26,7 @@
             android:orientation="vertical"
             android:paddingBottom="20dp">
 
-            <ScrollView
-                android:id="@+id/svTestInfo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/text_info_bg"
-                android:minHeight="200dp">
-
-                <TextView
-                    android:id="@+id/tvTestInfo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="酸🥕别吃、酸！🍋"
-                    android:textColor="#fff"
-                    android:textSize="14dp"/>
-
-            </ScrollView>
-
-            <TextView
-                android:id="@+id/tvDetectProcessStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:textColor="#f720f9"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:visibility="gone"/>
-
-            <com.timaimee.vpdemo.utils.CollapseCardView
+            <com.timaimee.vpdemo.utils.CollapseCardLogView
                 android:id="@+id/ccvSettingPSAIMHealthData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,6 +66,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            style="@style/ProtocolEditText"
                             android:hint=""
                             android:textSize="14sp"/>
 
@@ -113,9 +83,9 @@
                         android:text="血糖私人模式读取"/>
                 </LinearLayout>
 
-            </com.timaimee.vpdemo.utils.CollapseCardView>
+            </com.timaimee.vpdemo.utils.CollapseCardLogView>
 
-            <com.timaimee.vpdemo.utils.CollapseCardView
+            <com.timaimee.vpdemo.utils.CollapseCardLogView
                 android:id="@+id/ccvSettingComplianceEvent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -139,6 +109,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+                        android:layout_marginTop="4dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -161,6 +132,7 @@
 
                         <EditText
                             android:id="@+id/etBreakfastBefore"
+                            style="@style/ProtocolEditText"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
@@ -173,6 +145,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+                        android:layout_marginTop="4dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/llBreakfastBefore">
@@ -195,6 +168,7 @@
 
                         <EditText
                             android:id="@+id/etBreakfastAfter"
+                            style="@style/ProtocolEditText"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
@@ -207,6 +181,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+                        android:layout_marginTop="4dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/llBreakfastAfter">
@@ -229,6 +204,7 @@
 
                         <EditText
                             android:id="@+id/etLunchBefore"
+                            style="@style/ProtocolEditText"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
@@ -241,6 +217,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+                        android:layout_marginTop="4dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/llLunchBefore">
@@ -263,6 +240,7 @@
 
                         <EditText
                             android:id="@+id/etLunchAfter"
+                            style="@style/ProtocolEditText"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
@@ -275,6 +253,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+                        android:layout_marginTop="4dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/llLunchAfter">
@@ -297,6 +276,7 @@
 
                         <EditText
                             android:id="@+id/etDinnerBefore"
+                            style="@style/ProtocolEditText"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
@@ -309,6 +289,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+                        android:layout_marginTop="4dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/llDinnerBefore">
@@ -331,6 +312,7 @@
 
                         <EditText
                             android:id="@+id/etDinnerAfter"
+                            style="@style/ProtocolEditText"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
@@ -348,7 +330,7 @@
                         android:textSize="17sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/llLunchAfter"/>
+                        app:layout_constraintTop_toBottomOf="@id/llDinnerAfter"/>
 
                     <RadioGroup
                         android:id="@+id/rgIsOpen"
@@ -391,10 +373,10 @@
                         app:layout_constraintTop_toBottomOf="@id/btnSettingBloodGlucoseMultipleCalibration"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </com.timaimee.vpdemo.utils.CollapseCardView>
+            </com.timaimee.vpdemo.utils.CollapseCardLogView>
 
-            <com.timaimee.vpdemo.utils.CollapseCardView
-                android:id="@+id/ccvGetRefreshTimeAndSteps"
+            <com.timaimee.vpdemo.utils.CollapseCardLogView
+                android:id="@+id/ccvBloodGlucoseDetect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -428,7 +410,7 @@
                         app:layout_constraintTop_toBottomOf="@id/btnStartDetect"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </com.timaimee.vpdemo.utils.CollapseCardView>
+            </com.timaimee.vpdemo.utils.CollapseCardLogView>
 
         </LinearLayout>
     </ScrollView>

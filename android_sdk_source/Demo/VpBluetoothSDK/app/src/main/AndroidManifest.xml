@@ -4,8 +4,8 @@
     package="com.timaimee.vpdemo">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
-
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
         android:name="android.permission.ACCESS_NETWORK_STATE"
         tools:node="merge" />
@@ -58,7 +58,28 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".activity.v2.other.Device4gOptActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="false" />
 
+        <activity android:name=".activity.v2.other.MagneticTherapyActivity"
+             android:exported="false" />
+        <activity
+            android:name=".activity.v2.other.AddClockActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.WorldClockActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.EcgMultiLeadDetect1Activity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.v2.custom.G08WHealthAlarmIntervalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.v2.connection.ConnectionActivity"
+            android:exported="false" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.timaimee.vpdemo.fileProvider"
@@ -84,12 +105,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.FunctionSwitchActivity"
             android:exported="false" />
         <activity
             android:name=".activity.OperaterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.PwdConfirmActivity"
             android:exported="false" />
         <activity
             android:name=".activity.GpsReportActivity"
@@ -124,49 +147,79 @@
         <activity
             android:name=".oad.activity.NotificationActivity"
             android:exported="false" />
-        <activity
-            android:name=".activity.UiUpdateG15ImgActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.TextAlarmActivity"
-            android:exported="false" />
+
         <activity
             android:name=".activity.OriginalDataLogActivity"
             android:exported="false" />
         <activity
             android:name=".activity.NotificationSettingsActivity"
             android:exported="false" />
-        <activity android:name=".activity.MagneticTherapyActivity" android:exported="false"/>
-        <activity android:name=".activity.G15QRCodeActivity" android:exported="false"/>
-        <activity android:name=".activity.TestActivity" android:exported="false"/>
-        <activity android:name=".activity.ECGSwitchActivity" android:exported="false"/>
-        <activity android:name=".activity.F2DebugActivity" android:exported="false"/>
-        <activity android:name=".activity.HealthRemindActivity" android:exported="false"/>
-        <activity android:name=".activity.JLDeviceOPTActivity" android:exported="false"/>
-        <activity android:name=".activity.ContactActivity" android:exported="false"/>
-        <activity android:name=".activity.AddContactActivity" android:exported="false"/>
-        <activity android:name=".activity.WorldClockActivity" android:exported="false"/>
-        <activity android:name=".activity.AddClockActivity" android:exported="false"/>
-        <activity android:name=".activity.G08WHealthAlarmIntervalActivity" android:exported="false"/>
-        <activity android:name=".activity.EcgMultiLeadDetect1Activity" android:exported="false"/>
-        <activity android:name=".activity.NewAlarmActivity" android:exported="false"/>
-        <activity android:name=".activity.TextImagePushActivity" android:exported="false"/>
-        <activity android:name=".activity.JH58PPGOptTestActivity" android:exported="false"/>
-        <activity android:name=".activity.MiniCheckupActivity" android:exported="false"/>
-        <activity android:name=".activity.ZT163DeviceAlwaysOffScreenActivity" android:exported="false"/>
-
         <activity
-            android:name=".activity.Device4gOptActivity"
+            android:name=".activity.v2.custom.G15QRCodeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.TestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ECGSwitchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.F2DebugActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.HealthRemindActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.JLDeviceOPTActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.v2.other.ContactActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.v2.other.AddContactActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+        <activity
+            android:name=".activity.v2.other.NewAlarmActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+        <activity
+            android:name=".activity.v2.other.MusicActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+        <activity
+            android:name=".activity.v2.other.PhotographActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+        <activity
+            android:name=".activity.v2.other.LanguageAndBatteryActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
 
         <activity
-            android:name=".activity.GNSSOptActivity"
+            android:name=".activity.TextImagePushActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+        <activity
+            android:name=".activity.v2.custom.JH58PPGOptTestActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+        <activity
+            android:name=".activity.v2.health.MiniCheckupActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+        <activity
+            android:name=".activity.v2.custom.ZT163DeviceAlwaysOffScreenActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
 
         <activity
-            android:name=".activity.AutoMeasureActivity"
+            android:name=".activity.v2.other.GNSSOptActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.AutoMeasureActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
 
@@ -174,17 +227,11 @@
             android:name=".activity.AutoMeasureEditActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
-        <activity android:name=".activity.NRFOtaActivity"
+        <activity
+            android:name=".activity.NRFOtaActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
 
-        <activity android:name=".activity.PwdConfirmActivity"
-            android:configChanges="keyboardHidden"
-            android:exported="false" />
-        <activity android:name=".activity.TCMActivity"
-            android:configChanges="keyboardHidden"
-            android:exported="false" />
         <activity
             android:name=".activity.QX17DataAcquisitionActivity"
             android:configChanges="keyboardHidden"
@@ -194,14 +241,9 @@
             android:name=".activity.v2.DeviceFunctionMenuActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
+        <!-- 健康相关功能 -->
         <activity
             android:name=".activity.v2.health.HealthFunctionActivity"
-            android:configChanges="keyboardHidden"
-            android:exported="false" />
-
-        <activity
-            android:name=".activity.v2.OTAActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
 
@@ -221,7 +263,22 @@
             android:exported="false" />
 
         <activity
+            android:name=".activity.v2.health.RemindEventActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.HeartRateActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
             android:name=".activity.v2.health.BodyTemperatureDetectActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.BodyTemperatureActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
 
@@ -241,7 +298,47 @@
             android:exported="false" />
 
         <activity
+            android:name=".activity.v2.health.BloodPressActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
             android:name=".activity.v2.health.DeviceManualTestDataActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.BodyComponentActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.HrvActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.BloodOxygenActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.GSRDetectActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.StepActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.FunctionTestActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+        <!-- 客户定制功能 -->
+        <activity
+            android:name=".activity.v2.custom.TCMActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
 
@@ -256,25 +353,77 @@
             android:exported="false" />
 
         <activity
+            android:name=".activity.v2.custom.UiUpdateG15ImgActivity"
+            android:exported="false" />
+        <!-- 其他功能 -->
+        <activity
+            android:name=".activity.v2.other.TextAlarmActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.other.OtherFunctionActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.other.AlarmClockActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.other.WeatherActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.health.SedentaryRemindActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.function_switch.FunctionSwitchActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.function_switch.MessagePushSwitchActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.function_switch.CustomSettingSwitchActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.v2.OTAActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+
+        <activity
             android:name="com.nbsp.materialfilepicker.ui.FilePickerActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
             tools:replace="android:theme"/>
+
         <service
             android:name="com.inuker.bluetooth.library.BluetoothService"
             android:enabled="true"
-            android:exported="false"
-            android:foregroundServiceType="location" />
-
-        <service android:name=".oad.service.DfuService" android:exported="false"/>
-        <!-- 高德地图定位 -->
-        <service android:name="com.amap.api.location.APSService" android:exported="false"/>
-
+            android:exported="true"
+            android:foregroundServiceType="connectedDevice"
+            android:permission="android.permission.FOREGROUND_SERVICE"
+            tools:ignore="ForegroundServicePermission" />
+        <service
+            android:name=".oad.service.DfuService"
+            android:exported="false" /> <!-- 高德地图定位 -->
+        <service
+            android:name="com.amap.api.location.APSService"
+            android:exported="false" />
         <service
             android:name=".MyService"
             android:enabled="true"
             android:exported="false"
-            android:foregroundServiceType="location" />
+            android:foregroundServiceType="location"
+            tools:ignore="ForegroundServicePermission" />
     </application>
-
 
 </manifest>

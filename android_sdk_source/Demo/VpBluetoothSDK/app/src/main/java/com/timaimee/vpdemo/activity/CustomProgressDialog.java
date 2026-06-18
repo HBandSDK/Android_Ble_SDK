@@ -10,6 +10,7 @@ import com.timaimee.vpdemo.R;
 
 public class CustomProgressDialog extends Dialog {
 
+
     public CustomProgressDialog(Context context) {
         super(context, R.style.loading_dialog);
         this.setContentView(R.layout.dialog_connect_progress);

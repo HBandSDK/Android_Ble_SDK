@@ -8,8 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.iielse.switchbutton.SwitchView;
 import com.timaimee.vpdemo.R;
-import com.timaimee.vpdemo.activity.SwitchView;
 import com.veepoo.protocol.model.settings.Alarm2Setting;
 
 import java.util.List;

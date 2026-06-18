@@ -5,19 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvTextImagePush"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_centerInParent="true"
-        android:background="#000"
-        android:gravity="center"
-        android:text="图文推送"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/tvPushText"
@@ -29,19 +22,21 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTextImagePush" />
+        app:layout_constraintTop_toBottomOf="@id/vTitle" />
 
     <EditText
         android:id="@+id/etSendContent"
+        style="@style/ProtocolEditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:hint="请输入您推送的文本信息"
+        android:layout_margin="4dp"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvPushText" />
 
     <Button
         android:id="@+id/btnPushText"
+        style="@style/vpButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -65,6 +60,7 @@
 
     <ImageView
         android:id="@+id/ivWatchFace1"
+        android:background="#f2f2f2"
         android:layout_width="156dp"
         android:layout_height="180dp"
         android:layout_marginTop="10dp"
@@ -76,6 +72,7 @@
         android:id="@+id/ivWatchFace2"
         android:layout_width="156dp"
         android:layout_height="180dp"
+        android:background="#f2f2f2"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/ivWatchFace1"
@@ -110,26 +107,29 @@
 
     <EditText
         android:id="@+id/etWidth"
+        style="@style/ProtocolEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/etHeight"
         app:layout_constraintTop_toBottomOf="@id/rbImageSelect"
         android:inputType="number"
         android:hint="请输入裁剪宽"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"/>
+        android:layout_height="40dp"/>
 
     <EditText
         android:id="@+id/etHeight"
+        style="@style/ProtocolEditText"
         app:layout_constraintStart_toEndOf="@id/etWidth"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rbImageSelect"
         android:inputType="number"
         android:hint="请输入裁剪高"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"/>
+        android:layout_height="40dp"/>
 
     <Button
         android:id="@+id/btnSelectImage"
+        style="@style/vpButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -141,6 +141,7 @@
 
     <Button
         android:id="@+id/btnPushImage"
+        style="@style/vpButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -156,6 +157,7 @@
         android:layout_height="wrap_content"
         android:background="#000"
         android:padding="10dp"
+        android:layout_marginTop="10dp"
         android:text="推送图文信息"
         android:textColor="#fff"
         app:layout_constraintEnd_toEndOf="parent"

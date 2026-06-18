@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
+import android.os.Handler;
+import android.os.Looper;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
@@ -15,10 +19,13 @@ import com.veepoo.protocol.customui.WatchUIType;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.data.IUIBaseInfoFormAGPSListener;
 import com.veepoo.protocol.listener.data.IUiUpdateListener;
+import com.veepoo.protocol.listener.oad.OnDownLoadListener;
 import com.veepoo.protocol.model.datas.UIDataAGPS;
 import com.veepoo.protocol.model.enums.EUIFromType;
 import com.veepoo.protocol.model.enums.EUiUpdateError;
+import com.veepoo.protocol.util.UiServerHttpUtil;
 import com.veepoo.protocol.util.UiUpdateUtil;
+import com.veepoo.protocol.util.VPLogger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,22 +43,25 @@ public class UiUpdateAGPSActivity extends Activity {
 
     public TextView mUiAGPSSupportTV;
     public TextView mUiAGPSBaseInfoTV;
-    public TextView mSendProgressTv;
+    public TextView mSendProgressTv, mDownProgressTv;
 
     WatchUIType mWatchUIType;
+    UiUpdateUtil mUiUpdateUtil;
+
+    UiServerHttpUtil uiUpdateCheckOprate;
+    private File mAgpsUpdatefile;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_uiupdate_agps);
-        {
-            mUiAGPSSupportTV = findViewById(R.id.ui_issupport_agps);
-            mUiAGPSBaseInfoTV = findViewById(R.id.ui_baseinfo_agps);
-            mSendProgressTv = findViewById(R.id.ui_agps_progress);
-        }
+        mUiAGPSSupportTV = findViewById(R.id.ui_issupport_agps);
+        mUiAGPSBaseInfoTV = findViewById(R.id.ui_baseinfo_agps);
+        mSendProgressTv = findViewById(R.id.ui_agps_progress);
+        mDownProgressTv = findViewById(R.id.tv_download_info);
         mContext = UiUpdateAGPSActivity.this;
         UiUpdateUtil.getInstance().init(this);
-
+        uiUpdateCheckOprate = new UiServerHttpUtil();
     }
 
     /**
@@ -148,6 +158,48 @@ public class UiUpdateAGPSActivity extends Activity {
         } else {
             Logger.t(TAG).i("can not find rtcm");
         }
+    }
+
+    public void downloadAgps(View view) {
+        String filePath = getExternalFilesDir(null) + File.separator + "vp_agps.pgl";
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                uiUpdateCheckOprate.downLoadAGpsFile(isInChina(), filePath, new OnDownLoadListener() {
+                    @Override
+                    public void onProgress(final float progress) {
+                        Logger.t(TAG).i("下载进度:" + progress);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mDownProgressTv.setText("下载进度:" + progress * 100);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mDownProgressTv.setText("下载完成");
+                            }
+                        });
+                        VPLogger.i("下载完成");
+                        mAgpsUpdatefile = new File(filePath);
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private boolean isInChina() {
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+
+        String simCountryIso = telephonyManager.getSimCountryIso().toUpperCase();
+        String networkCountryIso = telephonyManager.getNetworkCountryIso().toUpperCase();
+
+        return "CN".equals(simCountryIso) || "CN".equals(networkCountryIso);
     }
 
 

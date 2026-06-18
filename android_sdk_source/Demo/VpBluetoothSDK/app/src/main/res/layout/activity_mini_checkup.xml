@@ -2,26 +2,21 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        app:layout_constraintStart_toStartOf="parent"
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:gravity="center"
-        android:background="#000"
-        android:layout_centerInParent="true"
-        android:text="微体检"
-        android:textColor="@android:color/white"
-        android:textSize="20sp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <Button
         android:id="@+id/btnReadPPGRawData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/vpButton"
         android:text="开始微体检"
         android:textSize="12sp"
         android:paddingStart="30dp"
@@ -29,12 +24,13 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toStartOf="@id/btnStopRealTimePPGRawDataTransfer"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+        app:layout_constraintTop_toBottomOf="@id/vTitle" />
 
     <Button
         android:id="@+id/btnStopRealTimePPGRawDataTransfer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/vpButton"
         android:text="停止微体检"
         android:layout_marginTop="10dp"
         android:paddingStart="30dp"
@@ -42,7 +38,7 @@
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@id/btnReadPPGRawData"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+        app:layout_constraintTop_toBottomOf="@id/vTitle" />
 
     <ScrollView
         android:id="@+id/svInfo"

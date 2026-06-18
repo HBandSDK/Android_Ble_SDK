@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/tvTitle"
@@ -15,7 +23,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/vTitle" />
 
     <TextView
         android:id="@+id/tvRefresh"
@@ -27,7 +35,7 @@
         android:textColor="#fff"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/vTitle" />
 
     <TextView
         android:id="@+id/tvDeleteAll"
@@ -39,7 +47,7 @@
         android:textColor="#fff"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/vTitle" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvContact"
@@ -64,11 +72,8 @@
 
     <Button
         android:id="@+id/btnAdd"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
+        style="@style/vpButton"
         android:layout_margin="20dp"
-        android:background="@drawable/login_button"
         android:text="添加"
         android:textColor="#Fff"
         android:textSize="18sp"
@@ -78,11 +83,8 @@
 
     <Button
         android:id="@+id/btnAddAll"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
+        style="@style/vpButton"
         android:layout_margin="20dp"
-        android:background="@drawable/login_button"
         android:text="添加剩余"
         android:textColor="#Fff"
         android:textSize="18sp"
@@ -92,11 +94,8 @@
 
     <Button
         android:id="@+id/btnSOSSettings"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
+        style="@style/vpButton"
         android:layout_margin="20dp"
-        android:background="@drawable/login_button"
         android:text="紧急联系人呼叫设置"
         android:textColor="#Fff"
         android:textSize="18sp"

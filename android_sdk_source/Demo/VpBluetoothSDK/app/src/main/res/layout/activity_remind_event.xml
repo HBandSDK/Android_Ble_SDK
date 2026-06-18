@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.timaimee.vpdemo.utils.CollapseCardLogView
+        android:id="@+id/ccvRemindEvent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:collapseDefaultExpand="true"
+        app:collapseTitle="提醒事件"
+        app:collapseTitleColor="#E53935"
+        app:collapseTitleSize="15sp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/tvFunName"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="读取类型:"
+                android:textColor="#4A3F35"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <Spinner
+                android:id="@+id/spFun"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="全部"
+                android:textColor="#4A3F35"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/tvFunName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvStartReadTimestamp"
+                android:layout_width="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvFunName"
+                android:padding="10dp"
+                android:text="开始读取的时间位置↓"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btnDatePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/date_time_btn_bg"
+                android:padding="10dp"
+                android:layout_marginTop="6dp"
+                android:text="2025-10-30"
+                app:layout_constraintEnd_toStartOf="@id/tv_"
+                app:layout_constraintTop_toBottomOf="@id/tvStartReadTimestamp" />
+
+            <TextView
+                android:id="@+id/tv_"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  -  "
+                app:layout_constraintBottom_toBottomOf="@id/btnDatePicker"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/btnDatePicker" />
+
+            <Button
+                android:id="@+id/btnTimePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:background="@drawable/date_time_btn_bg"
+                android:padding="10dp"
+                android:layout_marginTop="6dp"
+                android:text="12:30:00"
+                app:layout_constraintStart_toEndOf="@id/tv_"
+                app:layout_constraintTop_toBottomOf="@id/tvStartReadTimestamp" />
+
+            <Button
+                android:id="@+id/btnReadRemindEvent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnDatePicker"
+                style="@style/vpButton"
+                android:text="读取提醒事件"/>
+
+            <Button
+                android:id="@+id/btnSendAddEvent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnReadRemindEvent"
+                style="@style/vpButton"
+                android:lines="1"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="11sp"
+                android:autoSizeMaxTextSize="17sp"
+                android:text="添加提醒事件(仅调试用后期关闭)"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.timaimee.vpdemo.utils.CollapseCardLogView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Button
@@ -21,20 +22,16 @@
         app:layout_constraintTop_toBottomOf="@id/btnReadEcg"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="30dp"
-        android:background="#32cd32"
-        android:textColor="#FFF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/btnCloseEcg"
         android:text="ECG close"
-        android:background="#FF0000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnOpenEcg"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="30dp"
-        android:textColor="#FFF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

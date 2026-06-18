@@ -12,7 +12,10 @@ import android.widget.Toast;
 
 import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.activity.v2.BaseActivity;
+import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity;
+import com.timaimee.vpdemo.utils.CollapseCardLogView;
 import com.timaimee.vpdemo.utils.CollapseCardView;
+import com.timaimee.vpdemo.utils.TimeUtils;
 import com.veepoo.protocol.listener.data.IBloodGlucoseChangeListener;
 import com.veepoo.protocol.model.datas.MealInfo;
 import com.veepoo.protocol.model.enums.EBloodGlucoseRiskLevel;
@@ -24,7 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class BloodGlucoseActivity extends BaseActivity implements View.OnClickListener, IBloodGlucoseChangeListener{
+public class BloodGlucoseActivity extends BaseVPBLETestActivity implements View.OnClickListener, IBloodGlucoseChangeListener{
 
     private EditText etBreakfastBefore, etBreakfastAfter, etDinnerBefore, etDinnerAfter, etLunchBefore, etLunchAfter, etBloodGlucoseCalibration;
     private Button btnBreakfastTimeBefore, btnBreakfastTimeAfter, btnDinnerTimeBefore, btnDinnerTimeAfter, btnLunchTimeBefore, btnLunchTimeAfter;
@@ -34,7 +37,7 @@ public class BloodGlucoseActivity extends BaseActivity implements View.OnClickLi
     TextView tvProcessInfo;
 
     // 折叠卡片（加互斥）
-    private CollapseCardView ccvSettingBloodGlucoseCalibration, ccvSettingBloodGlucoseMultipleCalibration;
+    private CollapseCardLogView ccvSettingBloodGlucoseCalibration, ccvSettingBloodGlucoseMultipleCalibration, ccvBloodGlucoseDetect;
 
     // 默认配置
     private static final String[] defaultMealTime = {"08:00", "09:00", "12:00", "13:10", "18:00", "19:00"};
@@ -85,6 +88,7 @@ public class BloodGlucoseActivity extends BaseActivity implements View.OnClickLi
 
         ccvSettingBloodGlucoseCalibration = findViewById(R.id.ccvSettingPSAIMHealthData);
         ccvSettingBloodGlucoseMultipleCalibration = findViewById(R.id.ccvSettingComplianceEvent);
+        ccvBloodGlucoseDetect = findViewById(R.id.ccvBloodGlucoseDetect);
 
         // ==================== 限制输入类型：只允许数字 + 小数点 ====================
         etBreakfastBefore.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -97,19 +101,19 @@ public class BloodGlucoseActivity extends BaseActivity implements View.OnClickLi
     }
 
     @Override
-    public boolean hasCommonMsgUI() {
-        return true;
-    }
-
-    @Override
     public void initData() {
         // 初始化三个 MealInfo
         breakfastMeal = new MealInfo(1);
         lunchMeal = new MealInfo(2);
         dinnerMeal = new MealInfo(3);
-
         // 设置默认值
         setDefaultValues();
+
+        //是否有血糖功能
+        fCheck.checkBgMultipleAdjusting();
+        ccvBloodGlucoseDetect.setFunctionEnabled(true);
+        ccvSettingBloodGlucoseCalibration.setFunctionEnabled(fCheck.checkBgAdjusting());
+        ccvSettingBloodGlucoseMultipleCalibration.setFunctionEnabled(fCheck.checkBgMultipleAdjusting());
     }
 
     /**
@@ -146,32 +150,55 @@ public class BloodGlucoseActivity extends BaseActivity implements View.OnClickLi
         btnSettingBloodGlucoseMultipleCalibration.setOnClickListener(this);
         btnReadBloodGlucoseMultipleCalibration.setOnClickListener(this);
         btnStartDetect.setOnClickListener(this);
-        btnStartDetect.setOnClickListener(this);
+        btnStopDetect.setOnClickListener(this);
 
-        ccvSettingBloodGlucoseCalibration.setOnExpandStateChangeListener(new CollapseCardView.OnExpandStateChangeListener() {
+        ccvSettingBloodGlucoseCalibration.setOnExpandStateChangeListener(new CollapseCardLogView.OnExpandStateChangeListener() {
             @Override
-            public void onExpanded(CollapseCardView cardView) {
+            public void onExpanded(CollapseCardLogView cardView) {
+                if (ccvSettingBloodGlucoseMultipleCalibration.isExpanded()) {
+                    ccvSettingBloodGlucoseMultipleCalibration.collapse();
+                }
+                if (ccvBloodGlucoseDetect.isExpanded()) {
+                    ccvBloodGlucoseDetect.collapse();
+                }
+            }
+
+            @Override
+            public void onCollapsed(CollapseCardLogView cardView) {
+
+            }
+        });
+
+        ccvBloodGlucoseDetect.setOnExpandStateChangeListener(new CollapseCardLogView.OnExpandStateChangeListener() {
+            @Override
+            public void onExpanded(CollapseCardLogView cardView) {
+                if (ccvSettingBloodGlucoseCalibration.isExpanded()) {
+                    ccvSettingBloodGlucoseCalibration.collapse();
+                }
                 if (ccvSettingBloodGlucoseMultipleCalibration.isExpanded()) {
                     ccvSettingBloodGlucoseMultipleCalibration.collapse();
                 }
             }
 
             @Override
-            public void onCollapsed(CollapseCardView cardView) {
+            public void onCollapsed(CollapseCardLogView cardView) {
 
             }
         });
 
-        ccvSettingBloodGlucoseMultipleCalibration.setOnExpandStateChangeListener(new CollapseCardView.OnExpandStateChangeListener() {
+        ccvSettingBloodGlucoseMultipleCalibration.setOnExpandStateChangeListener(new CollapseCardLogView.OnExpandStateChangeListener() {
             @Override
-            public void onExpanded(CollapseCardView cardView) {
+            public void onExpanded(CollapseCardLogView cardView) {
                 if (ccvSettingBloodGlucoseCalibration.isExpanded()) {
                     ccvSettingBloodGlucoseCalibration.collapse();
+                }
+                if (ccvBloodGlucoseDetect.isExpanded()) {
+                    ccvBloodGlucoseDetect.collapse();
                 }
             }
 
             @Override
-            public void onCollapsed(CollapseCardView cardView) {
+            public void onCollapsed(CollapseCardLogView cardView) {
 
             }
         });
@@ -200,18 +227,22 @@ public class BloodGlucoseActivity extends BaseActivity implements View.OnClickLi
                 return;
             }
             float privateCalibration = Float.parseFloat(value);
+            ccvSettingBloodGlucoseCalibration.appendBlueMiddleText("▶ 正在设置[血糖私人模式]...");
             vpBleManager.setBloodGlucoseAdjustingData(privateCalibration, true, defaultResponse,this);
         } else if (id == R.id.btnReadBloodGlucosePrivate) {
+            ccvSettingBloodGlucoseCalibration.appendBlueMiddleText("▶ 正在读取[血糖私人模式]...");
             vpBleManager.readBloodGlucoseAdjustingData(defaultResponse, this);
         } else if (id == R.id.btnSettingBloodGlucoseMultipleCalibration) {
-            clearTestInfo();
+            ccvSettingBloodGlucoseMultipleCalibration.appendBlueMiddleText("▶ 正在设置[血糖多校准]...");
             settingSettingBloodGlucoseMultipleCalibration();
         } else if (id == R.id.btnReadBloodGlucoseMultipleCalibration) {
+            ccvSettingBloodGlucoseMultipleCalibration.appendBlueMiddleText("▶ 正在读取[血糖多校准]...");
             readBloodGlucoseMultipleCalibration();
         } else if (id == R.id.btnStartDetect) {
-            clearTestInfo();
+            ccvBloodGlucoseDetect.appendBlueMiddleText("▶ 正在开始测量血糖...");
             vpBleManager.startBloodGlucoseDetect(defaultResponse, this);
         }  else if (id == R.id.btnStopDetect) {
+            ccvBloodGlucoseDetect.appendBlueMiddleText("▶ 正在停止测量血糖...");
             vpBleManager.stopBloodGlucoseDetect(defaultResponse, this);
         }
     }
@@ -231,8 +262,7 @@ public class BloodGlucoseActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void readBloodGlucoseMultipleCalibration() {
-        clearTestInfo();
-//        vpBleManager.readBloodComponentCalibration(defaultResponse, this);
+        vpBleManager.readMultipleCalibrationBGValue(defaultResponse, this);
     }
 
     /**
@@ -347,55 +377,68 @@ public class BloodGlucoseActivity extends BaseActivity implements View.OnClickLi
 //            }
 //        }
 //        appendBlueMiddleText("心率值：" + heartData.getData());
+        ccvBloodGlucoseDetect.appendRedLargeText("⚠️: ️血糖测量异常>>> " + status);
     }
 
     @Override
     public void onBloodGlucoseDetect(int progress, float bloodGlucose, EBloodGlucoseRiskLevel level) {
-
+        ccvBloodGlucoseDetect.appendResult(">>进度: " + progress + "% | 血糖: " + bloodGlucose + "  | 风险: " + level);
+        if (progress == 100) {
+            ccvBloodGlucoseDetect.appendBlueMiddleText("⏹️: ️血糖测量已停止");
+        }
     }
 
     @Override
     public void onBloodGlucoseStopDetect() {
-
+        ccvBloodGlucoseDetect.appendBlueMiddleText("⏹️: ️血糖测量已停止");
     }
 
     @Override
     public void onBloodGlucoseAdjustingSettingSuccess(boolean isOpen, float adjustingValue) {
-
+        ccvSettingBloodGlucoseCalibration.appendResult("🍚设置成功> 开关：" + (isOpen?"开启":"关闭") + " | 校准值: " + adjustingValue);
     }
 
     @Override
     public void onBloodGlucoseAdjustingSettingFailed() {
-
+        ccvSettingBloodGlucoseCalibration.appendRedLargeText("🍚设置失败");
     }
 
     @Override
     public void onBloodGlucoseAdjustingReadSuccess(boolean isOpen, float adjustingValue) {
-
+        ccvSettingBloodGlucoseCalibration.appendResult("🍚读取成功> 开关：" + (isOpen?"开启":"关闭") + " | 校准值: " + adjustingValue);
     }
 
     @Override
     public void onBloodGlucoseAdjustingReadFailed() {
-
+        ccvSettingBloodGlucoseCalibration.appendRedLargeText("🍚读取失败");
     }
 
     @Override
     public void onBGMultipleAdjustingReadSuccess(boolean isOpen, MealInfo breakfast, MealInfo lunch, MealInfo dinner) {
+        ccvSettingBloodGlucoseMultipleCalibration.appendResult("🍚 多校准读取成功⬇️");
+        ccvSettingBloodGlucoseMultipleCalibration.appendResult("早餐➡️" + getMealInfo(breakfast));
+        ccvSettingBloodGlucoseMultipleCalibration.appendResult("中餐➡️" + getMealInfo(lunch));
+        ccvSettingBloodGlucoseMultipleCalibration.appendResult("晚餐➡️" + getMealInfo(dinner));
+    }
 
+    private String getMealInfo(MealInfo mealInfo){
+        String strBeforeTime = String.format(Locale.US,"%02d:%02d", mealInfo.beforeMealTime / 60, mealInfo.beforeMealTime % 60);
+        String strAfterTime = String.format(Locale.US,"%02d:%02d", mealInfo.afterMealTime / 60, mealInfo.afterMealTime % 60);
+        return String.format("餐前:%s - %smg/dl | 餐后:%s - %smg/dl", strBeforeTime, mealInfo.bgBeforeMeal_mgDL, strAfterTime, mealInfo.bgAfterMeal_mgDL);
     }
 
     @Override
     public void onBGMultipleAdjustingReadFailed() {
-
+        ccvSettingBloodGlucoseMultipleCalibration.appendRedLargeText("🍚读取失败");
     }
 
     @Override
     public void onBGMultipleAdjustingSettingSuccess() {
-
+        ccvSettingBloodGlucoseMultipleCalibration.appendBlueMiddleText("🍚设置成功");
     }
 
     @Override
     public void onBGMultipleAdjustingSettingFailed() {
-
+        ccvSettingBloodGlucoseMultipleCalibration.appendRedLargeText("🍚设置失败");
     }
 }

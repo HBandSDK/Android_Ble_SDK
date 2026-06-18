@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- 根 ScrollView 包裹所有内容 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <com.timaimee.vpdemo.utils.CollapseCardLogView
+                android:id="@+id/ccvBodyComponentDetect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="visible"
+                app:collapseDefaultExpand="false"
+                app:collapseTitle="身体成分测量"
+                app:collapseTitleColor="#E53935"
+                app:collapseTitleSize="15sp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
+
+                    <Button
+                        android:id="@+id/btnStartDetect"
+                        style="@style/vpButton"
+                        android:text="开始测量"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/btnStopDetect"
+                        style="@style/vpButton"
+                        android:text="停止测量"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/btnStartDetect"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.timaimee.vpdemo.utils.CollapseCardLogView>
+
+            <com.timaimee.vpdemo.utils.CollapseCardLogView
+                android:id="@+id/ccvBodyComponentRead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="visible"
+                app:collapseDefaultExpand="false"
+                app:collapseTitle="身体成分读取"
+                app:collapseTitleColor="#E53935"
+                app:collapseTitleSize="15sp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
+
+                    <Button
+                        android:id="@+id/btnReadAll"
+                        style="@style/vpButton"
+                        android:text="读取所有身体成分数据"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/btnReadID"
+                        style="@style/vpButton"
+                        android:text="读取身体成分ID"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/btnReadAll"/>
+
+                    <EditText
+                        android:id="@+id/etId"
+                        style="@style/ProtocolEditText"
+                        android:inputType="number"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:hint="请输入有效的身体成分ID"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/btnReadID"/>
+
+                    <Button
+                        android:id="@+id/btnReadByID"
+                        style="@style/vpButton"
+                        android:text="通过ID读取身体成分数据"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etId"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.timaimee.vpdemo.utils.CollapseCardLogView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -43,7 +43,7 @@
         android:id="@+id/layoutContentContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="6dp"
+        android:padding="10dp"
         android:orientation="vertical"
         android:visibility="gone"/>
 

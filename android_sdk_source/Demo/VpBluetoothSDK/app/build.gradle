@@ -125,6 +125,7 @@ dependencies {
 
     implementation 'io.github.lucksiege:ucrop:v3.11.2'
     implementation 'com.github.nbsp-team:MaterialFilePicker:master-SNAPSHOT'
+    implementation 'cn.carbs.android:SegmentControlView:1.0.0'
     implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
 }
 

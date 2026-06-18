@@ -786,12 +786,36 @@ public class PSAIMHealthDataActivity extends BaseVPBLETestActivity implements IQ
 
     @Override
     public void onDataSettingSuccess() {
-        ccvSettingPSAIMHealthData.appendOrangeText("✅️ [PSAIM] 数据发送成功！");
+        showToast("设置成功");
+        switch (cmdTag) {
+            case 0:
+                ccvSettingPSAIMHealthData.appendOrangeText("✅️ [健康数据] 设置成功！");
+                break;
+            case 1:
+                ccvSettingComplianceEvent.appendOrangeText("✅️ [达标事件] 设置成功！");
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+        }
     }
 
     @Override
     public void onDataSettingFailed() {
-        ccvSettingPSAIMHealthData.appendRedLargeText("❌ [PSAIM] 数据发送失败！");
+        showToast("设置失败");
+        switch (cmdTag) {
+            case 0:
+                ccvSettingPSAIMHealthData.appendRedLargeText("❌ [健康数据] 设置失败！");
+                break;
+            case 1:
+                ccvSettingComplianceEvent.appendRedLargeText("❌ [达标事件] 设置失败！");
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+        }
     }
 
     @Override
@@ -889,6 +913,8 @@ public class PSAIMHealthDataActivity extends BaseVPBLETestActivity implements IQ
                 + ",压力="+data.getPressure()
                 + ",情绪="+data.getEmotion()
                 + ",疲劳度="+data.getFatigue()
+                + ",体温="+data.getTemperature()
+                + ",皮肤体温="+data.getBaseTemperature()
                 ;
     }
 

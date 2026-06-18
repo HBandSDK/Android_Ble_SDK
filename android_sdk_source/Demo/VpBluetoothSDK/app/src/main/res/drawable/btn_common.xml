@@ -12,6 +12,18 @@
             <corners android:radius="6dp"/>
         </shape>
     </item>
+    <item android:state_enabled="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#000"/>
+            <corners android:radius="6dp"/>
+        </shape>
+    </item>
+    <item android:state_enabled="false">
+        <shape android:shape="rectangle">
+            <solid android:color="#999"/>
+            <corners android:radius="6dp"/>
+        </shape>
+    </item>
     <item>
         <shape android:shape="rectangle">
             <solid android:color="#222"/>

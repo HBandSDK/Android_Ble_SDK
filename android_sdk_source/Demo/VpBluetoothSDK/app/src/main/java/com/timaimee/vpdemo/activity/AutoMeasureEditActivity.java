@@ -1,6 +1,6 @@
 package com.timaimee.vpdemo.activity;
 
-import static com.timaimee.vpdemo.activity.AutoMeasureActivity.selectData;
+import static com.timaimee.vpdemo.activity.v2.health.AutoMeasureActivity.selectData;
 
 import android.app.TimePickerDialog;
 import android.os.Bundle;
@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -22,7 +21,6 @@ import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.data.IAutoMeasureSettingDataListener;
 import com.veepoo.protocol.model.datas.AutoMeasureData;
-import com.veepoo.protocol.model.datas.TimeData;
 
 import java.util.List;
 import java.util.Locale;

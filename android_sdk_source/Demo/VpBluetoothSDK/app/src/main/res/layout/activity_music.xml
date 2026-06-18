@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.timaimee.vpdemo.utils.CollapseCardLogView
+        android:id="@+id/ccvMusicControl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTitle"
+        android:layout_margin="10dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="visible"
+        app:collapseDefaultExpand="true"
+        app:collapseTitle="音乐控制"
+        app:collapseTitleColor="#E53935"
+        app:collapseTitleSize="15sp"
+        tools:visibility="visible"
+        tools:context=".activity.v2.other.MusicActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clMusicControlPan"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ccvMusicControl"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvSingerName"
+                android:text="歌手:"
+                android:textSize="16sp"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:id="@+id/etSingerName"
+                app:layout_constraintStart_toEndOf="@id/tvSingerName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvSingerName"
+                app:layout_constraintBottom_toBottomOf="@id/tvSingerName"
+                android:hint="请输入歌手名称"
+                style="@style/ProtocolEditText"
+                android:layout_width="0dp"
+                android:layout_height="40dp"/>
+
+            <TextView
+                android:id="@+id/tvMusicName"
+                android:text="歌曲:"
+                android:textSize="16sp"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvSingerName"
+                android:layout_marginTop="20dp"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:id="@+id/etMusicName"
+                app:layout_constraintStart_toEndOf="@id/tvMusicName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvMusicName"
+                app:layout_constraintBottom_toBottomOf="@id/tvMusicName"
+                android:hint="请输入歌曲名"
+                style="@style/ProtocolEditText"
+                android:layout_width="0dp"
+                android:layout_height="40dp"/>
+
+            <TextView
+                android:id="@+id/tvAlbumName"
+                android:text="专辑:"
+                android:textSize="16sp"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvMusicName"
+                android:layout_marginTop="20dp"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:id="@+id/etAlbumName"
+                app:layout_constraintStart_toEndOf="@id/tvAlbumName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvAlbumName"
+                app:layout_constraintBottom_toBottomOf="@id/tvAlbumName"
+                android:hint="请输入专辑名"
+                style="@style/ProtocolEditText"
+                android:layout_width="0dp"
+                android:layout_height="40dp"/>
+
+            <TextView
+                android:id="@+id/tvStatus"
+                android:text="状态:"
+                android:textSize="16sp"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAlbumName"
+                android:layout_marginTop="20dp"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"/>
+
+            <RadioGroup
+                android:id="@+id/rgStatus"
+                app:layout_constraintStart_toEndOf="@id/tvStatus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvStatus"
+                app:layout_constraintBottom_toBottomOf="@id/tvStatus"
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/rbPlay"
+                    android:text="播放"
+                    android:checked="true"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+
+                <RadioButton
+                    android:id="@+id/rbPause"
+                    android:text="暂停"
+                    android:layout_gravity="end"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/tvVoice"
+                android:text="音量:"
+                android:textSize="16sp"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvStatus"
+                android:layout_marginTop="20dp"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"/>
+
+            <SeekBar
+                android:id="@+id/sbVoice"
+                android:layout_width="0dp"
+                android:max="100"
+                android:progress="50"
+                app:layout_constraintStart_toEndOf="@id/tvVoice"
+                app:layout_constraintEnd_toStartOf="@id/tvVoiceValue"
+                app:layout_constraintTop_toTopOf="@id/tvVoice"
+                app:layout_constraintBottom_toBottomOf="@id/tvVoice"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tvVoiceValue"
+                app:layout_constraintStart_toEndOf="@id/sbVoice"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvVoice"
+                app:layout_constraintBottom_toBottomOf="@id/tvVoice"
+                android:text="50%"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btnMusicSetting"
+                app:layout_constraintTop_toBottomOf="@id/tvVoice"
+                android:layout_marginTop="20dp"
+                android:text="音乐设置"
+                style="@style/vpButton"/>
+
+            <Button
+                android:id="@+id/btnVoiceSetting"
+                app:layout_constraintTop_toBottomOf="@id/btnMusicSetting"
+                android:layout_marginTop="20dp"
+                android:text="音量设置"
+                style="@style/vpButton"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.timaimee.vpdemo.utils.CollapseCardLogView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

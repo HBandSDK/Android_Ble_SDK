@@ -36,6 +36,7 @@ public class EcgDetectActivity extends Activity implements View.OnClickListener 
         setContentView(R.layout.activity_ecgdetect);
         mContext = EcgDetectActivity.this;
         mEcgHeartView = (EcgHeartRealthView) findViewById(R.id.ecg_real_view);
+        mEcgHeartView.setEcgType(VpSpGetUtil.getVpSpVariInstance(EcgDetectActivity.this.getApplicationContext()).getECGType());
         notify = (Button) findViewById(R.id.greenlightdata);
         start = (Button) findViewById(R.id.start);
         stop = (Button) findViewById(R.id.stop);

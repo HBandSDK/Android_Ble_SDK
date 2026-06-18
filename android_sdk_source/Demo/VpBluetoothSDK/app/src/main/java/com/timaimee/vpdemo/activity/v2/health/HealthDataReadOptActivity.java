@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
-import com.timaimee.vpdemo.activity.v2.BaseActivity;
+import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity;
 import com.timaimee.vpdemo.bean.MyDeviceInfo;
 import com.timaimee.vpdemo.utils.CollapseCardView;
 import com.veepoo.protocol.listener.data.IOriginData3Listener;
@@ -29,7 +29,7 @@ import com.veepoo.protocol.model.settings.ReadOriginSetting;
 import java.util.Arrays;
 import java.util.List;
 
-public class HealthDataReadOptActivity extends BaseActivity implements IOriginData3Listener {
+public class HealthDataReadOptActivity extends BaseVPBLETestActivity implements IOriginData3Listener {
     private static final String TAG = "-健康数据读取-";
 
     private CollapseCardView ccvReadAll, ccvReadCustom, ccvReadFrom, ccvReadOneDay;
@@ -47,7 +47,6 @@ public class HealthDataReadOptActivity extends BaseActivity implements IOriginDa
     /* 只读一天 */
     Spinner spWhichDay, spStartFromOneDayPosition;
     Button btnReadOneDay;
-
 
     private TextView tvInfo, tvReadState;
     private ScrollView svInfo;
@@ -244,7 +243,9 @@ public class HealthDataReadOptActivity extends BaseActivity implements IOriginDa
                 + ": 心率=" + data3.getRateValue()
                 + " , 步数=" + data3.getStepValue()
                 + " , 高压=" + data3.getHighValue()
-                + " , 低压=" + data3.getLowValue();
+                + " , 低压=" + data3.getLowValue()
+                + " , 运动状态版本=" + data3.getSportStatusVersion()
+                + " , 运动状态=" + Arrays.toString(data3.getSportStatus());
     }
 
     @Override

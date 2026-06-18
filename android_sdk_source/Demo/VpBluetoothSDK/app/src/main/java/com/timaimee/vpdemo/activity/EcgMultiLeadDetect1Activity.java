@@ -79,7 +79,6 @@ public class EcgMultiLeadDetect1Activity extends Activity implements View.OnClic
     @Override
     public void onClick(View v) {
         int id = v.getId();
-
         if (id == R.id.start) {
             if (isDetecting) {
                 return;
@@ -151,7 +150,7 @@ public class EcgMultiLeadDetect1Activity extends Activity implements View.OnClic
 
                 @Override
                 public void onEcgADCChange(@NonNull ELeadFlag leadFlag, @NonNull int[] data, int gain, int packNum) {
-                    viewList.get(leadFlag.getValue() - 1).changeData(data, data.length);
+                    viewList.get(leadFlag.getValue() - 1).changeData(data, data.length, gain);
                 }
 
 

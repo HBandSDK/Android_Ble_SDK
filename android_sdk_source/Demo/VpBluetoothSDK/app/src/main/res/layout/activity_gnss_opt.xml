@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
@@ -14,6 +15,13 @@
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="48dp"/>
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/tvSafetyProtection"
@@ -28,11 +36,12 @@
 
     <Button
         android:id="@+id/btnStartSafetyProtection"
+        style="@style/vpButton"
         app:layout_constraintTop_toBottomOf="@id/tvSafetyProtection"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btnStopSafetyProtection"
         android:text="开启守护"
-        android:textSize="18sp"
+        android:layout_marginTop="2dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_width="0dp"
@@ -40,11 +49,12 @@
 
     <Button
         android:id="@+id/btnStopSafetyProtection"
+        style="@style/vpButton"
         app:layout_constraintTop_toBottomOf="@id/tvSafetyProtection"
         app:layout_constraintStart_toEndOf="@id/btnStartSafetyProtection"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="结束守护"
-        android:textSize="18sp"
+        android:layout_marginTop="2dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_width="0dp"
@@ -71,6 +81,7 @@
 
     <EditText
         android:id="@+id/etRSSI"
+        style="@style/ProtocolEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/etAltitude"
         app:layout_constraintTop_toBottomOf="@id/tvGNSS"
@@ -82,6 +93,7 @@
 
     <EditText
         android:id="@+id/etAltitude"
+        style="@style/ProtocolEditText"
         app:layout_constraintStart_toEndOf="@id/etRSSI"
         app:layout_constraintTop_toBottomOf="@id/tvGNSS"
         android:hint="请输入海拔值（cm，默认0）"
@@ -93,6 +105,7 @@
 
     <EditText
         android:id="@+id/etLng"
+        style="@style/ProtocolEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/etAltitude"
         app:layout_constraintTop_toBottomOf="@id/etRSSI"
@@ -104,6 +117,7 @@
 
     <EditText
         android:id="@+id/etLat"
+        style="@style/ProtocolEditText"
         app:layout_constraintStart_toEndOf="@id/etRSSI"
         app:layout_constraintTop_toBottomOf="@id/etRSSI"
         android:hint="请输入纬度"
@@ -115,6 +129,7 @@
 
     <Button
         android:id="@+id/btnPushGnssLocationData"
+        style="@style/vpButton"
         app:layout_constraintTop_toBottomOf="@id/etLng"
         app:layout_constraintStart_toEndOf="@id/spFunction"
         app:layout_constraintEnd_toEndOf="parent"

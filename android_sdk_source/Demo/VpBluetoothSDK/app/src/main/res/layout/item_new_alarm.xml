@@ -43,7 +43,7 @@
         app:layout_constraintLeft_toRightOf="@id/tvAlarmId"/>
 
 
-    <com.timaimee.vpdemo.activity.SwitchView
+    <com.github.iielse.switchbutton.SwitchView
         android:id="@+id/sv"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"

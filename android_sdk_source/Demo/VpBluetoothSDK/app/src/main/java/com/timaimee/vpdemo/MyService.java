@@ -24,10 +24,17 @@ import android.os.ParcelUuid;
 import androidx.annotation.Nullable;
 import android.util.Log;
 
+import com.inuker.bluetooth.library.BluetoothContext;
+import com.inuker.bluetooth.library.search.SearchResult;
+import com.inuker.bluetooth.library.search.response.BluetoothSearchResponse;
+import com.inuker.bluetooth.library.search.response.SearchResponse;
 import com.inuker.bluetooth.library.utils.BluetoothLog;
 import com.inuker.bluetooth.library.utils.BluetoothUtils;
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.activity.MainActivity;
+import com.veepoo.protocol.VPOperateManager;
+import com.veepoo.protocol.listener.base.IABleConnectStatusListener;
+import com.veepoo.protocol.listener.base.IABluetoothStateListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +60,18 @@ public class MyService extends Service {
     public void onCreate() {
         super.onCreate();
         initNotify();
+        VPOperateManager.getMangerInstance(this).registerBluetoothStateListener(new IABluetoothStateListener() {
+            @Override
+            public void onBluetoothStateChanged(boolean openOrClosed) {
+
+            }
+        });
+        VPOperateManager.getMangerInstance(this).registerConnectStatusListener("", new IABleConnectStatusListener() {
+            @Override
+            public void onConnectStatusChanged(String mac, int status) {
+
+            }
+        });
         mBluetoothAdapter = BluetoothUtils.getBluetoothAdapter();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mScanner = mBluetoothAdapter.getBluetoothLeScanner();

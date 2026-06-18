@@ -13,7 +13,7 @@
         <attr name="isOpened" format="boolean"/>
     </declare-styleable>
 
-    <declare-styleable name="CollapseCardView">
+    <declare-styleable name="CollapseCardLogView">
         <!-- 卡片标题文字 -->
         <attr name="collapseTitle" format="string"/>
         <!-- 标题文字颜色 -->
@@ -24,6 +24,9 @@
         <attr name="collapseDefaultExpand" format="boolean"/>
         <!-- 卡片背景色 -->
         <attr name="collapseCardBg" format="color"/>
+        <attr name="collapseLogHeight" format="dimension"/>
+        <attr name="collapseSubTitle" format="string"/>
+        <attr name="collapseSubTitleColor" format="color"/>
+        <attr name="collapseSubTitleSize" format="dimension"/>
     </declare-styleable>
-
 </resources>

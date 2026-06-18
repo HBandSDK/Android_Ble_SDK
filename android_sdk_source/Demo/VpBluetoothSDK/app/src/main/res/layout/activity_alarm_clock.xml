@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- 根 ScrollView 包裹所有内容 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <com.timaimee.vpdemo.utils.CollapseCardLogView
+                android:id="@+id/ccvOldAlarmClock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="visible"
+                app:collapseDefaultExpand="false"
+                app:collapseTitle="旧版闹钟"
+                app:collapseSubTitle="旧版闹钟最多支持三组"
+                app:collapseTitleColor="#E53935"
+                app:collapseTitleSize="15sp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
+
+                    <CheckBox
+                        android:id="@+id/cbAlarmClock1"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <Button
+                        android:id="@+id/btnAlarmClockTime1"
+                        app:layout_constraintStart_toEndOf="@id/cbAlarmClock1"
+                        app:layout_constraintTop_toTopOf="@id/cbAlarmClock1"
+                        app:layout_constraintBottom_toBottomOf="@id/cbAlarmClock1"
+                        style="@style/vpButton"
+                        android:layout_width="100dp"
+                        android:text="08:00"
+                        android:layout_height="38dp"/>
+
+                    <RadioGroup
+                        android:id="@+id/rgAlarmClock1IsOpen"
+                        android:orientation="horizontal"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/btnAlarmClockTime1"
+                        app:layout_constraintTop_toTopOf="@id/btnAlarmClockTime1"
+                        app:layout_constraintBottom_toBottomOf="@id/btnAlarmClockTime1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/rbAlarmClock1Open"
+                            android:text="开启"
+                            android:checked="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <RadioButton
+                            android:id="@+id/rbAlarmClock1Close"
+                            android:text="关闭"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    </RadioGroup>
+
+                    <CheckBox
+                        android:id="@+id/cbAlarmClock2"
+                        android:layout_marginTop="20dp"
+                        app:layout_constraintTop_toBottomOf="@id/cbAlarmClock1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <Button
+                        android:id="@+id/btnAlarmClockTime2"
+                        app:layout_constraintStart_toEndOf="@id/cbAlarmClock2"
+                        app:layout_constraintTop_toTopOf="@id/cbAlarmClock2"
+                        app:layout_constraintBottom_toBottomOf="@id/cbAlarmClock2"
+                        style="@style/vpButton"
+                        android:layout_width="100dp"
+                        android:text="14:15"
+                        android:layout_height="38dp"/>
+
+                    <RadioGroup
+                        android:id="@+id/rgAlarmClock2IsOpen"
+                        android:orientation="horizontal"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/btnAlarmClockTime2"
+                        app:layout_constraintTop_toTopOf="@id/btnAlarmClockTime2"
+                        app:layout_constraintBottom_toBottomOf="@id/btnAlarmClockTime2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/rbAlarmClock2Open"
+                            android:text="开启"
+                            android:checked="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <RadioButton
+                            android:id="@+id/rbAlarmClock2Close"
+                            android:text="关闭"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    </RadioGroup>
+
+                    <CheckBox
+                        android:id="@+id/cbAlarmClock3"
+                        android:layout_marginTop="20dp"
+                        app:layout_constraintTop_toBottomOf="@id/cbAlarmClock2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <Button
+                        android:id="@+id/btnAlarmClockTime3"
+                        app:layout_constraintStart_toEndOf="@id/cbAlarmClock3"
+                        app:layout_constraintTop_toTopOf="@id/cbAlarmClock3"
+                        app:layout_constraintBottom_toBottomOf="@id/cbAlarmClock3"
+                        style="@style/vpButton"
+                        android:layout_width="100dp"
+                        android:text="09:30"
+                        android:layout_height="38dp"/>
+
+                    <RadioGroup
+                        android:id="@+id/rgAlarmClock3IsOpen"
+                        android:orientation="horizontal"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@id/btnAlarmClockTime3"
+                        app:layout_constraintTop_toTopOf="@id/btnAlarmClockTime3"
+                        app:layout_constraintBottom_toBottomOf="@id/btnAlarmClockTime3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/rbAlarmClock3Open"
+                            android:text="开启"
+                            android:checked="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <RadioButton
+                            android:id="@+id/rbAlarmClock3Close"
+                            android:text="关闭"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    </RadioGroup>
+
+                    <Button
+                        android:id="@+id/btnSetting"
+                        style="@style/vpButton"
+                        android:text="设置"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/cbAlarmClock3" />
+
+                    <Button
+                        android:id="@+id/btnRead"
+                        style="@style/vpButton"
+                        android:text="读取"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/btnSetting"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.timaimee.vpdemo.utils.CollapseCardLogView>
+
+            <Button
+                android:id="@+id/btnNewAlarmClock"
+                android:text="新版闹钟（支持10个）"
+                style="@style/vpButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btnTextAlarmClock"
+                android:text="文字闹钟（支持10个）"
+                style="@style/vpButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

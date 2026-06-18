@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
+import com.veepoo.protocol.shareprence.VpSpGetUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +31,15 @@ public class EcgDetectView extends View {
     private static final String TAG = EcgDetectView.class.getSimpleName();
     float mWidth, mHeight;
     Paint mLinePiant, mWhiteRectPiant, mGridPiant, mBordGridPiant;
-    float heartPositionY[];
+    float[] heartPositionY;
     PointF[] mPoints;
     int ecgLineColor = 0, color_line = 0, color_black = 0;
     int linePositionX = 0;
+
+    //增益效果
+    int gain = 20;
+
+    int ecgType = 0;
 
 
     public EcgDetectView(Context context, @Nullable AttributeSet attrs) {
@@ -41,9 +47,9 @@ public class EcgDetectView extends View {
         ecgLineColor = context.getResources().getColor(R.color.ecg_line);
         color_line = getResources().getColor(R.color.ecg_line_bg_normal);
         color_black = getResources().getColor(R.color.ecg_line_bg_bold);
+        ecgType = VpSpGetUtil.getVpSpVariInstance(context).getECGType();
         initPaint();
     }
-
 
     private void initPaint() {
         mLinePiant = new Paint();
@@ -80,17 +86,13 @@ public class EcgDetectView extends View {
         mWidth = MeasureSpec.getSize(widthMeasureSpec);
         mHeight = MeasureSpec.getSize(heightMeasureSpec);
         onPagerSetting();
-
     }
-
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-//        Logger.t(TAG).i("onDraw");
         float stopX = mWidth;
         for (int i = 0; i <= coumlnQutoCount; i++) {
-//            Logger.t(TAG).i("onDraw: " + stopX);
             if (i % 5 == 0) {
                 canvas.drawLine(0, rowQutoWidth * i, stopX, rowQutoWidth * i, mBordGridPiant);
             } else {
@@ -114,9 +116,14 @@ public class EcgDetectView extends View {
     }
 
     private float getRowY(float adcValue) {
-        float yValue = adcValue * 1000f * 1.8f / ((1 << 23) * 20);
+        float yValue = 0f;
+        if (ecgType == 0x07) {
+            yValue = (adcValue * 1000f * 1.8f / ((1 << 23) * 20));
+        } else if (ecgType == 0x0A || ecgType == 0x0C) {
+            yValue = (adcValue * (10 * coumlnQutoWidth) * 1000f * 1.2f) / ((1 << 21) * gain);
+        }
         // 一个小格是0.1mv，所以这里 *20
-        float v1 = mHeight / 2 - yValue * 10 * coumlnQutoWidth;
+        float v1 = mHeight / 2 - yValue;
         if (v1 < 0) {
             v1 = 0;
         } else if (v1 > mHeight) {
@@ -125,7 +132,7 @@ public class EcgDetectView extends View {
         return v1;
     }
 
-    private int ecgLineSpace = 250/2;
+    private final int ecgLineSpace = 250 / 2;
 
     private void drawPath(Canvas canvas, PointF[] mPoints, int pointX, int item_contents) {
         PointF[] arrayLeft = null;
@@ -227,7 +234,8 @@ public class EcgDetectView extends View {
 
     private int item_contents;
 
-    public synchronized void changeData(int[] data, int item_content) {
+    public synchronized void changeData(int[] data, int item_content, int gain) {
+        this.gain = gain;
         this.item_contents = item_content;
         linePositionX = linePositionX % rowEcgCount;
         for (int i = linePositionX; i < linePositionX + item_contents; i++) {
@@ -252,7 +260,6 @@ public class EcgDetectView extends View {
         onPagerSetting();
         invalidate();
     }
-
 
     List<Integer> arraylist = new ArrayList<>();
 
@@ -290,8 +297,6 @@ public class EcgDetectView extends View {
         for (int i = 0; i < rowEcgCount; i++) {
             heartPositionY[i] = mHeight / 2;
         }
-
     }
-
 
 }

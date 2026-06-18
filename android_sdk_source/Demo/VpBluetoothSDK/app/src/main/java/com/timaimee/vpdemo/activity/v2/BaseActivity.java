@@ -8,6 +8,7 @@ import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import com.inuker.bluetooth.library.Code;
 import com.timaimee.vpdemo.R;
 import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
+import com.veepoo.protocol.util.FunctionCheckUtil;
 
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,6 +30,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     public ImageView ivBack = null;
 
     public VPOperateManager vpBleManager;
+    public FunctionCheckUtil fCheck;
 
     public SpannableStringBuilder sb = new SpannableStringBuilder();
     public TextView tvTestInfo = null;
@@ -52,6 +55,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 .fitsSystemWindows(true)             // 关键：不侵入布局
                 .init();
         vpBleManager = VPOperateManager.getInstance();
+        fCheck = FunctionCheckUtil.getInstance(this);
         initView();
         initData();
         initEvent();
@@ -132,9 +136,40 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         tvTestInfo.setText("");
     }
 
-
     private boolean checkCommonUI(){
         return hasCommonMsgUI() && tvTestInfo != null && svTestInfo != null;
+    }
+
+
+    protected boolean checkFunction(String functionName) {
+        boolean isSupport = true;
+        switch (functionName) {
+            case DeviceMenu.Health.BloodComponent -> isSupport = fCheck.checkBloodComponent();
+            case DeviceMenu.Health.BodyTemperature -> isSupport = fCheck.checkTemptureByApp();
+            case DeviceMenu.Health.BodyComponent -> isSupport = fCheck.checkBodyComponent();
+            case DeviceMenu.Health.MiniCheckUp -> isSupport = fCheck.checkMiniCheckup();
+            case DeviceMenu.Health.GSR -> isSupport = fCheck.checkGSR();
+            case DeviceMenu.Health.BloodGlucose -> isSupport = fCheck.checkBgAdjusting() || fCheck.checkBgMultipleAdjusting();
+            case DeviceMenu.Health.BloodPress -> isSupport = fCheck.checkBp();
+            case DeviceMenu.Health.ECG -> isSupport = fCheck.checkECG();
+            case DeviceMenu.Other.IMG_TXT_PUSH -> isSupport = fCheck.checkTextImagePush();
+            case DeviceMenu.Other.WORLD_CLOCK -> isSupport = fCheck.checkWorldClock();
+            case DeviceMenu.Other.WEATHER -> isSupport = fCheck.checkWeather();
+            case DeviceMenu.Other.PHOTOGRAPH -> isSupport = fCheck.checkCamera();
+            case DeviceMenu.Other.DEVICE_4G -> isSupport = fCheck.check4g();
+            case DeviceMenu.Other.DEVICE_ANTI_LOSS -> isSupport = fCheck.check4g();
+            case DeviceMenu.Health.Fatigue -> isSupport = fCheck.checkFtg();
+            case DeviceMenu.Other.CHECK_WEAR -> isSupport = fCheck.checkCheckWear();
+            case DeviceMenu.Switch.HEALTH_SUPPORT -> isSupport = fCheck.checkHealthAssessment();
+        }
+        if (!isSupport) {
+            showFunctionNotSupport(functionName);
+        }
+        return isSupport;
+    }
+
+    private void showFunctionNotSupport(String functionName) {
+        showToast( "当前设备暂不支持"+functionName +"功能");
     }
 
 }

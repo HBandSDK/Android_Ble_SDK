@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="#f2f2f2">
 
     <TextView
@@ -16,19 +17,6 @@
         android:layout_height="48dp"/>
 
     <Button
-        android:id="@+id/btn1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:text="原始数据"
-        android:textColor="#000"
-        app:layout_constraintEnd_toStartOf="@id/btn2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
-
-    <Button
         android:id="@+id/btn2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -40,6 +28,21 @@
         app:layout_constraintEnd_toStartOf="@id/btn3"
         app:layout_constraintStart_toEndOf="@id/btn1"
         app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+    <Button
+        android:id="@+id/btn1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="原始数据"
+        android:textColor="#000"
+        app:layout_constraintEnd_toStartOf="@+id/btns2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+
     <Button
         android:id="@+id/btn3"
         android:layout_width="0dp"
@@ -50,7 +53,7 @@
         android:text="血氧"
         android:textColor="#000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btn2"
+        app:layout_constraintStart_toEndOf="@+id/btns2"
         app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
     <Button
@@ -79,7 +82,7 @@
         app:layout_constraintStart_toEndOf="@id/btnToTop"
         app:layout_constraintTop_toBottomOf="@id/btn1" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_log"
         android:layout_width="match_parent"
         android:background="#8eee"
@@ -89,7 +92,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnToBottom" />
-    
+
     <ProgressBar
         android:id="@+id/progress"
         android:layout_width="100dp"

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.timaimee.vpdemo.utils.CollapseCardLogView
+        android:id="@+id/ccvWeatherControl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTitle"
+        android:layout_margin="10dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="visible"
+        app:collapseDefaultExpand="true"
+        app:collapseTitle="️⛈️❄️☔️天气"
+        app:collapseTitleColor="#E53935"
+        app:collapseTitleSize="15sp"
+        tools:visibility="visible"
+        tools:context=".activity.v2.other.MusicActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clMusicControlPan"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ccvWeatherControl"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvStatus"
+                android:text="状态:"
+                android:textSize="16sp"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="20dp"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"/>
+
+            <RadioGroup
+                android:id="@+id/rgIsOpen"
+                app:layout_constraintStart_toEndOf="@id/tvStatus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvStatus"
+                app:layout_constraintBottom_toBottomOf="@id/tvStatus"
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/rbOpen"
+                    android:text="开启"
+                    android:checked="true"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+
+                <RadioButton
+                    android:id="@+id/rbClose"
+                    android:text="关闭"
+                    android:layout_gravity="end"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+            </RadioGroup>
+
+
+            <TextView
+                android:id="@+id/tvTempUnit"
+                android:text="单位:"
+                android:textSize="16sp"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvStatus"
+                android:layout_marginTop="20dp"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"/>
+
+            <RadioGroup
+                android:id="@+id/rgTempUnit"
+                app:layout_constraintStart_toEndOf="@id/tvTempUnit"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvTempUnit"
+                app:layout_constraintBottom_toBottomOf="@id/tvTempUnit"
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/rbC"
+                    android:text="℃"
+                    android:checked="true"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+
+                <RadioButton
+                    android:id="@+id/rbF"
+                    android:text="℉"
+                    android:layout_gravity="end"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/btnWeatherSwitchUnitSetting"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTempUnit"
+                android:layout_marginTop="20dp"
+                android:text="天气开关以及单位设置"
+                style="@style/vpButton"/>
+
+            <Button
+                android:id="@+id/btnWeatherSwitchUnitRead"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnWeatherSwitchUnitSetting"
+                android:layout_marginTop="20dp"
+                android:text="天气开关以及单位读取"
+                style="@style/vpButton"/>
+
+            <TextView
+                android:id="@+id/tvCityName"
+                android:text="🏙️名:"
+                android:textSize="16sp"
+                android:textColor="@color/black_80"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnWeatherSwitchUnitRead"
+                android:layout_marginTop="20dp"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:id="@+id/etCityName"
+                app:layout_constraintStart_toEndOf="@id/tvCityName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvCityName"
+                app:layout_constraintBottom_toBottomOf="@id/tvCityName"
+                android:hint="请输入🏙️名称"
+                style="@style/ProtocolEditText"
+                android:layout_width="0dp"
+                android:layout_height="40dp"/>
+
+            <Button
+                android:id="@+id/btnWeatherDataSetting"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvCityName"
+                android:layout_marginTop="20dp"
+                android:text="天气数据设置(随机)"
+                style="@style/vpButton"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.timaimee.vpdemo.utils.CollapseCardLogView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

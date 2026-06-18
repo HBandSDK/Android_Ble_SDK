@@ -1,62 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="#fff"
     android:orientation="vertical">
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tvAlarmText"
+        android:text="闹钟内容: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTitle"
+        app:layout_constraintEnd_toStartOf="@id/etAlarmText"
+        android:textSize="17sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/etAlarmText"
+        style="@style/ProtocolEditText"
+        app:layout_constraintStart_toEndOf="@id/tvAlarmText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvAlarmText"
+        app:layout_constraintBottom_toBottomOf="@id/tvAlarmText"
+        android:layout_width="0dp"
+        android:layout_marginEnd="10dp"
+        android:layout_height="48dp"
+        android:hint="请输入闹钟文字"
+        android:text="大郎，该吃药了 @^_^@" />
+
+    <TextView
+        android:id="@+id/tvAlarmTime"
+        android:text="闹钟时间: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvAlarmText"
+        android:textSize="17sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="26dp"
+        android:layout_marginStart="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnAlarmTime"
+        style="@style/BlackButton"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        app:layout_constraintStart_toEndOf="@id/tvAlarmTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvAlarmTime"
+        app:layout_constraintBottom_toBottomOf="@id/tvAlarmTime"
+        android:text="08:30" />
+
+    <CheckBox
+        android:id="@+id/cbDay1"
+        android:text="周一"
+        android:checked="true"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnAlarmTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <CheckBox
+        android:id="@+id/cbDay2"
+        android:text="二"
+        android:checked="true"
+        app:layout_constraintStart_toEndOf="@id/cbDay1"
+        app:layout_constraintTop_toTopOf="@id/cbDay1"
+        app:layout_constraintEnd_toStartOf="@id/cbDay3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <CheckBox
+        android:id="@+id/cbDay3"
+        android:text="三"
+        app:layout_constraintStart_toEndOf="@id/cbDay2"
+        app:layout_constraintTop_toTopOf="@id/cbDay1"
+        app:layout_constraintEnd_toStartOf="@id/cbDay4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <CheckBox
+        android:id="@+id/cbDay4"
+        android:text="四"
+        app:layout_constraintStart_toEndOf="@id/cbDay3"
+        app:layout_constraintTop_toTopOf="@id/cbDay1"
+        app:layout_constraintEnd_toStartOf="@id/cbDay5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <CheckBox
+        android:id="@+id/cbDay5"
+        android:text="五"
+        app:layout_constraintStart_toEndOf="@id/cbDay4"
+        app:layout_constraintTop_toTopOf="@id/cbDay1"
+        app:layout_constraintEnd_toStartOf="@id/cbDay6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <CheckBox
+        android:id="@+id/cbDay6"
+        android:text="六"
+        app:layout_constraintStart_toEndOf="@id/cbDay5"
+        app:layout_constraintTop_toTopOf="@id/cbDay1"
+        app:layout_constraintEnd_toStartOf="@id/cbDay7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <CheckBox
+        android:id="@+id/cbDay7"
+        android:text="日"
+        app:layout_constraintStart_toEndOf="@id/cbDay6"
+        app:layout_constraintTop_toTopOf="@id/cbDay1"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <RadioGroup
+        android:id="@+id/rgIsOpen"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cbDay1"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/rbOpen"
+            android:text="开启"
+            android:checked="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RadioButton
+            android:id="@+id/rbClose"
+            android:text="关闭"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnAlarmDate"
+        style="@style/BlackButton"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/rgIsOpen"
+        app:layout_constraintBottom_toBottomOf="@id/rgIsOpen"
+        android:text="2026-06-08" />
+
+    <Button
+        android:id="@+id/btnAdd"
+        style="@style/vpButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnAlarmDate"
+        android:text="添加闹钟" />
 
-        <EditText
-            android:id="@+id/et_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="请输入闹钟文字"
-            android:text="大郎，该吃药了 @^_^@" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/et_hour"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="请输入小时"
-                android:inputType="number"
-                android:textAlignment="textEnd" />
-
-            <TextView
-                android:id="@+id/tv_"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=":"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/et_minute"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:hint="请输入分钟" />
-
-            <Button
-                android:id="@+id/btn_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="添加闹钟" />
-        </LinearLayout>
-
-
-    </LinearLayout>
     <com.yanzhenjie.recyclerview.SwipeRecyclerView
         android:id="@+id/rvTextAlarm"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnAdd"
+        app:layout_constraintVertical_bias="0.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

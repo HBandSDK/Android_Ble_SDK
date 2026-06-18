@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- 根 ScrollView 包裹所有内容 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <com.timaimee.vpdemo.utils.CollapseCardLogView
+                android:id="@+id/ccvSedentaryRemindSetting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="visible"
+                app:collapseDefaultExpand="false"
+                app:collapseTitle="久坐提醒"
+                app:collapseTitleColor="#E53935"
+                app:collapseTitleSize="15sp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tvStartTime"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:text="开始时间:"
+                        android:textColor="#4A3F35"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/btnStartTime"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <Button
+                        android:id="@+id/btnStartTime"
+                        style="@style/vpButton"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:text="22:00"
+                        app:layout_constraintStart_toEndOf="@id/tvStartTime"
+                        app:layout_constraintBottom_toBottomOf="@id/tvStartTime"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvStartTime"/>
+
+                    <TextView
+                        android:id="@+id/tvEndTime"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="结束时间:"
+                        android:textColor="#4A3F35"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/btnEndTime"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvStartTime"/>
+
+                    <Button
+                        android:id="@+id/btnEndTime"
+                        style="@style/vpButton"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:text="08:00"
+                        app:layout_constraintStart_toEndOf="@id/tvEndTime"
+                        app:layout_constraintBottom_toBottomOf="@id/tvEndTime"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvEndTime"/>
+
+                    <TextView
+                        android:id="@+id/tvRemindInterval"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="提醒间隔(分钟):"
+                        android:textColor="#4A3F35"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/etRemindInterval"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvEndTime"/>
+
+                    <EditText
+                        android:id="@+id/etRemindInterval"
+                        style="@style/ProtocolEditText"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:text="60"
+                        android:inputType="number"
+                        app:layout_constraintStart_toEndOf="@id/tvRemindInterval"
+                        app:layout_constraintBottom_toBottomOf="@id/tvRemindInterval"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvRemindInterval"/>
+
+                    <TextView
+                        android:id="@+id/tvIsOpen"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="是否开启:"
+                        android:textColor="#4A3F35"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvRemindInterval"/>
+
+                    <RadioGroup
+                        android:id="@+id/rgIsOpen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="@id/tvIsOpen"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvIsOpen">
+
+                        <RadioButton
+                            android:id="@+id/rbOpen"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="开启"/>
+
+                        <RadioButton
+                            android:id="@+id/rbClose"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="关闭"/>
+
+                    </RadioGroup>
+
+                    <Button
+                        android:id="@+id/btnSedentaryRemindSetting"
+                        style="@style/vpButton"
+                        android:text="久坐提醒设置"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvIsOpen"/>
+
+                    <Button
+                        android:id="@+id/btnSedentaryRemindRead"
+                        style="@style/vpButton"
+                        android:text="久坐提醒读取"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/btnSedentaryRemindSetting"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.timaimee.vpdemo.utils.CollapseCardLogView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

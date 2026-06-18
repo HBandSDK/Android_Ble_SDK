@@ -37,8 +37,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_margin="10dp"
-                android:onClick="isSupportServerUi"
                 android:text="1.是否支持表盘市场"
+                android:onClick="isSupportServerUi"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp" />
 
@@ -74,9 +74,9 @@
 
             <Button
                 android:id="@+id/ui_server_get"
+                android:onClick="serverUI"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="serverUI"
                 android:layout_centerInParent="true"
                 android:layout_margin="10dp"
                 android:text="3.获取服务器的UI"
@@ -114,11 +114,11 @@
 
             <Button
                 android:id="@+id/ui_server_set"
+                android:onClick="onServerSet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_margin="10dp"
-                android:onClick="onServerSet"
                 android:text="5.设置服务器的UI"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp" />

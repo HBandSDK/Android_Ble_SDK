@@ -9,14 +9,14 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
+import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity;
+import com.timaimee.vpdemo.activity.v2.other.AddClockActivity;
 import com.timaimee.vpdemo.adapter.DividerItemDecoration;
 import com.timaimee.vpdemo.adapter.OnRecycleViewClickCallback;
 import com.timaimee.vpdemo.adapter.WorldClockAdapter;
@@ -37,7 +37,7 @@ import tech.gujin.toast.ToastUtil;
  * @author KYM.
  * @date 2024/4/10 16:05
  */
-public class WorldClockActivity extends AppCompatActivity implements IWorldClockOptListener, OnRecycleViewClickCallback {
+public class WorldClockActivity extends BaseVPBLETestActivity implements IWorldClockOptListener, OnRecycleViewClickCallback {
 
     private static final String TAG = "WorldClockActivity";
 
@@ -53,54 +53,18 @@ public class WorldClockActivity extends AppCompatActivity implements IWorldClock
     private boolean isDeleteAll = false;
     private int delCount = 0;
 
-    private final OperaterActivity.WriteResponse response = new OperaterActivity.WriteResponse();
-
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_world_clock);
-        initView();
-        findViewById(R.id.btnAdd).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListData != null && mListData.size() >= 10) {
-                    showMsg("联系人已超过十个。（已满）");
-                    return;
-                }
-                Intent intent = new Intent(WorldClockActivity.this, AddClockActivity.class);
-                startActivityForResult(intent, 15);
-            }
-        });
-
-
-        findViewById(R.id.tvRefresh).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ToastUtil.show("刷新");
-                VPOperateManager.getInstance().readWorldClock(-1, response, WorldClockActivity.this);
-            }
-        });
-        findViewById(R.id.tvDeleteAll).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListData.isEmpty()) {
-                    ToastUtil.show("列表为空");
-                    return;
-                }
-                isDeleteAll = true;
-                ToastUtil.show("删除全部");
-                VPOperateManager.getInstance().deleteWorldClocks(mListData, response, WorldClockActivity.this);
-            }
-        });
-        initListData();
+    public int getLayoutID() {
+        return R.layout.activity_world_clock;
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    public String pageTitle() {
+        return "世界时钟";
     }
 
-    private void initView() {
+    @Override
+    public void initView() {
         ivEmpty = findViewById(R.id.ivEmpty);
         rvClock = findViewById(R.id.rvContact);
         rvClock = (RecyclerView) findViewById(R.id.rvClock);
@@ -112,8 +76,38 @@ public class WorldClockActivity extends AppCompatActivity implements IWorldClock
         helper.attachToRecyclerView(rvClock);
     }
 
+    @Override
+    public void initData() {
+        initListData();
+    }
+
+    @Override
+    public void initEvent() {
+        findViewById(R.id.btnAdd).setOnClickListener(v -> {
+            if (mListData != null && mListData.size() >= 10) {
+                showMsg("联系人已超过十个。（已满）");
+                return;
+            }
+            Intent intent = new Intent(WorldClockActivity.this, AddClockActivity.class);
+            startActivityForResult(intent, 15);
+        });
+        findViewById(R.id.tvRefresh).setOnClickListener(v -> {
+            ToastUtil.show("刷新");
+            VPOperateManager.getInstance().readWorldClock(-1, defaultResponse, WorldClockActivity.this);
+        });
+        findViewById(R.id.tvDeleteAll).setOnClickListener(v -> {
+            if (mListData.isEmpty()) {
+                ToastUtil.show("列表为空");
+                return;
+            }
+            isDeleteAll = true;
+            ToastUtil.show("删除全部");
+            VPOperateManager.getInstance().deleteWorldClocks(mListData, defaultResponse, WorldClockActivity.this);
+        });
+    }
+
     private void initListData() {
-        VPOperateManager.getInstance().readWorldClock(-1, response, this);
+        VPOperateManager.getInstance().readWorldClock(-1, defaultResponse, this);
     }
 
     int mFirstAdapterPosition = -1, mLastAdapterPosition = -1;
@@ -149,7 +143,7 @@ public class WorldClockActivity extends AppCompatActivity implements IWorldClock
             WorldClock to = mListData.get(targetAdapterPosition);
             Logger.t(TAG + "-[MOVE]").i("from => " + adapterPosition + "-" + from.toString());
             Logger.t(TAG + "-[MOVE]").i("to => " + targetAdapterPosition + "-" + to.toString());
-            VPOperateManager.getInstance().moveWorldClockPosition(adapterPosition + 1, targetAdapterPosition + 1, response, WorldClockActivity.this);
+            VPOperateManager.getInstance().moveWorldClockPosition(adapterPosition + 1, targetAdapterPosition + 1, defaultResponse, WorldClockActivity.this);
             mAdapter.notifyItemMoved(adapterPosition, targetAdapterPosition);
             return false;
         }
@@ -197,7 +191,7 @@ public class WorldClockActivity extends AppCompatActivity implements IWorldClock
             ivEmpty.setVisibility(View.GONE);
         }
         ToastUtil.show("删除世界时钟建议删除的时候 弹出加载框，成功或失败的时候再关闭加载框。防止多次快速去点击删除 导致删除失败。 删除id = " + worldClock.getId());
-        VPOperateManager.getInstance().deleteWorldClock(worldClock, response, this);
+        VPOperateManager.getInstance().deleteWorldClock(worldClock, defaultResponse, this);
     }
 
     public void showMsg(String msg) {
@@ -229,7 +223,7 @@ public class WorldClockActivity extends AppCompatActivity implements IWorldClock
                     mListData.add(worldClock);
                     ivEmpty.setVisibility(View.GONE);
                     mAdapter.notifyDataSetChanged();
-                    VPOperateManager.getInstance().addWorldClock(worldClock, response, this);
+                    VPOperateManager.getInstance().addWorldClock(worldClock, defaultResponse, this);
                 }
 
             }

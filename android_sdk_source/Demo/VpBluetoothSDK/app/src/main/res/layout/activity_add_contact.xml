@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,14 +11,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         android:text="姓名："
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/etName"
+        style="@style/ProtocolEditText"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="42dp"
         app:layout_constraintBottom_toBottomOf="@id/tvTitleName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tvTitleName"
@@ -30,13 +35,17 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:text="手机："
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitleName" />
 
     <EditText
         android:id="@+id/etPhoneNumber"
+        style="@style/ProtocolEditText"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="42dp"
         android:inputType="phone"
         app:layout_constraintBottom_toBottomOf="@id/tvTitlePhoneNumber"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,8 +54,7 @@
 
     <Button
         android:id="@+id/btnSure"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/vpButton"
         android:layout_marginTop="20dp"
         android:text="确认添加联系人"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,14 +74,17 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:text="呼叫次数："
+        android:textStyle="bold"
+        android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/etSOSCount"
+        style="@style/ProtocolEditText"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="42dp"
         android:inputType="number"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@id/tvSOSCountTitle"
@@ -87,14 +98,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
+        android:textSize="15sp"
+        android:textColor="#ef8132"
         android:text="呼叫次数设置范围：[1-18]"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etSOSCount" />
 
     <Button
         android:id="@+id/btnSettingCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/vpButton"
         android:layout_marginTop="20dp"
         android:text="设置呼叫次数"
         app:layout_constraintEnd_toEndOf="parent"

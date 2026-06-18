@@ -15,17 +15,20 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.timaimee.vpdemo.R;
 
@@ -36,12 +39,16 @@ import com.timaimee.vpdemo.R;
 public class CollapseCardLogView extends CardView {
 
     private TextView tvTitle;
+    private TextView tvSubTitle;
     private ImageView ivArrow;
+    private ImageView ivClearLog;
     private LinearLayout layoutTitleRoot;
-    private LinearLayout layoutContentRootAnim;
+    private ConstraintLayout layoutContentRootAnim;
     private LinearLayout layoutContentContainer;
     private ScrollView svTestInfo;
     private TextView tvTestInfo;
+    private ConstraintLayout maskView; // 全屏半透明蒙版
+    private boolean isFunctionEnabled = true;
     private final SpannableStringBuilder sb = new SpannableStringBuilder();
 
     private boolean isExpanded = false;
@@ -49,6 +56,9 @@ public class CollapseCardLogView extends CardView {
     private ValueAnimator mHeightAnimator;
 
     private OnExpandStateChangeListener stateChangeListener;
+
+    // 日志区域默认高度 200dp
+    private int mLogScrollViewHeight = 200;
 
     public CollapseCardLogView(Context context) {
         this(context, null);
@@ -68,32 +78,57 @@ public class CollapseCardLogView extends CardView {
         View.inflate(context, R.layout.layout_collapse_log_card, this);
 
         tvTitle = findViewById(R.id.tvCollapseTitle);
+        tvSubTitle = findViewById(R.id.tvCollapseSubTitle);
         ivArrow = findViewById(R.id.ivCollapseArrow);
+        ivClearLog = findViewById(R.id.ivClearLog);
         layoutTitleRoot = findViewById(R.id.layoutTitleRoot);
         layoutContentRootAnim = findViewById(R.id.layoutContentRootAnim);
         layoutContentContainer = findViewById(R.id.layoutContentContainer);
         svTestInfo = findViewById(R.id.svInternalTestInfo);
         tvTestInfo = findViewById(R.id.tvInternalTestInfo);
+        maskView = findViewById(R.id.maskView);
 
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.CollapseCardView);
-        String title = ta.getString(R.styleable.CollapseCardView_collapseTitle);
-        int titleColor = ta.getColor(R.styleable.CollapseCardView_collapseTitleColor, 0xFFE53935);
-        float titleSize = ta.getDimension(R.styleable.CollapseCardView_collapseTitleSize, 15);
-        boolean defaultExpand = ta.getBoolean(R.styleable.CollapseCardView_collapseDefaultExpand, false);
-        int cardBg = ta.getColor(R.styleable.CollapseCardView_collapseCardBg, 0xFFFFFBEB);
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.CollapseCardLogView);
+        String title = ta.getString(R.styleable.CollapseCardLogView_collapseTitle);
+        int titleColor = ta.getColor(R.styleable.CollapseCardLogView_collapseTitleColor, 0xFFE53935);
+        float titleSize = ta.getDimension(R.styleable.CollapseCardLogView_collapseTitleSize, dp2px(15));
+        boolean defaultExpand = ta.getBoolean(R.styleable.CollapseCardLogView_collapseDefaultExpand, false);
+        int cardBg = ta.getColor(R.styleable.CollapseCardLogView_collapseCardBg, 0xFFFFFBEB);
+
+        String subTitle = ta.getString(R.styleable.CollapseCardLogView_collapseSubTitle);
+        int subTitleColor = ta.getColor(R.styleable.CollapseCardLogView_collapseSubTitleColor, 0xFF757575);
+        float subTitleSize = ta.getDimension(R.styleable.CollapseCardLogView_collapseSubTitleSize, dp2px(12));
+
+        mLogScrollViewHeight = ta.getDimensionPixelSize(R.styleable.CollapseCardLogView_collapseLogHeight, dp2px(200));
+
         ta.recycle();
 
         tvTitle.setText(title);
         tvTitle.setTextColor(titleColor);
         tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize);
+
+        if (subTitle != null && !subTitle.isEmpty()) {
+            tvSubTitle.setText(subTitle);
+            tvSubTitle.setTextColor(subTitleColor);
+            tvSubTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, subTitleSize);
+            tvSubTitle.setVisibility(VISIBLE);
+        } else {
+            tvSubTitle.setVisibility(GONE);
+        }
+
         setCardBackgroundColor(cardBg);
         setRadius(dp2px(5));
         setCardElevation(dp2px(3));
-        tvTitle.setSelected(true);
+
+        ViewGroup.LayoutParams layoutParams = svTestInfo.getLayoutParams();
+        layoutParams.height = mLogScrollViewHeight;
+        svTestInfo.setLayoutParams(layoutParams);
 
         layoutTitleRoot.setOnClickListener(v -> toggle());
         svTestInfo.setVerticalScrollBarEnabled(true);
         svTestInfo.setOverScrollMode(View.OVER_SCROLL_NEVER);
+
+        ivClearLog.setOnClickListener(view -> clearTestInfo());
 
         post(() -> {
             if (defaultExpand) {
@@ -114,7 +149,55 @@ public class CollapseCardLogView extends CardView {
         });
     }
 
-    // ========================= 【核心：高性能滑动冲突修复】 =========================
+    public void setFunctionTitle(String functionTitle) {
+        tvTitle.setText(functionTitle);
+    }
+
+    /**
+     * 设置功能是否可用
+     */
+    public void setFunctionEnabled(boolean enabled) {
+        this.isFunctionEnabled = enabled;
+        if (!enabled) {
+            setSubTitle("⚠️ 当前功能暂不支持");
+        }
+        if (maskView != null) {
+            maskView.setVisibility(enabled ? View.GONE : View.VISIBLE);
+        }
+    }
+
+    public void setFunctionDisabled() {
+        setFunctionEnabled(false);
+    }
+
+    public void setFunctionEnabled() {
+        setFunctionEnabled(true);
+    }
+
+    public void setSubTitle(String subTitle) {
+        if (subTitle == null || subTitle.isEmpty()) {
+            tvSubTitle.setVisibility(GONE);
+        } else {
+            tvSubTitle.setText(subTitle);
+            tvSubTitle.setVisibility(VISIBLE);
+        }
+    }
+
+    public void setSubTitleColor(int color) {
+        tvSubTitle.setTextColor(color);
+    }
+
+    public void setSubTitleSize(float spSize) {
+        tvSubTitle.setTextSize(spSize);
+    }
+
+    public void setLogScrollViewHeight(int dpHeight) {
+        this.mLogScrollViewHeight = dp2px(dpHeight);
+        ViewGroup.LayoutParams params = svTestInfo.getLayoutParams();
+        params.height = mLogScrollViewHeight;
+        svTestInfo.setLayoutParams(params);
+    }
+
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_MOVE) {
@@ -124,7 +207,6 @@ public class CollapseCardLogView extends CardView {
         return super.onInterceptTouchEvent(ev);
     }
 
-    // ========================= 日志方法 =========================
     public void appendResult(String msg) {
         sb.append(msg).append("\n");
         tvTestInfo.setText(sb);
@@ -176,7 +258,6 @@ public class CollapseCardLogView extends CardView {
         tvTestInfo.setText("");
     }
 
-    // ========================= 动画与展开收起 =========================
     public void toggle() {
         if (isExpanded) collapse();
         else expand();

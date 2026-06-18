@@ -9,4 +9,8 @@
     <color name="divider_color">#B7B2B2</color>
     <color name="real_red">#f00</color>
     <color name="black_30">#4B000000</color>
+    <color name="black_80">#CC000000</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+
 </resources>

@@ -3,7 +3,6 @@ package com.timaimee.vpdemo.activity;
 import static com.veepoo.protocol.model.enums.EFunctionStatus.SUPPORT;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -15,11 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.inuker.bluetooth.library.Code;
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
+import com.timaimee.vpdemo.activity.v2.BaseActivity;
+import com.timaimee.vpdemo.activity.v2.DeviceFunctionMenuActivity;
+import com.timaimee.vpdemo.bean.MyDeviceInfo;
 import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.data.ICustomSettingDataListener;
@@ -36,8 +37,10 @@ import com.veepoo.protocol.model.datas.PwdData;
 import com.veepoo.protocol.listener.data.IPwdDataListener;
 import com.veepoo.protocol.model.enums.EFunctionStatus;
 import com.veepoo.protocol.model.settings.CustomSettingData;
+import com.veepoo.protocol.shareprence.VpSpGetUtil;
+import com.veepoo.protocol.shareprence.VpSpSaveUtil;
 
-public class PwdConfirmActivity extends AppCompatActivity {
+public class PwdConfirmActivity extends BaseActivity {
 
     private static final String TAG = "-密码校验-";
 
@@ -45,22 +48,27 @@ public class PwdConfirmActivity extends AppCompatActivity {
     private ScrollView svInfo;
     private Button btnConfirm, btn2Function;
     private RadioGroup rgConnectConfirm;
+    private RadioGroup rgDemoVersion;
     private TextView tvPwdInfo, tvDeviceInfo;
     private int deviceNumber = 0;
     private String deviceVersion = "";
+    private String deviceName = "";
     private String deviceTestVersion = "";
 
     private StringBuilder sb = new StringBuilder();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getLayoutID() {
+        return R.layout.activity_pwd_confirm;
+    }
 
-        setContentView(R.layout.activity_pwd_confirm);
-        isOadModel = getIntent().getBooleanExtra("isoadmodel", false);
-        deviceaddress = getIntent().getStringExtra("deviceaddress");
+    @Override
+    public String pageTitle() {
+        return "设备密码校验";
+    }
 
-        VPOperateManager.getInstance().init(this);
+    @Override
+    public void initView() {
         etPassword = findViewById(R.id.et_password);
         btnConfirm = findViewById(R.id.btn_confirm);
         btn2Function = findViewById(R.id.btn2Function);
@@ -68,7 +76,26 @@ public class PwdConfirmActivity extends AppCompatActivity {
         svInfo = findViewById(R.id.svInfo);
         tvDeviceInfo = findViewById(R.id.tvDeviceInfo);
         rgConnectConfirm = findViewById(R.id.rgConnectConfirm);
+        rgDemoVersion = findViewById(R.id.rgDemoVersion);
+    }
+
+    @Override
+    public void initData() {
+        VPOperateManager.getInstance().init(this);
         VPOperateManager.getInstance().setDeviceShowConfirm(true);//默认弹
+
+        isOadModel = getIntent().getBooleanExtra("isoadmodel", false);
+        deviceaddress = getIntent().getStringExtra("deviceaddress");
+        deviceName = getIntent().getStringExtra("deviceName");
+
+        btn2Function.setEnabled(false);
+        btnConfirm.setEnabled(true);
+
+        rgDemoVersion.check(R.id.rbV2);
+    }
+
+    @Override
+    public void initEvent() {
         rgConnectConfirm.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -80,7 +107,6 @@ public class PwdConfirmActivity extends AppCompatActivity {
             }
         });
 
-        btnConfirm.setEnabled(true);
         etPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -102,7 +128,6 @@ public class PwdConfirmActivity extends AppCompatActivity {
                 confirmPassword();
             }
         });
-        btn2Function.setEnabled(false);
         btn2Function.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,7 +173,6 @@ public class PwdConfirmActivity extends AppCompatActivity {
             public void onConnectionConfirmTimeout() {
                 tvPwdInfo.setText("错误:连接确认超时");
                 btn2Function.setEnabled(false);
-                btnConfirm.setEnabled(true);
             }
         }, new IDeviceFuctionDataListener() {
             @Override
@@ -258,26 +282,45 @@ public class PwdConfirmActivity extends AppCompatActivity {
     private boolean isOadModel = false;
     private String deviceaddress = "";
 
+    private boolean isStartV2Demo = true;
+
     private void toFunctionTestPager() {
         new AlertDialog.Builder(this)
                 .setTitle("是否跳转功能测试页面")
                 .setMessage("【注意】：测试设备功能时，只有当前设备【支持该功能】才能测试，功能支持与否请参考【IDeviceFuctionDataListener】的功能回调接口")
                 .setPositiveButton("确定", (dialog, which) -> {
                     // 点击确定后要做的事
-                    Intent intent = new Intent(this, OperaterActivity.class);
-                    intent.putExtra("password_confirmed", true);
-                    intent.putExtra("deviceNumber", deviceNumber);
-                    intent.putExtra("deviceVersion", deviceVersion);
-                    intent.putExtra("deviceTestVersion", deviceTestVersion);
-                    intent.putExtra("watchDataDay", watchDataDay);
-                    intent.putExtra("weatherStyle", weatherStyle);
-                    intent.putExtra("contactMsgLength", contactMsgLength);
-                    intent.putExtra("allMsgLenght", allMsgLenght);
-                    intent.putExtra("isSleepPrecision", isSleepPrecision);
-                    intent.putExtra("isNewSportCalc", isNewSportCalc);
-                    intent.putExtra("isOadModel", isOadModel);
-                    intent.putExtra("deviceaddress", deviceaddress);
-                    startActivity(intent);
+                    isStartV2Demo = rgDemoVersion.getCheckedRadioButtonId() == R.id.rbV2;
+                    if (isStartV2Demo) {
+                        MyDeviceInfo.INSTANCE.setAllMsgLength(allMsgLenght);
+                        MyDeviceInfo.INSTANCE.setContactMsgLength(contactMsgLength);
+                        MyDeviceInfo.INSTANCE.setWatchDataDay(watchDataDay);
+                        MyDeviceInfo.INSTANCE.setDeviceNumber(deviceNumber);
+                        MyDeviceInfo.INSTANCE.setDeviceTestVersion(deviceTestVersion);
+                        MyDeviceInfo.INSTANCE.setDeviceVersion(deviceVersion);
+                        MyDeviceInfo.INSTANCE.setDeviceName(deviceName);
+                        MyDeviceInfo.INSTANCE.setDeviceAddress(deviceaddress);
+                        MyDeviceInfo.INSTANCE.setWeatherStyle(weatherStyle);
+                        MyDeviceInfo.INSTANCE.setSleepPrecision(isSleepPrecision);
+                        MyDeviceInfo.INSTANCE.setOadModel(isOadModel);
+                        MyDeviceInfo.INSTANCE.setNewSportCalc(isNewSportCalc);
+                        startActivity(new Intent(this, DeviceFunctionMenuActivity.class));
+                    } else {
+                        Intent intent = new Intent(this, OperaterActivity.class);
+                        intent.putExtra("password_confirmed", true);
+                        intent.putExtra("deviceNumber", deviceNumber);
+                        intent.putExtra("deviceVersion", deviceVersion);
+                        intent.putExtra("deviceTestVersion", deviceTestVersion);
+                        intent.putExtra("watchDataDay", watchDataDay);
+                        intent.putExtra("weatherStyle", weatherStyle);
+                        intent.putExtra("contactMsgLength", contactMsgLength);
+                        intent.putExtra("allMsgLenght", allMsgLenght);
+                        intent.putExtra("isSleepPrecision", isSleepPrecision);
+                        intent.putExtra("isNewSportCalc", isNewSportCalc);
+                        intent.putExtra("isOadModel", isOadModel);
+                        intent.putExtra("deviceaddress", deviceaddress);
+                        startActivity(intent);
+                    }
                     dialog.dismiss();
                     finish();
                 })
@@ -287,5 +330,10 @@ public class PwdConfirmActivity extends AppCompatActivity {
                 })
                 .setCancelable(true) // 点击空白是否能关闭
                 .show();
+    }
+
+    @Override
+    public void onClick(View view) {
+
     }
 }
