@@ -37,6 +37,9 @@
 | 1.3.1 | 新增QH15健康数据相关接口 | 2026.05.28 |
 | 1.3.2 | 新增提醒事件以及运动状态 | 2026.06.16 |
 | 1.3.3 | 新增读取设备IMEI号 | 2026.06.18 |
+| 1.3.4 | 新增健康灯功能 | 2026.06.30 |
+
+
 ## 导入SDK
 添加依赖
 
@@ -12125,6 +12128,91 @@ interface IRemindEventListener {
     fun onRemindEventReport(data: ArrayList<RemindEvent>)
 }
 ```
+
+
+
+## 健康灯功能
+
+在使用提醒事件功能之前，需判断设备是否支持健康灯功能
+
+判断条件：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportHealthLight()
+```
+
+#### 设置健康灯状态
+
+###### 接口
+
+```kotlin
+setHealthLightStatus(EHealthLightStatus status, IBleWriteResponse bleWriteResponse, IHealthLightListener listener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                 | 备注           |
+| ---------------- | -------------------- | -------------- |
+| status           | EHealthLightStatus   | 健康灯状态类型 |
+| listener         | IHealthLightListener | 健康灯相关监听 |
+| bleWriteResponse | IBleWriteResponse    | 写入操作监听   |
+
+**EHealthLightStatus** --- 健康灯状态类型
+
+| 参数名         | 备注   |
+| -------------- | ------ |
+| OFF            | 关闭   |
+| SLOW_FLASH     | 慢闪   |
+| RAPID_FLASHING | 连续闪 |
+| ALWAYS_ON      | 常亮   |
+
+**IHealthLightListener** -- 健康灯相关监听
+
+```kotlin
+interface IHealthLightListener {
+    /**
+     * 健康灯设置回调
+     *
+     * @param isSuccess 设置成功或失败
+     * @param status 设置的健康灯状态，如果失败则为null
+     */
+    fun onHealthLightStatusSetting(isSuccess: Boolean, status: EHealthLightStatus?)
+
+    /**
+     * 健康灯状态读取回调
+     *
+     * @param isSuccess 读取成功或失败
+     * @param status 读取的健康灯状态，如果失败则为null
+     */
+    fun onHealthLightStatusRead(isSuccess: Boolean, status: EHealthLightStatus?)
+
+    /**
+     * 健康灯状态主动上报
+     * 
+     * @param status 主动上报的健康灯状态，null为异常现象
+     */
+    fun onHealthLightStatusReport(status: EHealthLightStatus?)
+}
+```
+
+#### 读取健康灯状态
+
+###### 接口
+
+```kotlin
+readHealthLightStatus(IBleWriteResponse bleWriteResponse, IHealthLightListener listener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                 | 备注           |
+| ---------------- | -------------------- | -------------- |
+| listener         | IHealthLightListener | 健康灯相关监听 |
+| bleWriteResponse | IBleWriteResponse    | 写入操作监听   |
+
+## 
+
+
 
 ## 定制项目功能
 

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.activity.v2.BaseActivity;
+import com.timaimee.vpdemo.activity.v2.DeviceMenu;
 import com.veepoo.protocol.listener.data.IBloodComponentOptListener;
 import com.veepoo.protocol.model.datas.BloodComponent;
 
@@ -31,7 +32,7 @@ public class BloodComponentActivity extends BaseActivity implements View.OnClick
 
     @Override
     public String pageTitle() {
-        return "血液成分";
+        return DeviceMenu.Health.BloodComponent;
     }
 
     @Override

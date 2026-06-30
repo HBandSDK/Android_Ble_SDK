@@ -84,8 +84,8 @@ public class PwdConfirmActivity extends BaseActivity {
         VPOperateManager.getInstance().init(this);
         VPOperateManager.getInstance().setDeviceShowConfirm(true);//默认弹
 
-        isOadModel = getIntent().getBooleanExtra("isoadmodel", false);
-        deviceaddress = getIntent().getStringExtra("deviceaddress");
+        isOadModel = getIntent().getBooleanExtra("isOADModel", false);
+        deviceaddress = getIntent().getStringExtra("macAddress");
         deviceName = getIntent().getStringExtra("deviceName");
 
         btn2Function.setEnabled(false);
@@ -318,7 +318,7 @@ public class PwdConfirmActivity extends BaseActivity {
                         intent.putExtra("isSleepPrecision", isSleepPrecision);
                         intent.putExtra("isNewSportCalc", isNewSportCalc);
                         intent.putExtra("isOadModel", isOadModel);
-                        intent.putExtra("deviceaddress", deviceaddress);
+                        intent.putExtra("macAddress", deviceaddress);
                         startActivity(intent);
                     }
                     dialog.dismiss();

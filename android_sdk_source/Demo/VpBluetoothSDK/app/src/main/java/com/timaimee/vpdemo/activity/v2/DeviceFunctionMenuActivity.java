@@ -5,9 +5,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.inuker.bluetooth.library.log.VPLocalLogger;
 import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.activity.JLDeviceOPTActivity;
+import com.timaimee.vpdemo.activity.OperaterActivity;
 import com.timaimee.vpdemo.activity.v2.connection.ConnectionActivity;
 import com.timaimee.vpdemo.activity.v2.function_switch.FunctionSwitchActivity;
 import com.timaimee.vpdemo.activity.v2.custom.CustomFunctionActivity;
@@ -22,7 +25,8 @@ import java.text.MessageFormat;
  */
 public class DeviceFunctionMenuActivity extends BaseActivity {
 
-    Button btnHealthFunction, btnOtherFunction, btnSwitchFunction, btnWatchFace, btnConnectSetting, btnOTAUpgrade, btnCustomFunction, btnLogShare;
+    Button btnHealthFunction, btnOtherFunction, btnSwitchFunction, btnWatchFace, btnConnectSetting,
+            btnOTAUpgrade, btnCustomFunction, btnLogShare, btnOldApiEntry;
     TextView tvDeviceInfo;
 
     @Override
@@ -45,6 +49,7 @@ public class DeviceFunctionMenuActivity extends BaseActivity {
         btnOTAUpgrade = findViewById(R.id.btnOTAUpgrade);
         btnCustomFunction = findViewById(R.id.btnCustomFunction);
         btnLogShare = findViewById(R.id.btnLogShare);
+        btnOldApiEntry = findViewById(R.id.btnOldApiEntry);
         tvDeviceInfo = findViewById(R.id.tvDeviceInfo);
     }
 
@@ -63,8 +68,8 @@ public class DeviceFunctionMenuActivity extends BaseActivity {
         btnConnectSetting.setOnClickListener(this);
         btnOTAUpgrade.setOnClickListener(this);
         btnCustomFunction.setOnClickListener(this);
-        tvDeviceInfo.setOnClickListener(this);
         btnLogShare.setOnClickListener(this);
+        btnOldApiEntry.setOnClickListener(this);
     }
 
     @Override
@@ -86,6 +91,26 @@ public class DeviceFunctionMenuActivity extends BaseActivity {
             startActivity(new Intent(this, CustomFunctionActivity.class));
         } else if (id == R.id.btnLogShare) {
             VPLocalLogger.getInstance().shareLogFile(this, "com.timaimee.vpdemo.fileProvider");
+        } else if (id == R.id.btnOldApiEntry) {
+            startActivity(getOldApiEntryIntent());
         }
+    }
+
+    @NonNull
+    private Intent getOldApiEntryIntent() {
+        Intent intent = new Intent(this, OperaterActivity.class);
+        intent.putExtra("isOADModel", MyDeviceInfo.INSTANCE.isOadModel());
+        intent.putExtra("macAddress", MyDeviceInfo.INSTANCE.getDeviceAddress());
+        intent.putExtra("password_confirmed", true);
+        intent.putExtra("deviceNumber", MyDeviceInfo.INSTANCE.getDeviceNumber());
+        intent.putExtra("deviceVersion", MyDeviceInfo.INSTANCE.getDeviceVersion());
+        intent.putExtra("deviceTestVersion", MyDeviceInfo.INSTANCE.getDeviceTestVersion());
+        intent.putExtra("watchDataDay", MyDeviceInfo.INSTANCE.getWatchDataDay());
+        intent.putExtra("weatherStyle", MyDeviceInfo.INSTANCE.getWeatherStyle());
+        intent.putExtra("contactMsgLength", MyDeviceInfo.INSTANCE.getContactMsgLength());
+        intent.putExtra("allMsgLenght", MyDeviceInfo.INSTANCE.getAllMsgLength());
+        intent.putExtra("isSleepPrecision", MyDeviceInfo.INSTANCE.isSleepPrecision());
+        intent.putExtra("isNewSportCalc", MyDeviceInfo.INSTANCE.isNewSportCalc());
+        return intent;
     }
 }

@@ -76,9 +76,9 @@ public class OadActivity extends Activity implements View.OnClickListener, DfuPr
     }
 
     private OadSetting getIntData() {
-        boolean isOadModel = getIntent().getBooleanExtra("isoadmodel", false);
+        boolean isOadModel = getIntent().getBooleanExtra("isOADModel", false);
         int deviceNumber = getIntent().getIntExtra("devicenumber", 0);
-        String deviceAddress = getIntent().getStringExtra("deviceaddress");
+        String deviceAddress = getIntent().getStringExtra("macAddress");
         String deviceVersion = getIntent().getStringExtra("deviceversion");
         String deviceTestVersion = getIntent().getStringExtra("devicetestversion");
         return new OadSetting(deviceAddress, deviceVersion, deviceTestVersion, deviceNumber, isOadModel);

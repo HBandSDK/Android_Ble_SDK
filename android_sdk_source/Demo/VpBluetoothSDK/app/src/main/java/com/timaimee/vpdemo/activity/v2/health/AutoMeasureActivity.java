@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.activity.AutoMeasureEditActivity;
 import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity;
+import com.timaimee.vpdemo.activity.v2.DeviceMenu;
 import com.timaimee.vpdemo.adapter.AutoMeasureAdapter;
 import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.data.IAutoMeasureSettingDataListener;
@@ -46,7 +47,7 @@ public class AutoMeasureActivity extends BaseVPBLETestActivity implements IAutoM
 
     @Override
     public String pageTitle() {
-        return "自动测量";
+        return DeviceMenu.Health.AUTO_MEASURE;
     }
 
     @Override

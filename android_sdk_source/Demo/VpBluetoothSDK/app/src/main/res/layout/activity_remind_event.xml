@@ -115,7 +115,7 @@
                 android:autoSizeTextType="uniform"
                 android:autoSizeMinTextSize="11sp"
                 android:autoSizeMaxTextSize="17sp"
-                android:text="添加提醒事件(仅调试用后期关闭)"/>
+                android:text="添加提醒事件(仅供调试版本)"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.timaimee.vpdemo.utils.CollapseCardLogView>

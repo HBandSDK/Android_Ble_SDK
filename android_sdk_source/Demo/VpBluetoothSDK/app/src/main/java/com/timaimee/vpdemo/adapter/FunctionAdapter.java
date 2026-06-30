@@ -40,42 +40,42 @@ public class FunctionAdapter extends BaseAdapter {
     public View getView(int i, View convertView, ViewGroup viewGroup) {
         GridHold mGridHold;
         if (null == convertView) {
-            convertView = mLayoutInflater.inflate(R.layout.item_grid, null);
+            convertView = mLayoutInflater.inflate(R.layout.item_function, null);
             mGridHold = new GridHold();
-            mGridHold.mButton = (TextView) convertView.findViewById(R.id.gridbutton);
+            mGridHold.tvFunctionName = (TextView) convertView.findViewById(R.id.tvFunctionName);
             convertView.setTag(mGridHold);
         } else {
             mGridHold = (GridHold) convertView.getTag();
         }
         String functionName = functions[i];
-        mGridHold.mButton.setText(functionName);
-        if (i % 4 == 0) {
-            mGridHold.mButton.setBackgroundColor(Color.parseColor("#FF7032"));
-        } else if (i % 4 == 1) {
-            mGridHold.mButton.setBackgroundColor(Color.parseColor("#3F51B5"));
-        } else if (i % 4 == 2) {
-            mGridHold.mButton.setBackgroundColor(Color.parseColor("#2695f0"));
-        } else if (i % 4 == 3) {
-            mGridHold.mButton.setBackgroundColor(Color.parseColor("#852BFE"));
-        }
-        if (mGridHold.mButton.getText().toString().equals(Oprate.SHARE_LOG)) {
-            mGridHold.mButton.setBackgroundColor(Color.RED);
-        }
-        if (mGridHold.mButton.getText().toString().equals(Oprate.READ_HEALTH_ORIGINAL)) {
-            mGridHold.mButton.setBackgroundColor(Color.RED);
-        }
-        if (mGridHold.mButton.getText().toString().equals(Oprate.JL_DEVICE)) {
-            mGridHold.mButton.setBackgroundColor(Color.parseColor("#e529f0"));
-        }
-
-        if (mGridHold.mButton.getText().toString().equals(Oprate.ALARM_NEW_)) {
-            mGridHold.mButton.setBackgroundColor(Color.parseColor("#f5B910"));
-        }
+        mGridHold.tvFunctionName.setText(functionName);
+//        if (i % 4 == 0) {
+//            mGridHold.tvFunctionName.setBackgroundColor(Color.parseColor("#FF7032"));
+//        } else if (i % 4 == 1) {
+//            mGridHold.tvFunctionName.setBackgroundColor(Color.parseColor("#3F51B5"));
+//        } else if (i % 4 == 2) {
+//            mGridHold.tvFunctionName.setBackgroundColor(Color.parseColor("#2695f0"));
+//        } else if (i % 4 == 3) {
+//            mGridHold.tvFunctionName.setBackgroundColor(Color.parseColor("#852BFE"));
+//        }
+//        if (mGridHold.tvFunctionName.getText().toString().equals(Oprate.SHARE_LOG)) {
+//            mGridHold.tvFunctionName.setBackgroundColor(Color.RED);
+//        }
+//        if (mGridHold.tvFunctionName.getText().toString().equals(Oprate.READ_HEALTH_ORIGINAL)) {
+//            mGridHold.tvFunctionName.setBackgroundColor(Color.RED);
+//        }
+//        if (mGridHold.tvFunctionName.getText().toString().equals(Oprate.JL_DEVICE)) {
+//            mGridHold.tvFunctionName.setBackgroundColor(Color.parseColor("#e529f0"));
+//        }
+//
+//        if (mGridHold.tvFunctionName.getText().toString().equals(Oprate.ALARM_NEW_)) {
+//            mGridHold.tvFunctionName.setBackgroundColor(Color.parseColor("#f5B910"));
+//        }
         return convertView;
     }
 
 
     static class GridHold {
-        TextView mButton;
+        TextView tvFunctionName;
     }
 }

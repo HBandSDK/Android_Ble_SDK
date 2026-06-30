@@ -37,6 +37,7 @@
 | 1.3.1 | Added QH15 health data function | 2026.05.28 |
 | 1.3.2 | Added Remind event function, sport status function | 2026.06.16 |
 | 1.3.3 | Add read device IMEI Info function | 2026.06.18 |
+| 1.3.4 | Added Health ligth function | 2026.06.30 |
 ## Import SDK
 ### Add Dependency
 
@@ -11909,6 +11910,86 @@ interface IRemindEventListener {
     fun onRemindEventReport(data: ArrayList<RemindEvent>)
 }
 ```
+
+
+
+## Health Light Function
+
+Before using the health light function, it is necessary to determine whether the device supports it.
+
+Condition：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportHealthLight()
+```
+
+#### Set health light status
+
+###### interface
+
+```kotlin
+setHealthLightStatus(EHealthLightStatus status, IBleWriteResponse bleWriteResponse, IHealthLightListener listener)
+```
+
+###### Parameter Explanation
+
+| Parameter name   | Type                 | Describe                            |
+| ---------------- | -------------------- | ----------------------------------- |
+| status           | EHealthLightStatus   | The enum of health ligth status     |
+| listener         | IHealthLightListener | The listener of Health Light status |
+| bleWriteResponse | IBleWriteResponse    | Listening for write operations      |
+
+**EHealthLightStatus** ---The enum of health ligth status
+
+| Parameter name | Describe               |
+| -------------- | ---------------------- |
+| OFF            | light is off           |
+| SLOW_FLASH     | slow flash             |
+| RAPID_FLASHING | rapid flashing         |
+| ALWAYS_ON      | the light is alawys on |
+
+**IHealthLightListener** -- The listener of Health Light status
+
+```kotlin
+interface IHealthLightListener {
+    /**
+     * Callback for health light setting operation
+     * @param isSuccess Operation result, true if set successfully
+     * @param status Current health light status, null if operation failed
+     */
+    fun onHealthLightStatusSetting(isSuccess: Boolean, status: EHealthLightStatus?)
+
+    /**
+     * Callback for reading health light status
+     * @param isSuccess Operation result, true if read successfully
+     * @param status Queried health light status, null if operation failed
+     */
+    fun onHealthLightStatusRead(isSuccess: Boolean, status: EHealthLightStatus?)
+
+    /**
+     * Active report callback of health light status from device
+     * @param status Real-time reported health light status, null for exception
+     */
+    fun onHealthLightStatusReport(status: EHealthLightStatus?)
+}
+```
+
+#### Read health light status
+
+###### interface
+
+```kotlin
+readHealthLightStatus(IBleWriteResponse bleWriteResponse, IHealthLightListener listener)
+```
+
+###### Parameter Explanation
+
+| Parameter name   | Type                 | Describe                            |
+| ---------------- | -------------------- | ----------------------------------- |
+| listener         | IHealthLightListener | The listener of Health Light status |
+| bleWriteResponse | IBleWriteResponse    | Listening for write operations      |
+
+
 
 ## Custom Project Features
 

@@ -20,6 +20,7 @@ import com.veepoo.protocol.listener.data.IDeviceFunctionStatusChangeListener
 import com.veepoo.protocol.listener.data.IFatigueDataListener
 import com.veepoo.protocol.listener.data.IFindDeviceDatalistener
 import com.veepoo.protocol.listener.data.IFunSwitchListener
+import com.veepoo.protocol.listener.data.IHealthLightListener
 import com.veepoo.protocol.listener.data.IReadIMEIInfoListener
 import com.veepoo.protocol.listener.data.IRemindEventListener
 import com.veepoo.protocol.model.datas.FunSwitchFlags
@@ -29,6 +30,7 @@ import com.veepoo.protocol.model.enums.ECheckWear
 import com.veepoo.protocol.model.enums.EDeviceStatus
 import com.veepoo.protocol.model.enums.EFindDeviceStatus
 import com.veepoo.protocol.model.enums.EFunctionStatus
+import com.veepoo.protocol.model.enums.EHealthLightStatus
 import com.veepoo.protocol.model.settings.CheckWearSetting
 
 
@@ -42,6 +44,27 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
     lateinit var spFun: Spinner
 
     var functionName = ""
+
+    val funStringList: Array<String> = arrayOf(
+        "血糖",
+        "血压",
+        "血氧",
+        "体温",
+        "HRV",
+        "压力",
+        "梅脱",
+        "血液成分",
+        "身体成分",
+        "微体检",
+        "情绪",
+        "疲劳度",
+        "核辐射",
+        "跌倒提醒",
+        "AI问答",
+        "AI表盘",
+        "皮电测试"
+    )
+
     companion object {
 
         const val FUNCTION_NAME = "-FUNCTION-"
@@ -83,7 +106,7 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
     }
 
     private fun initSP(data: Array<String>, spinner: Spinner) {
-        if (data == null || data.size == 0) return
+        if (data.isEmpty()) return
         val adapter = ArrayAdapter<String?>(this, android.R.layout.simple_spinner_item, data)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.setAdapter(adapter)
@@ -134,26 +157,18 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
                 tvFunName.visibility = View.VISIBLE
                 spFun.visibility = View.VISIBLE
                 tvFunName.text = "辅助类型:"
-                val funStringList: Array<String> = arrayOf(
-                    "血糖",
-                    "血压",
-                    "血氧",
-                    "体温",
-                    "HRV",
-                    "压力",
-                    "梅脱",
-                    "血液成分",
-                    "身体成分",
-                    "微体检",
-                    "情绪",
-                    "疲劳度",
-                    "核辐射",
-                    "跌倒提醒",
-                    "AI问答",
-                    "AI表盘",
-                    "皮电测试"
-                )
                 initSP(funStringList, spFun)
+            }
+
+            DeviceMenu.Other.HEALTH_LIGHT -> {
+                btnStartDetect.text = "健康灯状态设置"
+                btnStopDetect.text = "健康灯状态读取"
+                setRadioGroupShow(false)
+                rgIsOpen.visibility = View.GONE
+                tvFunName.visibility = View.VISIBLE
+                spFun.visibility = View.VISIBLE
+                tvFunName.text = "状态:"
+                initSP(EHealthLightStatus.entries.map { it.des }.toTypedArray(), spFun)
             }
         }
     }
@@ -165,14 +180,14 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
             ccvTest.appendBlueMiddleText(functionAction1)
             when(functionName) {
                 DeviceMenu.Health.Fatigue -> vpBleManager.startDetectFatigue(defaultResponse, fatigueListener)
-                DeviceMenu.Other.PHOTOGRAPH -> vpBleManager.startCamera(defaultResponse, cameraListener)
-                DeviceMenu.Other.CHECK_WEAR -> vpBleManager.setttingCheckWear(defaultResponse, checkWearListener, CheckWearSetting().apply { isOpen = true })
-                DeviceMenu.Other.DEVICE_ANTI_LOSS -> vpBleManager.settingFindDevice(defaultResponse, findDeviceListener, isOpen())
                 DeviceMenu.Switch.HEALTH_SUPPORT -> vpBleManager.setFunSwitchState(defaultResponse, funSwitchListener, spFun.selectedItemPosition, isOpen().switch(
                     EFunctionStatus.SUPPORT_OPEN, EFunctionStatus.SUPPORT_CLOSE))
                 DeviceMenu.Switch.SWITCH_STATUS_LISTENER -> vpBleManager.setDeviceFunctionStatusChangeListener(deviceFunctionStatusChange)
+                DeviceMenu.Other.PHOTOGRAPH -> vpBleManager.startCamera(defaultResponse, cameraListener)
+                DeviceMenu.Other.CHECK_WEAR -> vpBleManager.setttingCheckWear(defaultResponse, checkWearListener, CheckWearSetting().apply { isOpen = true })
+                DeviceMenu.Other.DEVICE_ANTI_LOSS -> vpBleManager.settingFindDevice(defaultResponse, findDeviceListener, isOpen())
                 DeviceMenu.Other.DEVICE_4G_READ_IMEI -> vpBleManager.readIMEIInfo(defaultResponse, readIMEIInfoListener)
-
+                DeviceMenu.Other.HEALTH_LIGHT -> vpBleManager.setHealthLightStatus(EHealthLightStatus.getStatusWithCMD(spFun.selectedItemPosition.toByte()),defaultResponse, healthLightListener)
             }
         }
         btnStopDetect.setOnClickListener {
@@ -180,11 +195,12 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
             ccvTest.appendBlueMiddleText(functionAction2)
             when(functionName) {
                 DeviceMenu.Health.Fatigue -> vpBleManager.stopDetectFatigue(defaultResponse, fatigueListener)
+                DeviceMenu.Switch.HEALTH_SUPPORT -> vpBleManager.readFunSwitchState(defaultResponse, funSwitchListener)
+                DeviceMenu.Switch.SWITCH_STATUS_LISTENER -> vpBleManager.setDeviceFunctionStatusChangeListener(null)
                 DeviceMenu.Other.PHOTOGRAPH -> vpBleManager.stopCamera(defaultResponse, cameraListener)
                 DeviceMenu.Other.CHECK_WEAR -> vpBleManager.setttingCheckWear(defaultResponse, checkWearListener, CheckWearSetting().apply { isOpen = false })
                 DeviceMenu.Other.DEVICE_ANTI_LOSS -> vpBleManager.readFindDevice(defaultResponse, findDeviceListener)
-                DeviceMenu.Switch.HEALTH_SUPPORT -> vpBleManager.readFunSwitchState(defaultResponse, funSwitchListener)
-                DeviceMenu.Switch.SWITCH_STATUS_LISTENER -> vpBleManager.setDeviceFunctionStatusChangeListener(null)
+                DeviceMenu.Other.HEALTH_LIGHT -> vpBleManager.readHealthLightStatus(defaultResponse, healthLightListener)
 
             }
         }
@@ -335,6 +351,32 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
      */
     private val readIMEIInfoListener = IReadIMEIInfoListener { IMEI -> ccvTest.appendResult("✅️IMEI读取成功:$IMEI") }
 
+    /**
+     * 健康灯监听
+     */
+    private val healthLightListener = object : IHealthLightListener {
+        override fun onHealthLightStatusSetting(isSuccess: Boolean, status: EHealthLightStatus?) {
+            if (isSuccess) {
+                ccvTest.appendResult("✅️健康灯状态设置成功>>> ${status!!.des}")
+            } else {
+                ccvTest.appendRedLargeText("❌️健康灯状态设置失败")
+            }
+        }
+
+        override fun onHealthLightStatusRead(isSuccess: Boolean, status: EHealthLightStatus?) {
+            if (isSuccess) {
+                ccvTest.appendResult("✅️健康灯状态读取成功>>> ${status!!.des}")
+            } else {
+                ccvTest.appendRedLargeText("❌️健康灯状态读取失败")
+            }
+        }
+
+        override fun onHealthLightStatusReport(status: EHealthLightStatus?) {
+            ccvTest.appendResult("✅️健康灯状态上报成功>>> ${status!!.des}")
+        }
+
+    }
+
     override fun onCMDWriteFailed(cmdTag: Int) {
         super.onCMDWriteFailed(cmdTag)
         when(cmdTag) {
@@ -372,14 +414,16 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
         }
     }
 
-    val functionAction1: String = when(functionName) {
-        DeviceMenu.Health.Fatigue -> "⏯️开始疲劳度测试..."
-        DeviceMenu.Other.PHOTOGRAPH ->  "⏯️进入拍照模式..."
-        DeviceMenu.Other.CHECK_WEAR ->  "⏯️开启佩戴检测.."
-        DeviceMenu.Other.DEVICE_4G_READ_IMEI ->  "⏯️开启读取IMEI码.."
-        DeviceMenu.Other.DEVICE_ANTI_LOSS ->  "⏯️${if(isOpen()) "开启" else "关闭"}设备防丢.."
-        DeviceMenu.Switch.HEALTH_SUPPORT ->  "⏯️${if(isOpen()) "开启${spFun.selectedItem as String}" else "关闭${spFun.selectedItem as String}"}健康辅助.."
-        else -> "开始${functionName}"
+    val functionAction1: String
+        get() = when(functionName) {
+            DeviceMenu.Health.Fatigue -> "⏯️开始疲劳度测试..."
+            DeviceMenu.Other.PHOTOGRAPH ->  "⏯️进入拍照模式..."
+            DeviceMenu.Other.CHECK_WEAR ->  "⏯️开启佩戴检测.."
+            DeviceMenu.Other.DEVICE_4G_READ_IMEI ->  "⏯️开启读取IMEI码.."
+            DeviceMenu.Other.HEALTH_LIGHT ->  "⏯️设置健康灯状态.."
+            DeviceMenu.Other.DEVICE_ANTI_LOSS ->  "⏯️${if(isOpen()) "开启" else "关闭"}设备防丢.."
+            DeviceMenu.Switch.HEALTH_SUPPORT ->  "⏯️${if(isOpen()) "开启${spFun.selectedItem as String}" else "关闭${spFun.selectedItem as String}"}健康辅助.."
+            else -> "开始${functionName}"
     }
 
     val functionAction2 : String
@@ -388,6 +432,7 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
             DeviceMenu.Other.PHOTOGRAPH -> "🛑退出拍照模式..."
             DeviceMenu.Other.CHECK_WEAR -> "🛑关闭佩戴检测..."
             DeviceMenu.Other.DEVICE_ANTI_LOSS -> "读取设备防丢..."
+            DeviceMenu.Other.HEALTH_LIGHT -> "读取健康灯状态..."
             DeviceMenu.Switch.HEALTH_SUPPORT -> "读取健康辅助..."
             else -> "停止${functionName}"
         }
@@ -395,10 +440,11 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
     val isFunctionEnable: Boolean
         get() = when(functionName) {
             DeviceMenu.Health.Fatigue -> fCheck.checkFtg()
+            DeviceMenu.Switch.HEALTH_SUPPORT -> fCheck.checkHealthAssessment()
             DeviceMenu.Other.PHOTOGRAPH -> fCheck.checkCamera()
             DeviceMenu.Other.DEVICE_ANTI_LOSS -> fCheck.checkFindDevice()
             DeviceMenu.Other.CHECK_WEAR -> fCheck.checkCheckWear()
-            DeviceMenu.Switch.HEALTH_SUPPORT -> fCheck.checkHealthAssessment()
+            DeviceMenu.Other.HEALTH_LIGHT -> fCheck.checkHealthLight()
             DeviceMenu.Other.DEVICE_4G_READ_IMEI -> fCheck.check4g()
             else -> true
         }

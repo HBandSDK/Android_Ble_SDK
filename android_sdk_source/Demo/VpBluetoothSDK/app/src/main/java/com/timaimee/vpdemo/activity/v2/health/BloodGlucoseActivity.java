@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.activity.v2.BaseActivity;
 import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity;
+import com.timaimee.vpdemo.activity.v2.DeviceMenu;
 import com.timaimee.vpdemo.utils.CollapseCardLogView;
 import com.timaimee.vpdemo.utils.CollapseCardView;
 import com.timaimee.vpdemo.utils.TimeUtils;
@@ -53,7 +54,7 @@ public class BloodGlucoseActivity extends BaseVPBLETestActivity implements View.
 
     @Override
     public String pageTitle() {
-        return "血糖";
+        return DeviceMenu.Health.BloodGlucose;
     }
 
     @Override

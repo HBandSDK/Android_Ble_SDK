@@ -33,7 +33,7 @@
                 android:layout_margin="10dp"
                 android:layout_marginBottom="8dp"
                 android:visibility="visible"
-                app:collapseDefaultExpand="false"
+                app:collapseDefaultExpand="true"
                 app:collapseTitle="久坐提醒"
                 app:collapseTitleColor="#E53935"
                 app:collapseTitleSize="15sp">

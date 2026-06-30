@@ -54,6 +54,7 @@ import com.timaimee.vpdemo.activity.v2.other.Device4gOptActivity;
 import com.timaimee.vpdemo.activity.v2.other.GNSSOptActivity;
 import com.timaimee.vpdemo.activity.v2.other.MagneticTherapyActivity;
 import com.timaimee.vpdemo.activity.v2.other.NewAlarmActivity;
+import com.timaimee.vpdemo.activity.v2.other.NotificationSettingsActivity;
 import com.timaimee.vpdemo.activity.v2.other.TextAlarmActivity;
 import com.timaimee.vpdemo.activity.v2.other.TextImagePushActivity;
 import com.timaimee.vpdemo.adapter.GridAdatper;
@@ -359,7 +360,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
     private void initDataByIntent(){
         deviceVersion = getIntent().getStringExtra("deviceVersion");
         deviceTestVersion = getIntent().getStringExtra("deviceTestVersion");
-        deviceaddress = getIntent().getStringExtra("deviceaddress");
+        deviceaddress = getIntent().getStringExtra("macAddress");
         deviceNumber = getIntent().getIntExtra("deviceNumber",0);
         watchDataDay = getIntent().getIntExtra("watchDataDay",0);
         weatherStyle = getIntent().getIntExtra("weatherStyle",0);
@@ -379,7 +380,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         setContentView(R.layout.activity_operate);
         mContext = getApplicationContext();
         filePath = mContext.getExternalFilesDir(null) + File.separator + FILE_PATH;
-        deviceaddress = getIntent().getStringExtra("deviceaddress");
+        deviceaddress = getIntent().getStringExtra("macAddress");
         titleBleInfo = (TextView) super.findViewById(R.id.main_title_ble);
         tv1 = (TextView) super.findViewById(R.id.tv1);
         tv2 = (TextView) super.findViewById(R.id.tv2);
@@ -2387,12 +2388,12 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 Toast.makeText(mContext, "请先通过密码验证，获取版本号!", Toast.LENGTH_LONG).show();
                 return;
             }
-            boolean isOadModel = getIntent().getBooleanExtra("isoadmodel", false);
-            deviceaddress = getIntent().getStringExtra("deviceaddress");
+            boolean isOadModel = getIntent().getBooleanExtra("isOADModel", false);
+            deviceaddress = getIntent().getStringExtra("macAddress");
 
             Intent intent = new Intent(OperaterActivity.this, OadActivity.class);
-            intent.putExtra("deviceaddress", deviceaddress);
-            intent.putExtra("isoadmodel", isOadModel);
+            intent.putExtra("macAddress", deviceaddress);
+            intent.putExtra("isOADModel", isOadModel);
             intent.putExtra("devicenumber", deviceNumber);
             intent.putExtra("deviceversion", deviceVersion);
             intent.putExtra("devicetestversion", deviceTestVersion);

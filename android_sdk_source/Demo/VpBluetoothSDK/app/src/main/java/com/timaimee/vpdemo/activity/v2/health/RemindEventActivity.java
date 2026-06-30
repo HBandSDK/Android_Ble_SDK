@@ -37,7 +37,7 @@ public class RemindEventActivity extends BaseVPBLETestActivity implements IRemin
 
     @Override
     public String pageTitle() {
-        return "设备手动测量数据";
+        return "提醒事件";
     }
 
     @Override

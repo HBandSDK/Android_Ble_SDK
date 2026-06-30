@@ -7,7 +7,6 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.timaimee.vpdemo.R;
-import com.timaimee.vpdemo.activity.NotificationSettingsActivity;
 import com.timaimee.vpdemo.activity.WorldClockActivity;
 import com.timaimee.vpdemo.activity.v2.BaseActivity;
 import com.timaimee.vpdemo.activity.v2.DeviceMenu;
@@ -68,6 +67,7 @@ public class OtherFunctionActivity extends BaseActivity implements AdapterView.O
             case DeviceMenu.Other.GNSS ->  startActivity(new Intent(this, GNSSOptActivity.class));
             case DeviceMenu.Other.PHOTOGRAPH,
                  DeviceMenu.Other.CHECK_WEAR,
+                 DeviceMenu.Other.HEALTH_LIGHT,
                  DeviceMenu.Other.DEVICE_4G_READ_IMEI,
                  DeviceMenu.Other.DEVICE_ANTI_LOSS
                     -> FunctionTestActivity.Companion.start(this, function);

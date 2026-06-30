@@ -152,7 +152,7 @@
             android:name=".activity.OriginalDataLogActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.NotificationSettingsActivity"
+            android:name=".activity.v2.other.NotificationSettingsActivity"
             android:exported="false" />
         <activity
             android:name=".activity.v2.custom.G15QRCodeActivity"

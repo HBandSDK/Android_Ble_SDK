@@ -29,7 +29,7 @@ class SedentaryRemindActivity : BaseVPBLETestActivity(){
 
     override fun getLayoutID() = R.layout.activity_sedentary_remind
 
-    override fun pageTitle() = "血氧"
+    override fun pageTitle() = "久坐提醒"
 
     override fun initView() {
         ccvSedentaryRemindSetting = findViewById(R.id.ccvSedentaryRemindSetting)

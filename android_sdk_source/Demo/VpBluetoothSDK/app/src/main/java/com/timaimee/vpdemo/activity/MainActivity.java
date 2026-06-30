@@ -317,8 +317,8 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
             } else {
                 Logger.t(TAG).i("监听失败，重新连接");
                 Intent intent = new Intent(mContext, OperaterActivity.class);
-                intent.putExtra("isoadmodel", mIsOadModel);
-                intent.putExtra("deviceaddress", mac);
+                intent.putExtra("isOADModel", mIsOadModel);
+                intent.putExtra("macAddress", mac);
                 startActivity(intent);
             }
         });
