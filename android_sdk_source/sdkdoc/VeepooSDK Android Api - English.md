@@ -11923,30 +11923,19 @@ Condition：
 VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportHealthLight()
 ```
 
-#### Set health light status
+#### Add health light listener
 
 ###### interface
 
 ```kotlin
-setHealthLightStatus(EHealthLightStatus status, IBleWriteResponse bleWriteResponse, IHealthLightListener listener)
+addHealthLightListener(IHealthLightListener listener)
 ```
 
 ###### Parameter Explanation
 
-| Parameter name   | Type                 | Describe                            |
-| ---------------- | -------------------- | ----------------------------------- |
-| status           | EHealthLightStatus   | The enum of health ligth status     |
-| listener         | IHealthLightListener | The listener of Health Light status |
-| bleWriteResponse | IBleWriteResponse    | Listening for write operations      |
-
-**EHealthLightStatus** ---The enum of health ligth status
-
-| Parameter name | Describe               |
-| -------------- | ---------------------- |
-| OFF            | light is off           |
-| SLOW_FLASH     | slow flash             |
-| RAPID_FLASHING | rapid flashing         |
-| ALWAYS_ON      | the light is alawys on |
+| Parameter name | Type                 | Describe                            |
+| -------------- | -------------------- | ----------------------------------- |
+| listener       | IHealthLightListener | The listener of Health Light status |
 
 **IHealthLightListener** -- The listener of Health Light status
 
@@ -11974,20 +11963,43 @@ interface IHealthLightListener {
 }
 ```
 
+#### Set health light status
+
+###### interface
+
+```kotlin
+setHealthLightStatus(EHealthLightStatus status, IBleWriteResponse bleWriteResponse)
+```
+
+###### Parameter Explanation
+
+| Parameter name   | Type               | Describe                        |
+| ---------------- | ------------------ | ------------------------------- |
+| status           | EHealthLightStatus | The enum of health ligth status |
+| bleWriteResponse | IBleWriteResponse  | Listening for write operations  |
+
+**EHealthLightStatus** ---The enum of health ligth status
+
+| Parameter name | Describe               |
+| -------------- | ---------------------- |
+| OFF            | light is off           |
+| SLOW_FLASH     | slow flash             |
+| RAPID_FLASHING | rapid flashing         |
+| ALWAYS_ON      | the light is alawys on |
+
 #### Read health light status
 
 ###### interface
 
 ```kotlin
-readHealthLightStatus(IBleWriteResponse bleWriteResponse, IHealthLightListener listener)
+readHealthLightStatus(IBleWriteResponse bleWriteResponse)
 ```
 
 ###### Parameter Explanation
 
-| Parameter name   | Type                 | Describe                            |
-| ---------------- | -------------------- | ----------------------------------- |
-| listener         | IHealthLightListener | The listener of Health Light status |
-| bleWriteResponse | IBleWriteResponse    | Listening for write operations      |
+| Parameter name   | Type              | Describe                       |
+| ---------------- | ----------------- | ------------------------------ |
+| bleWriteResponse | IBleWriteResponse | Listening for write operations |
 
 
 

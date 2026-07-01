@@ -12141,30 +12141,19 @@ interface IRemindEventListener {
 VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportHealthLight()
 ```
 
-#### 设置健康灯状态
+#### 设置健康灯监听
 
 ###### 接口
 
 ```kotlin
-setHealthLightStatus(EHealthLightStatus status, IBleWriteResponse bleWriteResponse, IHealthLightListener listener)
+addHealthLightListener(IHealthLightListener listener)
 ```
 
 ###### 参数解释
 
-| 参数名           | 类型                 | 备注           |
-| ---------------- | -------------------- | -------------- |
-| status           | EHealthLightStatus   | 健康灯状态类型 |
-| listener         | IHealthLightListener | 健康灯相关监听 |
-| bleWriteResponse | IBleWriteResponse    | 写入操作监听   |
-
-**EHealthLightStatus** --- 健康灯状态类型
-
-| 参数名         | 备注   |
-| -------------- | ------ |
-| OFF            | 关闭   |
-| SLOW_FLASH     | 慢闪   |
-| RAPID_FLASHING | 连续闪 |
-| ALWAYS_ON      | 常亮   |
+| 参数名   | 类型                 | 备注           |
+| -------- | -------------------- | -------------- |
+| listener | IHealthLightListener | 健康灯相关监听 |
 
 **IHealthLightListener** -- 健康灯相关监听
 
@@ -12195,22 +12184,45 @@ interface IHealthLightListener {
 }
 ```
 
+#### 
+
+#### 设置健康灯状态
+
+###### 接口
+
+```kotlin
+setHealthLightStatus(EHealthLightStatus status, IBleWriteResponse bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型               | 备注           |
+| ---------------- | ------------------ | -------------- |
+| status           | EHealthLightStatus | 健康灯状态类型 |
+| bleWriteResponse | IBleWriteResponse  | 写入操作监听   |
+
+**EHealthLightStatus** --- 健康灯状态类型
+
+| 参数名         | 备注   |
+| -------------- | ------ |
+| OFF            | 关闭   |
+| SLOW_FLASH     | 慢闪   |
+| RAPID_FLASHING | 连续闪 |
+| ALWAYS_ON      | 常亮   |
+
 #### 读取健康灯状态
 
 ###### 接口
 
 ```kotlin
-readHealthLightStatus(IBleWriteResponse bleWriteResponse, IHealthLightListener listener)
+readHealthLightStatus(IBleWriteResponse bleWriteResponse)
 ```
 
 ###### 参数解释
 
-| 参数名           | 类型                 | 备注           |
-| ---------------- | -------------------- | -------------- |
-| listener         | IHealthLightListener | 健康灯相关监听 |
-| bleWriteResponse | IBleWriteResponse    | 写入操作监听   |
-
-## 
+| 参数名           | 类型              | 备注         |
+| ---------------- | ----------------- | ------------ |
+| bleWriteResponse | IBleWriteResponse | 写入操作监听 |
 
 
 

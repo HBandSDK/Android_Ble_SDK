@@ -169,6 +169,7 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
                 spFun.visibility = View.VISIBLE
                 tvFunName.text = "状态:"
                 initSP(EHealthLightStatus.entries.map { it.des }.toTypedArray(), spFun)
+                vpBleManager.addHealthLightListener(healthLightListener)
             }
         }
     }
@@ -187,7 +188,7 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
                 DeviceMenu.Other.CHECK_WEAR -> vpBleManager.setttingCheckWear(defaultResponse, checkWearListener, CheckWearSetting().apply { isOpen = true })
                 DeviceMenu.Other.DEVICE_ANTI_LOSS -> vpBleManager.settingFindDevice(defaultResponse, findDeviceListener, isOpen())
                 DeviceMenu.Other.DEVICE_4G_READ_IMEI -> vpBleManager.readIMEIInfo(defaultResponse, readIMEIInfoListener)
-                DeviceMenu.Other.HEALTH_LIGHT -> vpBleManager.setHealthLightStatus(EHealthLightStatus.getStatusWithCMD(spFun.selectedItemPosition.toByte()),defaultResponse, healthLightListener)
+                DeviceMenu.Other.HEALTH_LIGHT -> vpBleManager.setHealthLightStatus(EHealthLightStatus.getStatusWithCMD(spFun.selectedItemPosition.toByte()),defaultResponse)
             }
         }
         btnStopDetect.setOnClickListener {
@@ -200,7 +201,7 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
                 DeviceMenu.Other.PHOTOGRAPH -> vpBleManager.stopCamera(defaultResponse, cameraListener)
                 DeviceMenu.Other.CHECK_WEAR -> vpBleManager.setttingCheckWear(defaultResponse, checkWearListener, CheckWearSetting().apply { isOpen = false })
                 DeviceMenu.Other.DEVICE_ANTI_LOSS -> vpBleManager.readFindDevice(defaultResponse, findDeviceListener)
-                DeviceMenu.Other.HEALTH_LIGHT -> vpBleManager.readHealthLightStatus(defaultResponse, healthLightListener)
+                DeviceMenu.Other.HEALTH_LIGHT -> vpBleManager.readHealthLightStatus(defaultResponse)
 
             }
         }

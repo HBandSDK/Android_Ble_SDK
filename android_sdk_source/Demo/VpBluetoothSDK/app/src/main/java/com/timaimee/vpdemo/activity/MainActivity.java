@@ -271,8 +271,8 @@ public class MainActivity extends Activity implements SwipeRefreshLayout.OnRefre
 
                 Intent intent = new Intent(mContext, PwdConfirmActivity.class);
                 intent.putExtra("deviceName", deviceName);
-                intent.putExtra("isoadmodel", mIsOadModel);
-                intent.putExtra("deviceaddress", mac);
+                intent.putExtra("isOADModel", mIsOadModel);
+                intent.putExtra("macAddress", mac);
                 startActivity(intent);
 
 //                    VPOperateManager.getInstance().confirmDevicePwd(new IBleWriteResponse() {
