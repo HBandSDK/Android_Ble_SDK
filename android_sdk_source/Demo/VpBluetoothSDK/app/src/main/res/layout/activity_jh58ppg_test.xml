@@ -175,7 +175,14 @@
             android:gravity="center"
             android:text="模式2(每5分钟采集1分钟时长)"
             android:textSize="12sp" />
-
+        <RadioButton
+            android:id="@+id/rbReadMode3On"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="模式3(数据采集实时上报)"
+            android:textSize="12sp" />
     </RadioGroup>
 
     <Button
@@ -220,12 +227,55 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnReadPPGRawData" />
 
+    <TextView
+        android:id="@+id/tvMode3Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="主动测量状态控制"
+        android:textColor="#000FFF"
+        android:background="#FFF000"
+        android:textSize="16sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnStopRealTimePPGRawDataTransfer" />
+
+    <Button
+        android:id="@+id/btnActiveMeasureRealTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="主动测量-实时传输"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnActiveMeasureBreakpoint"
+        app:layout_constraintTop_toBottomOf="@id/tvMode3Title" />
+
+    <Button
+        android:id="@+id/btnActiveMeasureBreakpoint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="主动测量-断点传输"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/btnActiveMeasureRealTime"
+        app:layout_constraintEnd_toStartOf="@id/btnCloseActiveMeasure"
+        app:layout_constraintTop_toBottomOf="@id/tvMode3Title" />
+
+    <Button
+        android:id="@+id/btnCloseActiveMeasure"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="关闭主动测量"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/btnActiveMeasureBreakpoint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvMode3Title" />
+
     <ScrollView
         android:id="@+id/svInfo"
         android:layout_width="match_parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnStartRealTimePPGRawDataTransfer"
+        app:layout_constraintTop_toBottomOf="@id/btnActiveMeasureRealTime"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_margin="4dp"
         android:background="@drawable/text_info_bg"

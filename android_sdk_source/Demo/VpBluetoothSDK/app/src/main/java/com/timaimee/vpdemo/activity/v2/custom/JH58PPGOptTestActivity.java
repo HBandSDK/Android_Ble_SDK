@@ -20,16 +20,21 @@ import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity;
 import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.data.IPPGRawDataReadListener;
+import com.veepoo.protocol.listener.data.IActiveMeasurementDataListener;
 import com.veepoo.protocol.listener.data.IPPGRealTimeTransmissionListener;
+import com.veepoo.protocol.listener.data.IJH58MeasurementStateListener;
 import com.veepoo.protocol.listener.data.IPPGSwitchOperaterListener;
 import com.veepoo.protocol.model.datas.AccelerationData;
 import com.veepoo.protocol.model.datas.PPGRawData;
 import com.veepoo.protocol.model.datas.PPGReadData;
 import com.veepoo.protocol.model.datas.PPGSecondData;
 import com.veepoo.protocol.model.datas.TimeData;
+import com.veepoo.protocol.model.enums.EJH58MeasurementState;
 import com.veepoo.protocol.model.enums.PPGSwitchStatus;
 import com.veepoo.protocol.model.enums.PPGTestMode;
 import com.veepoo.protocol.util.thread.HBThreadPools;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -47,6 +52,9 @@ public class JH58PPGOptTestActivity extends BaseVPBLETestActivity implements Vie
     Button btnDatePicker;
     Button btnTimePicker;
     Button btnShareData;
+    Button btnActiveMeasureRealTime;
+    Button btnActiveMeasureBreakpoint;
+    Button btnCloseActiveMeasure;
     TextView tvPPGTestStatus;
     TextView tvPPGOptInfo;
 
@@ -80,6 +88,9 @@ public class JH58PPGOptTestActivity extends BaseVPBLETestActivity implements Vie
         btnDatePicker = findViewById(R.id.btnDatePicker);
         btnTimePicker = findViewById(R.id.btnTimePicker);
         btnShareData = findViewById(R.id.btnShareData);
+        btnActiveMeasureRealTime = findViewById(R.id.btnActiveMeasureRealTime);
+        btnActiveMeasureBreakpoint = findViewById(R.id.btnActiveMeasureBreakpoint);
+        btnCloseActiveMeasure = findViewById(R.id.btnCloseActiveMeasure);
         tvPPGTestStatus = findViewById(R.id.tvAutoMeasureStatusTitle);
         tvPPGOptInfo = findViewById(R.id.tvPPGOptInfo);
         rgPPGTestMode = findViewById(R.id.rgPPGTestMode);
@@ -97,6 +108,9 @@ public class JH58PPGOptTestActivity extends BaseVPBLETestActivity implements Vie
         btnShareData.setOnClickListener(this);
         btnStartRealTimePPGRawDataTransfer.setOnClickListener(this);
         btnStopRealTimePPGRawDataTransfer.setOnClickListener(this);
+        btnActiveMeasureRealTime.setOnClickListener(this);
+        btnActiveMeasureBreakpoint.setOnClickListener(this);
+        btnCloseActiveMeasure.setOnClickListener(this);
 
         timeData = new TimeData();
         timeData.setCurrentTime();
@@ -112,6 +126,8 @@ public class JH58PPGOptTestActivity extends BaseVPBLETestActivity implements Vie
                 ppgTestMode = PPGTestMode.MODE1;
             } else if (checkedId == R.id.rbReadMode2On) {
                 ppgTestMode = PPGTestMode.MODE2;
+            } else if (checkedId == R.id.rbReadMode3On) {
+                ppgTestMode = PPGTestMode.MODE3;
             }
         });
 
@@ -166,6 +182,7 @@ public class JH58PPGOptTestActivity extends BaseVPBLETestActivity implements Vie
             }
 
             @Override
+
             public void onAccelerationDataReport(List<AccelerationData> accDataList) {
                 appendMsg("收到加速度信号>>> " + accDataList);
             }
@@ -204,6 +221,12 @@ public class JH58PPGOptTestActivity extends BaseVPBLETestActivity implements Vie
             startPPGRawDataRealTimeTransfer();
         } else if (id == R.id.btnStopRealTimePPGRawDataTransfer) {
             stopPPGRawDataRealTimeTransfer();
+        } else if (id == R.id.btnActiveMeasureRealTime) {
+            activeMeasureRealTime();
+        } else if (id == R.id.btnActiveMeasureBreakpoint) {
+            activeMeasureBreakpoint();
+        } else if (id == R.id.btnCloseActiveMeasure) {
+            closeActiveMeasure();
         }
     }
 
@@ -352,6 +375,90 @@ public class JH58PPGOptTestActivity extends BaseVPBLETestActivity implements Vie
         } catch (IOException e) {
             Log.e("FileSave", "保存失败: " + e.getMessage());
         }
+    }
+
+    private void activeMeasureRealTime() {
+        sb.setLength(0);
+        appendMsg("主动测量-实时传输：正在开启...");
+        vpBleManager.activeJH58MeasurementState(EJH58MeasurementState.ACTIVE_MEASUREMENT_REAL_TIME,
+                code -> appendMsg("主动测量-实时传输：" + (code == com.inuker.bluetooth.library.Code.REQUEST_SUCCESS ? "设置成功" : "设置失败")),
+                new IActiveMeasurementDataListener() {
+                    @Override
+                    public void onMeasurementStateResult(@NotNull EJH58MeasurementState state, int ack) {
+                        String ackDes;
+                        switch (ack) {
+                            case 0x01:
+                                ackDes = "成功";
+                                break;
+                            case 0x02:
+                                ackDes = "设备正在手动测量(设备正忙)";
+                                break;
+                            case 0x03:
+                                ackDes = "设备处于低电状态";
+                                break;
+                            default:
+                                ackDes = "未知(" + ack + ")";
+                                break;
+                        }
+                        appendMsg("主动测量状态设置应答：state=" + state.getDes() + ", ack=" + ackDes);
+                    }
+
+                    @Override
+                    public void onActiveMeasurementDataStart(int totalSeconds) {
+                        appendMsg("开始接收主动测量数据（预估共" + totalSeconds + "秒）");
+                    }
+
+                    @Override
+                    public void onActiveMeasurementDataReceived(PPGRawData ppgRawData) {
+                        appendMsg(">>> " + ppgRawData);
+                    }
+                });
+    }
+
+    private void activeMeasureBreakpoint() {
+        sb.setLength(0);
+        appendMsg("主动测量-断点传输：正在开启...");
+        vpBleManager.activeJH58MeasurementState(EJH58MeasurementState.ACTIVE_MEASUREMENT_BREAKPOINT,
+                code -> appendMsg("主动测量-断点传输：" + (code == com.inuker.bluetooth.library.Code.REQUEST_SUCCESS ? "设置成功" : "设置失败")),
+                new IActiveMeasurementDataListener() {
+                    @Override
+                    public void onMeasurementStateResult(@NotNull EJH58MeasurementState state, int ack) {
+                        String ackDes;
+                        switch (ack) {
+                            case 0x01:
+                                ackDes = "成功";
+                                break;
+                            case 0x02:
+                                ackDes = "设备正在手动测量(设备正忙)";
+                                break;
+                            case 0x03:
+                                ackDes = "设备处于低电状态";
+                                break;
+                            default:
+                                ackDes = "未知(" + ack + ")";
+                                break;
+                        }
+                        appendMsg("主动测量状态设置应答：state=" + state.getDes() + ", ack=" + ackDes);
+                    }
+
+                    @Override
+                    public void onActiveMeasurementDataStart(int totalSeconds) {
+                        appendMsg("开始接收主动测量数据(断点)（预估共" + totalSeconds + "秒）");
+                    }
+
+                    @Override
+                    public void onActiveMeasurementDataReceived(PPGRawData ppgRawData) {
+                        appendMsg(">>> " + ppgRawData);
+                    }
+                });
+    }
+
+    private void closeActiveMeasure() {
+        sb.setLength(0);
+        appendMsg("关闭主动测量：正在关闭...");
+        vpBleManager.activeJH58MeasurementState(EJH58MeasurementState.CLOSE_ACTIVE_MEASUREMENT,
+                code -> appendMsg("关闭主动测量：" + (code == com.inuker.bluetooth.library.Code.REQUEST_SUCCESS ? "设置成功" : "设置失败")),
+                null);
     }
 
     private void appendMsg(String msg) {

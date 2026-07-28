@@ -38,6 +38,8 @@
 | 1.3.2 | Added Remind event function, sport status function | 2026.06.16 |
 | 1.3.3 | Add read device IMEI Info function | 2026.06.18 |
 | 1.3.4 | Added Health ligth function | 2026.06.30 |
+| 1.3.5 | Modify the pre-conditions supported by 'Read Device Manual Measurement Data', and add new APIs for MET, Emotion, and Fatigue related features. | 2026.07.02 |
+| 1.3.6 | **JH58 adds active measurement-related interfaces, and adds data collection and reporting (MODE3) for reading raw PPG signals.** | 2026.07.27 |
 ## Import SDK
 ### Add Dependency
 
@@ -1281,7 +1283,8 @@ fun onOriginSpo2OriginListDataChange(originSpo2hDataList:List<Spo2hOriginData>)
 | corrects       | IntArray       | Blood oxygen correction value string array |
 | bloodGlucose   | Int            | Blood glucose value                        |
 | bloodComponent | BloodComponent | Blood components                           |
-|                |                |                                            |
+| met            | float          | met value                                  |
+| pressure       | int            | pressure value                             |
 
 **BloodComponent** --Blood components
 
@@ -11911,8 +11914,6 @@ interface IRemindEventListener {
 }
 ```
 
-
-
 ## Health Light Function
 
 Before using the health light function, it is necessary to determine whether the device supports it.
@@ -12002,6 +12003,508 @@ readHealthLightStatus(IBleWriteResponse bleWriteResponse)
 | bleWriteResponse | IBleWriteResponse | Listening for write operations |
 
 
+
+## MET Feature
+
+Prerequisite: The device must support the MET feature. The condition is as follows:
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportMet()
+```
+
+Note: All the following interfaces can only be called when the device supports the MET feature.
+
+### Start MET Measurement
+
+Prerequisite: The device must support the MET App measurement feature. The condition is as follows:
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportMetAppDetect()
+```
+
+###### Interface
+
+Java
+
+```
+/***
+     * <ul>
+     * <li style="color:#1055d2">Start Met measurement</li>
+     * <li><br/></li>
+     * <li style="color:#555555">Start Met measurement</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     * <li>the response of write operate,if response code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     * <li>Listener for the write operation</li>
+     * </ul>
+     * @param detectListener
+     * <ul>
+     * <li style="color:#1055d2">Met measurement callback</li>
+     * <li><br/></li>
+     * <li style="color:#555555">Met measurement callback</li>
+     * </ul>
+     */
+    public void startDetectMet(BleWriteResponse bleWriteResponse, IMetDetectListener detectListener)
+```
+
+###### Parameter Description
+
+| **Parameter Name** | **Type**           | **Description**                  |
+| ------------------ | ------------------ | -------------------------------- |
+| bleWriteResponse   | BleWriteResponse   | Listener for the write operation |
+| listener           | IMetDetectListener | Listener for MET measurement     |
+
+###### Data Return
+
+**IMetDetectListener** -- MET measurement callback
+
+Kotlin
+
+```
+interface IMetDetectListener {
+
+    /**
+     * Callback for Met measurement values.
+     * * Callback for Met  measurement values.
+     * * @param progress The current measurement progress.
+     * * @param Met The current Met measurement value, range [-10, 10]/ The current Met measurement value in milliseconds.
+     */
+    fun onMetDetect(progress: Int, met: Float)
+
+    /**
+     * Callback for measurement failure.
+     * * Callback for measurement failure.
+     * * @param detectState The specific state indicating the reason for failure.
+     */
+    fun onDetectFailed(detectState: MetDetectState)
+
+    /**
+     * Callback when the measurement is stopped.
+     * * Callback when the measurement is stopped.
+     * * This is triggered when the measurement process is manually or automatically terminated.
+     */
+    fun onDetectStop()
+}
+```
+
+**MetDetectState** -- Error codes for MET measurement
+
+Kotlin
+
+```
+enum class MetDetectState(val code: Int, val des: String) {
+    PROGRESS(0, "Available, the App side only proceeds with the normal measurement process in this state"),
+    BUSY(1, "The device is measuring other data, the App side displays that the device is busy"),
+    LOW_POWER(2, "Low power"),
+    WEAR_OFF(4, "Wear detection failed")
+}
+```
+
+###### Code Example
+
+Java
+
+```
+VPOperateManager.getInstance().startDetectMet(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            }, new IMetDetectListener() {
+                @Override
+                public void onMetDetect(int progress, float met) {
+                    Logger.t(TAG).e("onMetDetect -> " + progress+",value="+met);
+                }
+
+                @Override
+                public void onDetectFailed(@NotNull MetDetectState detectState) {
+                    Logger.t(TAG).e("onDetectFailed -> " + detectState);
+                }
+
+                @Override
+                public void onDetectStop() {
+                    Logger.t(TAG).e("onDetectStop -> " );
+                }
+            });
+```
+
+### Stop MET Measurement
+
+###### Prerequisite
+
+The device must support both the MET feature and the MET App measurement feature.
+
+###### Interface
+
+Java
+
+```
+ /***
+     * <ul>
+     * <li style="color:#1055d2">Stop Met measurement</li>
+     * <li><br/></li>
+     * <li style="color:#555555">End Met measurement</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     * <li>the response of write operate,if response code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     * <li>Listener for the write operation</li>
+     * </ul>
+     */
+    public void stopDetectMet(BleWriteResponse bleWriteResponse)
+```
+
+###### Parameter Description
+
+| **Parameter Name** | **Type**         | **Description**                  |
+| ------------------ | ---------------- | -------------------------------- |
+| bleWriteResponse   | BleWriteResponse | Listener for the write operation |
+
+###### Code Example
+
+Java
+
+```
+VPOperateManager.getInstance().stopDetectMet(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            });
+```
+
+## Emotion Feature
+
+Prerequisite: The device must support the Emotion feature. The condition is as follows:
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportEmotion()
+```
+
+Note: All the following interfaces can only be called when the device supports the Emotion feature.
+
+### Start Emotion Measurement
+
+Prerequisite: The device must support the Emotion App measurement feature. The condition is as follows:
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportEmotionAppDetect()
+```
+
+###### Interface
+
+Java
+
+```
+ /***
+     * <ul>
+     * <li style="color:#1055d2">Start emotion measurement</li>
+     * <li><br/></li>
+     * <li style="color:#555555">Start emotion measurement</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     * <li>the response of write operate,if response code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     * <li>Listener for the write operation</li>
+     * </ul>
+     * @param detectListener
+     * <ul>
+     * <li style="color:#1055d2">emotion measurement callback</li>
+     * <li><br/></li>
+     * <li style="color:#555555">Emotion measurement callback</li>
+     * </ul>
+     */
+    public void startDetectEmotion(BleWriteResponse bleWriteResponse, IEmotionDetectListener detectListener) 
+```
+
+###### Parameter Description
+
+| **Parameter Name** | **Type**               | **Description**                  |
+| ------------------ | ---------------------- | -------------------------------- |
+| bleWriteResponse   | BleWriteResponse       | Listener for the write operation |
+| listener           | IEmotionDetectListener | Listener for Emotion measurement |
+
+###### Data Return
+
+**IEmotionDetectListener** -- Emotion measurement callback
+
+Kotlin
+
+```
+interface IEmotionDetectListener {
+
+    /**
+     * Callback for Emotion measurement values.
+     * * Callback for Emotion  measurement values.
+     * * @param progress The current measurement progress.
+     * * @param Emotion The current Emotion measurement value, range [-10, 10]/ The current Emotion measurement value in milliseconds.
+     */
+    fun onEmotionDetect(progress: Int, emotion: Int)
+
+    /**
+     * Callback for measurement failure.
+     * * Callback for measurement failure.
+     * * @param detectState The specific state indicating the reason for failure.
+     */
+    fun onDetectFailed(detectState: EmotionDetectState)
+
+    /**
+     * Callback when the measurement is stopped.
+     * * Callback when the measurement is stopped.
+     * * This is triggered when the measurement process is manually or automatically terminated.
+     */
+    fun onDetectStop()
+}
+```
+
+**EmotionDetectState** -- Error codes for Emotion measurement
+
+Kotlin
+
+```
+enum class EmotionDetectState(val code: Int, val des: String) {
+    /**
+     * `0x00` Available, the App side only proceeds with the normal measurement process in this state
+     * `0x01` The device is measuring pressure, mutually exclusive, the App side displays that the device is busy
+     * `0x02` The device is in a low power state
+     * `0x03` The device is measuring other data, the App side displays that the device is busy
+     * `0x04` Device wear detection failed, the App side displays an abnormal prompt
+     */
+    PROGRESS(0, "Available, the App side only proceeds with the normal measurement process in this state"),
+    BUSY(1, "The device is measuring other data, the App side displays that the device is busy"),
+    LOW_POWER(2, "Low power"),
+    WEAR_OFF(4, "Wear detection failed");
+}
+```
+
+Code Example
+
+Java
+
+```
+VPOperateManager.getInstance().startDetectGsr(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            }, new IGsrDetectListener() {
+                @Override
+                public void onGsrDetectProgress(int progress) {
+                    Logger.t(TAG).e("onGsrDetectProgress -> " + progress);
+                }
+
+                @Override
+                public void onGsrDetectSuccess(@NonNull GsrDetectResult detectResult) {
+                    Logger.t(TAG).e("onGsrDetectSuccess -> " + detectResult.toString());
+                }
+
+                @Override
+                public void onGsrDetectFailed(@NonNull GsrDetectAck detectAck) {
+                    Logger.t(TAG).e("onGsrDetectFailed -> " + detectAck.getDescription());
+                }
+
+                @Override
+                public void onGsrDetectStop() {
+                    Logger.t(TAG).e("onGsrDetectStop -> -- ");
+                }
+            });
+```
+
+### Stop Emotion Measurement
+
+###### Prerequisite
+
+The device must support both the Emotion measurement feature and the App measurement feature.
+
+###### Interface
+
+Java
+
+```
+/***
+     * <ul>
+     * <li style="color:#1055d2">Stop emotion measurement</li>
+     * <li><br/></li>
+     * <li style="color:#555555">End emotion measurement</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     * <li>the response of write operate,if response code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     * <li>Listener for the write operation</li>
+     * </ul>
+     */
+    public void stopDetectEmotion(BleWriteResponse bleWriteResponse) 
+```
+
+###### Parameter Description
+
+| **Parameter Name** | **Type**         | **Description**                  |
+| ------------------ | ---------------- | -------------------------------- |
+| bleWriteResponse   | BleWriteResponse | Listener for the write operation |
+
+###### Code Example
+
+Java
+
+```
+       VPOperateManager.getInstance().stopDetectEmotion(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            });
+```
+
+## Fatigue Feature
+
+Prerequisite: The device must support the Fatigue feature. The condition is as follows:
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportFtg()
+```
+
+Note: All the following interfaces can only be called when the device supports the Fatigue feature.
+
+### Start Fatigue Measurement
+
+Prerequisite: The device must support the Fatigue App measurement feature. The condition is as follows:
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportFtgAppDetect()
+```
+
+###### Interface
+
+Java
+
+```
+ /***
+     * <ul>
+     * <li style="color:#1055d2">Start detect the fatigue in real-time</li>
+     * <li><br/></li>
+     * <li style="color:#555555">Start fatigue measurement</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     * <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     * <li>Listener for the write operation</li>
+     * </ul>
+     * @param fatigueDataListener
+     * <ul>
+     * <li>the listener of detect the fatigue </li>
+     * <li>Fatigue callback</li>
+     * </ul>
+     */
+    public void startDetectFatigue(IBleWriteResponse bleWriteResponse, IFatigueDataListener fatigueDataListener) 
+```
+
+###### Parameter Description
+
+| **Parameter Name**  | **Type**             | **Description**                  |
+| ------------------- | -------------------- | -------------------------------- |
+| bleWriteResponse    | BleWriteResponse     | Listener for the write operation |
+| fatigueDataListener | IFatigueDataListener | Listener for Fatigue measurement |
+
+###### Data Return
+
+**IFatigueDataListener** -- Fatigue measurement callback
+
+Java
+
+```
+public interface IFatigueDataListener extends IListener{
+    /**
+     * Returns the data of the fatigue operation
+     * @param fatigueData  Data of the fatigue operation
+     */
+    void onFatigueDataListener(FatigueData fatigueData);
+}
+```
+
+**FatigueData** -- Fatigue Data
+
+Java
+
+```
+public class FatigueData {
+    // Fatigue status
+    private EFatigueStatus fatigueState;
+    // Device status
+    private EDeviceStatus deviceState;
+    // Measurement progress
+    private int progress;
+    // Measurement value, range [0, 10]
+    private int value;
+}
+```
+
+Code Example
+
+Java
+
+```
+VPOperateManager.getInstance().startDetectFatigue(writeResponse, new IFatigueDataListener() {
+                @Override
+                public void onFatigueDataListener(FatigueData fatigueData) {
+                    String message = "Fatigue-Start:\n" + fatigueData.toString();
+                    Logger.t(TAG).i(message);
+                }
+            });
+```
+
+### Stop Fatigue Measurement
+
+###### Prerequisite
+
+The device must support both the Fatigue measurement feature and the App measurement feature.
+
+###### Interface
+
+Java
+
+```
+/***
+     * <ul>
+     * <li style="color:#1055d2">Stop detect fatigue in real-time</li>
+     * <li><br/></li>
+     * <li style="color:#555555">End fatigue measurement</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     * <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     * <li>Listener for the write operation</li>
+     * </ul>
+     * @param fatigueDataListener
+     * <ul>
+     * <li>the listener of detect fatigue</li>
+     * <li>Callback for the fatigue operation, returns fatigue data: whether it is supported, on/off status, progress, fatigue value</li>
+     * </ul>
+     */
+    public void stopDetectFatigue(IBleWriteResponse bleWriteResponse, IFatigueDataListener fatigueDataListener) 
+```
+
+###### Parameter Description
+
+| **Parameter Name**  | **Type**             | **Description**                  |
+| ------------------- | -------------------- | -------------------------------- |
+| bleWriteResponse    | BleWriteResponse     | Listener for the write operation |
+| fatigueDataListener | IFatigueDataListener | Listener for Fatigue data        |
+
+###### Code Example
+
+Java
+
+```
+      VPOperateManager.getInstance().stopDetectFatigue(writeResponse, new IFatigueDataListener() {
+                @Override
+                public void onFatigueDataListener(FatigueData fatigueData) {
+                    String message = "Fatigue-End:\n" + fatigueData.toString();
+                    Logger.t(TAG).i(message);
+                    sendMsg(message, 1);
+                }
+            });
+```
 
 ## Custom Project Features
 
@@ -12360,6 +12863,237 @@ public void startPPGRealTimeTransmission(BleWriteResponse bleWriteResponse, IPPG
  * @param bleWriteResponse 指令写入结果回调 (Callback for the command write result)
  */
 public void stopPPGRealTimeTransmission(BleWriteResponse bleWriteResponse)
+```
+
+#### Active Measurement
+
+The active measurement feature for JH58 custom projects. The App can control the device to enable/disable active measurement (supporting both real-time transmission and breakpoint transmission modes), and receive raw PPG data (green light + acceleration) per second via listeners.
+
+##### Control Active Measurement State
+
+The control result will be returned in `IActiveMeasurementDataListener.onMeasurementStateResult()`.
+
+###### Interface
+
+java
+
+```java
+/**
+ * <ul>
+ *     <li style="color:#1055d2">JH58 active measurement state control </li>
+ *     <li><br/></li>
+ *     <li style="color:#555555">JH58 active measurement state control </li>
+ * </ul>
+ *
+ * @param state             <ul>
+ *                              <li>Measurement state</li>
+ *                              <li>Active measurement state</li>
+ *                          </ul>
+ * @param bleWriteResponse  <ul>
+ *                              <li>the response of write operation</li>
+ *                              <li>Listener for write operation</li>
+ *                          </ul>
+ * @param dataListener      <ul>
+ *                              <li>Mode 3 real-time data listener (can be null if only need state ack)</li>
+ *                              <li>Mode 3 real-time data listener (can be null if only state acknowledgment is required)</li>
+ *                          </ul>
+ */
+public void activeJH58MeasurementState(EJH58MeasurementState state, BleWriteResponse bleWriteResponse, IActiveMeasurementDataListener dataListener)
+```
+
+
+
+###### Parameter Explanation
+
+| Parameter        | Type                           | Description                                  |
+| :--------------- | :----------------------------- | :------------------------------------------- |
+| state            | EJH58MeasurementState          | Active measurement state                     |
+| bleWriteResponse | BleWriteResponse               | Listener for write operation                 |
+| dataListener     | IActiveMeasurementDataListener | Mode 3 real-time data listener (can be null) |
+
+**EJH58MeasurementState** —— Active measurement state enum
+
+kotlin
+
+```kotlin
+enum class EJH58MeasurementState(val value: Byte, val des: String) {
+    /** Enable measurement with real-time transmission */
+    ACTIVE_MEASUREMENT_REAL_TIME(0x01, "Active measurement - real-time"),
+
+    /** Enable measurement with breakpoint transmission (after Bluetooth disconnection and reconnection, the device pushes the data from 5 minutes before the disconnection and then resumes real-time reporting) */
+    ACTIVE_MEASUREMENT_BREAKPOINT(0x02, "Active measurement - breakpoint"),
+
+    /** Disable measurement */
+    CLOSE_ACTIVE_MEASUREMENT(0x03, "Close active measurement");
+}
+```
+
+
+
+| Enum Value                      | Description                                                  |
+| :------------------------------ | :----------------------------------------------------------- |
+| `ACTIVE_MEASUREMENT_REAL_TIME`  | Enable measurement with real-time transmission               |
+| `ACTIVE_MEASUREMENT_BREAKPOINT` | Enable measurement with breakpoint transmission (suitable for scenarios where after Bluetooth disconnection and reconnection, the device pushes the data from 5 minutes before the disconnection and then resumes real-time reporting) |
+| `CLOSE_ACTIVE_MEASUREMENT`      | Disable measurement                                          |
+
+##### Active Measurement Data Listener
+
+###### IActiveMeasurementDataListener —— Mode 3 PPG real‑time raw data reception listener
+
+kotlin
+
+```
+/**
+ * Mode 3 PPG real-time raw data reception listener
+ * Used for active measurement data callbacks of JH58
+ */
+interface IActiveMeasurementDataListener : IListener {
+
+    /**
+     * Acknowledgment of active measurement state setting
+     * @param state The state being set
+     * @param ack   Acknowledgment: 0x01 = success, 0x02 = device is in manual measurement (busy), 0x03 = device is in low battery state
+     */
+    fun onMeasurementStateResult(state: EJH58MeasurementState, ack: Int)
+
+    /**
+     * Start reporting active measurement data
+     * @param totalSeconds Total seconds (estimated by the device)
+     */
+    fun onActiveMeasurementDataStart(totalSeconds: Int)
+
+    /**
+     * Per‑second active measurement data report
+     * @param ppgRawData Raw PPG data for 1 second of active measurement
+     */
+    fun onActiveMeasurementDataReceived(ppgRawData: PPGRawData)
+}
+```
+
+
+
+| Callback Method                               | Description                                                  |
+| :-------------------------------------------- | :----------------------------------------------------------- |
+| `onMeasurementStateResult(state, ack)`        | Acknowledgment of active measurement state setting. `ack`: `0x01` = success, `0x02` = device busy (manual measurement in progress), `0x03` = device low battery |
+| `onActiveMeasurementDataStart(totalSeconds)`  | Start reporting active measurement data; `totalSeconds` is the estimated total seconds by the device |
+| `onActiveMeasurementDataReceived(ppgRawData)` | Per‑second active measurement data report; `ppgRawData` contains the raw green light signal and acceleration signal for that second |
+
+###### PPGRawData —— A set of raw PPG data
+
+kotlin
+
+```kotlin
+/**
+ * A set of raw PPG data
+ * @param index The index of the current data set
+ * @param ppgTestMode PPG measurement mode
+ */
+class PPGRawData(val index: Int, val ppgTestMode: PPGTestMode) {
+    /** Second‑level timestamp of the current data */
+    var timestamp: Long = 0
+
+    /** CRC calculated from this data packet, used to verify content integrity */
+    var crc: Int = 0
+
+    /** Length of this data packet */
+    var count: Int = 0
+
+    /** Collection of one‑second PPG data */
+    val ppgSecondDataList: MutableList<PPGSecondData>
+}
+```
+
+
+
+**Note**: For Mode 3, `ppgTestMode` is fixed to `PPGTestMode.MODE3`, and `ppgSecondDataList` typically contains only **1 second** of data per `PPGRawData` (list size is 1).
+
+###### PPGSecondData —— Per‑second PPG data
+
+kotlin
+
+```kotlin
+/**
+ * Per‑second PPG data
+ * @param contentLength Total length of the content
+ * @param greenRawData  Raw green light signal (3 bytes/sample, signed, little‑endian; 300 bytes per second = 100 samples)
+ * @param accRawData    Raw acceleration signal (2 bytes/axis, signed, little‑endian; X/Y/Z each at 50 Hz; 300 bytes per second = 50 samples)
+ */
+class PPGSecondData(
+    val contentLength: Int,
+    val greenRawData: ByteArray,
+    val accRawData: ByteArray
+) {
+    /** Parsed list of green light signal values (100 samples) */
+    val greenLightSignalList: MutableList<Int>
+
+    /** Parsed list of acceleration data (50 samples, each containing X/Y/Z axes) */
+    val accelerationList: MutableList<AccelerationData>
+}
+```
+
+
+
+| Property               | Type                          | Description                                                  |
+| :--------------------- | :---------------------------- | :----------------------------------------------------------- |
+| `contentLength`        | Int                           | Total raw content length for that second                     |
+| `greenRawData`         | ByteArray                     | Raw green light signal (300 bytes, 3 bytes/sample × 100 Hz)  |
+| `accRawData`           | ByteArray                     | Raw acceleration signal (300 bytes, 2 bytes/axis × 3 axes × 50 Hz) |
+| `greenLightSignalList` | MutableList<Int>              | Parsed green light signal values (automatically parsed by SDK) |
+| `accelerationList`     | MutableList<AccelerationData> | Parsed acceleration data list (automatically parsed by SDK)  |
+
+###### Example Code
+
+java
+
+```kotlin
+// 1. Enable active measurement (real‑time mode) and set data listener
+VPOperateManager.getInstance().activeJH58MeasurementState(
+    EJH58MeasurementState.ACTIVE_MEASUREMENT_REAL_TIME,
+    code -> {
+        appendMsg("Active measurement state control command sent " + (code == Code.REQUEST_SUCCESS ? "successfully" : "failed"));
+    },
+    new IActiveMeasurementDataListener() {
+        @Override
+        public void onMeasurementStateResult(@NonNull EJH58MeasurementState state, int ack) {
+            String ackDesc;
+            switch (ack) {
+                case 0x01: ackDesc = "Success"; break;
+                case 0x02: ackDesc = "Device busy"; break;
+                case 0x03: ackDesc = "Low battery"; break;
+                default: ackDesc = "Unknown(" + ack + ")"; break;
+            }
+            appendMsg("Active measurement state acknowledgment: " + state.getDes() + " -> " + ackDesc);
+        }
+
+        @Override
+        public void onActiveMeasurementDataStart(int totalSeconds) {
+            appendMsg("Start receiving active measurement data, estimated " + totalSeconds + " seconds");
+        }
+
+        @Override
+        public void onActiveMeasurementDataReceived(@NonNull PPGRawData ppgRawData) {
+            appendMsg("Received data for second " + ppgRawData.getIndex() + ": " + ppgRawData.toString());
+
+            // Parse the green light and acceleration data in each second
+            if (!ppgRawData.getPpgSecondDataList().isEmpty()) {
+                PPGSecondData secondData = ppgRawData.getPpgSecondDataList().get(0);
+                // Green light signal values
+                List<Integer> greenData = secondData.getGreenLightSignalList();
+                // Acceleration data (X/Y/Z axes)
+                List<AccelerationData> accData = secondData.getAccelerationList();
+            }
+        }
+    }
+);
+
+// 2. Disable active measurement (data listener can be null if not needed)
+VPOperateManager.getInstance().activeJH58MeasurementState(
+    EJH58MeasurementState.CLOSE_ACTIVE_MEASUREMENT,
+    code -> {
+        appendMsg("Close active measurement command sent " + (code == Code.REQUEST_SUCCESS ? "successfully" : "failed"));
+    },
+    null
+);
 ```
 
 ### ZT163 Project Device-Always-Off-Screen function
@@ -13003,3 +13737,4 @@ void setQH15ComplianceEvent(EQH15ComplianceType type, IBleWriteResponse bleWrite
 | NUTRITION_GOAL     | Nutrition goal     |
 | ALL_GOALS_ACHIEVED | All goals achieved |
 | NEW_FITNESS_GOAL   | New fitness goals  |
+

@@ -37,8 +37,9 @@
 | 1.3.1 | 新增QH15健康数据相关接口 | 2026.05.28 |
 | 1.3.2 | 新增提醒事件以及运动状态 | 2026.06.16 |
 | 1.3.3 | 新增读取设备IMEI号 | 2026.06.18 |
-| 1.3.4 | 新增健康灯功能 | 2026.06.30 |
-
+|1.3.4|新增健康灯功能|2026.06.30|
+| 1.3.5 | 修改“读取设备手动测量数据”支持的判断条件，新增梅脱、情绪、疲劳度相关功能api | 2026.07.02 |
+| 1.3.6 | JH58新增主动测量相关接口，读取PPG原始信号新增数据采集上报（MODE3） | 2026.07.27 |
 
 ## 导入SDK
 添加依赖
@@ -9939,15 +9940,14 @@ VPOperateManager.getInstance().stopDetectBloodComponent {
 
 ## 读取设备手动测量数据
 
-包含多种数据读取，需满足以下任何一条件才可读取
+包含多种数据读取，需满足以下条件才可读取
 
-**血压** 是否支持读取，判定条件：需支持气泵血压才可读取，判断代码如下：
-
+```kotlin
+val supportList = VpSpGetUtil.getVpSpVariInstance(applicationContext).getSupportReadDeviceManual()
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportReadDeviceManual
 ```
-VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportBumpBp
-```
 
-**其他** 其他数据暂不支持读取手动测量数据，后续支持
+supportList是当前设备支持读取的数据类型，可传入到相关的接口当中，isSupportReadDeviceManual为是否支持自动测量数据读取功能(supportList>0)
 
 #### 读取设备手动测量数据
 
@@ -9968,6 +9968,7 @@ readDeviceManualData(bleWriteResponse, timeStampSecond, dataTypeList, dataListen
 | bleWriteResponse | BleWriteResponse                | 写入操作的监听                                               |
 | timeStampSecond  | long                            | 秒级时间戳，表示APP端上一次读取的时间，设备只上报大于它的数据，如果其值为0则表示APP上一次没有读取过 |
 | dataTypeList     | List<DeviceManualDataType>      | 要读取的数据类型，如果为全部则传DeviceManualDataType.ALL     |
+| optionsList      | List<DeviceManualDataType>      | 传空数组即可                                                 |
 | dataListener     | IDeviceManualDetectDataListener | 设备手动测量数据读取监听                                     |
 
 **DeviceManualDataType** -- 读取的数据类型
@@ -12130,7 +12131,6 @@ interface IRemindEventListener {
 ```
 
 
-
 ## 健康灯功能
 
 在使用提醒事件功能之前，需判断设备是否支持健康灯功能
@@ -12184,8 +12184,6 @@ interface IHealthLightListener {
 }
 ```
 
-#### 
-
 #### 设置健康灯状态
 
 ###### 接口
@@ -12223,6 +12221,476 @@ readHealthLightStatus(IBleWriteResponse bleWriteResponse)
 | 参数名           | 类型              | 备注         |
 | ---------------- | ----------------- | ------------ |
 | bleWriteResponse | IBleWriteResponse | 写入操作监听 |
+
+
+
+## 梅脱功能
+
+前提：需设备支持梅脱功能，判断条件如下：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportMet()
+```
+
+注：以下所有接口都需在满足设备支持梅脱功能才能调用
+
+### 开始梅脱测量
+
+前提：需设备支持梅脱APP测量功能，判断条件如下：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportMetAppDetect()
+```
+
+###### 接口
+
+```java
+/***
+     * <ul>
+     *     <li style="color:#1055d2">Start Met measurement</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">开始Met测量</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write operate,if response code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     * @param detectListener
+     * <ul>
+     *     <li style="color:#1055d2">Met measurement callback</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">Met测量回调</li>
+     * </ul>
+     */
+    public void startDetectMet(BleWriteResponse bleWriteResponse, IMetDetectListener detectListener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型               | 描述           |
+| ---------------- | ------------------ | -------------- |
+| bleWriteResponse | BleWriteResponse   | 写入操作的监听 |
+| listener         | IMetDetectListener | 梅脱测量的监听 |
+
+###### 数据返回
+
+**IMetDetectListener** --   梅脱测量回调
+
+```kotlin
+interface IMetDetectListener {
+
+    /**
+     * Met 测量值回调
+     * * Callback for Met  measurement values.
+     * * @param progress 本次的 测量进度 / The current measurement progress.
+     * * @param Met 本次的 Met 测量数值  值域范围[-10, 10]/ The current Met measurement value in milliseconds.
+     */
+    fun onMetDetect(progress: Int, met: Float)
+
+    /**
+     * 测量失败回调
+     * * Callback for measurement failure.
+     * * @param detectState 失败的具体原因状态 / The specific state indicating the reason for failure.
+     */
+    fun onDetectFailed(detectState: MetDetectState)
+
+    /**
+     * 停止测量回调
+     * * Callback when the measurement is stopped.
+     * * This is triggered when the measurement process is manually or automatically terminated.
+     */
+    fun onDetectStop()
+}
+```
+
+**MetDetectState** -- 梅脱测量的错误码
+
+```kotlin
+enum class MetDetectState(val code: Int, val des: String) {
+    PROGRESS(0, "可用，App端仅在当前状态下走正常测量流程"),
+    BUSY(1, "设备正在测量其它数据，App端显示设备正忙"),
+    LOW_POWER(2, "低电"),
+    WEAR_OFF(4, "佩戴检测未通过")
+}
+```
+
+###### 示例代码
+
+```java
+VPOperateManager.getInstance().startDetectMet(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            }, new IMetDetectListener() {
+                @Override
+                public void onMetDetect(int progress, float met) {
+                    Logger.t(TAG).e("onMetDetect --》 " + progress+",value="+met);
+                }
+
+                @Override
+                public void onDetectFailed(@NotNull MetDetectState detectState) {
+                    Logger.t(TAG).e("onDetectFailed --》 " + detectState);
+                }
+
+                @Override
+                public void onDetectStop() {
+                    Logger.t(TAG).e("onDetectStop --》 " );
+                }
+            });
+```
+
+### 停止梅脱测量
+
+###### 前提
+
+需设备支持梅脱功能且支持梅脱APP测量功能
+
+###### 接口
+
+```java
+ /***
+     * <ul>
+     *     <li style="color:#1055d2">Stop Met measurement</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">结束Met测量</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write operate,if response code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     */
+    public void stopDetectMet(BleWriteResponse bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型             | 描述           |
+| ---------------- | ---------------- | -------------- |
+| bleWriteResponse | BleWriteResponse | 写入操作的监听 |
+
+###### 示例代码
+
+```java
+VPOperateManager.getInstance().stopDetectMet(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            });
+```
+
+## 情绪功能
+
+前提：需设备支持情绪功能，判断条件如下：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportEmotion()
+```
+
+注：以下所有接口都需在满足设备支持情绪功能才能调用
+
+### 开始情绪测量
+
+前提：需设备支持情绪APP测量功能，判断条件如下：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportEmotionAppDetect()
+```
+
+###### 
+
+###### 接口
+
+```java
+ /***
+     * <ul>
+     *     <li style="color:#1055d2">Start emotion measurement</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">开始情绪测量</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write operate,if response code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     * @param detectListener
+     * <ul>
+     *     <li style="color:#1055d2">emotion measurement callback</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">情绪测量回调</li>
+     * </ul>
+     */
+    public void startDetectEmotion(BleWriteResponse bleWriteResponse, IEmotionDetectListener detectListener) 
+```
+
+###### 参数解释
+
+| 参数名           | 类型                   | 描述           |
+| ---------------- | ---------------------- | -------------- |
+| bleWriteResponse | BleWriteResponse       | 写入操作的监听 |
+| listener         | IEmotionDetectListener | 情绪测量的监听 |
+
+###### 数据返回
+
+**IEmotionDetectListener** -- 情绪测量回调
+
+```kotlin
+interface IEmotionDetectListener {
+
+    /**
+     * Emotion 测量值回调
+     * * Callback for Emotion  measurement values.
+     * * @param progress 本次的 测量进度 / The current measurement progress.
+     * * @param Emotion 本次的 Emotion 测量数值  值域范围[-10, 10]/ The current Emotion measurement value in milliseconds.
+     */
+    fun onEmotionDetect(progress: Int, emotion: Int)
+
+    /**
+     * 测量失败回调
+     * * Callback for measurement failure.
+     * * @param detectState 失败的具体原因状态 / The specific state indicating the reason for failure.
+     */
+    fun onDetectFailed(detectState: EmotionDetectState)
+
+    /**
+     * 停止测量回调
+     * * Callback when the measurement is stopped.
+     * * This is triggered when the measurement process is manually or automatically terminated.
+     */
+    fun onDetectStop()
+}
+```
+
+**EmotionDetectState** -- 情绪测量的错误码
+
+```kotlin
+enum class EmotionDetectState(val code: Int, val des: String) {
+    /**
+     *`0x00` 可用，App端仅在当前状态下走正常测量流程
+     * `0x01` 设备正在测量压力，互斥，App端显示设备正忙
+     * `0x02` 设备处于低电状态
+     * `0x03` 设备正在测量其它数据，App端显示设备正忙
+     * `0x04` 设备佩戴检测未通过，App端显示异常提示
+     */
+    PROGRESS(0, "可用，App端仅在当前状态下走正常测量流程"),
+    BUSY(1, "设备正在测量其它数据，App端显示设备正忙"),
+    LOW_POWER(2, "低电"),
+    WEAR_OFF(4, "佩戴检测未通过");
+}
+```
+
+**示例代码**
+
+```java
+VPOperateManager.getInstance().startDetectGsr(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            }, new IGsrDetectListener() {
+                @Override
+                public void onGsrDetectProgress(int progress) {
+                    Logger.t(TAG).e("onGsrDetectProgress --》 " + progress);
+                }
+
+                @Override
+                public void onGsrDetectSuccess(@NonNull GsrDetectResult detectResult) {
+                    Logger.t(TAG).e("onGsrDetectSuccess --》 " + detectResult.toString());
+                }
+
+                @Override
+                public void onGsrDetectFailed(@NonNull GsrDetectAck detectAck) {
+                    Logger.t(TAG).e("onGsrDetectFailed --》 " + detectAck.getDescription());
+                }
+
+                @Override
+                public void onGsrDetectStop() {
+                    Logger.t(TAG).e("onGsrDetectStop --》 -- ");
+                }
+            });
+```
+
+### 停止情绪测量
+
+###### 前提
+
+需设备支持情绪测量功能且支持app测量
+
+###### 接口
+
+```java
+/***
+     * <ul>
+     *     <li style="color:#1055d2">Stop emotion measurement</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">结束情绪测量</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write operate,if response code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     */
+    public void stopDetectEmotion(BleWriteResponse bleWriteResponse) 
+```
+
+###### 参数解释
+
+| 参数名           | 类型             | 描述           |
+| ---------------- | ---------------- | -------------- |
+| bleWriteResponse | BleWriteResponse | 写入操作的监听 |
+
+###### 示例代码
+
+```java
+       VPOperateManager.getInstance().stopDetectEmotion(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            });
+```
+
+## 疲劳度功能
+
+前提：需设备支持疲劳度功能，判断条件如下：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportFtg()
+```
+
+注：以下所有接口都需在满足设备支持疲劳度功能才能调用
+
+### 开始疲劳度测量
+
+前提：需设备支持疲劳度APP测量功能，判断条件如下：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportFtgAppDetect
+```
+
+###### 接口
+
+```java
+ /***
+     * <ul>
+     *     <li style="color:#1055d2">Start detect the fatigue in real-time</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">开始测量疲劳度</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     * @param fatigueDataListener
+     * <ul>
+     *    <li>the listener of detect the fatigue </li>
+     *    <li>疲劳度的回调</li>
+     * </ul>
+     */
+    public void startDetectFatigue(IBleWriteResponse bleWriteResponse, IFatigueDataListener fatigueDataListener) 
+```
+
+###### 参数解释
+
+| 参数名              | 类型                 | 描述             |
+| ------------------- | -------------------- | ---------------- |
+| bleWriteResponse    | BleWriteResponse     | 写入操作的监听   |
+| fatigueDataListener | IFatigueDataListener | 疲劳度测量的监听 |
+
+###### 数据返回
+
+**IFatigueDataListener** -- 疲劳度测量回调
+
+```java
+public interface IFatigueDataListener extends IListener{
+    /**
+     * 返回疲劳度操作的数据
+     * @param fatigueData  疲劳度操作的数据
+     */
+    void onFatigueDataListener(FatigueData fatigueData);
+}
+```
+
+**FatigueData** -- 疲劳度数据
+
+```java
+public class FatigueData {
+    //疲劳度状态
+    private EFatigueStatus fatigueState;
+    //设备状态
+    private EDeviceStatus deviceState;
+    //测量进度
+    private int progress;
+    //测量值 值域[0, 10]
+    private int value;
+}
+```
+
+**示例代码**
+
+```java
+VPOperateManager.getInstance().startDetectFatigue(writeResponse, new IFatigueDataListener() {
+                @Override
+                public void onFatigueDataListener(FatigueData fatigueData) {
+                    String message = "疲劳度-开始:\n" + fatigueData.toString();
+                    Logger.t(TAG).i(message);
+                }
+            });
+```
+
+### 停止疲劳度测量
+
+###### 前提
+
+需设备支持疲劳度测量功能且支持app测量
+
+###### 接口
+
+```java
+/***
+     * <ul>
+     *     <li style="color:#1055d2">Stop detect fatigue in real-time</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">结束测量疲劳度</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     * @param fatigueDataListener
+     * <ul>
+     *    <li>the listener of detect fatigue</li>
+     *    <li>疲劳度操作的回调,返回疲劳度的数据:是否支持,开/关状态,进度,疲劳度值</li>
+     * </ul>
+     */
+    public void stopDetectFatigue(IBleWriteResponse bleWriteResponse, IFatigueDataListener fatigueDataListener) 
+```
+
+###### 参数解释
+
+| 参数名              | 类型                 | 描述           |
+| ------------------- | -------------------- | -------------- |
+| bleWriteResponse    | BleWriteResponse     | 写入操作的监听 |
+| fatigueDataListener | IFatigueDataListener | 疲劳度数据监听 |
+
+###### 示例代码
+
+```java
+      VPOperateManager.getInstance().stopDetectFatigue(writeResponse, new IFatigueDataListener() {
+                @Override
+                public void onFatigueDataListener(FatigueData fatigueData) {
+                    String message = "疲劳度-结束:\n" + fatigueData.toString();
+                    Logger.t(TAG).i(message);
+                    sendMsg(message, 1);
+                }
+            });
+```
 
 
 
@@ -12398,7 +12866,8 @@ PPGTestMode
 ```kotlin
 enum class PPGTestMode(val value: Byte, val des: String) {
     MODE1(0x01, "每15分钟采集10秒时长，绿光+加速度原始数据"),
-    MODE2(0x02, "每5分钟采集1分钟时长，绿光+加速度原始数据"), ;
+    MODE2(0x02, "每5分钟采集1分钟时长，绿光+加速度原始数据"),
+    MODE3(0x03, "数据采集实时上报，保存最后一次测量最近5分钟原始数据");
 
     companion object {
         fun toTestMode(@IntRange(from = 1, to = 2) value: Int): PPGTestMode {
@@ -12590,6 +13059,219 @@ public void startPPGRealTimeTransmission(BleWriteResponse bleWriteResponse, IPPG
  */
 public void stopPPGRealTimeTransmission(BleWriteResponse bleWriteResponse)
 ```
+
+
+
+#### 主动测量
+
+用于 JH58 定制项目的主动测量功能。App 可控制设备开启/关闭主动测量（支持实时传输和断点传输两种模式），并通过监听接收每秒的 PPG 原始数据（绿光 + 加速度）。
+
+##### 控制主动测量状态
+
+控制结果将在 `IActiveMeasurementDataListener.onMeasurementStateResult()` 中回调。
+
+###### 接口
+
+```java
+/**
+ * <ul>
+ *     <li style="color:#1055d2">JH58 active measurement state control</li>
+ *     <li><br/></li>
+ *     <li style="color:#555555">JH58主动测量状态控制</li>
+ * </ul>
+ *
+ * @param state             <ul>
+ *                              <li>Measurement state</li>
+ *                              <li>主动测量状态</li>
+ *                          </ul>
+ * @param bleWriteResponse  <ul>
+ *                              <li>the response of write operation</li>
+ *                              <li>写入操作的监听</li>
+ *                          </ul>
+ * @param dataListener      <ul>
+ *                              <li>Mode 3 real-time data listener (can be null if only need state ack)</li>
+ *                              <li>模式3实时数据监听（若仅需状态应答可为null）</li>
+ *                          </ul>
+ */
+public void activeJH58MeasurementState(EJH58MeasurementState state, BleWriteResponse bleWriteResponse, IActiveMeasurementDataListener dataListener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                           | 描述                          |
+| ---------------- | ------------------------------ | ----------------------------- |
+| state            | EJH58MeasurementState          | 主动测量状态                  |
+| bleWriteResponse | BleWriteResponse               | 写入操作的监听                |
+| dataListener     | IActiveMeasurementDataListener | 模式3实时数据监听（可为null） |
+
+**EJH58MeasurementState** —— 主动测量状态枚举
+
+```kotlin
+enum class EJH58MeasurementState(val value: Byte, val des: String) {
+    /** 开启测量，且进行实时传输 */
+    ACTIVE_MEASUREMENT_REAL_TIME(0x01, "主动测量-实时传输"),
+
+    /** 开启测量，且进行断点传输（蓝牙断连重连后推送断联前5分钟数据再衔接实时上报） */
+    ACTIVE_MEASUREMENT_BREAKPOINT(0x02, "主动测量-断点传输"),
+
+    /** 关闭测量 */
+    CLOSE_ACTIVE_MEASUREMENT(0x03, "关闭主动测量");
+}
+```
+
+| 枚举值                          | 描述                                                         |
+| ------------------------------- | ------------------------------------------------------------ |
+| `ACTIVE_MEASUREMENT_REAL_TIME`  | 开启测量，且进行实时传输                                     |
+| `ACTIVE_MEASUREMENT_BREAKPOINT` | 开启测量，且进行断点传输（适用于蓝牙断连重连后，设备推送本次测量断联前5分钟数据后再衔接实时上报） |
+| `CLOSE_ACTIVE_MEASUREMENT`      | 关闭测量                                                     |
+
+##### 主动测量数据监听
+
+###### IActiveMeasurementDataListener —— 模式3 PPG实时原始数据接收监听
+
+```kotlin
+/**
+ * 模式3 PPG实时原始数据接收监听
+ * 用于 JH58 主动测量的主动测量数据回调
+ */
+interface IActiveMeasurementDataListener : IListener {
+
+    /**
+     * 主动测量状态设置应答
+     * @param state 设置的状态
+     * @param ack   应答：0x01=成功, 0x02=设备正在手动测量（设备正忙）, 0x03=设备处于低电状态
+     */
+    fun onMeasurementStateResult(state: EJH58MeasurementState, ack: Int)
+
+    /**
+     * 开始上报主动测量数据
+     * @param totalSeconds 总秒数（设备预估）
+     */
+    fun onActiveMeasurementDataStart(totalSeconds: Int)
+
+    /**
+     * 每秒主动测量数据上报
+     * @param ppgRawData 1秒钟的主动测量PPG原始数据
+     */
+    fun onActiveMeasurementDataReceived(ppgRawData: PPGRawData)
+}
+```
+
+| 回调方法                                      | 描述                                                         |
+| --------------------------------------------- | ------------------------------------------------------------ |
+| `onMeasurementStateResult(state, ack)`        | 主动测量状态设置应答。`ack`：`0x01`=成功，`0x02`=设备正在手动测量（设备正忙），`0x03`=设备处于低电状态 |
+| `onActiveMeasurementDataStart(totalSeconds)`  | 开始上报主动测量数据，`totalSeconds`为设备预估的总秒数       |
+| `onActiveMeasurementDataReceived(ppgRawData)` | 每秒主动测量数据上报，`ppgRawData`包含该秒的绿光原始信号和加速度原始信号 |
+
+###### PPGRawData —— 一组PPG原始数据
+
+```kotlin
+/**
+ * 一组PPG原始数据
+ * @param index 当前第几组数据
+ * @param ppgTestMode ppg测量模式
+ */
+class PPGRawData(val index: Int, val ppgTestMode: PPGTestMode) {
+    /** 当前数据的秒级时间戳 */
+    var timestamp: Long = 0
+
+    /** 该组数据包计算出来的CRC，用于校验内容的完整性 */
+    var crc: Int = 0
+
+    /** 该组数据包的长度 */
+    var count: Int = 0
+
+    /** 一秒PPG数据的集合 */
+    val ppgSecondDataList: MutableList<PPGSecondData>
+}
+```
+
+**注意**：对于模式3，`ppgTestMode` 固定为 `PPGTestMode.MODE3`，`ppgSecondDataList` 中通常每个 `PPGRawData` 只包含 **1 秒**数据（列表大小为1）。
+
+###### PPGSecondData —— 每秒PPG数据
+
+```kotlin
+/**
+ * 每秒PPG数据
+ * @param contentLength 内容总长度
+ * @param greenRawData  绿光原始信号（3Bytes/采样点，有符号，小端，1秒共300Bytes = 100个采样点）
+ * @param accRawData    加速度原始信号（2Bytes/轴，有符号，小端，X/Y/Z各50Hz，1秒共300Bytes = 50个采样点）
+ */
+class PPGSecondData(
+    val contentLength: Int,
+    val greenRawData: ByteArray,
+    val accRawData: ByteArray
+) {
+    /** 解析后的绿光信号值列表（100个采样点） */
+    val greenLightSignalList: MutableList<Int>
+
+    /** 解析后的加速度数据列表（50个采样点，每点含X/Y/Z三轴） */
+    val accelerationList: MutableList<AccelerationData>
+}
+```
+
+| 属性                   | 类型                            | 描述                                                |
+| ---------------------- | ------------------------------- | --------------------------------------------------- |
+| `contentLength`        | Int                             | 该秒数据的原始内容总长度                            |
+| `greenRawData`         | ByteArray                       | 绿光原始信号（300 Bytes，3Bytes/采样点 × 100Hz）    |
+| `accRawData`           | ByteArray                       | 加速度原始信号（300 Bytes，2Bytes/轴 × 3轴 × 50Hz） |
+| `greenLightSignalList` | MutableList\<Int\>              | SDK自动解析后的绿光信号值列表                       |
+| `accelerationList`     | MutableList\<AccelerationData\> | SDK自动解析后的加速度数据列表                       |
+
+###### 示例代码
+
+```java
+// 1. 开启主动测量（实时传输模式），并设置数据监听
+VPOperateManager.getInstance().activeJH58MeasurementState(
+    EJH58MeasurementState.ACTIVE_MEASUREMENT_REAL_TIME,
+    code -> {
+        appendMsg("主动测量状态控制指令发送" + (code == Code.REQUEST_SUCCESS ? "成功" : "失败"));
+    },
+    new IActiveMeasurementDataListener() {
+        @Override
+        public void onMeasurementStateResult(@NonNull EJH58MeasurementState state, int ack) {
+            String ackDesc;
+            switch (ack) {
+                case 0x01: ackDesc = "成功"; break;
+                case 0x02: ackDesc = "设备正忙"; break;
+                case 0x03: ackDesc = "低电状态"; break;
+                default: ackDesc = "未知(" + ack + ")"; break;
+            }
+            appendMsg("主动测量状态应答：" + state.getDes() + " -> " + ackDesc);
+        }
+
+        @Override
+        public void onActiveMeasurementDataStart(int totalSeconds) {
+            appendMsg("开始接收主动测量数据，预估" + totalSeconds + "秒");
+        }
+
+        @Override
+        public void onActiveMeasurementDataReceived(@NonNull PPGRawData ppgRawData) {
+            appendMsg("收到第" + ppgRawData.getIndex() + "秒数据: " + ppgRawData.toString());
+
+            // 解析每秒中的绿光和加速度数据
+            if (!ppgRawData.getPpgSecondDataList().isEmpty()) {
+                PPGSecondData secondData = ppgRawData.getPpgSecondDataList().get(0);
+                // 绿光信号值
+                List<Integer> greenData = secondData.getGreenLightSignalList();
+                // 加速度数据（含X/Y/Z三轴）
+                List<AccelerationData> accData = secondData.getAccelerationList();
+            }
+        }
+    }
+);
+
+// 2. 关闭主动测量（无需数据监听时可传null）
+VPOperateManager.getInstance().activeJH58MeasurementState(
+    EJH58MeasurementState.CLOSE_ACTIVE_MEASUREMENT,
+    code -> {
+        appendMsg("关闭主动测量指令发送" + (code == Code.REQUEST_SUCCESS ? "成功" : "失败"));
+    },
+    null
+);
+```
+
+
 
 ### ZT163项目设备常灭屏功能
 
