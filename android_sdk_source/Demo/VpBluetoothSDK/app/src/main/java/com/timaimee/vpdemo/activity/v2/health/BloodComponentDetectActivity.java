@@ -2,6 +2,7 @@ package com.timaimee.vpdemo.activity.v2.health;
 
 import android.view.View;
 
+import com.timaimee.vpdemo.activity.v2.DeviceMenu;
 import com.veepoo.protocol.listener.data.IBloodComponentDetectListener;
 import com.veepoo.protocol.model.datas.BloodComponent;
 import com.veepoo.protocol.model.enums.EBloodComponentDetectState;
@@ -14,7 +15,7 @@ public class BloodComponentDetectActivity extends BaseDetectActivity implements 
 
     @Override
     public String pageTitle() {
-        return "血液成分测量";
+        return DeviceMenu.Health.BloodComponent;
     }
 
     @Override

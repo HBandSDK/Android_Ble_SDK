@@ -40,6 +40,7 @@
 |1.3.4|新增健康灯功能|2026.06.30|
 | 1.3.5 | 修改“读取设备手动测量数据”支持的判断条件，新增梅脱、情绪、疲劳度相关功能api | 2026.07.02 |
 | 1.3.6 | JH58新增主动测量相关接口，读取PPG原始信号新增数据采集上报（MODE3） | 2026.07.27 |
+| 1.3.7 | 新增AI功能相关接口和流程说明 | 2026.08.18 |
 
 ## 导入SDK
 添加依赖
@@ -12691,6 +12692,757 @@ VPOperateManager.getInstance().startDetectFatigue(writeResponse, new IFatigueDat
                 }
             });
 ```
+
+
+
+## AI功能
+
+AI 功能包含 **AI问答**（设备端语音提问，App 端语音识别并调用 AI 回答）与 **AI表盘**（设备端语音描述，App 端 AI 生成表盘），交互流程如下：
+
+- 设备端上报请求事件 → 通过监听器回调通知 App；
+- App 执行录音、语音识别、云端 AI 处理等动作后，调用下发接口将结果回复给设备；
+- 每个回调（开始录音/结束录音/结果/重新生成/终止等）App 均需按顺序应答，否则流程会卡住。
+
+使用前需先注册监听器（`setAiListener`），并可通过 `readAiConfig` 读取设备 AI 配置。
+
+#### 前提
+
+设备需支持 AI 功能，判断条件如下：
+
+```kotlin
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportAi()
+```
+
+#### 注册AI功能监听
+
+注册 AI 功能相关的三个监听器（配置、问答、表盘），注册后设备上报的 AI 指令才会回调到 App。
+
+###### 接口
+
+```
+setAiListener(configOptListener, aiqaOptListener, dialOptListener)
+```
+
+###### 参数解释
+
+| 参数名            | 类型                  | 备注       |
+| ----------------- | --------------------- | ---------- |
+| configOptListener | OnAIConfigOptListener | AI配置监听 |
+| aiqaOptListener   | OnAIQAOptListener     | AI问答监听 |
+| dialOptListener   | OnAIDialOptListener   | AI表盘监听 |
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().setAiListener(object : OnAIConfigOptListener {
+    override fun onAIDeviceConfigReport(config: AIDeviceConfigBean) {}
+    override fun onAIDeviceConfigSettingResult(isSuccess: Boolean) {}
+    override fun onAIDeviceConfigRead(config: AIDeviceConfigBean) {}
+}, object : OnAIQAOptListener {
+    override fun onAIQAStartRecording() {}
+    override fun onAIQAStopRecording() {}
+    override fun onAIQAResult(errorCode: AIFunctionOpt.AIDeviceErrorCode) {}
+    override fun onAIQARegenerate() {}
+    override fun onAIQATerminateREQ() {}
+}, object : OnAIDialOptListener {
+    override fun onAIDialStartRecording() {}
+    override fun onAIDialStopRecording() {}
+    override fun onAIDialStartGenerate() {}
+    override fun onAIDialProgressSetting() {}
+    override fun onAIDialResultSettingACK() {}
+    //以下预览图相关回调由 SDK 的 sendAiDialPreview 自动应答，App 收到后可忽略
+    override fun onAIDialPreviewLengthGetACK(needGetPreviewLength: Int) {}
+    override fun onAIDialContinueGetPreviewDataREQ(needGetPreviewLength: Int) {}
+    override fun onAIDialPreviewDataReceiveComplete(errorCode: AIFunctionOpt.AIDeviceErrorCode) {}
+    override fun onAIDialSetDial() {}
+    override fun onAIDialRegenerate() {}
+    override fun onAIDialTerminateREQ() {}
+})
+```
+
+#### 读取AI配置
+
+读取设备的 AI 配置信息（AI问答内容最大长度、预览图/表盘最大大小、文生图风格、预览图分辨率等），结果在 **OnAIConfigOptListener.onAIDeviceConfigRead** 中回调；设备连接后也可能主动上报配置，回调在 **onAIDeviceConfigReport**。
+
+###### 接口
+
+```
+readAiConfig(bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型              | 备注           |
+| ---------------- | ----------------- | -------------- |
+| bleWriteResponse | IBleWriteResponse | 写入操作的监听 |
+
+###### 返回数据
+
+**AIDeviceConfigBean** -- 设备AI配置详情
+
+| 变量                 | 类型 | 备注                                                         |
+| -------------------- | ---- | ------------------------------------------------------------ |
+| aiQAContentMaxLength | Int  | AI问答内容最大长度                                           |
+| previewMaxSize       | Int  | 表盘预览图最大值                                             |
+| dialMaxSize          | Int  | 表盘最大值                                                   |
+| aiDrawingStyle       | Int  | AI绘图风格：0x00默认/0x01 3D渲染/0x02赛博朋克/0x03人像摄影/0x04动漫/0x05电影写真/0x06风景/0x07油画/0x08水墨画/0x09水彩画/0x0A像素风格... |
+| previewResolutionW   | Int  | 预览图分辨率-宽                                              |
+| previewResolutionH   | Int  | 预览图分辨率-高                                              |
+| previewAngleRadius   | Int  | 预览图风格-圆角半径（0为直角）                               |
+| customDialFlag       | Int  | 自定义照片表盘标志位                                         |
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().readAiConfig({
+    if (it != Code.REQUEST_SUCCESS) {
+        //写入失败
+    }
+})
+```
+
+#### AI问答
+
+设备需支持 AI 问答功能，判断条件如下：
+
+```kotlin
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportAiQa()
+```
+
+设备端发起语音提问，App 端完成录音、语音识别与 AI 回答。整体时序如下：
+
+```
+设备端                                        App端
+  | ①上报开始录音 ──onAIQAStartRecording()───>| 开始录音
+  |<──sendAIQAStartRecordingResult(结果) ②───| 录音完成，回复结果
+  | ③上报结束录音 ──onAIQAStopRecording()───>| 停止录音
+  |<──sendAIQARecordingContent2Device(内容) ④| 语音识别，发送文本
+  | ⑤上报问答结果 ──onAIQAResult()──────────>| 收到设备结果请求
+  |<──sendAIQAResultCmd(答案) ⑥─────────────| 调用AI，发送答案
+  | ⑦上报重新生成 ──onAIQARegenerate()──────>| 重新生成
+  |<──sendAIQARegenerateResultCmd(答案) ⑧───| 发送新答案
+  | ⑨上报终止请求 ──onAIQATerminateREQ()────>| 终止交互
+```
+
+##### 回复开始录音结果
+
+设备上报开始录音后，App 开始录音；录音完成后调用本接口把录音结果回复给设备。
+
+###### 接口
+
+```
+sendAIQAStartRecordingResult(bleWriteResponse, errorCode)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                         | 备注                                             |
+| ---------------- | ---------------------------- | ------------------------------------------------ |
+| bleWriteResponse | IBleWriteResponse            | 写入操作的监听                                   |
+| errorCode        | AIFunctionOpt.AIAppErrorCode | 录音结果错误码，成功传 SUCCESS，失败传对应错误码 |
+
+###### 返回数据
+
+**OnAIQAOptListener.onAIQAStartRecording** -- 设备请求开始录音
+
+```kotlin
+fun onAIQAStartRecording()
+```
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().sendAIQAStartRecordingResult({
+    if (it != Code.REQUEST_SUCCESS) {
+        //写入失败
+    }
+}, AIFunctionOpt.AIAppErrorCode.SUCCESS)
+```
+
+##### 发送录音识别内容到设备
+
+设备上报结束录音后，App 停止录音并将语音识别出的文本内容发送给设备（内容过长时 SDK 自动分包发送）。
+
+###### 接口
+
+```
+sendAIQARecordingContent2Device(bleWriteResponse, errorCode, content)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                         | 备注                                                         |
+| ---------------- | ---------------------------- | ------------------------------------------------------------ |
+| bleWriteResponse | IBleWriteResponse            | 写入操作的监听                                               |
+| errorCode        | AIFunctionOpt.AIAppErrorCode | 识别结果错误码，成功传 SUCCESS；失败时无需传内容，SDK 将发送失败指令 |
+| content          | String                       | 语音识别出的文本内容（用户提问内容）                         |
+
+###### 返回数据
+
+**OnAIQAOptListener.onAIQAStopRecording** -- 设备请求结束录音
+
+```kotlin
+fun onAIQAStopRecording()
+```
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().sendAIQARecordingContent2Device({
+    if (it != Code.REQUEST_SUCCESS) {
+        //写入失败
+    }
+}, AIFunctionOpt.AIAppErrorCode.SUCCESS, "今天天气怎么样")
+```
+
+##### 发送AI问答结果
+
+设备上报问答结果请求后，App 调用云端 AI 得到答案，通过本接口将答案发送给设备（内容过长时 SDK 自动分包发送）。
+
+###### 接口
+
+```
+sendAIQAResultCmd(bleWriteResponse, errorCode, content)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                         | 备注                                                         |
+| ---------------- | ---------------------------- | ------------------------------------------------------------ |
+| bleWriteResponse | IBleWriteResponse            | 写入操作的监听                                               |
+| errorCode        | AIFunctionOpt.AIAppErrorCode | 问答结果错误码，成功传 SUCCESS；失败时无需传内容，SDK 将发送失败指令 |
+| content          | String                       | AI 回答的文本内容                                            |
+
+###### 返回数据
+
+**OnAIQAOptListener.onAIQAResult** -- 设备上报AI问答结果
+
+```kotlin
+fun onAIQAResult(errorCode: AIFunctionOpt.AIDeviceErrorCode)
+```
+
+| 枚举值                                   | 备注           |
+| ---------------------------------------- | -------------- |
+| SUCCESS                                  | 成功           |
+| PACKET_LOSS_OR_PREVIEW_CHECK_FAILED_0x80 | 丢包或校验失败 |
+| DATA_RECEIVER_TIMEOUT_0x81               | 数据接收超时   |
+| UNKNOWN                                  | 未知错误       |
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().sendAIQAResultCmd({
+    if (it != Code.REQUEST_SUCCESS) {
+        //写入失败
+    }
+}, AIFunctionOpt.AIAppErrorCode.SUCCESS, "今天天气晴朗，气温26度")
+```
+
+##### 发送AI问答重新生成结果
+
+设备上报重新生成请求后，App 重新生成答案并通过本接口发送给设备（内容过长时 SDK 自动分包发送）。
+
+###### 接口
+
+```
+sendAIQARegenerateResultCmd(bleWriteResponse, errorCode, content)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                         | 备注                                                 |
+| ---------------- | ---------------------------- | ---------------------------------------------------- |
+| bleWriteResponse | IBleWriteResponse            | 写入操作的监听                                       |
+| errorCode        | AIFunctionOpt.AIAppErrorCode | 重新生成结果错误码，成功传 SUCCESS；失败时无需传内容 |
+| content          | String                       | 重新生成的 AI 回答文本内容                           |
+
+###### 返回数据
+
+**OnAIQAOptListener.onAIQARegenerate** -- 设备请求重新生成
+
+```kotlin
+fun onAIQARegenerate()
+```
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().sendAIQARegenerateResultCmd({
+    if (it != Code.REQUEST_SUCCESS) {
+        //写入失败
+    }
+}, AIFunctionOpt.AIAppErrorCode.SUCCESS, "今天天气晴朗，气温26度，适合外出")
+```
+
+##### 终止AI问答
+
+设备上报终止请求时回调 **onAIQATerminateREQ**，App 收到后应停止当前问答流程。
+
+###### 返回数据
+
+**OnAIQAOptListener.onAIQATerminateREQ** -- 设备请求终止AI问答
+
+```kotlin
+fun onAIQATerminateREQ()
+```
+
+#### AI表盘
+
+设备需支持 AI 表盘功能，判断条件如下：
+
+```kotlin
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportAiDial()
+```
+
+设备端发起语音描述，App 端完成录音、语音识别并调用 AI 生成表盘，随后传输预览图数据。整体时序如下：
+
+```
+设备端                                        App端
+  | ①上报开始录音 ──onAIDialStartRecording()──>| 开始录音
+  |<──sendAIDialStartRecordingResult(结果) ②──| 录音完成，回复结果
+  | ③上报结束录音 ──onAIDialStopRecording()──>| 停止录音
+  |<──sendAIDialRecordingResult(描述) ④───────| 语音识别，发送表盘描述
+  | ⑤上报开始生成 ──onAIDialStartGenerate()──>| 调用AI绘图
+  |<──sendAIDialStartGenerateACK(结果) ⑥─────| 回复开始生成结果
+  | ⑦上报生成进度 ──onAIDialProgressSetting()>| （一般不用处理）
+  |<──sendAIDialGenerateResult(长度,CRC) ⑧────| AI生成完成，发送表盘数据长度与CRC
+  | ⑨上报生成结果应答 ─onAIDialResultSettingACK()>| （一般不用处理）
+  | ⑩上报获取预览图长度 ─onAIDialPreviewLengthGetACK(长度)>| 预览图传输（由 sendAiDialPreview
+  | ⑪上报继续获取数据 ─onAIDialContinueGetPreviewDataREQ(长度)>| 触发，裁剪/转换/CRC/分包/
+  | ⑫上报数据接收结束 ─onAIDialPreviewDataReceiveComplete(结果)>| 设备请求应答均由 SDK 自动处理）
+  | ⑬上报设为表盘 ──onAIDialSetDial()────────>| 确认设为表盘
+  | ⑭上报重新生成 ──onAIDialRegenerate()─────>| 重新生成
+  | ⑮上报终止请求 ──onAIDialTerminateREQ()───>| 终止交互
+  |<──sendAIDialTerminateACK() ⑯─────────────| 回复终止确认
+```
+
+> AI 绘图完成后，App 只需调用 [发送AI表盘预览图](#发送ai表盘预览图)（`sendAiDialPreview(表盘原图路径, 屏幕类型, 监听)`），SDK 内部自动完成：裁剪（大图/缩略图/预览图）→ 数据转换 + CRC → 发送生成结果 → 响应设备预览图数据请求并分包传输。设备侧的预览图请求/应答（时序 ⑩⑪⑫）由 SDK 自动处理，App 无需参与；预览图接收结束后通过 `OnAiDialPreviewSendListener.onPreviewSendComplete` 回调携带裁剪结果（大图/缩略图/预览图）。
+
+##### AI表盘功能不可用（区域不支持时）
+
+当设备所在区域不支持 AI 表盘功能时，App 下发本指令告知设备功能不可用。
+
+###### 接口
+
+```
+sendAIDialDisableCMD(bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型              | 备注           |
+| ---------------- | ----------------- | -------------- |
+| bleWriteResponse | IBleWriteResponse | 写入操作的监听 |
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().sendAIDialDisableCMD({
+    if (it != Code.REQUEST_SUCCESS) {
+        //写入失败
+    }
+})
+```
+
+##### 回复开始录音结果
+
+设备上报开始录音后，App 开始录音；录音完成后调用本接口把录音结果回复给设备。
+
+###### 接口
+
+```
+sendAIDialStartRecordingResult(bleWriteResponse, errorCode)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                         | 备注                                             |
+| ---------------- | ---------------------------- | ------------------------------------------------ |
+| bleWriteResponse | IBleWriteResponse            | 写入操作的监听                                   |
+| errorCode        | AIFunctionOpt.AIAppErrorCode | 录音结果错误码，成功传 SUCCESS，失败传对应错误码 |
+
+###### 返回数据
+
+**OnAIDialOptListener.onAIDialStartRecording** -- 设备请求开始录音
+
+```kotlin
+fun onAIDialStartRecording()
+```
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().sendAIDialStartRecordingResult({
+    if (it != Code.REQUEST_SUCCESS) {
+        //写入失败
+    }
+}, AIFunctionOpt.AIAppErrorCode.SUCCESS)
+```
+
+##### 发送表盘描述内容
+
+设备上报结束录音后，App 停止录音并将语音识别出的表盘描述文本发送给设备（内容过长时 SDK 自动分包发送）。
+
+###### 接口
+
+```
+sendAIDialRecordingResult(bleWriteResponse, errorCode, content)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                         | 备注                                             |
+| ---------------- | ---------------------------- | ------------------------------------------------ |
+| bleWriteResponse | IBleWriteResponse            | 写入操作的监听                                   |
+| errorCode        | AIFunctionOpt.AIAppErrorCode | 识别结果错误码，成功传 SUCCESS；失败时无需传内容 |
+| content          | String                       | 语音识别出的表盘描述文本                         |
+
+###### 返回数据
+
+**OnAIDialOptListener.onAIDialStopRecording** -- 设备请求结束录音
+
+```kotlin
+fun onAIDialStopRecording()
+```
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().sendAIDialRecordingResult({
+    if (it != Code.REQUEST_SUCCESS) {
+        //写入失败
+    }
+}, AIFunctionOpt.AIAppErrorCode.SUCCESS, "蓝色星空风格的圆形表盘")
+```
+
+##### 回复开始生成表盘
+
+设备上报开始生成表盘后，App 调用 AI 绘图，并将生成是否开始的结果回复给设备。
+
+###### 接口
+
+```
+sendAIDialStartGenerateACK(bleWriteResponse, errorCode)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                         | 备注                           |
+| ---------------- | ---------------------------- | ------------------------------ |
+| bleWriteResponse | IBleWriteResponse            | 写入操作的监听                 |
+| errorCode        | AIFunctionOpt.AIAppErrorCode | 生成结果错误码，成功传 SUCCESS |
+
+###### 返回数据
+
+**OnAIDialOptListener.onAIDialStartGenerate** -- 设备请求开始生成表盘
+
+```kotlin
+fun onAIDialStartGenerate()
+```
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().sendAIDialStartGenerateACK({
+    if (it != Code.REQUEST_SUCCESS) {
+        //写入失败
+    }
+}, AIFunctionOpt.AIAppErrorCode.SUCCESS)
+```
+
+##### 发送AI表盘生成结果
+
+AI 绘图完成后，App 将生成结果及表盘数据长度、CRC 发送给设备，设备据此校验并回调进度/结果应答。
+
+###### 接口
+
+```
+sendAIDialGenerateResult(bleWriteResponse, errorCode, dialLength, crc)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                         | 备注                           |
+| ---------------- | ---------------------------- | ------------------------------ |
+| bleWriteResponse | IBleWriteResponse            | 写入操作的监听                 |
+| errorCode        | AIFunctionOpt.AIAppErrorCode | 生成结果错误码，成功传 SUCCESS |
+| dialLength       | Int                          | 表盘数据长度                   |
+| crc              | Int                          | 表盘数据 CRC 校验值            |
+
+###### 返回数据
+
+**OnAIDialOptListener.onAIDialProgressSetting** -- 生成进度设置应答（一般不用处理）
+
+```kotlin
+fun onAIDialProgressSetting()
+```
+
+**OnAIDialOptListener.onAIDialResultSettingACK** -- 生成结果设置应答（一般不用处理）
+
+```kotlin
+fun onAIDialResultSettingACK()
+```
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().sendAIDialGenerateResult({
+    if (it != Code.REQUEST_SUCCESS) {
+        //写入失败
+    }
+}, AIFunctionOpt.AIAppErrorCode.SUCCESS, dialLength, crc)
+```
+
+##### 发送AI表盘预览图
+
+AI 绘图完成后，App 只需传入生成的表盘原图路径与屏幕类型，SDK 内部自动完成裁剪（大图/缩略图/预览图）、数据转换、CRC 校验、分包传输，并自动应答设备侧的预览图数据请求（长度/继续/接收结束），无需 App 参与。
+
+###### 接口
+
+```
+sendAiDialPreview(aiDialImagePath, watchUIType, listener)
+```
+
+###### 参数解释
+
+| 参数名          | 类型                        | 备注                                                         |
+| --------------- | --------------------------- | ------------------------------------------------------------ |
+| aiDialImagePath | String                      | AI 生成的表盘原图路径                                        |
+| watchUIType     | EWatchUIType                | 屏幕类型。建议通过 `readWatchUiInfo(bleWriteResponse, EUIFromType.CUSTOM, IUIBaseInfoListener)` 从设备读取（回调中 `UIDataCustom.getCustomUIType()`）；传 null 时使用 SDK 默认 RECT_JL_240_284 |
+| listener        | OnAiDialPreviewSendListener | 预览图发送结果监听（携带裁剪结果）                           |
+
+###### 返回数据
+
+**OnAiDialPreviewSendListener** -- AI 表盘预览图发送监听
+
+```kotlin
+interface OnAiDialPreviewSendListener {
+    //数据发送进度
+    fun onDataSendProgress(
+        data: ByteArray?,
+        currentPackage: Int,
+        haveSendDataLength: Int,
+        totalDataLength: Int,
+        progress: Int,
+    )
+
+    //数据发送失败
+    fun onDataSendFailed(data: ByteArray?, failedTimes: Int)
+
+    //预览图发送失败
+    fun onPreviewSendFailed()
+
+    //预览图发送完成（携带裁剪结果：大图/缩略图/预览图，App 可用大图与缩略图进行表盘设置）
+    fun onPreviewSendComplete(
+        bigWatchFace: AiCropWatchFaceBitmap?,
+        scaleWatchFace: AiCropWatchFaceBitmap?,
+        previewWatchFace: AiCropWatchFaceBitmap?,
+    )
+}
+```
+
+**AiCropWatchFaceBitmap** -- AI 裁剪结果位图
+
+| 变量     | 类型   | 备注     |
+| -------- | ------ | -------- |
+| bitmap   | Bitmap | 位图     |
+| filePath | String | 文件路径 |
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().sendAiDialPreview(aiDialImagePath, uiType, object : OnAiDialPreviewSendListener {
+    override fun onDataSendProgress(
+        data: ByteArray?,
+        currentPackage: Int,
+        haveSendDataLength: Int,
+        totalDataLength: Int,
+        progress: Int,
+    ) {
+        //发送进度
+    }
+
+    override fun onDataSendFailed(data: ByteArray?, failedTimes: Int) {}
+
+    override fun onPreviewSendFailed() {
+        //发送失败，可提示用户重试
+    }
+
+    override fun onPreviewSendComplete(
+        bigWatchFace: AiCropWatchFaceBitmap?,
+        scaleWatchFace: AiCropWatchFaceBitmap?,
+        previewWatchFace: AiCropWatchFaceBitmap?,
+    ) {
+        //预览图传输完成，可用 bigWatchFace/scaleWatchFace 进行表盘设置
+    }
+})
+```
+
+> 说明：
+>
+> 1. **JL（杰理）设备**：预览图传输由 SDK 内置实现，客户无需关注（非 JL 设备自动走普通通道）；**使用前需完成三项前置**——① 打开杰理通知 `VPOperateManager.openJLDataNotify(...)`（状态判断 `isJLNotifyOpened()`）；② 设备认证 `VPOperateManager.startJLDeviceAuth(...)`（状态判断 `RcspAuthManager.isAuthPass()`）；③ **文件系统初始化** `JLWatchFaceManager.getInstance().checkJLSDKAndInit(listener)`（状态判断 `isJLFatFileSystemInitSuccess()`，未初始化会导致传输报 `Watch system has not been initialized`），建议进入 AI 功能页时一并完成（参照 demo `JLDeviceOPTActivity`）；
+> 2. **屏幕类型**：通过 `sendAiDialPreview` 的 `watchUIType` 参数传入（建议从设备读取，见参数表）；不传（null）时 SDK 默认 `RECT_JL_240_284`；
+> 3. 设备侧的预览图请求回调（`onAIDialPreviewLengthGetACK` / `onAIDialContinueGetPreviewDataREQ` / `onAIDialPreviewDataReceiveComplete`）由 SDK 自动应答，App 收到后可忽略；`onPreviewSendComplete`（携带裁剪后的大图/缩略图/预览图）在**设备 B7 确认**或 **JL 通道传输完成**时回调（两者去重，JL 设备可能不发 B7 而直接发 0xB8 设为表盘），App 在 `onAIDialSetDial` 时即可使用大图设置表盘。
+
+##### 设为表盘与重新生成
+
+设备上报设为表盘时回调 **onAIDialSetDial**，App 将表盘设为当前使用；设备上报重新生成时回调 **onAIDialRegenerate**，App 重新调用 AI 生成。
+
+###### 返回数据
+
+**OnAIDialOptListener.onAIDialSetDial** -- 设备上报设为表盘
+
+```kotlin
+fun onAIDialSetDial()
+```
+
+**OnAIDialOptListener.onAIDialRegenerate** -- 设备请求再次生成表盘
+
+```kotlin
+fun onAIDialRegenerate()
+```
+
+###### 设置表盘（onAIDialSetDial 中的处理）
+
+收到 `onAIDialSetDial` 后，App 使用预览图传输完成回调（`onPreviewSendComplete`）携带的**大图**（`bigWatchFace.filePath`）进行表盘设置。接口详细说明见【表盘功能】章节，此处仅给指引：
+
+| 设备类型   | 使用接口                                                     | 详细说明           |
+| ---------- | ------------------------------------------------------------ | ------------------ |
+| JL（杰理） | `VPOperateManager.setJLWatchPhotoDial(大图路径, listener)`   | 见【照片表盘】章节 |
+| 非 JL      | `WatchUIType.getSendInputStream(...)` + `UiUpdateUtil.startSetUiStream(CUSTOM, ...)` | 见【本地表盘】章节 |
+
+> ⚠️ **JL（杰理）设备注意**：`setJLWatchPhotoDial` 只传输表盘**背景图**（bgp_w001/bgp_w000），**不包含功能元素**（时间/日期/步数/颜色等）。背景图传输完成后，还需调用 `VPOperateManager.setCustomWacthUi(...)`（`UICustomSetData`，见【照片表盘】章节）重新设置功能元素，否则设备只显示默认照片表盘。建议参照 GBand2：设置成功后延迟约 150ms 调用：
+>
+> ```kotlin
+> //元素取自 getCustomWatchUiInfo 读取的 UIDataCustom
+> val uiCustomSetData = UICustomSetData(false,
+>  uiDataCustom.timePosition, uiDataCustom.upTimeType,
+>  uiDataCustom.downTimeType, uiDataCustom.color888)
+> VPOperateManager.getInstance().setCustomWacthUi({}, uiCustomSetData) { }
+> ```
+
+##### 终止AI表盘
+
+设备上报终止请求时回调 **onAIDialTerminateREQ**，App 应调用本接口回复终止确认。
+
+###### 接口
+
+```
+sendAIDialTerminateACK(bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型              | 备注           |
+| ---------------- | ----------------- | -------------- |
+| bleWriteResponse | IBleWriteResponse | 写入操作的监听 |
+
+###### 返回数据
+
+**OnAIDialOptListener.onAIDialTerminateREQ** -- 设备请求终止AI表盘
+
+```kotlin
+fun onAIDialTerminateREQ()
+```
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().sendAIDialTerminateACK({
+    if (it != Code.REQUEST_SUCCESS) {
+        //写入失败
+    }
+})
+```
+
+#### AI Opus 转 PCM
+
+AI 问答/表盘流程中设备端返回的 opus 音频文件，可通过本接口解码为 pcm 文件，供后续语音识别使用。
+
+###### 接口
+
+```
+aiOpus2Pcm(opusFilePath, pcmFilePath, listener)
+```
+
+###### 参数解释
+
+| 参数名       | 类型                     | 备注                    |
+| ------------ | ------------------------ | ----------------------- |
+| opusFilePath | String                   | opus 音频文件路径       |
+| pcmFilePath  | String                   | 解码后 pcm 文件输出路径 |
+| listener     | OnOpusDecode2PcmListener | 解码结果监听            |
+
+###### 返回数据
+
+**OnOpusDecode2PcmListener** -- AI Opus 转 PCM 解码结果监听
+
+```kotlin
+interface OnOpusDecode2PcmListener {
+    //解码完成，filePath 为解码后的 pcm 文件路径
+    fun onDecodeComplete(filePath: String)
+
+    //解码失败，filePath 为目标 pcm 文件路径
+    fun onDecodeFailed(filePath: String)
+}
+```
+
+###### 示例代码
+
+```kotlin
+VPOperateManager.getInstance().aiOpus2Pcm(opusFilePath, pcmFilePath, object : OnOpusDecode2PcmListener {
+    override fun onDecodeComplete(filePath: String) {
+        //解码完成，可进行语音识别
+    }
+
+    override fun onDecodeFailed(filePath: String) {
+        //解码失败
+    }
+})
+```
+
+#### AI错误码
+
+**AIFunctionOpt.AIAppErrorCode** -- App 端错误码（App 回复设备时使用）
+
+| 枚举值                                   | 备注                              |
+| ---------------------------------------- | --------------------------------- |
+| SUCCESS                                  | 成功                              |
+| NO_MICROPHONE_PERMISSION_0x01            | 无麦克风权限                      |
+| NO_VOICE_RECOGNITION_PERMISSION_0x02     | 无语音识别权限                    |
+| NETWORK_ERROR_0x03                       | 网络异常                          |
+| RECORDING_FAILED_0x04                    | 录音失败                          |
+| SPEECH_RECOGNITION_FAILED_0x05           | 语音识别失败                      |
+| AI_QA_FAILED_0x06                        | AI问答失败                        |
+| AI_DRAWING_FAILED_0x07                   | AI作画失败                        |
+| SENSITIVE_WORDS_0x08                     | 敏感词                            |
+| SPEECH_RECOGNITION_OVER_UPPER_LIMIT_0x09 | 语音识别次数达上限                |
+| AI_QA_OVER_UPPER_LIMIT_0x0A              | 问答次数达上限                    |
+| AI_DRAWING_OVER_UPPER_LIMIT_0x0B         | AI作画次数达上限                  |
+| NO_MICROPHONE_0x0C                       | 未找到蓝牙麦克风设备              |
+| SYNCHRONIZING_DATA_0x0D                  | 设备上报AI数据时App回复同步数据中 |
+| APP_USE_AI_FUNCTION_0x0E                 | App使用中                         |
+| REGION_NOT_SUPPORTED_0x0F                | 区域不支持                        |
+| UNKNOWN                                  | 未知错误                          |
+
+**AIFunctionOpt.AIDeviceErrorCode** -- 设备端错误码（设备回复 App 时使用）
+
+| 枚举值                                   | 备注                 |
+| ---------------------------------------- | -------------------- |
+| SUCCESS                                  | 成功                 |
+| PACKET_LOSS_OR_PREVIEW_CHECK_FAILED_0x80 | 丢包或预览图校验失败 |
+| DATA_RECEIVER_TIMEOUT_0x81               | 数据接收超时         |
+| UNKNOWN                                  | 未知错误             |
+
+**AIFunctionOpt.AIDialErrorCode** -- AI表盘语音问题错误码
+
+| 枚举值         | 备注     |
+| -------------- | -------- |
+| SUCCESS        | 成功     |
+| TIMEOUT        | 超时     |
+| UNRECOGNIZABLE | 无法识别 |
+| LOW_VOLUME     | 音量低   |
+| UNKNOWN        | 未知错误 |
 
 
 

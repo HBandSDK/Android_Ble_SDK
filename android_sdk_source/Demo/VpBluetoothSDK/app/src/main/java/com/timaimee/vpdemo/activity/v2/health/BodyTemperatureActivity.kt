@@ -7,6 +7,7 @@ import android.widget.Spinner
 import com.orhanobut.logger.Logger
 import com.timaimee.vpdemo.R
 import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity
+import com.timaimee.vpdemo.activity.v2.DeviceMenu
 import com.timaimee.vpdemo.bean.MyDeviceInfo
 import com.timaimee.vpdemo.utils.CollapseCardLogView
 import com.veepoo.protocol.listener.data.ITemptureDataListener
@@ -30,7 +31,7 @@ class BodyTemperatureActivity : BaseVPBLETestActivity(), ITemptureDetectDataList
 
     override fun getLayoutID() = R.layout.activity_body_temperature
 
-    override fun pageTitle() = "体温🌡️"
+    override fun pageTitle() = DeviceMenu.Health.BodyTemperature
 
     override fun initView() {
         ccvBodyTemperatureDetect = findViewById(R.id.ccvBodyTemperatureDetect)
@@ -99,6 +100,10 @@ class BodyTemperatureActivity : BaseVPBLETestActivity(), ITemptureDetectDataList
 
                 override fun onReadOriginComplete() {
                     ccvBodyTemperatureRead.appendBlueMiddleText("🔚:BodyTemperature读取已完成")
+                }
+
+                override fun onReadTimeout(day: Int) {
+
                 }
 
                 override fun onTemptureDataListDataChange(temptureDataList: List<TemptureData>) {

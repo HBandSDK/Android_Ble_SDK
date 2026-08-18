@@ -8,6 +8,7 @@ import android.widget.TimePicker
 import com.orhanobut.logger.Logger
 import com.timaimee.vpdemo.R
 import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity
+import com.timaimee.vpdemo.activity.v2.DeviceMenu
 import com.timaimee.vpdemo.utils.CollapseCardLogView
 import com.veepoo.protocol.listener.data.IAllSetDataListener
 import com.veepoo.protocol.listener.data.ISpo2hDataListener
@@ -36,7 +37,7 @@ class BloodOxygenActivity : BaseVPBLETestActivity(){
     lateinit var btnEndTime: Button
     override fun getLayoutID() = R.layout.activity_blood_oxygen
 
-    override fun pageTitle() = "血氧"
+    override fun pageTitle() = DeviceMenu.Health.BloodOxygen
 
     override fun initView() {
         ccvBloodOxygenDetect = findViewById(R.id.ccvBloodOxygenDetect)

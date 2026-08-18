@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.orhanobut.logger.Logger;
 import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity;
+import com.timaimee.vpdemo.activity.v2.DeviceMenu;
 import com.timaimee.vpdemo.bean.MyDeviceInfo;
 import com.timaimee.vpdemo.utils.CollapseCardView;
 import com.veepoo.protocol.listener.data.IOriginData3Listener;
@@ -59,7 +60,7 @@ public class HealthDataReadOptActivity extends BaseVPBLETestActivity implements 
 
     @Override
     public String pageTitle() {
-        return "健康（五分钟测量）数据";
+        return DeviceMenu.Health.HealthData;
     }
 
     @Override
@@ -277,7 +278,7 @@ public class HealthDataReadOptActivity extends BaseVPBLETestActivity implements 
     @Override
     public void onReadOriginProgressDetail(int day, String date, int allPackage, int currentPackage) {
         Logger.t(TAG).e("-onReadOriginProgressDetail-: | day="+day + " date="+date + "["+currentPackage+"/"+allPackage+"] ");
-        tvReadState.setText("读取进度："+(day == 0 ? "今天": day == 1 ? "昨天" : "前天" )+":" + date + "["+currentPackage+"/"+allPackage+"] ");
+        tvReadState.setText("读取进度：" + getDayDes(day) + ":" + date + "["+currentPackage+"/"+allPackage+"] ");
     }
     @Override
     public void onReadOriginProgress(float progress) {
@@ -286,5 +287,21 @@ public class HealthDataReadOptActivity extends BaseVPBLETestActivity implements 
     @Override
     public void onReadOriginComplete() {
         tvReadState.setText("读取完成");
+    }
+
+    @Override
+    public void onReadTimeout(int day) {
+        tvReadState.setText("读取" + getDayDes(day) + "超时，请重新读取或者断开重连重启蓝牙再读取");
+    }
+
+    private String getDayDes(int day) {
+        if (day == 0) {
+            return "今天";
+        } else if (day == 1) {
+            return "昨天";
+        } else if (day == 2) {
+            return "前天";
+        }
+        return "异常天";
     }
 }

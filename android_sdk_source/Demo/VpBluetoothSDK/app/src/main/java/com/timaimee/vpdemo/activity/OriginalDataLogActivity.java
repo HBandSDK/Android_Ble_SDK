@@ -185,6 +185,11 @@ public class OriginalDataLogActivity extends Activity implements View.OnClickLis
                 isReadFinished = true;
                 mProgressBar.setVisibility(View.GONE);
             }
+
+            @Override
+            public void onReadTimeout(int day) {
+                Logger.t(TAG).i("读取超时了：" + day + ", 请重新读取或者重启蓝牙尝试重新读取");
+            }
         };
         VPOperateManager.getMangerInstance(this).readOriginData(writeResponse, originDataListener, 3);
     }

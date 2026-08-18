@@ -7,6 +7,7 @@ import android.widget.RadioGroup
 import android.widget.TimePicker
 import com.timaimee.vpdemo.R
 import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity
+import com.timaimee.vpdemo.activity.v2.DeviceMenu
 import com.timaimee.vpdemo.utils.CollapseCardLogView
 import com.veepoo.protocol.listener.data.ILongSeatDataListener
 import com.veepoo.protocol.model.datas.LongSeatData
@@ -29,7 +30,7 @@ class SedentaryRemindActivity : BaseVPBLETestActivity(){
 
     override fun getLayoutID() = R.layout.activity_sedentary_remind
 
-    override fun pageTitle() = "久坐提醒"
+    override fun pageTitle() = DeviceMenu.Health.SEDENTARY_REMIND
 
     override fun initView() {
         ccvSedentaryRemindSetting = findViewById(R.id.ccvSedentaryRemindSetting)

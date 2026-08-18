@@ -74,6 +74,7 @@ public class OtherFunctionActivity extends BaseActivity implements AdapterView.O
             case DeviceMenu.Other.LANGUAGE_BATTER ->   startActivity(new Intent(this, LanguageAndBatteryActivity.class));
             case DeviceMenu.Other.DEVICE_4G ->   startActivity(new Intent(this, Device4gOptActivity.class));
             case DeviceMenu.Other.MAGNETIC ->   startActivity(new Intent(this, MagneticTherapyActivity.class));
+            case DeviceMenu.Other.AI_FUNCTION ->   startActivity(new Intent(this, AIFunActivity.class));
         }
 
     }

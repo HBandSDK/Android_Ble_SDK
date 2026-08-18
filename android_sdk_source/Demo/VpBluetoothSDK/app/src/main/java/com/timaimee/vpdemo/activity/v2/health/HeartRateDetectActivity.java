@@ -2,11 +2,13 @@ package com.timaimee.vpdemo.activity.v2.health;
 
 import android.view.View;
 
+import com.timaimee.vpdemo.activity.v2.DeviceMenu;
+
 public class HeartRateDetectActivity extends BaseDetectActivity {
 
     @Override
     public String pageTitle() {
-        return "心率测量 ";
+        return DeviceMenu.Health.HeartRate;
     }
 
     @Override

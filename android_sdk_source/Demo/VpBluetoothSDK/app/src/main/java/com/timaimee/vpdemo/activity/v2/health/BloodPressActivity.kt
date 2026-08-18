@@ -8,6 +8,7 @@ import android.widget.Spinner
 import com.orhanobut.logger.Logger
 import com.timaimee.vpdemo.R
 import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity
+import com.timaimee.vpdemo.activity.v2.DeviceMenu
 import com.timaimee.vpdemo.bean.MyDeviceInfo
 import com.timaimee.vpdemo.utils.CollapseCardLogView
 import com.veepoo.protocol.listener.data.IBPDetectDataListener
@@ -38,7 +39,7 @@ class BloodPressActivity : BaseVPBLETestActivity() {
 
     override fun getLayoutID() = R.layout.activity_blood_press
 
-    override fun pageTitle() = "血压"
+    override fun pageTitle() = DeviceMenu.Health.BloodPress
 
     override fun initView() {
         ccvBloodPressDetect = findViewById(R.id.ccvBloodPressDetect)

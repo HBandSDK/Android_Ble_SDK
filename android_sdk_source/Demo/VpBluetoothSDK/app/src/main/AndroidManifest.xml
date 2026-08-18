@@ -8,28 +8,21 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
         android:name="android.permission.ACCESS_NETWORK_STATE"
-        tools:node="merge" />
-    <!--允许程序访问WiFi网络信息-->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!--允许程序读写手机状态和身份-->
+        tools:node="merge" /> <!-- 允许程序访问WiFi网络信息 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 允许程序读写手机状态和身份 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-    android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
-
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Android 12以下才需要定位权限， Android 9以下官方建议申请ACCESS_COARSE_LOCATION -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /><!--模糊定位基于wifi-蓝牙4.0 5.0搜索需要-->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /><!--精准定位-蓝牙4.0 5.0搜索需要-->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" /> <!-- Android 12以下才需要定位权限， Android 9以下官方建议申请ACCESS_COARSE_LOCATION -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 模糊定位基于wifi-蓝牙4.0 5.0搜索需要 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 精准定位-蓝牙4.0 5.0搜索需要 -->
     <uses-permission
         android:name="android.permission.BLUETOOTH"
         android:maxSdkVersion="30" />
     <uses-permission
         android:name="android.permission.BLUETOOTH_ADMIN"
-        android:maxSdkVersion="30" />
-    <!-- Android 12在不申请定位权限时，必须加上android:usesPermissionFlags="neverForLocation"，否则搜不到设备 -->
+        android:maxSdkVersion="30" /> <!-- Android 12在不申请定位权限时，必须加上android:usesPermissionFlags="neverForLocation"，否则搜不到设备 -->
     <uses-permission
         android:name="android.permission.BLUETOOTH_SCAN"
         android:usesPermissionFlags="neverForLocation"
@@ -59,12 +52,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".activity.v2.other.Device4gOptActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".activity.v2.other.AIFunActivity"
             android:exported="false" />
-
-        <activity android:name=".activity.v2.other.MagneticTherapyActivity"
-             android:exported="false" />
+        <activity
+            android:name=".activity.v2.other.Device4gOptActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.v2.other.MagneticTherapyActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.v2.other.AddClockActivity"
             android:exported="false" />
@@ -72,7 +68,7 @@
             android:name=".activity.WorldClockActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.EcgMultiLeadDetect1Activity"
+            android:name=".activity.v2.health.EcgMultiLeadDetectActivity"
             android:exported="false" />
         <activity
             android:name=".activity.v2.custom.G08WHealthAlarmIntervalActivity"
@@ -80,6 +76,7 @@
         <activity
             android:name=".activity.v2.connection.ConnectionActivity"
             android:exported="false" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.timaimee.vpdemo.fileProvider"
@@ -127,9 +124,6 @@
             android:name=".activity.InstitutionActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.EcgDetectActivity"
-            android:exported="false" />
-        <activity
             android:name=".activity.PttActivity"
             android:exported="false" />
         <activity
@@ -147,7 +141,6 @@
         <activity
             android:name=".oad.activity.NotificationActivity"
             android:exported="false" />
-
         <activity
             android:name=".activity.OriginalDataLogActivity"
             android:exported="false" />
@@ -195,7 +188,6 @@
             android:name=".activity.v2.other.LanguageAndBatteryActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.other.TextImagePushActivity"
             android:configChanges="keyboardHidden"
@@ -209,20 +201,23 @@
             android:configChanges="keyboardHidden"
             android:exported="false" />
         <activity
+            android:name=".activity.v2.health.EcgDetectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.v2.health.FemaleActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.v2.custom.ZT163DeviceAlwaysOffScreenActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.other.GNSSOptActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.AutoMeasureActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.AutoMeasureEditActivity"
             android:configChanges="keyboardHidden"
@@ -231,179 +226,144 @@
             android:name=".activity.NRFOtaActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.QX17DataAcquisitionActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.DeviceFunctionMenuActivity"
             android:configChanges="keyboardHidden"
-            android:exported="false" />
-        <!-- 健康相关功能 -->
+            android:exported="false" /> <!-- 健康相关功能 -->
         <activity
             android:name=".activity.v2.health.HealthFunctionActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.HealthDataReadActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.HealthDataReadOptActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.HeartRateDetectActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.RemindEventActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.HeartRateActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.BodyTemperatureDetectActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.BodyTemperatureActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.BloodComponentActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.BloodComponentDetectActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.BloodGlucoseActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.BloodPressActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.DeviceManualTestDataActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.BodyComponentActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.HrvActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.BloodOxygenActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.GSRDetectActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.StepActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.FunctionTestActivity"
             android:configChanges="keyboardHidden"
-            android:exported="false" />
-        <!-- 客户定制功能 -->
+            android:exported="false" /> <!-- 客户定制功能 -->
         <activity
             android:name=".activity.v2.custom.TCMActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.custom.CustomFunctionActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.custom.PSAIMHealthDataActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.custom.UiUpdateG15ImgActivity"
-            android:exported="false" />
-        <!-- 其他功能 -->
+            android:exported="false" /> <!-- 其他功能 -->
         <activity
             android:name=".activity.v2.other.TextAlarmActivity"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.other.OtherFunctionActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.other.AlarmClockActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.other.WeatherActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.health.SedentaryRemindActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.function_switch.FunctionSwitchActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.function_switch.MessagePushSwitchActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.function_switch.CustomSettingSwitchActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".activity.v2.OTAActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name="com.nbsp.materialfilepicker.ui.FilePickerActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
-            tools:replace="android:theme"/>
+            tools:replace="android:theme" />
 
         <service
             android:name="com.inuker.bluetooth.library.BluetoothService"

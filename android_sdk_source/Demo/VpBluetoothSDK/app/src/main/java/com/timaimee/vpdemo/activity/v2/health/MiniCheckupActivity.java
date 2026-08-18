@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.inuker.bluetooth.library.Code;
 import com.timaimee.vpdemo.R;
+import com.timaimee.vpdemo.activity.v2.DeviceMenu;
 import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.IMiniCheckupOptListener;
 import com.veepoo.protocol.model.datas.MiniCheckupBPAirPump;
@@ -43,7 +44,7 @@ public class MiniCheckupActivity extends Activity implements IMiniCheckupOptList
         tvMiniCheckupInfo = findViewById(R.id.tvMiniCheckupInfo);
         tvTitle = findViewById(R.id.tvTitle);
         ivBack = findViewById(R.id.ivBack);
-        tvTitle.setText("微体检");
+        tvTitle.setText(DeviceMenu.Health.MiniCheckUp);
         btnStopMiniCheckup.setOnClickListener(this);
         btnStartMiniCheckup.setOnClickListener(this);
         ivBack.setOnClickListener(this);

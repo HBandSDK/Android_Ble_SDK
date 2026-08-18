@@ -47,6 +47,8 @@ import com.timaimee.vpdemo.activity.v2.custom.TCMActivity;
 import com.timaimee.vpdemo.activity.v2.custom.UiUpdateG15ImgActivity;
 import com.timaimee.vpdemo.activity.v2.custom.ZT163DeviceAlwaysOffScreenActivity;
 import com.timaimee.vpdemo.activity.v2.health.AutoMeasureActivity;
+import com.timaimee.vpdemo.activity.v2.health.EcgDetectActivity;
+import com.timaimee.vpdemo.activity.v2.health.EcgMultiLeadDetectActivity;
 import com.timaimee.vpdemo.activity.v2.health.HealthDataReadActivity;
 import com.timaimee.vpdemo.activity.v2.health.MiniCheckupActivity;
 import com.timaimee.vpdemo.activity.v2.other.ContactActivity;
@@ -94,11 +96,13 @@ import com.veepoo.protocol.listener.data.IDrinkDataListener;
 import com.veepoo.protocol.listener.data.IECGAutoReportListener;
 import com.veepoo.protocol.listener.data.IECGReadDataListener;
 import com.veepoo.protocol.listener.data.IECGReadIdListener;
+import com.veepoo.protocol.listener.data.IEmotionDetectListener;
 import com.veepoo.protocol.listener.data.IFatigueDataListener;
 import com.veepoo.protocol.listener.data.IFindDeviceDatalistener;
 import com.veepoo.protocol.listener.data.IFindDevicelistener;
 import com.veepoo.protocol.listener.data.IFindPhonelistener;
 import com.veepoo.protocol.listener.data.IFunSwitchListener;
+import com.veepoo.protocol.listener.data.IMetDetectListener;
 import com.veepoo.protocol.listener.data.IQX17DataAcquisitionStateListener;
 import com.veepoo.protocol.listener.data.IG08ProjectPPGLightCallBack;
 import com.veepoo.protocol.listener.data.IGsrDetectListener;
@@ -235,8 +239,10 @@ import com.veepoo.protocol.model.enums.ETimeMode;
 import com.veepoo.protocol.model.enums.EUricAcidUnit;
 import com.veepoo.protocol.model.enums.EWeatherType;
 import com.veepoo.protocol.model.enums.EWomenStatus;
+import com.veepoo.protocol.model.enums.EmotionDetectState;
 import com.veepoo.protocol.model.enums.GsrDetectAck;
 import com.veepoo.protocol.model.enums.HrvDetectState;
+import com.veepoo.protocol.model.enums.MetDetectState;
 import com.veepoo.protocol.model.settings.Alarm2Setting;
 import com.veepoo.protocol.model.settings.AlarmSetting;
 import com.veepoo.protocol.model.settings.AllSetSetting;
@@ -357,16 +363,16 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
     };
     String PID = "";
 
-    private void initDataByIntent(){
+    private void initDataByIntent() {
         deviceVersion = getIntent().getStringExtra("deviceVersion");
         deviceTestVersion = getIntent().getStringExtra("deviceTestVersion");
         deviceaddress = getIntent().getStringExtra("macAddress");
-        deviceNumber = getIntent().getIntExtra("deviceNumber",0);
-        watchDataDay = getIntent().getIntExtra("watchDataDay",0);
-        weatherStyle = getIntent().getIntExtra("weatherStyle",0);
-        weatherStyle = getIntent().getIntExtra("weatherStyle",0);
-        contactMsgLength = getIntent().getIntExtra("contactMsgLength",0);
-        allMsgLenght = getIntent().getIntExtra("allMsgLenght",0);
+        deviceNumber = getIntent().getIntExtra("deviceNumber", 0);
+        watchDataDay = getIntent().getIntExtra("watchDataDay", 0);
+        weatherStyle = getIntent().getIntExtra("weatherStyle", 0);
+        weatherStyle = getIntent().getIntExtra("weatherStyle", 0);
+        contactMsgLength = getIntent().getIntExtra("contactMsgLength", 0);
+        allMsgLenght = getIntent().getIntExtra("allMsgLenght", 0);
         isSleepPrecision = getIntent().getBooleanExtra("isSleepPrecision", false);
         isNewSportCalc = getIntent().getBooleanExtra("isNewSportCalc", false);
         isOadModel = getIntent().getBooleanExtra("isOadModel", false);
@@ -918,10 +924,10 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
             }, "0000", is24Hourmodel);
 
-        } else  if (oprater.equals(NEED_COMFIRM)) {
+        } else if (oprater.equals(NEED_COMFIRM)) {
             VPOperateManager.getInstance().setDeviceShowConfirm(true);
             showToast("设置需要密码确认");
-        } else  if (oprater.equals(UNNEED_COMFIRM)) {
+        } else if (oprater.equals(UNNEED_COMFIRM)) {
             VPOperateManager.getInstance().setDeviceShowConfirm(false);
             showToast("设置无需密码确认");
         } else if (oprater.equals(PWD_COMFIRM_2_DISCONNECT)) { //发起BT立马断开
@@ -1987,6 +1993,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     String message = "onReadOriginComplete";
                     Logger.t(TAG).i(message);
                 }
+
+                @Override
+                public void onReadTimeout(int day) {
+                    Logger.t(TAG).i("读取超时了：" + day + ", 请重新读取或者重启蓝牙尝试重新读取");
+                }
             }, readOriginSetting);
         } else if (oprater.equals(READ_HEALTH_SLEEP)) {
             VPOperateManager.getInstance().readSleepData(writeResponse, new ISleepDataListener() {
@@ -2119,6 +2130,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 }
 
                 @Override
+                public void onReadTimeout(int day) {
+                    
+                }
+
+                @Override
                 public void onOringinFiveMinuteDataChange(OriginData originData) {
 
                 }
@@ -2190,6 +2206,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     String message = "健康数据-读取结束";
                     Logger.t(TAG).i(message);
                 }
+
+                @Override
+                public void onReadTimeout(int day) {
+                    Logger.t(TAG).i("读取超时了：" + day + ", 请重新读取或者重启蓝牙尝试重新读取");
+                }
             };
             int protype = 3;
             if (protype == 3) {
@@ -2237,6 +2258,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     String message = "健康数据-读取结束";
                     Logger.t(TAG).i(message);
                 }
+
+                @Override
+                public void onReadTimeout(int day) {
+                    Logger.t(TAG).i("读取超时了：" + day + ", 请重新读取或者重启蓝牙尝试重新读取");
+                }
             }, yesterday, 10, watchDataDay);
         } else if (oprater.equals(READ_HEALTH_ORIGINAL_SINGLEDAY)) {
             int today = 0;
@@ -2272,6 +2298,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 public void onReadOriginComplete() {
                     String message = "健康数据-读取结束";
                     Logger.t(TAG).i(message);
+                }
+
+                @Override
+                public void onReadTimeout(int day) {
+                    Logger.t(TAG).i("读取超时了：" + day + ", 请重新读取或者重启蓝牙尝试重新读取");
                 }
             };
             IOriginProgressListener originData3Listener = new IOriginData3Listener() {
@@ -2334,6 +2365,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     String message = "健康数据-读取结束";
                     Logger.t(TAG).i(message);
                 }
+
+                @Override
+                public void onReadTimeout(int day) {
+                    Logger.t(TAG).i("读取超时了：" + day + ", 请重新读取或者重启蓝牙尝试重新读取");
+                }
             };
             IOriginProgressListener originProgressListener;
             if (originProtocolVersion == 3) {
@@ -2366,6 +2402,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 public void onReadOriginComplete() {
                     String message = "onReadOriginComplete";
                     Logger.t(TAG).i(message);
+                }
+
+                @Override
+                public void onReadTimeout(int day) {
+                    Logger.t(TAG).i("读取超时了：" + day + ", 请重新读取或者重启蓝牙尝试重新读取");
                 }
 
                 @Override
@@ -2527,7 +2568,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
 
                 }
             }, watchDataDay);
-        } else if(oprater.equals(HRV_START_DETECT)) {
+        } else if (oprater.equals(HRV_START_DETECT)) {
             VPOperateManager.getInstance().startDetectHrv(writeResponse, new IHrvDetectListener() {
                 @Override
                 public void onHrvDetect(int hrv) {
@@ -2544,7 +2585,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                     Toast.makeText(mContext, "app 测量hrv结束", Toast.LENGTH_SHORT).show();
                 }
             });
-        } else if(oprater.equals(HRV_STOP_DETECT)) {
+        } else if (oprater.equals(HRV_STOP_DETECT)) {
             VPOperateManager.getInstance().stopDetectHrv(writeResponse, new IHrvDetectListener() {
                 @Override
                 public void onHrvDetect(int hrv) {
@@ -3314,7 +3355,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
         } else if (oprater.equals(DETECT_STOP_BLOOD_COMPONENT)) {
             VPOperateManager.getInstance().stopDetectBloodComponent(writeResponse);
         } else if (oprater.equals(DETECT_MULTI_ECG_DETECT)) {
-            startActivity(new Intent(this, EcgMultiLeadDetect1Activity.class));
+            startActivity(new Intent(this, EcgMultiLeadDetectActivity.class));
         } else if (oprater.equals(WORLD_CLOCK)) {
             startActivity(new Intent(this, WorldClockActivity.class));
         } else if (oprater.equals(G08W_HEALTH_ALARM_INTERVAL)) {
@@ -3545,6 +3586,71 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             startActivity(new Intent(this, QX17DataAcquisitionActivity.class));
         } else if (oprater.equals(QH15_HEALTH_DATA)) {
             startActivity(new Intent(this, PSAIMHealthDataActivity.class));
+        } else if (oprater.equals(MET_DETECT_START)) {
+            VPOperateManager.getInstance().startDetectMet(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            }, new IMetDetectListener() {
+                @Override
+                public void onMetDetect(int progress, float met) {
+                    Logger.t(TAG).e("onMetDetect --》 " + progress+",value="+met);
+                }
+
+                @Override
+                public void onDetectFailed(@NotNull MetDetectState detectState) {
+                    Logger.t(TAG).e("onDetectFailed --》 " + detectState);
+                }
+
+                @Override
+                public void onDetectStop() {
+                    Logger.t(TAG).e("onDetectStop --》 " );
+                }
+            });
+        } else if (oprater.equals(MET_DETECT_STOP)) {
+            VPOperateManager.getInstance().stopDetectMet(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            });
+        } else if (oprater.equals(EMOTION_DETECT_START)) {
+            VPOperateManager.getInstance().startDetectEmotion(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            }, new IEmotionDetectListener() {
+                @Override
+                public void onEmotionDetect(int progress, int emotion) {
+                    Logger.t(TAG).e("onEmotionDetect --》 " + progress+",emotion="+emotion);
+                }
+
+                @Override
+                public void onDetectFailed(@NotNull EmotionDetectState detectState) {
+                    Logger.t(TAG).e("onDetectFailed --》 " + detectState);
+                }
+
+                @Override
+                public void onDetectStop() {
+                    Logger.t(TAG).e("onDetectStop --》 ");
+                }
+            });
+        } else if (oprater.equals(EMOTION_DETECT_STOP)) {
+            VPOperateManager.getInstance().stopDetectEmotion(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            });
+        } else if (oprater.equals(B3_READ)){
+            VPOperateManager.getInstance().readB3(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            });
         }
     }
 
@@ -4349,6 +4455,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             }
 
             @Override
+            public void onReadTimeout(int day) {
+                Logger.t(TAG).i("读取超时了：" + day + ", 请重新读取或者重启蓝牙尝试重新读取");
+            }
+
+            @Override
             public void onOringinFiveMinuteDataChange(OriginData originData) {
 
             }
@@ -4404,6 +4515,11 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             public void onReadOriginComplete() {
                 String message = "健康数据-读取结束";
                 Logger.t(TAG).i(message);
+            }
+
+            @Override
+            public void onReadTimeout(int day) {
+                Logger.t(TAG).i("读取超时了：" + day + ", 请重新读取或者重启蓝牙尝试重新读取");
             }
         };
         int protype = 3;

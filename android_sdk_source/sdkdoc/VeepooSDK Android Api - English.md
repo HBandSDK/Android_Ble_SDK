@@ -40,6 +40,7 @@
 | 1.3.4 | Added Health ligth function | 2026.06.30 |
 | 1.3.5 | Modify the pre-conditions supported by 'Read Device Manual Measurement Data', and add new APIs for MET, Emotion, and Fatigue related features. | 2026.07.02 |
 | 1.3.6 | **JH58 adds active measurement-related interfaces, and adds data collection and reporting (MODE3) for reading raw PPG signals.** | 2026.07.27 |
+| 1.3.7 | Added AI Function related interfaces and process descriptions | 2026.08.18 |
 ## Import SDK
 ### Add Dependency
 
@@ -12505,6 +12506,760 @@ Java
                 }
             });
 ```
+
+
+
+## AI Function
+
+AI Function includes **AI Q&A** (the device asks questions by voice, the App performs speech recognition and AI answering) and **AI Watch Face** (the device describes by voice, the App generates a watch face with AI). The interaction flow is as follows:
+
+- The device reports request events and the App is notified through listener callbacks;
+- After performing actions such as recording, speech recognition and cloud AI processing, the App sends the result back to the device through the send interfaces;
+- Each callback (start recording / stop recording / result / regenerate / terminate, etc.) must be answered in order, otherwise the flow will be stuck.
+
+Before use, you need to register the listeners (`setAiListener`), and you can read the device AI configuration through `readAiConfig`.
+
+#### Precondition
+
+The device must support the AI function; check as follows:
+
+```kotlin
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportAi()
+```
+
+#### Register AI Function Listeners
+
+Register the three listeners related to AI functions (config, Q&A, watch face). After registration, AI commands reported by the device will be called back to the App.
+
+###### API
+
+```
+setAiListener(configOptListener, aiqaOptListener, dialOptListener)
+```
+
+###### Parameters
+
+| Parameter         | Type                  | Description            |
+| ----------------- | --------------------- | ---------------------- |
+| configOptListener | OnAIConfigOptListener | AI config listener     |
+| aiqaOptListener   | OnAIQAOptListener     | AI Q&A listener        |
+| dialOptListener   | OnAIDialOptListener   | AI watch face listener |
+
+###### Example
+
+```kotlin
+VPOperateManager.getInstance().setAiListener(object : OnAIConfigOptListener {
+    override fun onAIDeviceConfigReport(config: AIDeviceConfigBean) {}
+    override fun onAIDeviceConfigSettingResult(isSuccess: Boolean) {}
+    override fun onAIDeviceConfigRead(config: AIDeviceConfigBean) {}
+}, object : OnAIQAOptListener {
+    override fun onAIQAStartRecording() {}
+    override fun onAIQAStopRecording() {}
+    override fun onAIQAResult(errorCode: AIFunctionOpt.AIDeviceErrorCode) {}
+    override fun onAIQARegenerate() {}
+    override fun onAIQATerminateREQ() {}
+}, object : OnAIDialOptListener {
+    override fun onAIDialStartRecording() {}
+    override fun onAIDialStopRecording() {}
+    override fun onAIDialStartGenerate() {}
+    override fun onAIDialProgressSetting() {}
+    override fun onAIDialResultSettingACK() {}
+    //The preview-related callbacks below are answered automatically by the SDK's sendAiDialPreview; the App can ignore them
+    override fun onAIDialPreviewLengthGetACK(needGetPreviewLength: Int) {}
+    override fun onAIDialContinueGetPreviewDataREQ(needGetPreviewLength: Int) {}
+    override fun onAIDialPreviewDataReceiveComplete(errorCode: AIFunctionOpt.AIDeviceErrorCode) {}
+    override fun onAIDialSetDial() {}
+    override fun onAIDialRegenerate() {}
+    override fun onAIDialTerminateREQ() {}
+})
+```
+
+#### Read AI Configuration
+
+Read the device AI configuration (AI Q&A content max length, preview / watch face max size, AI drawing style, preview resolution, etc.). The result is returned through the **OnAIConfigOptListener.onAIDeviceConfigRead** callback; the device may also report the configuration actively after connection, which is returned through **onAIDeviceConfigReport**.
+
+###### API
+
+```
+readAiConfig(bleWriteResponse)
+```
+
+###### Parameters
+
+| Parameter        | Type              | Description              |
+| ---------------- | ----------------- | ------------------------ |
+| bleWriteResponse | IBleWriteResponse | Write operation callback |
+
+###### Return Data
+
+**AIDeviceConfigBean** -- Device AI configuration
+
+| Variable             | Type | Description                                                  |
+| -------------------- | ---- | ------------------------------------------------------------ |
+| aiQAContentMaxLength | Int  | AI Q&A content max length                                    |
+| previewMaxSize       | Int  | Watch face preview max size                                  |
+| dialMaxSize          | Int  | Watch face max size                                          |
+| aiDrawingStyle       | Int  | AI drawing style: 0x00 default / 0x01 3D rendering / 0x02 cyberpunk / 0x03 portrait photography / 0x04 anime / 0x05 cinematic / 0x06 scenery / 0x07 oil painting / 0x08 ink wash / 0x09 watercolor / 0x0A pixel style... |
+| previewResolutionW   | Int  | Preview resolution - width                                   |
+| previewResolutionH   | Int  | Preview resolution - height                                  |
+| previewAngleRadius   | Int  | Preview corner radius (0 means right angle)                  |
+| customDialFlag       | Int  | Custom photo watch face flag                                 |
+
+###### Example
+
+```kotlin
+VPOperateManager.getInstance().readAiConfig({
+    if (it != Code.REQUEST_SUCCESS) {
+        //Write command failed
+    }
+})
+```
+
+#### AI Q&A
+
+The device must support the AI Q&A function; check as follows:
+
+```kotlin
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportAiQa()
+```
+
+The device starts voice questions, and the App completes recording, speech recognition and AI answering. Overall sequence:
+
+```
+Device                                        App
+  | ①report start recording ──onAIQAStartRecording()─>| Start recording
+  |<──sendAIQAStartRecordingResult(result) ②─────────| Recording finished, reply result
+  | ③report stop recording ──onAIQAStopRecording()───>| Stop recording
+  |<──sendAIQARecordingContent2Device(content) ④─────| Speech recognition, send text
+  | ⑤report Q&A result ──onAIQAResult()──────────────>| Received device result request
+  |<──sendAIQAResultCmd(answer) ⑥────────────────────| Call AI, send answer
+  | ⑦report regenerate ──onAIQARegenerate()──────────>| Regenerate
+  |<──sendAIQARegenerateResultCmd(answer) ⑧──────────| Send new answer
+  | ⑨report terminate request ──onAIQATerminateREQ()─>| Terminate interaction
+```
+
+##### Reply Start Recording Result
+
+After the device reports start recording, the App starts recording; after recording is finished, call this API to reply the recording result to the device.
+
+###### API
+
+```
+sendAIQAStartRecordingResult(bleWriteResponse, errorCode)
+```
+
+###### Parameters
+
+| Parameter        | Type                         | Description                                                  |
+| ---------------- | ---------------------------- | ------------------------------------------------------------ |
+| bleWriteResponse | IBleWriteResponse            | Write operation callback                                     |
+| errorCode        | AIFunctionOpt.AIAppErrorCode | Recording result error code; SUCCESS on success, otherwise the corresponding error code |
+
+###### Return Data
+
+**OnAIQAOptListener.onAIQAStartRecording** -- The device requests to start recording
+
+```kotlin
+fun onAIQAStartRecording()
+```
+
+###### Example
+
+```kotlin
+VPOperateManager.getInstance().sendAIQAStartRecordingResult({
+    if (it != Code.REQUEST_SUCCESS) {
+        //Write command failed
+    }
+}, AIFunctionOpt.AIAppErrorCode.SUCCESS)
+```
+
+##### Send Recording Recognition Content to Device
+
+After the device reports stop recording, the App stops recording and sends the recognized text content to the device (the SDK automatically splits into packets when the content is too long).
+
+###### API
+
+```
+sendAIQARecordingContent2Device(bleWriteResponse, errorCode, content)
+```
+
+###### Parameters
+
+| Parameter        | Type                         | Description                                                  |
+| ---------------- | ---------------------------- | ------------------------------------------------------------ |
+| bleWriteResponse | IBleWriteResponse            | Write operation callback                                     |
+| errorCode        | AIFunctionOpt.AIAppErrorCode | Recognition result error code; SUCCESS on success; no content needed on failure, the SDK will send the failure command |
+| content          | String                       | Recognized text content (user question)                      |
+
+###### Return Data
+
+**OnAIQAOptListener.onAIQAStopRecording** -- The device requests to stop recording
+
+```kotlin
+fun onAIQAStopRecording()
+```
+
+###### Example
+
+```kotlin
+VPOperateManager.getInstance().sendAIQARecordingContent2Device({
+    if (it != Code.REQUEST_SUCCESS) {
+        //Write command failed
+    }
+}, AIFunctionOpt.AIAppErrorCode.SUCCESS, "What is the weather like today")
+```
+
+##### Send AI Q&A Result
+
+After the device reports the Q&A result request, the App calls the cloud AI to get the answer and sends it to the device through this API (the SDK automatically splits into packets when the content is too long).
+
+###### API
+
+```
+sendAIQAResultCmd(bleWriteResponse, errorCode, content)
+```
+
+###### Parameters
+
+| Parameter        | Type                         | Description                                                  |
+| ---------------- | ---------------------------- | ------------------------------------------------------------ |
+| bleWriteResponse | IBleWriteResponse            | Write operation callback                                     |
+| errorCode        | AIFunctionOpt.AIAppErrorCode | Q&A result error code; SUCCESS on success; no content needed on failure |
+| content          | String                       | AI answer text content                                       |
+
+###### Return Data
+
+**OnAIQAOptListener.onAIQAResult** -- The device reports the AI Q&A result
+
+```kotlin
+fun onAIQAResult(errorCode: AIFunctionOpt.AIDeviceErrorCode)
+```
+
+| Enum Value                               | Description                 |
+| ---------------------------------------- | --------------------------- |
+| SUCCESS                                  | Success                     |
+| PACKET_LOSS_OR_PREVIEW_CHECK_FAILED_0x80 | Packet loss or check failed |
+| DATA_RECEIVER_TIMEOUT_0x81               | Data receiver timeout       |
+| UNKNOWN                                  | Unknown error               |
+
+###### Example
+
+```kotlin
+VPOperateManager.getInstance().sendAIQAResultCmd({
+    if (it != Code.REQUEST_SUCCESS) {
+        //Write command failed
+    }
+}, AIFunctionOpt.AIAppErrorCode.SUCCESS, "It is sunny today, 26 degrees")
+```
+
+##### Send AI Q&A Regenerate Result
+
+After the device reports the regenerate request, the App regenerates the answer and sends it to the device through this API (the SDK automatically splits into packets when the content is too long).
+
+###### API
+
+```
+sendAIQARegenerateResultCmd(bleWriteResponse, errorCode, content)
+```
+
+###### Parameters
+
+| Parameter        | Type                         | Description                                                  |
+| ---------------- | ---------------------------- | ------------------------------------------------------------ |
+| bleWriteResponse | IBleWriteResponse            | Write operation callback                                     |
+| errorCode        | AIFunctionOpt.AIAppErrorCode | Regenerate result error code; SUCCESS on success; no content needed on failure |
+| content          | String                       | Regenerated AI answer text content                           |
+
+###### Return Data
+
+**OnAIQAOptListener.onAIQARegenerate** -- The device requests to regenerate
+
+```kotlin
+fun onAIQARegenerate()
+```
+
+###### Example
+
+```kotlin
+VPOperateManager.getInstance().sendAIQARegenerateResultCmd({
+    if (it != Code.REQUEST_SUCCESS) {
+        //Write command failed
+    }
+}, AIFunctionOpt.AIAppErrorCode.SUCCESS, "It is sunny today, 26 degrees, good for outdoor activities")
+```
+
+##### Terminate AI Q&A
+
+When the device reports the terminate request, **onAIQATerminateREQ** is called back, and the App should stop the current Q&A flow.
+
+###### Return Data
+
+**OnAIQAOptListener.onAIQATerminateREQ** -- The device requests to terminate AI Q&A
+
+```kotlin
+fun onAIQATerminateREQ()
+```
+
+#### AI Watch Face
+
+The device must support the AI watch face function; check as follows:
+
+```kotlin
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportAiDial()
+```
+
+The device starts voice description, and the App completes recording, speech recognition, AI watch face generation, and then transfers the preview data. Overall sequence:
+
+```
+Device                                        App
+  | ①report start recording ──onAIDialStartRecording()─>| Start recording
+  |<──sendAIDialStartRecordingResult(result) ②─────────| Recording finished, reply result
+  | ③report stop recording ──onAIDialStopRecording()───>| Stop recording
+  |<──sendAIDialRecordingResult(description) ④─────────| Speech recognition, send watch face description
+  | ⑤report start generating ──onAIDialStartGenerate()─>| Call AI drawing
+  |<──sendAIDialStartGenerateACK(result) ⑥─────────────| Reply start generating result
+  | ⑦report generating progress ──onAIDialProgressSetting()>| (Usually no need to handle)
+  |<──sendAIDialGenerateResult(length,CRC) ⑧───────────| AI generation finished, send watch face data length and CRC
+  | ⑨report generating result ACK ─onAIDialResultSettingACK()>| (Usually no need to handle)
+  | ⑩report preview length ─onAIDialPreviewLengthGetACK(length)>| Preview transfer (triggered by
+  | ⑪report continue data ─onAIDialContinueGetPreviewDataREQ(length)>| sendAiDialPreview; cropping/conversion/
+  | ⑫report data receive complete ─onAIDialPreviewDataReceiveComplete(result)>| CRC/packet sending/device request
+  |                                                       | responses are all handled by the SDK)
+  | ⑬report set watch face ──onAIDialSetDial()─────────>| Confirm set watch face
+  | ⑭report regenerate ──onAIDialRegenerate()──────────>| Regenerate
+  | ⑮report terminate request ──onAIDialTerminateREQ()─>| Terminate interaction
+  |<──sendAIDialTerminateACK() ⑯───────────────────────| Reply terminate confirmation
+```
+
+> After AI drawing is finished, the App only needs to call [Send AI Watch Face Preview](#send-ai-watch-face-preview) (`sendAiDialPreview(watchFaceImagePath, watchUIType, listener)`); the SDK automatically completes: cropping (big / scale / preview) → data conversion + CRC → send generation result → respond to device preview data requests and send packets. The device-side preview requests/responses (steps ⑩⑪⑫) are handled automatically by the SDK; after the preview data is received, the cropped results (big / scale / preview) are returned through the `OnAiDialPreviewSendListener.onPreviewSendComplete` callback.
+
+##### AI Watch Face Function Disabled (Region Not Supported)
+
+When the AI watch face function is not supported in the device region, the App sends this command to inform the device that the function is unavailable.
+
+###### API
+
+```
+sendAIDialDisableCMD(bleWriteResponse)
+```
+
+###### Parameters
+
+| Parameter        | Type              | Description              |
+| ---------------- | ----------------- | ------------------------ |
+| bleWriteResponse | IBleWriteResponse | Write operation callback |
+
+###### Example
+
+```kotlin
+VPOperateManager.getInstance().sendAIDialDisableCMD({
+    if (it != Code.REQUEST_SUCCESS) {
+        //Write command failed
+    }
+})
+```
+
+##### Reply Start Recording Result
+
+After the device reports start recording, the App starts recording; after recording is finished, call this API to reply the recording result to the device.
+
+###### API
+
+```
+sendAIDialStartRecordingResult(bleWriteResponse, errorCode)
+```
+
+###### Parameters
+
+| Parameter        | Type                         | Description                                                  |
+| ---------------- | ---------------------------- | ------------------------------------------------------------ |
+| bleWriteResponse | IBleWriteResponse            | Write operation callback                                     |
+| errorCode        | AIFunctionOpt.AIAppErrorCode | Recording result error code; SUCCESS on success, otherwise the corresponding error code |
+
+###### Return Data
+
+**OnAIDialOptListener.onAIDialStartRecording** -- The device requests to start recording
+
+```kotlin
+fun onAIDialStartRecording()
+```
+
+###### Example
+
+```kotlin
+VPOperateManager.getInstance().sendAIDialStartRecordingResult({
+    if (it != Code.REQUEST_SUCCESS) {
+        //Write command failed
+    }
+}, AIFunctionOpt.AIAppErrorCode.SUCCESS)
+```
+
+##### Send Watch Face Description Content
+
+After the device reports stop recording, the App stops recording and sends the recognized watch face description text to the device (the SDK automatically splits into packets when the content is too long).
+
+###### API
+
+```
+sendAIDialRecordingResult(bleWriteResponse, errorCode, content)
+```
+
+###### Parameters
+
+| Parameter        | Type                         | Description                                                  |
+| ---------------- | ---------------------------- | ------------------------------------------------------------ |
+| bleWriteResponse | IBleWriteResponse            | Write operation callback                                     |
+| errorCode        | AIFunctionOpt.AIAppErrorCode | Recognition result error code; SUCCESS on success; no content needed on failure |
+| content          | String                       | Recognized watch face description text                       |
+
+###### Return Data
+
+**OnAIDialOptListener.onAIDialStopRecording** -- The device requests to stop recording
+
+```kotlin
+fun onAIDialStopRecording()
+```
+
+###### Example
+
+```kotlin
+VPOperateManager.getInstance().sendAIDialRecordingResult({
+    if (it != Code.REQUEST_SUCCESS) {
+        //Write command failed
+    }
+}, AIFunctionOpt.AIAppErrorCode.SUCCESS, "A round watch face in blue starry style")
+```
+
+##### Reply Start Generating Watch Face
+
+After the device reports start generating the watch face, the App calls AI drawing and replies the generation start result to the device.
+
+###### API
+
+```
+sendAIDialStartGenerateACK(bleWriteResponse, errorCode)
+```
+
+###### Parameters
+
+| Parameter        | Type                         | Description                                      |
+| ---------------- | ---------------------------- | ------------------------------------------------ |
+| bleWriteResponse | IBleWriteResponse            | Write operation callback                         |
+| errorCode        | AIFunctionOpt.AIAppErrorCode | Generation result error code; SUCCESS on success |
+
+###### Return Data
+
+**OnAIDialOptListener.onAIDialStartGenerate** -- The device requests to start generating the watch face
+
+```kotlin
+fun onAIDialStartGenerate()
+```
+
+###### Example
+
+```kotlin
+VPOperateManager.getInstance().sendAIDialStartGenerateACK({
+    if (it != Code.REQUEST_SUCCESS) {
+        //Write command failed
+    }
+}, AIFunctionOpt.AIAppErrorCode.SUCCESS)
+```
+
+##### Send AI Watch Face Generation Result
+
+After AI drawing is finished, the App sends the generation result, watch face data length and CRC to the device; the device verifies and calls back the progress/result ACK.
+
+###### API
+
+```
+sendAIDialGenerateResult(bleWriteResponse, errorCode, dialLength, crc)
+```
+
+###### Parameters
+
+| Parameter        | Type                         | Description                                      |
+| ---------------- | ---------------------------- | ------------------------------------------------ |
+| bleWriteResponse | IBleWriteResponse            | Write operation callback                         |
+| errorCode        | AIFunctionOpt.AIAppErrorCode | Generation result error code; SUCCESS on success |
+| dialLength       | Int                          | Watch face data length                           |
+| crc              | Int                          | Watch face data CRC                              |
+
+###### Return Data
+
+**OnAIDialOptListener.onAIDialProgressSetting** -- Generation progress setting ACK (usually no need to handle)
+
+```kotlin
+fun onAIDialProgressSetting()
+```
+
+**OnAIDialOptListener.onAIDialResultSettingACK** -- Generation result setting ACK (usually no need to handle)
+
+```kotlin
+fun onAIDialResultSettingACK()
+```
+
+###### Example
+
+```kotlin
+VPOperateManager.getInstance().sendAIDialGenerateResult({
+    if (it != Code.REQUEST_SUCCESS) {
+        //Write command failed
+    }
+}, AIFunctionOpt.AIAppErrorCode.SUCCESS, dialLength, crc)
+```
+
+##### Send AI Watch Face Preview
+
+After AI drawing is finished, the App only needs to pass the generated watch face original image path and the screen type; the SDK automatically completes cropping (big / scale / preview), data conversion, CRC check, packet sending, and automatically responds to the device-side preview data requests (length / continue / receive complete), no App involvement needed.
+
+###### API
+
+```
+sendAiDialPreview(aiDialImagePath, watchUIType, listener)
+```
+
+###### Parameters
+
+| Parameter       | Type                        | Description                                                  |
+| --------------- | --------------------------- | ------------------------------------------------------------ |
+| aiDialImagePath | String                      | AI generated watch face original image path                  |
+| watchUIType     | EWatchUIType                | Screen type. Recommended to read from the device via `readWatchUiInfo(bleWriteResponse, EUIFromType.CUSTOM, IUIBaseInfoListener)` (`UIDataCustom.getCustomUIType()` in the callback); pass null to use the SDK default RECT_JL_240_284 |
+| listener        | OnAiDialPreviewSendListener | Preview sending result listener (carries cropped results)    |
+
+###### Return Data
+
+**OnAiDialPreviewSendListener** -- AI watch face preview sending listener
+
+```kotlin
+interface OnAiDialPreviewSendListener {
+    //Data sending progress
+    fun onDataSendProgress(
+        data: ByteArray?,
+        currentPackage: Int,
+        haveSendDataLength: Int,
+        totalDataLength: Int,
+        progress: Int,
+    )
+
+    //Data sending failed
+    fun onDataSendFailed(data: ByteArray?, failedTimes: Int)
+
+    //Preview sending failed
+    fun onPreviewSendFailed()
+
+    //Preview sending complete (carries cropped results: big / scale / preview; the App can use big / scale for watch face setting)
+    fun onPreviewSendComplete(
+        bigWatchFace: AiCropWatchFaceBitmap?,
+        scaleWatchFace: AiCropWatchFaceBitmap?,
+        previewWatchFace: AiCropWatchFaceBitmap?,
+    )
+}
+```
+
+**AiCropWatchFaceBitmap** -- AI cropped result bitmap
+
+| Variable | Type   | Description |
+| -------- | ------ | ----------- |
+| bitmap   | Bitmap | Bitmap      |
+| filePath | String | File path   |
+
+###### Example
+
+```kotlin
+VPOperateManager.getInstance().sendAiDialPreview(aiDialImagePath, uiType, object : OnAiDialPreviewSendListener {
+    override fun onDataSendProgress(
+        data: ByteArray?,
+        currentPackage: Int,
+        haveSendDataLength: Int,
+        totalDataLength: Int,
+        progress: Int,
+    ) {
+        //Sending progress
+    }
+
+    override fun onDataSendFailed(data: ByteArray?, failedTimes: Int) {}
+
+    override fun onPreviewSendFailed() {
+        //Sending failed; the user can be prompted to retry
+    }
+
+    override fun onPreviewSendComplete(
+        bigWatchFace: AiCropWatchFaceBitmap?,
+        scaleWatchFace: AiCropWatchFaceBitmap?,
+        previewWatchFace: AiCropWatchFaceBitmap?,
+    ) {
+        //Preview transfer complete; use bigWatchFace/scaleWatchFace for watch face setting
+    }
+})
+```
+
+> Notes:
+>
+> 1. **JL (Jieli) device**: the preview transfer is implemented inside the SDK, no App involvement needed (non-JL devices automatically use the normal channel); **three prerequisites must be completed before use** — ① open the Jieli notify via `VPOperateManager.openJLDataNotify(...)` (status: `isJLNotifyOpened()`); ② complete the device auth via `VPOperateManager.startJLDeviceAuth(...)` (status: `RcspAuthManager.isAuthPass()`); ③ **initialize the file system** via `JLWatchFaceManager.getInstance().checkJLSDKAndInit(listener)` (status: `isJLFatFileSystemInitSuccess()`; without it the transfer fails with `Watch system has not been initialized`), recommended to be done together when entering the AI function page (see demo `JLDeviceOPTActivity`);
+> 2. **Screen type**: pass it through the `watchUIType` parameter of `sendAiDialPreview` (recommended to read from the device, see the parameter table); when null, the SDK defaults to `RECT_JL_240_284`;
+> 3. The device-side preview request callbacks (`onAIDialPreviewLengthGetACK` / `onAIDialContinueGetPreviewDataREQ` / `onAIDialPreviewDataReceiveComplete`) are answered automatically by the SDK; the App can ignore them. `onPreviewSendComplete` (carrying the cropped big/scale/preview watch face) is called on **device B7 confirmation** or **JL channel transfer completion** (deduplicated; JL devices may skip B7 and directly send 0xB8 to set the watch face), so the App can use the big watch face in `onAIDialSetDial`.
+
+##### Set Watch Face and Regenerate
+
+When the device reports set watch face, **onAIDialSetDial** is called back and the App sets the watch face as current; when the device reports regenerate, **onAIDialRegenerate** is called back and the App regenerates with AI.
+
+###### Return Data
+
+**OnAIDialOptListener.onAIDialSetDial** -- The device reports set watch face
+
+```kotlin
+fun onAIDialSetDial()
+```
+
+**OnAIDialOptListener.onAIDialRegenerate** -- The device requests to generate the watch face again
+
+```kotlin
+fun onAIDialRegenerate()
+```
+
+###### Setting the Watch Face (handling in onAIDialSetDial)
+
+After receiving `onAIDialSetDial`, the App uses the **big watch face** (`bigWatchFace.filePath`) carried by the preview transfer complete callback (`onPreviewSendComplete`) to set the watch face. Detailed API descriptions are in the [Watch Face] chapter; only guidance is given here:
+
+| Device type | API to use                                                   | Detailed docs                  |
+| ----------- | ------------------------------------------------------------ | ------------------------------ |
+| JL (Jieli)  | `VPOperateManager.setJLWatchPhotoDial(bigWatchFacePath, listener)` | See [Photo Watch Face] chapter |
+| Non-JL      | `WatchUIType.getSendInputStream(...)` + `UiUpdateUtil.startSetUiStream(CUSTOM, ...)` | See [Local Watch Face] chapter |
+
+> ⚠️ **JL (Jieli) device note**: `setJLWatchPhotoDial` only transfers the watch face **background image** (bgp_w001/bgp_w000), **NOT the function elements** (time / date / steps / color etc.). After the background transfer completes, you must also call `VPOperateManager.setCustomWacthUi(...)` (`UICustomSetData`, see [Photo Watch Face] chapter) to re-apply the function elements; otherwise the device only shows the default photo watch face. Recommended (refer to GBand2): call about 150ms after the transfer succeeds:
+>
+> ```kotlin
+> //elements from UIDataCustom read via getCustomWatchUiInfo
+> val uiCustomSetData = UICustomSetData(false,
+>  uiDataCustom.timePosition, uiDataCustom.upTimeType,
+>  uiDataCustom.downTimeType, uiDataCustom.color888)
+> VPOperateManager.getInstance().setCustomWacthUi({}, uiCustomSetData) { }
+> ```
+
+##### Terminate AI Watch Face
+
+When the device reports the terminate request, **onAIDialTerminateREQ** is called back, and the App should call this API to reply the terminate confirmation.
+
+###### API
+
+```
+sendAIDialTerminateACK(bleWriteResponse)
+```
+
+###### Parameters
+
+| Parameter        | Type              | Description              |
+| ---------------- | ----------------- | ------------------------ |
+| bleWriteResponse | IBleWriteResponse | Write operation callback |
+
+###### Return Data
+
+**OnAIDialOptListener.onAIDialTerminateREQ** -- The device requests to terminate AI watch face
+
+```kotlin
+fun onAIDialTerminateREQ()
+```
+
+###### Example
+
+```kotlin
+VPOperateManager.getInstance().sendAIDialTerminateACK({
+    if (it != Code.REQUEST_SUCCESS) {
+        //Write command failed
+    }
+})
+```
+
+#### AI Opus to PCM
+
+In the AI Q&A / watch face flow, the opus audio file returned by the device can be decoded to a pcm file through this API for subsequent speech recognition.
+
+###### API
+
+```
+aiOpus2Pcm(opusFilePath, pcmFilePath, listener)
+```
+
+###### Parameters
+
+| Parameter    | Type                     | Description                         |
+| ------------ | ------------------------ | ----------------------------------- |
+| opusFilePath | String                   | opus audio file path                |
+| pcmFilePath  | String                   | Output path of the decoded pcm file |
+| listener     | OnOpusDecode2PcmListener | Decode result listener              |
+
+###### Return Data
+
+**OnOpusDecode2PcmListener** -- AI Opus to PCM decode result listener
+
+```kotlin
+interface OnOpusDecode2PcmListener {
+    //Decode complete; filePath is the decoded pcm file path
+    fun onDecodeComplete(filePath: String)
+
+    //Decode failed; filePath is the target pcm file path
+    fun onDecodeFailed(filePath: String)
+}
+```
+
+###### Example
+
+```kotlin
+VPOperateManager.getInstance().aiOpus2Pcm(opusFilePath, pcmFilePath, object : OnOpusDecode2PcmListener {
+    override fun onDecodeComplete(filePath: String) {
+        //Decode complete; speech recognition can be performed
+    }
+
+    override fun onDecodeFailed(filePath: String) {
+        //Decode failed
+    }
+})
+```
+
+#### AI Error Codes
+
+**AIFunctionOpt.AIAppErrorCode** -- App-side error codes (used when the App replies to the device)
+
+| Enum Value                               | Description                                                  |
+| ---------------------------------------- | ------------------------------------------------------------ |
+| SUCCESS                                  | Success                                                      |
+| NO_MICROPHONE_PERMISSION_0x01            | No microphone permission                                     |
+| NO_VOICE_RECOGNITION_PERMISSION_0x02     | No voice recognition permission                              |
+| NETWORK_ERROR_0x03                       | Network error                                                |
+| RECORDING_FAILED_0x04                    | Recording failed                                             |
+| SPEECH_RECOGNITION_FAILED_0x05           | Speech recognition failed                                    |
+| AI_QA_FAILED_0x06                        | AI Q&A failed                                                |
+| AI_DRAWING_FAILED_0x07                   | AI drawing failed                                            |
+| SENSITIVE_WORDS_0x08                     | Sensitive words                                              |
+| SPEECH_RECOGNITION_OVER_UPPER_LIMIT_0x09 | Speech recognition upper limit reached                       |
+| AI_QA_OVER_UPPER_LIMIT_0x0A              | AI Q&A upper limit reached                                   |
+| AI_DRAWING_OVER_UPPER_LIMIT_0x0B         | AI drawing upper limit reached                               |
+| NO_MICROPHONE_0x0C                       | No Bluetooth microphone device found                         |
+| SYNCHRONIZING_DATA_0x0D                  | The App replies synchronizing data when the device reports AI data |
+| APP_USE_AI_FUNCTION_0x0E                 | The App is in use                                            |
+| REGION_NOT_SUPPORTED_0x0F                | Region not supported                                         |
+| UNKNOWN                                  | Unknown error                                                |
+
+**AIFunctionOpt.AIDeviceErrorCode** -- Device-side error codes (used when the device replies to the App)
+
+| Enum Value                               | Description                         |
+| ---------------------------------------- | ----------------------------------- |
+| SUCCESS                                  | Success                             |
+| PACKET_LOSS_OR_PREVIEW_CHECK_FAILED_0x80 | Packet loss or preview check failed |
+| DATA_RECEIVER_TIMEOUT_0x81               | Data receiver timeout               |
+| UNKNOWN                                  | Unknown error                       |
+
+**AIFunctionOpt.AIDialErrorCode** -- AI watch face speech problem error codes
+
+| Enum Value     | Description    |
+| -------------- | -------------- |
+| SUCCESS        | Success        |
+| TIMEOUT        | Timeout        |
+| UNRECOGNIZABLE | Unrecognizable |
+| LOW_VOLUME     | Low volume     |
+| UNKNOWN        | Unknown error  |
+
+
 
 ## Custom Project Features
 

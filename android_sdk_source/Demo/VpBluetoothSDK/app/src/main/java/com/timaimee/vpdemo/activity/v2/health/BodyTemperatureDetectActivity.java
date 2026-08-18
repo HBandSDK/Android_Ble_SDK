@@ -3,6 +3,7 @@ package com.timaimee.vpdemo.activity.v2.health;
 import android.view.View;
 
 import com.orhanobut.logger.Logger;
+import com.timaimee.vpdemo.activity.v2.DeviceMenu;
 import com.veepoo.protocol.listener.data.ITemptureDetectDataListener;
 import com.veepoo.protocol.model.datas.TemptureDetectData;
 
@@ -12,7 +13,7 @@ public class BodyTemperatureDetectActivity extends BaseDetectActivity {
 
     @Override
     public String pageTitle() {
-        return "体温";
+        return DeviceMenu.Health.BodyTemperature;
     }
 
     @Override

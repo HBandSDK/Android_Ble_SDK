@@ -8,6 +8,7 @@ import android.widget.Spinner
 import com.orhanobut.logger.Logger
 import com.timaimee.vpdemo.R
 import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity
+import com.timaimee.vpdemo.activity.v2.DeviceMenu
 import com.timaimee.vpdemo.bean.MyDeviceInfo
 import com.timaimee.vpdemo.utils.CollapseCardLogView
 import com.veepoo.protocol.listener.data.IBPDetectDataListener
@@ -31,7 +32,7 @@ class StepActivity : BaseVPBLETestActivity() {
 
     override fun getLayoutID() = R.layout.activity_step
 
-    override fun pageTitle() = "血压"
+    override fun pageTitle() = DeviceMenu.Health.Step
 
     override fun initView() {
         ccvReadStep = findViewById(R.id.ccvReadStep)

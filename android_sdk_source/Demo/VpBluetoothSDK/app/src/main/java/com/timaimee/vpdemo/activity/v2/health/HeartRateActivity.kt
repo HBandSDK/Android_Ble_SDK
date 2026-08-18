@@ -6,6 +6,7 @@ import android.widget.RadioGroup
 import com.orhanobut.logger.Logger
 import com.timaimee.vpdemo.R
 import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity
+import com.timaimee.vpdemo.activity.v2.DeviceMenu
 import com.timaimee.vpdemo.utils.CollapseCardLogView
 import com.veepoo.protocol.listener.data.IBPDetectDataListener
 import com.veepoo.protocol.listener.data.IBPSettingDataListener
@@ -35,7 +36,7 @@ class HeartRateActivity : BaseVPBLETestActivity(){
     lateinit var etHigh: EditText
     override fun getLayoutID() = R.layout.activity_heart_rate
 
-    override fun pageTitle() = "心率"
+    override fun pageTitle() = DeviceMenu.Health.HeartRate
 
     override fun initView() {
         ccvHeartRateDetect = findViewById(R.id.ccvHeartRateDetect)

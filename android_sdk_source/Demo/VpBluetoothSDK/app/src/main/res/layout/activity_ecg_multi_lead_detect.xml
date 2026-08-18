@@ -1,27 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/main_head"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@android:color/black">
-
-        <TextView
-            android:id="@+id/main_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="多导心电"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" />
-
-
-    </RelativeLayout>
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -102,16 +92,15 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/start"
+            android:id="@+id/btnStart"
+            style="@style/vpButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/black"
             android:paddingStart="16dp"
             android:paddingTop="8dp"
             android:paddingEnd="16dp"
             android:paddingBottom="8dp"
-            android:text="开始ECG测量"
-            android:textColor="@android:color/white" />
+            android:text="开始ECG测量" />
 
         <TextView
             android:id="@+id/tvProgress"
@@ -123,18 +112,17 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/stop"
+            android:id="@+id/btnStop"
+            style="@style/vpButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_gravity="center"
-            android:background="@android:color/black"
             android:paddingStart="16dp"
             android:paddingTop="8dp"
             android:paddingEnd="16dp"
             android:paddingBottom="8dp"
-            android:text="结束ECG测量"
-            android:textColor="@android:color/white" />
+            android:text="结束ECG测量" />
     </RelativeLayout>
 
     <TextView

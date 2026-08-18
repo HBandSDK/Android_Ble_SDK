@@ -152,13 +152,14 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             case DeviceMenu.Health.BloodGlucose -> isSupport = fCheck.checkBgAdjusting() || fCheck.checkBgMultipleAdjusting();
             case DeviceMenu.Health.BloodPress -> isSupport = fCheck.checkBp();
             case DeviceMenu.Health.ECG -> isSupport = fCheck.checkECG();
+            case DeviceMenu.Health.Fatigue -> isSupport = fCheck.checkFtg();
+            case DeviceMenu.Health.ECG_MULTI -> isSupport = fCheck.checkEcgMultiLead();
             case DeviceMenu.Other.IMG_TXT_PUSH -> isSupport = fCheck.checkTextImagePush();
             case DeviceMenu.Other.WORLD_CLOCK -> isSupport = fCheck.checkWorldClock();
             case DeviceMenu.Other.WEATHER -> isSupport = fCheck.checkWeather();
             case DeviceMenu.Other.PHOTOGRAPH -> isSupport = fCheck.checkCamera();
             case DeviceMenu.Other.DEVICE_4G -> isSupport = fCheck.check4g();
             case DeviceMenu.Other.DEVICE_ANTI_LOSS -> isSupport = fCheck.check4g();
-            case DeviceMenu.Health.Fatigue -> isSupport = fCheck.checkFtg();
             case DeviceMenu.Other.CHECK_WEAR -> isSupport = fCheck.checkCheckWear();
             case DeviceMenu.Switch.HEALTH_SUPPORT -> isSupport = fCheck.checkHealthAssessment();
         }

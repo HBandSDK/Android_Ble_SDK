@@ -354,4 +354,20 @@ public class HealthDataReadActivity extends BaseActivity implements IOriginData3
     public void onReadOriginComplete() {
         tvReadState.setText("读取完成");
     }
+
+    @Override
+    public void onReadTimeout(int day) {
+        tvReadState.setText("读取" + getDayDes(day) + "超时，请重新读取或者断开重连重启蓝牙再读取");
+    }
+
+    private String getDayDes(int day) {
+        if (day == 0) {
+            return "今天";
+        } else if (day == 1) {
+            return "昨天";
+        } else if (day == 2) {
+            return "前天";
+        }
+        return "异常天";
+    }
 }

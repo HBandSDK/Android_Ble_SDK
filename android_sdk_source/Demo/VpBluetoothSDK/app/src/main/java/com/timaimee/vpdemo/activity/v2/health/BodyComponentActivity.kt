@@ -4,6 +4,7 @@ import android.widget.Button
 import android.widget.EditText
 import com.timaimee.vpdemo.R
 import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity
+import com.timaimee.vpdemo.activity.v2.DeviceMenu
 import com.timaimee.vpdemo.utils.CollapseCardLogView
 import com.veepoo.protocol.listener.data.IBodyComponentDetectListener
 import com.veepoo.protocol.listener.data.IBodyComponentReadDataListener
@@ -24,7 +25,7 @@ class BodyComponentActivity : BaseVPBLETestActivity() {
 
     override fun getLayoutID() = R.layout.activity_body_component
 
-    override fun pageTitle() = "身体成分"
+    override fun pageTitle() = DeviceMenu.Health.BodyComponent
 
     override fun initView() {
         ccvBodyComponentDetect = findViewById(R.id.ccvBodyComponentDetect)

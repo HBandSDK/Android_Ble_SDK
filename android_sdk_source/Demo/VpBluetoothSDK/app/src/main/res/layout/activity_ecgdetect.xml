@@ -1,27 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/main_head"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@android:color/black">
-
-        <TextView
-            android:id="@+id/main_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="ECG检测"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" />
-
-
-    </RelativeLayout>
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <com.timaimee.vpdemo.activity.EcgHeartRealthView
         android:id="@+id/ecg_real_view"
@@ -38,18 +28,14 @@
         android:text="监听绿光信号" />
 
     <Button
-        android:id="@+id/start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/btnStart"
+        style="@style/vpButton"
         android:layout_gravity="center"
-        android:layout_marginRight="20dp"
         android:text="开始ECG测量" />
 
     <Button
-        android:id="@+id/stop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/btnStop"
+        style="@style/vpButton"
         android:layout_gravity="center"
-        android:layout_marginRight="20dp"
         android:text="结束ECG测量" />
 </LinearLayout>

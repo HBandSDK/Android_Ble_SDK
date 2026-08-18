@@ -9,6 +9,7 @@ import android.widget.Spinner;
 
 import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity;
+import com.timaimee.vpdemo.activity.v2.DeviceMenu;
 import com.timaimee.vpdemo.utils.CollapseCardLogView;
 import com.timaimee.vpdemo.utils.TimeUtils;
 import com.veepoo.protocol.listener.data.IRemindEventListener;
@@ -37,7 +38,7 @@ public class RemindEventActivity extends BaseVPBLETestActivity implements IRemin
 
     @Override
     public String pageTitle() {
-        return "提醒事件";
+        return DeviceMenu.Health.REMIND_EVENT;
     }
 
     @Override

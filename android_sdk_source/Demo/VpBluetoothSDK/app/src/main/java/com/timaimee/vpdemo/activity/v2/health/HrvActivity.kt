@@ -6,6 +6,7 @@ import android.widget.RadioGroup
 import android.widget.Spinner
 import com.timaimee.vpdemo.R
 import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity
+import com.timaimee.vpdemo.activity.v2.DeviceMenu
 import com.timaimee.vpdemo.bean.MyDeviceInfo
 import com.timaimee.vpdemo.utils.CollapseCardLogView
 import com.veepoo.protocol.listener.data.IBodyComponentReadDataListener
@@ -32,7 +33,7 @@ class HrvActivity : BaseVPBLETestActivity(), IHrvDetectListener {
 
     override fun getLayoutID() = R.layout.activity_hrv
 
-    override fun pageTitle() = "HRV"
+    override fun pageTitle() = DeviceMenu.Health.HRV
 
     override fun initView() {
         ccvHrvDetect = findViewById(R.id.ccvHrvDetect)

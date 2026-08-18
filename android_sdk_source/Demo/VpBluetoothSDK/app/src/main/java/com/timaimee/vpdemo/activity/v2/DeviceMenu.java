@@ -4,7 +4,7 @@ public interface DeviceMenu {
 
     String[] HealthMenu = {Health.HealthData, Health.HeartRate, Health.BloodPress, Health.BloodGlucose, Health.BloodOxygen, Health.HRV,
             Health.BodyComponent, Health.BloodComponent, Health.BodyTemperature, Health.Sleep, Health.MiniCheckUp, Health.GSR, Health.ECG,
-            Health.Step, Health.DeviceManualTestData, Health.Fatigue, Health.Female, Health.SEDENTARY_REMIND, Health.HEALTH_REMIND,
+            Health.ECG_MULTI, Health.Step, Health.DeviceManualTestData, Health.Fatigue, Health.Female, Health.SEDENTARY_REMIND, Health.HEALTH_REMIND,
             Health.REMIND_EVENT, Health.AUTO_MEASURE};
 
     interface Health {
@@ -20,6 +20,7 @@ public interface DeviceMenu {
         String MiniCheckUp = "微体检🩺";
         String GSR = "皮电⚡";
         String ECG = "ECG📈";
+        String ECG_MULTI = "多导心电\uD83D\uDCDF";
         String Sleep = "睡眠🌙";
         String Step = "计步👟";
         String Fatigue = "疲劳度😵‍💫";
@@ -47,7 +48,7 @@ public interface DeviceMenu {
 
     String[] OtherMenu = {Other.CONTACT, Other.ALARM, Other.MUSIC, Other.MESSAGE_PUSH, Other.IMG_TXT_PUSH, Other.WORLD_CLOCK,
             Other.WEATHER, Other.PHOTOGRAPH, Other.LANGUAGE_BATTER, Other.CHECK_WEAR, Other.DEVICE_ANTI_LOSS, Other.DEVICE_4G,
-            Other.DEVICE_4G_READ_IMEI, Other.MAGNETIC, Other.HEALTH_LIGHT};
+            Other.LOW_POWER, Other.DEVICE_4G_READ_IMEI, Other.MAGNETIC, Other.HEALTH_LIGHT,Other.AI_FUNCTION};
 
     interface Other {
         String CONTACT = "️联系人☎️";
@@ -62,10 +63,12 @@ public interface DeviceMenu {
         String LANGUAGE_BATTER = "语言&电量🔋";
         String CHECK_WEAR = "佩戴检测⌚️";
         String DEVICE_ANTI_LOSS = "设备防丢📍";
+        String LOW_POWER = "低功耗⚡️";
         String DEVICE_4G = "4G功能-网络配置🌐";
         String MAGNETIC = "磁疗\uD83E\uDDF2";
         String DEVICE_4G_READ_IMEI = "4G功能-读取IMEI";
         String HEALTH_LIGHT = "健康灯💡✨";
+        String AI_FUNCTION = "AI功能🤖";
     }
 
     String[] SwitchMenu = {Switch.MSG_PUSH, Switch.CUSTOM_SETTNG, Switch.HEALTH_SUPPORT, Switch.SWITCH_STATUS_LISTENER};

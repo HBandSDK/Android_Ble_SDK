@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.timaimee.vpdemo.utils.CollapseCardLogView
+        android:id="@+id/ccvFemale"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:collapseDefaultExpand="true"
+        app:collapseTitle="女性功能"
+        app:collapseTitleColor="#E53935"
+        app:collapseTitleSize="15sp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/tvFunName"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="类型:"
+                android:padding="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <Spinner
+                android:id="@+id/spFun"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_marginTop="10dp"
+                android:text="全部"
+                android:textColor="#4A3F35"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/tvFunName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvLastMenes"
+                android:layout_width="150dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvFunName"
+                android:padding="10dp"
+                android:layout_marginTop="6dp"
+                android:text="最后一次月经日期:"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btnMenesDate"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:background="@drawable/date_time_btn_bg"
+                android:padding="10dp"
+                android:layout_marginTop="6dp"
+                android:text="2025-10-30"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvLastMenes"
+                app:layout_constraintTop_toTopOf="@id/tvLastMenes"
+                app:layout_constraintBottom_toBottomOf="@id/tvLastMenes"/>
+
+            <TextView
+                android:id="@+id/tvDueDate"
+                android:layout_width="150dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvLastMenes"
+                android:padding="10dp"
+                android:layout_marginTop="6dp"
+                android:text="预产期:"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btnDueDate"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:background="@drawable/date_time_btn_bg"
+                android:padding="10dp"
+                android:layout_marginTop="6dp"
+                android:text="2026-8-28"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvDueDate"
+                app:layout_constraintTop_toTopOf="@id/tvDueDate"
+                app:layout_constraintBottom_toBottomOf="@id/tvDueDate"/>
+
+            <TextView
+                android:id="@+id/tvBabyBirthday"
+                android:layout_width="150dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvDueDate"
+                android:padding="10dp"
+                android:layout_marginTop="6dp"
+                android:text="Baby生日:"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btnBabyBirthday"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:background="@drawable/date_time_btn_bg"
+                android:padding="10dp"
+                android:layout_marginTop="6dp"
+                android:text="2026-8-28"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvBabyBirthday"
+                app:layout_constraintTop_toTopOf="@id/tvBabyBirthday"
+                app:layout_constraintBottom_toBottomOf="@id/tvBabyBirthday"/>
+
+            <TextView
+                android:id="@+id/tvBabySex"
+                android:layout_width="150dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvBabyBirthday"
+                android:padding="10dp"
+                android:layout_marginTop="6dp"
+                android:text="Baby性别:"
+                android:layout_height="wrap_content"/>
+
+            <RadioGroup
+                android:id="@+id/rgBayGender"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:background="@drawable/date_time_btn_bg"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:gravity="center"
+                android:layout_marginTop="6dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvBabySex"
+                app:layout_constraintTop_toTopOf="@id/tvBabySex"
+                app:layout_constraintBottom_toBottomOf="@id/tvBabySex"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rbMale"
+                    android:checked="true"
+                    android:text="男孩"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+
+                <RadioButton
+                    android:id="@+id/rbFemale"
+                    android:checked="true"
+                    android:text="女孩"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/btnSetting"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvBabySex"
+                android:layout_marginTop="10dp"
+                style="@style/vpButton"
+                android:text="设置女性状态"/>
+
+            <Button
+                android:id="@+id/btnRead"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnSetting"
+                style="@style/vpButton"
+                android:lines="1"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="11sp"
+                android:autoSizeMaxTextSize="17sp"
+                android:text="读取女性状态"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.timaimee.vpdemo.utils.CollapseCardLogView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

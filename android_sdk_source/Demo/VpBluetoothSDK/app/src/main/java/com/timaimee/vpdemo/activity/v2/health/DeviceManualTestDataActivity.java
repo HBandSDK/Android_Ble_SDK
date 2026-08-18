@@ -8,6 +8,7 @@ import android.widget.CheckBox;
 
 import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity;
+import com.timaimee.vpdemo.activity.v2.DeviceMenu;
 import com.timaimee.vpdemo.utils.CollapseCardLogView;
 import com.timaimee.vpdemo.utils.TimeUtils;
 import com.veepoo.protocol.listener.data.IDeviceManualDetectDataListener;
@@ -48,7 +49,7 @@ public class DeviceManualTestDataActivity extends BaseVPBLETestActivity implemen
 
     @Override
     public String pageTitle() {
-        return "设备手动测量数据";
+        return DeviceMenu.Health.DeviceManualTestData;
     }
 
     @Override

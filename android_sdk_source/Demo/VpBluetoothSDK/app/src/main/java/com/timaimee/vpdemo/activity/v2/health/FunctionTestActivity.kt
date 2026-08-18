@@ -21,10 +21,12 @@ import com.veepoo.protocol.listener.data.IFatigueDataListener
 import com.veepoo.protocol.listener.data.IFindDeviceDatalistener
 import com.veepoo.protocol.listener.data.IFunSwitchListener
 import com.veepoo.protocol.listener.data.IHealthLightListener
+import com.veepoo.protocol.listener.data.ILowPowerListener
 import com.veepoo.protocol.listener.data.IReadIMEIInfoListener
 import com.veepoo.protocol.listener.data.IRemindEventListener
 import com.veepoo.protocol.model.datas.FunSwitchFlags
 import com.veepoo.protocol.model.datas.RemindEvent
+import com.veepoo.protocol.model.datas.LowPowerData
 import com.veepoo.protocol.model.enums.ECameraStatus
 import com.veepoo.protocol.model.enums.ECheckWear
 import com.veepoo.protocol.model.enums.EDeviceStatus
@@ -159,7 +161,6 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
                 tvFunName.text = "辅助类型:"
                 initSP(funStringList, spFun)
             }
-
             DeviceMenu.Other.HEALTH_LIGHT -> {
                 btnStartDetect.text = "健康灯状态设置"
                 btnStopDetect.text = "健康灯状态读取"
@@ -170,6 +171,14 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
                 tvFunName.text = "状态:"
                 initSP(EHealthLightStatus.entries.map { it.des }.toTypedArray(), spFun)
                 vpBleManager.addHealthLightListener(healthLightListener)
+            }
+
+            DeviceMenu.Other.LOW_POWER -> {
+                btnStartDetect.text = "低功耗设置"
+                btnStopDetect.text = "低功耗读取"
+                setRadioGroupShow(true)
+                tvFunName.visibility = View.GONE
+                spFun.visibility = View.GONE
             }
         }
     }
@@ -189,6 +198,7 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
                 DeviceMenu.Other.DEVICE_ANTI_LOSS -> vpBleManager.settingFindDevice(defaultResponse, findDeviceListener, isOpen())
                 DeviceMenu.Other.DEVICE_4G_READ_IMEI -> vpBleManager.readIMEIInfo(defaultResponse, readIMEIInfoListener)
                 DeviceMenu.Other.HEALTH_LIGHT -> vpBleManager.setHealthLightStatus(EHealthLightStatus.getStatusWithCMD(spFun.selectedItemPosition.toByte()),defaultResponse)
+                DeviceMenu.Other.LOW_POWER -> vpBleManager.settingLowpower(defaultResponse, lowPowerListener, isOpen())
             }
         }
         btnStopDetect.setOnClickListener {
@@ -202,7 +212,7 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
                 DeviceMenu.Other.CHECK_WEAR -> vpBleManager.setttingCheckWear(defaultResponse, checkWearListener, CheckWearSetting().apply { isOpen = false })
                 DeviceMenu.Other.DEVICE_ANTI_LOSS -> vpBleManager.readFindDevice(defaultResponse, findDeviceListener)
                 DeviceMenu.Other.HEALTH_LIGHT -> vpBleManager.readHealthLightStatus(defaultResponse)
-
+                DeviceMenu.Other.LOW_POWER -> vpBleManager.readLowPower(defaultResponse, lowPowerListener)
             }
         }
     }
@@ -375,7 +385,22 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
         override fun onHealthLightStatusReport(status: EHealthLightStatus?) {
             ccvTest.appendResult("✅️健康灯状态上报成功>>> ${status!!.des}")
         }
+    }
 
+    /**
+     * 低功耗监听
+     */
+    private val lowPowerListener = ILowPowerListener { data ->
+        data?.let {
+            val isSuccess = it.readState == 1
+            val opt = (it.oprateType == 1).switch("设置", "读取")
+            val sw =  (it.openState == 1).switch("开启", "关闭")
+            if (isSuccess) {
+                ccvTest.appendResult("✅️${opt}${sw}成功")
+            } else {
+                ccvTest.appendResult("❌️️${opt}${sw}错误")
+            }
+        }
     }
 
     override fun onCMDWriteFailed(cmdTag: Int) {
@@ -423,6 +448,7 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
             DeviceMenu.Other.DEVICE_4G_READ_IMEI ->  "⏯️开启读取IMEI码.."
             DeviceMenu.Other.HEALTH_LIGHT ->  "⏯️设置健康灯状态.."
             DeviceMenu.Other.DEVICE_ANTI_LOSS ->  "⏯️${if(isOpen()) "开启" else "关闭"}设备防丢.."
+            DeviceMenu.Other.LOW_POWER ->  "⏯️${isOpen().switch("开启","关闭")}低功耗.."
             DeviceMenu.Switch.HEALTH_SUPPORT ->  "⏯️${if(isOpen()) "开启${spFun.selectedItem as String}" else "关闭${spFun.selectedItem as String}"}健康辅助.."
             else -> "开始${functionName}"
     }
@@ -434,6 +460,7 @@ class FunctionTestActivity: BaseVPBLETestActivity() , ICameraDataListener {
             DeviceMenu.Other.CHECK_WEAR -> "🛑关闭佩戴检测..."
             DeviceMenu.Other.DEVICE_ANTI_LOSS -> "读取设备防丢..."
             DeviceMenu.Other.HEALTH_LIGHT -> "读取健康灯状态..."
+            DeviceMenu.Other.LOW_POWER -> "读取低功耗..."
             DeviceMenu.Switch.HEALTH_SUPPORT -> "读取健康辅助..."
             else -> "停止${functionName}"
         }

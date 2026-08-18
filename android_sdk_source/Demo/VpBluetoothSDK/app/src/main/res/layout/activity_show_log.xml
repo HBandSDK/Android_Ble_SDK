@@ -38,7 +38,7 @@
         android:layout_marginEnd="10dp"
         android:text="原始数据"
         android:textColor="#000"
-        app:layout_constraintEnd_toStartOf="@+id/btn2"
+        app:layout_constraintEnd_toStartOf="@+id/btns2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
@@ -53,7 +53,7 @@
         android:text="血氧"
         android:textColor="#000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btn2"
+        app:layout_constraintStart_toEndOf="@+id/btns2"
         app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
     <Button
@@ -82,7 +82,7 @@
         app:layout_constraintStart_toEndOf="@id/btnToTop"
         app:layout_constraintTop_toBottomOf="@id/btn1" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_log"
         android:layout_width="match_parent"
         android:background="#8eee"
