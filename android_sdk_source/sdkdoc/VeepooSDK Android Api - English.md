@@ -3300,6 +3300,46 @@ fun onReadSleepComplete()
 | sleepDown      | TimeData | Time to fall asleep                                          |
 | sleepUp        | TimeData | Time to wake up                                              |
 
+**SleepPrecisionData**
+
+| Variable             | Type                   | Remarks                                                      |
+| -------------------- | ---------------------- | ------------------------------------------------------------ |
+| Date                 | String                 | Sleep date                                                   |
+| cali_flag            | Int                    | Sleep calibration flag; this value is not currently in use   |
+| sleepQulity          | Int                    | Sleep quality                                                |
+| wakeCount            | Int                    | Number of wake‑ups during sleep                              |
+| deepSleepTime        | Int                    | Deep sleep duration (unit: minute)                           |
+| lowSleepTime         | Int                    | Light sleep duration (unit: minute)                          |
+| allSleepTime         | Int                    | Total sleep duration                                         |
+| sleepLine            | String                 | Sleep curve, used for visualized UI display. Can be ignored if no special UI requirement.Two curve modes:1. Normal sleep: string composed of `0,1,2`. Each character represents 5 minutes. `0`‑Light sleep, `1`‑Deep sleep, `2`‑Awake.Example: `"201112"` means total 30 minutes; awake for first & last 5 min, light sleep 5 min, deep sleep 15 min.2. Precision sleep: string composed of `0,1,2,3,4`. Each character represents 1 minute. `0`‑Deep sleep, `1`‑Light sleep, `2`‑REM sleep, `3`‑Insomnia, `4`‑Awake |
+| sleepDown            | TimeData               | Sleep onset time                                             |
+| sleepUp              | TimeData               | Wake‑up time                                                 |
+| sleepTag             | int                    | Sleep tag flag                                               |
+| getUpScore           | int                    | Night‑wakening score                                         |
+| deepScore            | int                    | Deep sleep score                                             |
+| sleepEfficiencyScore | int                    | Sleep efficiency score; efficiency from night‑wakening back to deep sleep |
+| fallAsleepScore      | int                    | Sleep‑onset efficiency score; time from sleep start to first deep‑sleep entry |
+| sleepTimeScore       | int                    | Sleep duration score                                         |
+| exitSleepMode        | int                    | Mode of exiting sleep state                                  |
+| deepAndLightMode     | int                    | Deep‑light sleep mode                                        |
+| otherDuration        | int                    | Other sleep‑related duration (unit: minute)                  |
+| firstDeepDuration    | int                    | Time duration until entering the first deep sleep            |
+| getUpDuration        | int                    | Total night‑wakening duration (unit: minute)                 |
+| getUpToDeepAve       | int                    | Average duration from night‑wakening to returning to deep sleep |
+| onePointDuration     | int                    | Time represented by one point on curve (unit: second; fixed to 60 s currently) |
+| accurateType         | int                    | Sleep accuracy type                                          |
+| insomniaTag          | int                    | Insomnia flag                                                |
+| insomniaScore        | int                    | Insomnia score                                               |
+| insomniaTimes        | int                    | Count of insomnia episodes                                   |
+| insomniaLength       | int                    | Total length of insomnia                                     |
+| insomniaBeanList     | List<InsomniaTimeData> | List of insomnia time segments                               |
+| startInsomniaTime    | String                 | Insomnia start time                                          |
+| stopInsomniaTime     | String                 | Insomnia end time                                            |
+| insomniaDuration     | int                    | Insomnia duration calculated from count of `3` in sleepLine (unit: minute) |
+| sleepSourceStr       | String                 | Raw sleep string; generally not used                         |
+| laster               | int                    | Previous‑segment flag. Default `0`(no previous segment). `1` means previous sleep segment exists |
+| next                 | int                    | Next‑segment flag. Default `255`(unknown). `1` means next sleep segment exists |
+
 ###### Example Code
 
 ```kotlin

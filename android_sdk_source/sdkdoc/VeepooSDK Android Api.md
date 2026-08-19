@@ -3312,6 +3312,48 @@ fun onReadSleepComplete()
 | sleepDown     | TimeData | 入睡时间                                                     |
 | sleepUp       | TimeData | 起床时间                                                     |
 
+**SleepPrecisionData**
+
+| 变量                 | 类型                   | 备注                                                         |
+| -------------------- | ---------------------- | ------------------------------------------------------------ |
+| Date                 | String                 | 睡眠日期                                                     |
+| cali_flag            | Int                    | 睡眠定标值，目前这个值没有什么用                             |
+| sleepQulity          | Int                    | 睡眠质量                                                     |
+| wakeCount            | Int                    | 睡眠中起床的次数                                             |
+| deepSleepTime        | Int                    | 深睡时长(单位min)                                            |
+| lowSleepTime         | Int                    | 浅睡时长(单位min)                                            |
+| allSleepTime         | Int                    | 睡眠总时长                                                   |
+| sleepLine            | String                 | 睡眠曲线，主要用于更具象化的UI来显示睡眠状态，如果您睡眠界面对UI没有特殊要求，可不理会,睡眠曲线分为普通睡眠和精准睡眠，普通睡眠是一组由0,1,2组成的字符串，每一个字符代表时长为5分钟，其中0表示浅睡，1表示深睡，2表示苏醒,比如“201112”，长度为6，表示睡眠阶段共30分钟，头尾各苏醒5分钟，中间浅睡5分钟，深睡15分钟;若是精准睡眠，睡眠曲线是一组由0,1,2，3,4组成的字符串，每一个字符代表时长为1分钟，其中0表示深睡，1表示浅睡，2表示快速眼动,3表示失眠,4表示苏醒 |
+| sleepDown            | TimeData               | 入睡时间                                                     |
+| sleepUp              | TimeData               | 起床时间                                                     |
+| sleepTag             | int                    | 睡眠标志                                                     |
+| getUpScore           | int                    | 起夜得分                                                     |
+| deepScore            | int                    | 深睡得分                                                     |
+| sleepEfficiencyScore | int                    | 睡眠效率得分，起夜到深睡的效率得分                           |
+| fallAsleepScore      | int                    | 入睡效率得分，从开始睡眠到第一次进入深睡的效率               |
+| sleepTimeScore       | int                    | 睡眠时长得分                                                 |
+| exitSleepMode        | int                    | 退出睡眠的模式                                               |
+| deepAndLightMode     | int                    | 深浅睡眠模式                                                 |
+| otherDuration        | int                    | 其他睡眠时间长，单位分钟                                     |
+| firstDeepDuration    | int                    | 第一次进入深睡时间                                           |
+| getUpDuration        | int                    | 起夜总时长，单位分钟                                         |
+| getUpToDeepAve       | int                    | 起夜到深睡时间的平均值                                       |
+| onePointDuration     | int                    | 曲线上一个点代表的时间，单位秒，现在是60s                    |
+| accurateType         | int                    | 睡眠类型                                                     |
+| insomniaTag          | int                    | 失眠标志                                                     |
+| insomniaScore        | int                    | 失眠标志                                                     |
+| insomniaTimes        | int                    | 失眠次数                                                     |
+| insomniaLength       | int                    | 失眠长度                                                     |
+| insomniaBeanList     | List<InsomniaTimeData> | 失眠列表                                                     |
+| startInsomniaTime    | String                 | 失眠开始时间                                                 |
+| stopInsomniaTime     | String                 | 失眠结束时间                                                 |
+| insomniaDuration     | int                    | 通过睡眠曲线3的个数来计算,单位是分钟                         |
+| sleepSourceStr       | String                 | 睡眠原始字符串（一般不用关注）                               |
+| laster               | int                    | 上一段标志位，默认为0(表示肯定没有上一段)，如果为1，则表示有上一段睡眠,否则表示没有上一段睡眠 |
+| next                 | int                    | 下一段睡眠标志位，默认为255(表示不确定是否有下一段)，如果为1，则表示有下一段睡眠,否则表示没有下一段睡眠 |
+
+
+
 ###### 示例代码
 
 ```kotlin
