@@ -134,6 +134,7 @@ import com.veepoo.protocol.listener.data.ISleepDataListener;
 import com.veepoo.protocol.listener.data.ISocialMsgDataListener;
 import com.veepoo.protocol.listener.data.ISpo2hDataListener;
 import com.veepoo.protocol.listener.data.ISpo2hOriginDataListener;
+import com.veepoo.protocol.listener.data.ISportControlOptListener;
 import com.veepoo.protocol.listener.data.ISportDataListener;
 import com.veepoo.protocol.listener.data.ISportModelOriginListener;
 import com.veepoo.protocol.listener.data.ISportModelStateListener;
@@ -199,6 +200,7 @@ import com.veepoo.protocol.model.datas.SleepData;
 import com.veepoo.protocol.model.datas.SleepPrecisionData;
 import com.veepoo.protocol.model.datas.Spo2hData;
 import com.veepoo.protocol.model.datas.Spo2hOriginData;
+import com.veepoo.protocol.model.datas.SportControlDataInfo;
 import com.veepoo.protocol.model.datas.SportData;
 import com.veepoo.protocol.model.datas.SportModelGPSWatchOriginHeadData;
 import com.veepoo.protocol.model.datas.SportModelOriginHeadData;
@@ -233,6 +235,7 @@ import com.veepoo.protocol.model.enums.EOprateStauts;
 import com.veepoo.protocol.model.enums.ERenameError;
 import com.veepoo.protocol.model.enums.ESex;
 import com.veepoo.protocol.model.enums.ESpo2hDataType;
+import com.veepoo.protocol.model.enums.ESportControlType;
 import com.veepoo.protocol.model.enums.ESportType;
 import com.veepoo.protocol.model.enums.ETemperatureUnit;
 import com.veepoo.protocol.model.enums.ETimeMode;
@@ -640,6 +643,9 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
             } else {
                 Toast.makeText(mContext, "不支持自定义表盘", Toast.LENGTH_LONG).show();
             }
+        } else if (oprater.equals(GPS_EPHEMERIS)) {
+            Intent intent = new Intent(OperaterActivity.this, GpsEphemerisActivity.class);
+            startActivity(intent);
         } else if (oprater.equals(UI_UPDATE_CUSTOM)) {
 
             int bigTranType = VpSpGetUtil.getVpSpVariInstance(mContext).getBigTranType();
@@ -2481,7 +2487,7 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 public void onSportStopped() {
                     Logger.t(TAG).i(SPORT_MODE_START_INDOOR + "================================运动结束 @_@");
                 }
-            }, ESportType.INDOOR_WALK);
+            }, ESportType.OUTDOOR_WALK);
         } else if (oprater.equals(SPORT_MODE_ORIGIN_START)) {
             VPOperateManager.getInstance().startSportModel(writeResponse, new ISportModelStateListener() {
                 @Override
@@ -3649,6 +3655,23 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 @Override
                 public void onResponse(int code) {
 
+                }
+            });
+        } else if (oprater.equals(DA_SPORT)) {
+            VPOperateManager.getInstance().setSportControlInfo(writeResponse, ESportControlType.START, ESportType.OUTDOOR_WALK, new ISportControlOptListener() {
+                @Override
+                public void onSportControlOptFail() {
+                    Logger.t(TAG).e("运动控制 # onSportControlOptFail");
+                }
+
+                @Override
+                public void onSportControlOptSuccess() {
+                    Logger.t(TAG).e("运动控制 # onSportControlOptSuccess");
+                }
+
+                @Override
+                public void onSportControlDataChange(@NotNull SportControlDataInfo dataInfo) {
+                    Logger.t(TAG).e("运动控制 # onSportControlDataChange dataInfo=" + dataInfo.toString());
                 }
             });
         }

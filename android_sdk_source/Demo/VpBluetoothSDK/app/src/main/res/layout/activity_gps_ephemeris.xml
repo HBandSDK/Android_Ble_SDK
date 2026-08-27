@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/gps_head"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@android:color/black">
+
+        <TextView
+            android:id="@+id/gps_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="GPS星历传输 (GpsEphemeris)"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <!-- 当前状态 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="当前状态"
+                android:textColor="@color/colorAccent"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_gps_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="#22000000"
+                android:minHeight="40dp"
+                android:padding="8dp"
+                android:text="空闲"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+
+            <!-- 下载进度 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="1. 星历文件下载进度"
+                android:textColor="@color/colorAccent"
+                android:textSize="14sp" />
+
+            <ProgressBar
+                android:id="@+id/pb_gps_download"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:max="100"
+                android:progress="0" />
+
+            <TextView
+                android:id="@+id/tv_gps_download_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="进度:0%"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+
+            <!-- 传输进度 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="2. 星历蓝牙传输进度"
+                android:textColor="@color/colorAccent"
+                android:textSize="14sp" />
+
+            <ProgressBar
+                android:id="@+id/pb_gps_send"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:max="100"
+                android:progress="0" />
+
+            <TextView
+                android:id="@+id/tv_gps_send_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="进度:0%"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+
+            <!-- 一键升级（核心流程） -->
+            <Button
+                android:id="@+id/btn_gps_onekey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:onClick="startOneKeyUpdate"
+                android:text="★ 一键星历升级（初始化→读取AGPS→下载→传输）"
+                android:textColor="@android:color/holo_green_dark"
+                android:textSize="15sp" />
+
+            <!-- 分步操作 -->
+            <Button
+                android:id="@+id/btn_gps_support"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:onClick="isSupport"
+                android:text="a. 是否支持AGPS"
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_gps_support"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="是否支持: -"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/btn_gps_read"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:onClick="readBaseInfo"
+                android:text="b. 读取设备AGPS信息"
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_gps_base_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="AGPS基本信息: -"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/btn_gps_download"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:onClick="downloadEphemeris"
+                android:text="c. 下载星历文件"
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/btn_gps_transfer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:onClick="transferEphemeris"
+                android:text="d. 传输星历到设备"
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

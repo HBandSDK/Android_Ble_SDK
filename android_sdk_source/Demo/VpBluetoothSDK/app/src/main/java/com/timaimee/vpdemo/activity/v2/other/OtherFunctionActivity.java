@@ -7,6 +7,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.timaimee.vpdemo.R;
+import com.timaimee.vpdemo.activity.GpsEphemerisActivity;
 import com.timaimee.vpdemo.activity.WorldClockActivity;
 import com.timaimee.vpdemo.activity.v2.BaseActivity;
 import com.timaimee.vpdemo.activity.v2.DeviceMenu;
@@ -75,6 +76,7 @@ public class OtherFunctionActivity extends BaseActivity implements AdapterView.O
             case DeviceMenu.Other.DEVICE_4G ->   startActivity(new Intent(this, Device4gOptActivity.class));
             case DeviceMenu.Other.MAGNETIC ->   startActivity(new Intent(this, MagneticTherapyActivity.class));
             case DeviceMenu.Other.AI_FUNCTION ->   startActivity(new Intent(this, AIFunActivity.class));
+            case DeviceMenu.Other.GPS_EPHEMERIS -> startActivity(new Intent(this, GpsEphemerisActivity.class));
         }
 
     }

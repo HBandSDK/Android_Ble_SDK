@@ -130,6 +130,9 @@
             android:name=".activity.UiUpdateAGPSActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.GpsEphemerisActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.UiUpdateCustomActivity"
             android:exported="false" />
         <activity

@@ -41,6 +41,7 @@
 | 1.3.5 | Modify the pre-conditions supported by 'Read Device Manual Measurement Data', and add new APIs for MET, Emotion, and Fatigue related features. | 2026.07.02 |
 | 1.3.6 | **JH58 adds active measurement-related interfaces, and adds data collection and reporting (MODE3) for reading raw PPG signals.** | 2026.07.27 |
 | 1.3.7 | Added AI Function related interfaces and process descriptions | 2026.08.18 |
+| 1.3.8 | 1.Added GPS ephemeris related flow and interfaces<br/>2.Improved the callback descriptions for reading sports mode data in Sports function | 2026.08.27 |
 ## Import SDK
 ### Add Dependency
 
@@ -5471,6 +5472,13 @@ fun onReadOriginProgressDetail(day: Int, date: String?, allPackage: Int, current
 fun onHeadChangeListListener(sportModelHeadData: SportModelOriginHeadData?)
 
 /**
+* Callback for sports mode raw type 4 [header information]. This interface is only called back when the watch supports GPS sports, otherwise the onHeadChangeListListener interface is called back
+*
+* @param sportModelGPSWatchOriginHeadData sports mode raw type 4 [header information]
+*/
+fun onGPSWatchSportModeHeadChange(sportModelGPSWatchOriginHeadData: SportModelGPSWatchOriginHeadData?)
+
+/**
 * Callback for sports model raw data [details]
 *
 * @param sportModelItemDatas sports model raw data [details]
@@ -5519,6 +5527,28 @@ fun onReadOriginComplete()
 | kcal           | Int      | Consumed kilocalories |
 | beathPause     | Int      | Pause flag            |
 | crc            | Int      | Verification code     |
+
+**SportModelGPSWatchOriginHeadData**--Head information of GPS sports mode (only called back by watches that support GPS sports)
+
+| Variable        | Type     | Remarks                                                      |
+| --------------- | -------- | ------------------------------------------------------------ |
+| date            | String   | Sport date                                                   |
+| startTime       | TimeData | Precise start time                                           |
+| stopTime        | TimeData | Precise stop time                                            |
+| sportTime       | Int      | Total sport duration (excluding pause duration)              |
+| stepCount       | Int      | Total steps                                                  |
+| sportCount      | Int      | Total sport volume                                           |
+| distance        | Double   | Sport distance, unit m                                       |
+| calories        | Double   | Calories consumed, unit cal                                  |
+| recordCount     | Int      | Total number of records                                      |
+| pauseCount      | Int      | Number of pauses                                             |
+| pauseTime       | Int      | Pause duration                                               |
+| crc             | Int      | Data verification code                                       |
+| oxSportDuration | Int      | Aerobic exercise duration                                    |
+| averRate        | Int      | Average heart rate                                           |
+| sportType       | Int      | Sport type, see ESportType for details                       |
+| hasGpsInfo      | Boolean  | Whether there is GPS information                             |
+| dataType        | Int      | Data display type: 0 unknown; 1 GPS+steps; 2 GPS+no steps; 3 no GPS+steps; 4 no GPS+no steps |
 
 ESportType--Sport type enumeration
 
@@ -6303,6 +6333,10 @@ VPOperateManager.getInstance().readSportModelOrigin({
             ) {
 
             }
+    
+    		override fun onGPSWatchSportModeHeadChange(sportModelGPSWatchOriginHeadData: SportModelGPSWatchOriginHeadData?){
+            	Log.e("Test", "sportModelGPSWatchOriginHeadData:${sportModelGPSWatchOriginHeadData.toString()}")
+        	}
 
             override fun onHeadChangeListListener(sportModelHeadData: SportModelOriginHeadData?) {
                 Log.e("Test", "sportModelHeadData:${sportModelHeadData.toString()}")
@@ -13298,6 +13332,219 @@ VPOperateManager.getInstance().aiOpus2Pcm(opusFilePath, pcmFilePath, object : On
 | UNRECOGNIZABLE | Unrecognizable |
 | LOW_VOLUME     | Low volume     |
 | UNKNOWN        | Unknown error  |
+
+
+
+## GPS Ephemeris (AGPS)
+
+#### Premise
+
+The device must support the ephemeris (AGPS) function (agpsFunction)
+
+**Note ⚠️**: The ephemeris file transfer requires an additional abnormal protection scenario: if the watch's battery is very low when the ephemeris transfer is initiated, the watch may shut down due to low battery during the transfer, and the ephemeris may become invalid after recharging. We recommend reading the watch's current battery level before each transfer, and forbidding the transfer if the battery is low.
+
+#### Process
+
+>Step 1. Determine whether the ephemeris function is supported (initialize the protocol channel when supported)
+>Step 2. Read the device AGPS basic information
+>Step 3. Download the ephemeris file
+>Step 4. Transfer the ephemeris file to the device
+
+#### Class name
+
+Note: **The class names used for this function are different from the previous ones**
+
+```kotlin
+val mUiUpdateUtil = UiUpdateUtil.getInstance();
+val uiServerHttpUtil = UiServerHttpUtil();
+```
+
+#### Step 1. Determine whether the ephemeris function is supported
+
+```kotlin
+//Support ephemeris function
+if (mUiUpdateUtil.isSupportChangeCustomAGPS()) {
+    //Initialize the protocol channel (MTU negotiation + register UI data Notify listener)
+    mUiUpdateUtil.init(context)
+} else {
+    //Does not support ephemeris function
+}
+```
+
+#### Step 2. Read the device AGPS basic information
+
+Note: **Before transferring the ephemeris, you must first read the device AGPS basic information; the returned receive address and CRC must be used for subsequent writing; and you need to call** `init(context)` **to warm up the channel before reading.**
+
+###### Class name
+
+UiUpdateUtil
+
+###### Interface
+
+```
+getAGPSWacthUiInfo(iuiBaseInfoFormAGPSListener)
+```
+
+###### Parameter description
+
+| Parameter name              | Type                        | Remarks                              |
+| --------------------------- | --------------------------- | ------------------------------------ |
+| iuiBaseInfoFormAGPSListener | IUIBaseInfoFormAGPSListener | Callback for reading AGPS basic info |
+
+###### Return data
+
+**IUIBaseInfoFormAGPSListener**
+
+```kotlin
+/**
+ * Return agps basic information
+ *
+ * @param uiDataAGPS agps basic information
+ */
+fun onBaseUiInfoFormAgps(uiDataAGPS:UIDataAGPS)
+```
+
+**UIDataAGPS**
+
+| Variable           | Type | Remarks                                               |
+| ------------------ | ---- | ----------------------------------------------------- |
+| dataReceiveAddress | Int  | UI data receive start address                         |
+| dataCanSendLength  | Int  | Receivable data length                                |
+| fileLength         | Long | File length to be sent                                |
+| crc                | Int  | CRC check value of the ephemeris file                 |
+| validDay           | Int  | Total valid duration of ephemeris file (unit: day)    |
+| validMinute        | Int  | Total valid duration of ephemeris file (unit: minute) |
+| packageIndex       | Int  | Which packet, counting from 1                         |
+| timeStamp          | Long | Timestamp of the ephemeris file                       |
+
+###### Sample code
+
+```kotlin
+UiUpdateUtil.getInstance().getAGPSWacthUiInfo(object : IUIBaseInfoFormAGPSListener {
+    override fun onBaseUiInfoFormAgps(uiDataAGPS: UIDataAGPS) {
+        //Read successfully, you can get dataReceiveAddress, crc, validMinute, etc. here
+    }
+})
+```
+
+#### Step 3. Download the ephemeris file
+
+Note: **This interface is a network request and cannot run on the main thread**
+
+###### Class name
+
+UiServerHttpUtil
+
+###### Interface
+
+```
+downLoadAGpsFile(isChina, sdkOadFilePath, onDownLoadListener)
+```
+
+###### Parameter description
+
+| Parameter name     | Type               | Remarks                                                      |
+| ------------------ | ------------------ | ------------------------------------------------------------ |
+| isChina            | Boolean            | Whether in China; domestic uses rx-networks.cn, abroad uses location.io |
+| sdkOadFilePath     | String             | Local save path of the ephemeris file (vp_agps.pgl)          |
+| onDownLoadListener | OnDownLoadListener | Download callback                                            |
+
+###### Return data
+
+OnDownLoadListener
+
+```kotlin
+/**
+ * Return the download progress value, range [0-1]
+ * @param progress
+ */
+fun onProgress(progress:Float);
+
+/**
+ * Download finished
+ */
+fun onFinish();
+```
+
+###### Sample code
+
+```kotlin
+Thread {
+    uiServerHttpUtil.downLoadAGpsFile(isInChina, filePath, object : OnDownLoadListener {
+        override fun onProgress(progress: Float) {
+            //Download progress progress [0-1]
+        }
+
+        override fun onFinish() {
+            //Download complete, can proceed to step 4 transfer
+        }
+    })
+}.start()
+```
+
+#### Step 4. Transfer the ephemeris file to the device
+
+Note: **Setting the ephemeris file timestamp to 0 means using the latest ephemeris; it is recommended to read the device battery before transfer, and forbid transfer when battery is low.**
+
+###### Class name
+
+UiUpdateUtil
+
+###### Interface
+
+```
+startSetUiStream(euiFromType, inputStream, uiUpdateListener)
+```
+
+###### Parameter description
+
+| Parameter name   | Type              | Remarks                                   |
+| ---------------- | ----------------- | ----------------------------------------- |
+| euiFromType      | EUIFromType       | UI type, fixed here as: EUIFromType.A_GPS |
+| inputStream      | InputStream       | Ephemeris file input stream               |
+| uiUpdateListener | IUiUpdateListener | UI upgrade callback                       |
+
+###### Return data
+
+**IUiUpdateListener**
+
+Same as [[Server watch face - Set Ui](#Step 5. Set UI)]
+
+###### Sample code
+
+```kotlin
+//Set the ephemeris timestamp (0 means latest)
+UiUpdateUtil.getInstance().setAGPSTimeStamp(0)
+
+val file = File(filePath)
+val inputStream: InputStream = context.contentResolver.openInputStream(Uri.fromFile(file))
+UiUpdateUtil.getInstance().startSetUiStream(
+    EUIFromType.A_GPS,
+    inputStream,
+    object : IUiUpdateListener {
+        override fun onUiUpdateStart() {
+        }
+
+        override fun onStartClearCache(sumCount: Int) {
+        }
+
+        override fun onClearCacheProgress(currentCount: Int, sumCount: Int, progress: Int) {
+        }
+
+        override fun onFinishClearCache() {
+        }
+
+        override fun onUiUpdateProgress(currentBlock: Int, sumBlock: Int, progress: Int) {
+        }
+
+        override fun onUiUpdateSuccess() {
+        }
+
+        override fun onUiUpdateFail(eUiUpdateError: EUiUpdateError?) {
+        }
+    }
+)
+```
 
 
 

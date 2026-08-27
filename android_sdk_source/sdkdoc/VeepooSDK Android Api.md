@@ -41,6 +41,7 @@
 | 1.3.5 | 修改“读取设备手动测量数据”支持的判断条件，新增梅脱、情绪、疲劳度相关功能api | 2026.07.02 |
 | 1.3.6 | JH58新增主动测量相关接口，读取PPG原始信号新增数据采集上报（MODE3） | 2026.07.27 |
 | 1.3.7 | 新增AI功能相关接口和流程说明 | 2026.08.18 |
+| 1.3.8 | 1.新增gps星历相关流程和接口<br/>2.完善运动功能-读取运动模式数据相关回调说明 | 2026.08.27 |
 
 ## 导入SDK
 添加依赖
@@ -5492,6 +5493,13 @@ fun onReadOriginProgressDetail(day: Int, date: String?, allPackage: Int, current
 fun onHeadChangeListListener(sportModelHeadData: SportModelOriginHeadData?)
 
 /**
+ * 运动模式原始类型4[头部信息]的回调，只有当手表是支持GPS运动时则会回调该接口，否则回调的是 onHeadChangeListListener接口
+ *
+ * @param sportModelGPSWatchOriginHeadData 运动模式类型4的原始数据[头部信息]
+ */
+fun onGPSWatchSportModeHeadChange(sportModelGPSWatchOriginHeadData: SportModelGPSWatchOriginHeadData?)
+
+/**
  * 运动模式原始数据[详细信息]的回调
  *
  * @param sportModelItemDatas 运动模式原始数据[详细信息]
@@ -5540,6 +5548,29 @@ fun onReadOriginComplete()
 | kcal       | Int      | 消耗千卡 |
 | beathPause | Int      | 暂停标志 |
 | crc        | Int      | 校验码   |
+
+**SportModelGPSWatchOriginHeadData**--GPS运动模式的头部信息（仅支持GPS运动的手表回调）
+
+| 变量            | 类型     | 备注                                                         |
+| --------------- | -------- | ------------------------------------------------------------ |
+| date            | String   | 运动日期                                                     |
+| startTime       | TimeData | 开始精准时间                                                 |
+| stopTime        | TimeData | 停止精准时间                                                 |
+| sportTime       | Int      | 运动总时长(已扣除暂停时长)                                   |
+| stepCount       | Int      | 总步数                                                       |
+| sportCount      | Int      | 总运动量                                                     |
+| distance        | Double   | 运动距离，单位 m                                             |
+| calories        | Double   | 运动消耗卡路里，单位 cal                                     |
+| recordCount     | Int      | 总记录条数                                                   |
+| pauseCount      | Int      | 暂停次数                                                     |
+| pauseTime       | Int      | 暂停的时长                                                   |
+| crc             | Int      | 数据校验码                                                   |
+| oxSportDuration | Int      | 有氧运动时间                                                 |
+| averRate        | Int      | 平均心率                                                     |
+| sportType       | Int      | 运动类型，详见 ESportType                                    |
+| hasGpsInfo      | Boolean  | 是否有 GPS 信息                                              |
+| dataType        | Int      | 数据展示类型：0未知；1有GPS+有步数；2有GPS+无步数；3无GPS+有步数；4无GPS+无步数 |
+
 
 ESportType--运动类型枚举
 
@@ -6354,6 +6385,10 @@ VPOperateManager.getInstance().readSportModelOrigin({
             ) {
 
             }
+    
+    		override fun onGPSWatchSportModeHeadChange(sportModelGPSWatchOriginHeadData: SportModelGPSWatchOriginHeadData?){
+            	Log.e("Test", "sportModelGPSWatchOriginHeadData:${sportModelGPSWatchOriginHeadData.toString()}")
+        	}
 
             override fun onHeadChangeListListener(sportModelHeadData: SportModelOriginHeadData?) {
                 Log.e("Test", "sportModelHeadData:${sportModelHeadData.toString()}")
@@ -13485,6 +13520,221 @@ VPOperateManager.getInstance().aiOpus2Pcm(opusFilePath, pcmFilePath, object : On
 | UNRECOGNIZABLE | 无法识别 |
 | LOW_VOLUME     | 音量低   |
 | UNKNOWN        | 未知错误 |
+
+
+
+## GPS星历（AGPS）
+
+#### 前提
+
+设备需支持星历功能（agpsFunction）
+
+**注意⚠️ **：星历文件传输需要增加一个异常保护场景：手表电量很低时，如果发起星历传输，在传输过程中手表可能会因低电关机，重新充电后，星历可能失效。我们建议每次传输前，先读取一遍手表当前电量，如果电量状态为低电，则禁止传输。
+
+#### 流程
+
+>第1步.判断是否支持星历功能（支持时初始化协议通道）
+>第2步.读取设备AGPS基本信息
+>第3步.下载星历文件
+>第4步.传输星历文件至设备
+
+#### 类名
+
+注：**该功能操作使用的类名与前面类名不一样**
+
+```kotlin
+val mUiUpdateUtil = UiUpdateUtil.getInstance();
+val uiServerHttpUtil = UiServerHttpUtil();
+```
+
+#### 第1步.判断是否支持星历功能
+
+```kotlin
+//支持星历功能
+if (mUiUpdateUtil.isSupportChangeCustomAGPS()) {
+    //初始化协议通道（MTU协商 + 注册UI数据Notify监听）
+    mUiUpdateUtil.init(context)
+} else {
+    //不支持星历功能
+}
+```
+
+#### 第2步.读取设备AGPS基本信息
+
+注：**星历传输前必须先读取设备AGPS基本信息，后续写入必须使用返回的接收地址与CRC；且读取前需先调用** `init(context)` **完成通道预热。**
+
+###### 类名
+
+UiUpdateUtil
+
+###### 接口
+
+```
+getAGPSWacthUiInfo(iuiBaseInfoFormAGPSListener)
+```
+
+###### 参数解释
+
+| 参数名                      | 类型                        | 备注                 |
+| --------------------------- | --------------------------- | -------------------- |
+| iuiBaseInfoFormAGPSListener | IUIBaseInfoFormAGPSListener | 读取AGPS基本信息回调 |
+
+###### 返回数据
+
+**IUIBaseInfoFormAGPSListener**
+
+```kotlin
+/**
+ * 返回agps基本信息
+ *
+ * @param uiDataAGPS agps基本信息
+ */
+fun onBaseUiInfoFormAgps(uiDataAGPS:UIDataAGPS)
+```
+
+**UIDataAGPS**
+
+| 变量               | 类型 | 备注                          |
+| ------------------ | ---- | ----------------------------- |
+| dataReceiveAddress | Int  | UI数据的接收起始地址          |
+| dataCanSendLength  | Int  | 可接收的数据长度              |
+| fileLength         | Long | 要发送的文件长度              |
+| crc                | Int  | 星历文件的CRC校验值           |
+| validDay           | Int  | 星历文件有效总时长(单位:天)   |
+| validMinute        | Int  | 星历文件有效总时长(单位:分钟) |
+| packageIndex       | Int  | 第几包，从1开始计数           |
+| timeStamp          | Long | 星历文件的时间戳              |
+
+###### 示例代码
+
+```kotlin
+UiUpdateUtil.getInstance().getAGPSWacthUiInfo(object : IUIBaseInfoFormAGPSListener {
+    override fun onBaseUiInfoFormAgps(uiDataAGPS: UIDataAGPS) {
+        //读取成功，可在此拿到 dataReceiveAddress、crc、validMinute 等信息
+    }
+})
+```
+
+#### 第3步.下载星历文件
+
+注：**此接口为网络请求，不能运行在主线程中**
+
+###### 类名
+
+UiServerHttpUtil
+
+###### 接口
+
+```
+downLoadAGpsFile(isChina, sdkOadFilePath, onDownLoadListener)
+```
+
+###### 参数解释
+
+| 参数名             | 类型               | 备注                                                  |
+| ------------------ | ------------------ | ----------------------------------------------------- |
+| isChina            | Boolean            | 是否在国内；国内走 rx-networks.cn，国外走 location.io |
+| sdkOadFilePath     | String             | 星历文件(vp_agps.pgl)本地保存路径                     |
+| onDownLoadListener | OnDownLoadListener | 下载回调                                              |
+
+###### 返回数据
+
+OnDownLoadListener
+
+```kotlin
+/**
+ * 返回下载进度值,范围[0-1]
+ * @param progress
+ */
+fun onProgress(progress:Float);
+
+/**
+ * 下载结束
+ */
+fun onFinish();
+```
+
+###### 示例代码
+
+```kotlin
+Thread {
+    uiServerHttpUtil.downLoadAGpsFile(isInChina, filePath, object : OnDownLoadListener {
+        override fun onProgress(progress: Float) {
+            //下载进度 progress [0-1]
+        }
+
+        override fun onFinish() {
+            //下载完成，可进行第4步传输
+        }
+    })
+}.start()
+```
+
+#### 第4步.传输星历文件至设备
+
+注：**设置星历文件时间戳为 0 表示使用最新星历；传输前建议先读取设备电量，低电时禁止传输。**
+
+###### 类名
+
+UiUpdateUtil
+
+###### 接口
+
+```
+startSetUiStream(euiFromType, inputStream, uiUpdateListener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型              | 备注                                 |
+| ---------------- | ----------------- | ------------------------------------ |
+| euiFromType      | EUIFromType       | UI类型 此处固定为：EUIFromType.A_GPS |
+| inputStream      | InputStream       | 星历文件输入流                       |
+| uiUpdateListener | IUiUpdateListener | UI升级回调                           |
+
+###### 返回数据
+
+**IUiUpdateListener**
+
+同【[服务器表盘-设置Ui](#第5步.设置UI)】返回一致
+
+###### 示例代码
+
+```kotlin
+//设置星历时间戳（0 表示最新）
+UiUpdateUtil.getInstance().setAGPSTimeStamp(0)
+
+val file = File(filePath)
+val inputStream: InputStream = context.contentResolver.openInputStream(Uri.fromFile(file))
+UiUpdateUtil.getInstance().startSetUiStream(
+    EUIFromType.A_GPS,
+    inputStream,
+    object : IUiUpdateListener {
+        override fun onUiUpdateStart() {
+        }
+
+        override fun onStartClearCache(sumCount: Int) {
+        }
+
+        override fun onClearCacheProgress(currentCount: Int, sumCount: Int, progress: Int) {
+        }
+
+        override fun onFinishClearCache() {
+        }
+
+        override fun onUiUpdateProgress(currentBlock: Int, sumBlock: Int, progress: Int) {
+        }
+
+        override fun onUiUpdateSuccess() {
+        }
+
+        override fun onUiUpdateFail(eUiUpdateError: EUiUpdateError?) {
+        }
+    }
+)
+```
+
+
 
 
 

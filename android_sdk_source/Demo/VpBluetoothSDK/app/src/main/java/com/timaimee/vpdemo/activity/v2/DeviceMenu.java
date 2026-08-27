@@ -47,8 +47,8 @@ public interface DeviceMenu {
     }
 
     String[] OtherMenu = {Other.CONTACT, Other.ALARM, Other.MUSIC, Other.MESSAGE_PUSH, Other.IMG_TXT_PUSH, Other.WORLD_CLOCK,
-            Other.WEATHER, Other.PHOTOGRAPH, Other.LANGUAGE_BATTER, Other.CHECK_WEAR, Other.DEVICE_ANTI_LOSS, Other.DEVICE_4G,
-            Other.LOW_POWER, Other.DEVICE_4G_READ_IMEI, Other.MAGNETIC, Other.HEALTH_LIGHT,Other.AI_FUNCTION};
+            Other.WEATHER, Other.GNSS, Other.PHOTOGRAPH, Other.LANGUAGE_BATTER, Other.CHECK_WEAR, Other.DEVICE_ANTI_LOSS, Other.DEVICE_4G,
+            Other.LOW_POWER, Other.DEVICE_4G_READ_IMEI, Other.MAGNETIC, Other.HEALTH_LIGHT,Other.AI_FUNCTION, Other.GPS_EPHEMERIS};
 
     interface Other {
         String CONTACT = "️联系人☎️";
@@ -69,6 +69,7 @@ public interface DeviceMenu {
         String DEVICE_4G_READ_IMEI = "4G功能-读取IMEI";
         String HEALTH_LIGHT = "健康灯💡✨";
         String AI_FUNCTION = "AI功能🤖";
+        String GPS_EPHEMERIS = "GPS星历🛰️";
     }
 
     String[] SwitchMenu = {Switch.MSG_PUSH, Switch.CUSTOM_SETTNG, Switch.HEALTH_SUPPORT, Switch.SWITCH_STATUS_LISTENER};

@@ -14,7 +14,6 @@ import com.timaimee.vpdemo.R
 import com.timaimee.vpdemo.activity.v2.BaseVPBLETestActivity
 import com.timaimee.vpdemo.activity.v2.DeviceMenu
 import com.timaimee.vpdemo.utils.CollapseCardLogView
-import com.timaimee.vpdemo.utils.d
 import com.timaimee.vpdemo.utils.switch
 import com.veepoo.protocol.listener.data.IWomenDataListener
 import com.veepoo.protocol.model.datas.TimeData
@@ -38,7 +37,7 @@ class FemaleActivity: BaseVPBLETestActivity() , IWomenDataListener{
     lateinit var btnBabyBirthday: Button
     lateinit var btnSetting: Button
     lateinit var btnRead: Button
-
+    
     lateinit var tvLastMenes: TextView
     lateinit var tvDueDate: TextView
     lateinit var tvBabyBirthday: TextView
@@ -161,7 +160,7 @@ class FemaleActivity: BaseVPBLETestActivity() , IWomenDataListener{
             }
             R.id.btnSetting -> {
                 val data = getWomenSettingData()
-                TAG.d("设置的值 >>> ${getWomenInfo(data)}")
+//                TAG.d("设置的值 >>> ${getWomenInfo(data)}")
                 vpBleManager.settingWomenState(defaultResponse, this, getWomenSettingData())
             }
             R.id.btnRead -> {
@@ -201,7 +200,7 @@ class FemaleActivity: BaseVPBLETestActivity() , IWomenDataListener{
             else -> {
                 WomenSetting(status, 4 , 28, getTimeDataByBtn(btnMenesDate))
             }
-        }
+    }
 
     private fun showDatePicker(btnDatePicker: Button) {
         // 1. 获取按钮当前的文本
@@ -236,7 +235,7 @@ class FemaleActivity: BaseVPBLETestActivity() , IWomenDataListener{
 
     override fun onWomenDataChange(womenData: WomenData?) {
         womenData?.let {
-            "${womenData.toString()}".d(">>>>>>>>>>>")
+//            "${womenData.toString()}".d(">>>>>>>>>>>")
             when(it.oprateStatus) {
                 EWomenOprateStatus.SETTING_SUCCESS -> ccvFemale.appendResult("✅️设置成功")
                 EWomenOprateStatus.SETTING_FAIL -> ccvFemale.appendResult("❌️️设置失败")

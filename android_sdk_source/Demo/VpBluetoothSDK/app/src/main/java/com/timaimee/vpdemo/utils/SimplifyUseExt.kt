@@ -10,9 +10,9 @@ fun <T> Boolean.toObj(trueObj:T, falseObj:T) = if(this) trueObj else falseObj
 fun <T> Boolean.switch(trueObj:T, falseObj:T) = if(this) trueObj else falseObj
 
 fun EFunctionStatus.toDes() = when(this) {
-    EFunctionStatus.UNSUPPORT -> "²»Ö§³Ö"
-    EFunctionStatus.SUPPORT -> "Ö§³Ö"
-    EFunctionStatus.SUPPORT_OPEN -> "¿ªÆô"
-    EFunctionStatus.SUPPORT_CLOSE -> "¹Ø±Õ"
-    EFunctionStatus.UNKONW -> "Î´Öª"
+    EFunctionStatus.UNSUPPORT -> "ä¸æ”¯æŒ"
+    EFunctionStatus.SUPPORT -> "æ”¯æŒ"
+    EFunctionStatus.SUPPORT_OPEN -> "å¼€å¯"
+    EFunctionStatus.SUPPORT_CLOSE -> "å…³é—­"
+    EFunctionStatus.UNKONW -> "æœªçŸ¥"
 }

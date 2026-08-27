@@ -99,7 +99,6 @@ public class UiUpdateAGPSActivity extends Activity {
      * 使用的是apgs
      */
     public void setAgps(View view){
-
         //LTEPH_GPS_1.rtcm
         String fileRtcm = getExternalFilesDir(null) + File.separator + "LTEPH_GPS_1.rtcm";
         File file = new File(fileRtcm);
@@ -112,7 +111,7 @@ public class UiUpdateAGPSActivity extends Activity {
                 long timeStampAGPS=0;
                 UiUpdateUtil.getInstance().setAGPSTimeStamp(timeStampAGPS);
 
-                UiUpdateUtil.getInstance().startSetUiStream(EUIFromType.A_GPS,inputStream, new IUiUpdateListener() {
+                UiUpdateUtil.getInstance().startSetUiStream(EUIFromType.A_GPS, inputStream, new IUiUpdateListener() {
 
                     @Override
                     public void onUiUpdateStart() {

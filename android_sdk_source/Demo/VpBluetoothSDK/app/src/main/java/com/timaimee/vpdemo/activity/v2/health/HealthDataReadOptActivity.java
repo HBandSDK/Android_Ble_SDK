@@ -272,7 +272,11 @@ public class HealthDataReadOptActivity extends BaseVPBLETestActivity implements 
         System.out.println("==>==>==>==>==>==>==>==>==>==>==>==>==>==>==>==>==>==>==>==>==>==>==>==>");
     }
     @Override
-    public void onOriginHRVOriginListDataChange(List<HRVOriginData> originHrvDataList) {}
+    public void onOriginHRVOriginListDataChange(List<HRVOriginData> originHrvDataList) {
+        for (HRVOriginData data : originHrvDataList) {
+            Logger.t(TAG).e("HRVOriginData ==> " + data.toString());
+        }
+    }
     @Override
     public void onOriginSpo2OriginListDataChange(List<Spo2hOriginData> originSpo2hDataList) {}
     @Override
