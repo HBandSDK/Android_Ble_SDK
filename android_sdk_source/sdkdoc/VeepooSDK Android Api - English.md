@@ -42,6 +42,7 @@
 | 1.3.6 | **JH58 adds active measurement-related interfaces, and adds data collection and reporting (MODE3) for reading raw PPG signals.** | 2026.07.27 |
 | 1.3.7 | Added AI Function related interfaces and process descriptions | 2026.08.18 |
 | 1.3.8 | 1.Added GPS ephemeris related flow and interfaces<br/>2.Improved the callback descriptions for reading sports mode data in Sports function | 2026.08.27 |
+| 1.3.9 | Instructions for Integrating the New Logging Module | 2026.09.15 |
 ## Import SDK
 ### Add Dependency
 
@@ -112,6 +113,43 @@ init(context)
 Note: All interfaces can only be called after the SDK is initialized. During the running of the App, it only needs to be initialized once, and there is no need to initialize it repeatedly.
 
 
+
+## Log Monitoring and Sharing
+
+**Enabling log monitoring assists us in analyzing the causes of issues—such as data synchronization errors or connectivity problems—encountered by users with their smartwatches or fitness trackers, thereby facilitating troubleshooting and resolution. Please note that the submission of logs is required when reporting such issues.**。
+
+#### Enable log monitoring (recommended to call during SDK initialization).
+
+###### Interface
+
+```
+VPLocalLogger.startMonitor(this);
+```
+
+#### Stop log monitoring (recommended to call when the app exits).
+
+###### Interface
+
+```
+VPLocalLogger.stopMonitor();
+```
+
+#### Log storage path
+
+Android\data\your app packageName\files\VpSDK\....
+
+#### Share log  
+
+###### Interface
+
+```
+ /**
+     * share sdk log
+     * @param activity  The activity page when your share log
+     * @param authority The authority of a FileProvider defined in a <provider> element in your app's manifest.
+     */
+    public void shareLogFile(Activity activity, @NonNull String authority)
+```
 
 
 

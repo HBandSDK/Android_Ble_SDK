@@ -42,6 +42,7 @@
 | 1.3.6 | JH58新增主动测量相关接口，读取PPG原始信号新增数据采集上报（MODE3） | 2026.07.27 |
 | 1.3.7 | 新增AI功能相关接口和流程说明 | 2026.08.18 |
 | 1.3.8 | 1.新增gps星历相关流程和接口<br/>2.完善运动功能-读取运动模式数据相关回调说明 | 2026.08.27 |
+| 1.3.9 | 新增日志模块接入说明 | 2026.09.15 |
 
 ## 导入SDK
 添加依赖
@@ -94,8 +95,6 @@ VPOperateManager.getInstance()
 
 
 
-
-
 ## SDK初始化
 
 ```kotlin
@@ -105,9 +104,48 @@ init(context)
 | ------- | ------- | --------------------------- |
 | context | Context | 配置选项ApplicactionContext |
 
-注:所有接口仅在sdk初始化后才能调用,App运行期间，只需要初始化一次，无需重复初始化
+注:所有接口仅在sdk初始化后才能调用,App运行期间，只需要初始化一次，无需重复初始
 
 
+
+## 日志监听与分享
+
+**开启日志监听有助于我司帮助分析当用户在手表或手环同步数据出现异常或连接出现异常时出现问题的原因，以便于排查和解决问题。反馈问题需以日志提供为依据**。
+
+#### 开启日志监听（推荐在sdk初始化时调用）
+
+###### 接口
+
+```
+VPLocalLogger.startMonitor(this);
+```
+
+#### 关闭日志监听（推荐在app退出时调用）
+
+###### 接口
+
+```
+VPLocalLogger.stopMonitor();
+```
+
+#### 日志保存路径
+
+Android\data\你的应用包名\files\VpSDK\....
+
+#### 分享日志  
+
+###### 接口
+
+```
+ /**
+     * 分享SDK日志 | share sdk log
+     * @param activity  点击分享的当前页面
+     *                  The activity page when your share log
+     * @param authority 在应用清单文件的 `<provider>` 元素中定义的 FileProvider 授权（authority）
+     *                  The authority of a FileProvider defined in a <provider> element in your app's manifest.
+     */
+    public void shareLogFile(Activity activity, @NonNull String authority)
+```
 
 
 
