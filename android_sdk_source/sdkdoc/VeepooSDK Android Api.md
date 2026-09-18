@@ -43,6 +43,7 @@
 | 1.3.7 | 新增AI功能相关接口和流程说明 | 2026.08.18 |
 | 1.3.8 | 1.新增gps星历相关流程和接口<br/>2.完善运动功能-读取运动模式数据相关回调说明 | 2026.08.27 |
 | 1.3.9 | 新增日志模块接入说明 | 2026.09.15 |
+| 1.4.0 | 1.新增压力测量开始/结束接口<br />2.新增设备控制功能：复位、关机、恢复出厂设置（清除数据） | 2026.09.18 |
 
 ## 导入SDK
 添加依赖
@@ -11803,6 +11804,189 @@ VPOperateManager.getInstance().startDetectGsr(new IBleWriteResponse() {
             });
 ```
 
+## 压力功能
+
+前提：需设备支持压力功能，判断条件如下：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportStress()
+```
+
+注：以下所有接口都需在满足设备支持压力功能才能调用
+
+### 开始压力测量
+
+###### 前提
+
+需设备支持压力功能
+
+###### 接口
+
+```java
+/***
+     * <ul>
+     *     <li style="color:#1055d2">Start stress measurement</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">开始压力测量</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     * @param detectListener
+     * <ul>
+     *     <li style="color:#1055d2">Stress measurement callback</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">压力测量回调</li>
+     * </ul>
+     */
+    public void startDetectPressure(BleWriteResponse bleWriteResponse, IPressureDetectListener detectListener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                    | 描述           |
+| ---------------- | ----------------------- | -------------- |
+| bleWriteResponse | BleWriteResponse        | 写入操作的监听 |
+| detectListener   | IPressureDetectListener | 压力测量的监听 |
+
+###### 数据返回
+
+**IPressureDetectListener** -- 压力测量回调
+
+```kotlin
+interface IPressureDetectListener {
+
+    /**
+     * 测量中回调
+     * @param progress 测量进度
+     */
+    fun onDetecting(progress: Int)
+
+    /**
+     * 测量成功回调
+     * @param pressure 本次的压力值，有效范围[0,100]
+     */
+    fun onDetectSuccess(pressure: Int)
+
+    /**
+     * 测量失败
+     * @param detectState 失败原因
+     */
+    fun onDetectFailed(detectState: PressureDetectState)
+
+    /**
+     * 停止测量
+     */
+    fun onDetectStop()
+}
+```
+
+**PressureDetectState** -- 压力测量状态（失败原因）
+
+```kotlin
+/**
+ * 压力测量状态
+ *
+ * 设备原始ack对应：
+ * `0x00` 可用，App端仅在当前状态下走正常测量流程
+ * `0x01` 设备正在测量压力，互斥，App端显示设备正忙
+ * `0x02` 设备处于低电状态
+ * `0x03` 设备正在测量其它数据，App端显示设备正忙
+ * `0x04` 设备佩戴检测未通过，App端显示异常提示
+ */
+enum class PressureDetectState(val code: Int, val des: String) {
+    /** 0x00 可用，App端仅在当前状态下走正常测量流程 */
+    PROGRESS(0, "可用，App端仅在当前状态下走正常测量流程"),
+
+    /** 0x01 设备正在测量压力，互斥，App端显示设备正忙 */
+    BUSY(1, "设备正在测量压力，互斥，App端显示设备正忙"),
+
+    /** 0x02 低电 */
+    LOW_POWER(2, "低电"),
+
+    /** 0x03 佩戴检测未通过 */
+    WEAR_OFF(3, "佩戴检测未通过")
+}
+```
+
+注：设备原始ack与状态对应关系：`0x00`=测量中（返回进度/结果），`0x01`或`0x03`=设备正忙（BUSY），`0x02`=低电（LOW_POWER），`0x04`=佩戴检测未通过（WEAR_OFF）
+
+###### 示例代码
+
+```java
+VPOperateManager.getInstance().startDetectPressure(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            }, new IPressureDetectListener() {
+                @Override
+                public void onDetecting(int progress) {
+                    Logger.t(TAG).e("onDetecting --》 " + progress);
+                }
+
+                @Override
+                public void onDetectSuccess(int pressure) {
+                    Logger.t(TAG).e("onDetectSuccess --》 " + pressure);
+                }
+
+                @Override
+                public void onDetectFailed(@NonNull PressureDetectState detectState) {
+                    Logger.t(TAG).e("onDetectFailed --》 " + detectState.getDes());
+                }
+
+                @Override
+                public void onDetectStop() {
+                    Logger.t(TAG).e("onDetectStop --》 -- ");
+                }
+            });
+```
+
+### 停止压力测量
+
+###### 前提
+
+需设备支持压力功能
+
+###### 接口
+
+```java
+    /***
+     * <ul>
+     *     <li style="color:#1055d2">Stop stress measurement</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">结束压力测量</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     */
+    public void stopDetectPressure(BleWriteResponse bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型             | 描述           |
+| ---------------- | ---------------- | -------------- |
+| bleWriteResponse | BleWriteResponse | 写入操作的监听 |
+
+###### 示例代码
+
+```java
+ VPOperateManager.getInstance().stopDetectPressure(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            });
+```
+
+
+
 ## 健康辅助功能
 
 前提：需设备支持健康辅助功能，判断条件如下：
@@ -15057,3 +15241,144 @@ void setQH15ComplianceEvent(EQH15ComplianceType type, IBleWriteResponse bleWrite
 | NUTRITION_GOAL     | 营养目标       |
 | ALL_GOALS_ACHIEVED | 所有目标已达成 |
 | NEW_FITNESS_GOAL   | 新的健身目标   |
+
+## 设备控制功能
+
+设备控制相关操作，包括复位、恢复出厂设置（清除数据）、关机。以下接口需在设备已连接的状态下调用。
+
+### 复位
+
+###### 接口
+
+```java
+/***
+     * <ul>
+     *     <li style="color:#1055d2">Reset the device data</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">复位数据</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     */
+    public void resetDeviceData(IBleWriteResponse bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型              | 描述           |
+| ---------------- | ----------------- | -------------- |
+| bleWriteResponse | IBleWriteResponse | 写入操作的监听 |
+
+###### 示例代码
+
+```java
+VPOperateManager.getInstance().resetDeviceData(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            });
+```
+
+### 恢复出厂设置（清除数据）
+
+###### 接口
+
+```java
+/***
+     * <ul>
+     *     <li style="color:#1055d2">Clear the device data</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">清除数据</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     */
+    public void clearDeviceData(IBleWriteResponse bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型              | 描述           |
+| ---------------- | ----------------- | -------------- |
+| bleWriteResponse | IBleWriteResponse | 写入操作的监听 |
+
+###### 示例代码
+
+```java
+VPOperateManager.getInstance().clearDeviceData(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            });
+```
+
+### 关机
+
+###### 接口
+
+```java
+/***
+     * <ul>
+     *     <li style="color:#1055d2">Power off the device</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">关机</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     * @param listener
+     * <ul>
+     *     <li style="color:#1055d2">Power off result callback, 0 means fail, 1 means success</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">关机结果回调监听，0表示失败，1表示成功</li>
+     * </ul>
+     */
+    public void powerOffDevice(IBleWriteResponse bleWriteResponse, IResponseListener listener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型              | 描述             |
+| ---------------- | ----------------- | ---------------- |
+| bleWriteResponse | IBleWriteResponse | 写入操作的监听   |
+| listener         | IResponseListener | 关机结果回调监听 |
+
+###### 数据返回
+
+**IResponseListener** -- 关机结果回调
+
+```java
+public interface IResponseListener extends IListener {
+    void response(int state);
+}
+```
+
+state：0表示失败，1表示成功
+
+注：设备关机后会主动断开蓝牙连接，关机指令的回调可能不会返回，App端可结合断连状态判断关机是否成功
+
+###### 示例代码
+
+```java
+VPOperateManager.getInstance().powerOffDevice(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+
+                }
+            }, new IResponseListener() {
+                @Override
+                public void response(int state) {
+                    Logger.t(TAG).e("powerOffDevice response --》 " + (state == 1 ? "成功" : "失败"));
+                }
+            });
+```

@@ -43,6 +43,7 @@
 | 1.3.7 | Added AI Function related interfaces and process descriptions | 2026.08.18 |
 | 1.3.8 | 1.Added GPS ephemeris related flow and interfaces<br/>2.Improved the callback descriptions for reading sports mode data in Sports function | 2026.08.27 |
 | 1.3.9 | Instructions for Integrating the New Logging Module | 2026.09.15 |
+| 1.4.0 | 1. Added Start/Stop APIs for Pressure (Stress) Measurement<br />2. Added device control functions: Reset, Power Off, Factory Reset (Clear Data) | 2026.09.18 |
 ## Import SDK
 ### Add Dependency
 
@@ -11558,6 +11559,187 @@ The device must support GSR functionality.
             });
 ```
 
+## Pressure (Stress) Function
+
+Prerequisite: The device must support the pressure (stress) function. The check condition is as follows:
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportStress()
+```
+
+Note: All the following interfaces must be called only if the device supports the pressure (stress) function.
+
+### Start Pressure Measurement
+
+###### Prerequisite
+
+The device must support the pressure (stress) function.
+
+###### Interface
+
+```java
+/***
+     * <ul>
+     *     <li style="color:#1055d2">Start stress measurement</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">开始压力测量</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>Write operation listener</li>
+     * </ul>
+     * @param detectListener
+     * <ul>
+     *     <li style="color:#1055d2">Stress measurement callback</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">压力测量回调</li>
+     * </ul>
+     */
+    public void startDetectPressure(BleWriteResponse bleWriteResponse, IPressureDetectListener detectListener)
+```
+
+###### Parameter Description
+
+| Parameter Name   | Type                    | Description               |
+| ---------------- | ----------------------- | ------------------------- |
+| bleWriteResponse | BleWriteResponse        | Write operation listener  |
+| detectListener   | IPressureDetectListener | Pressure measure listener |
+
+###### Data Return
+
+**IPressureDetectListener** -- Pressure Measurement Callback
+
+```kotlin
+interface IPressureDetectListener {
+
+    /**
+     * Measuring callback
+     * @param progress Measurement progress
+     */
+    fun onDetecting(progress: Int)
+
+    /**
+     * Measurement success callback
+     * @param pressure The pressure value of this measurement, valid range [0,100]
+     */
+    fun onDetectSuccess(pressure: Int)
+
+    /**
+     * Measurement failed
+     * @param detectState Failure reason
+     */
+    fun onDetectFailed(detectState: PressureDetectState)
+
+    /**
+     * Measurement stopped
+     */
+    fun onDetectStop()
+}
+```
+
+**PressureDetectState** -- Pressure Measurement State (Failure Reason)
+
+```kotlin
+/**
+ * Pressure measurement state.
+ *
+ * Raw device ack mapping:
+ * `0x00` Available. The App should proceed with the normal measurement process only in this state.
+ * `0x01` Device is measuring pressure. Mutually exclusive. The App should display a device busy prompt.
+ * `0x02` Device is in a low battery state.
+ * `0x03` Device is measuring other data. The App should display a device busy prompt.
+ * `0x04` Device wearing check failed. The App should display an error prompt.
+ */
+enum class PressureDetectState(val code: Int, val des: String) {
+    /** 0x00 Available, proceed with normal measurement */
+    PROGRESS(0, "Available, proceed with normal measurement"),
+
+    /** 0x01 Device is measuring pressure. Mutually exclusive, device busy */
+    BUSY(1, "Device is measuring pressure, mutually exclusive, device is busy"),
+
+    /** 0x02 Low battery */
+    LOW_POWER(2, "Low battery"),
+
+    /** 0x03 Wearing check failed */
+    WEAR_OFF(3, "Wearing check failed")
+}
+```
+
+Note: The raw device ack mapping: `0x00` = measuring (progress/result returned), `0x01` or `0x03` = device busy (BUSY), `0x02` = low battery (LOW_POWER), `0x04` = wearing check failed (WEAR_OFF)
+
+###### Example Code
+
+```java
+VPOperateManager.getInstance().startDetectPressure(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+                    // Write command response
+                }
+            }, new IPressureDetectListener() {
+                @Override
+                public void onDetecting(int progress) {
+                    Logger.t(TAG).e("onDetecting --》 " + progress);
+                }
+
+                @Override
+                public void onDetectSuccess(int pressure) {
+                    Logger.t(TAG).e("onDetectSuccess --》 " + pressure);
+                }
+
+                @Override
+                public void onDetectFailed(@NonNull PressureDetectState detectState) {
+                    Logger.t(TAG).e("onDetectFailed --》 " + detectState.getDes());
+                }
+
+                @Override
+                public void onDetectStop() {
+                    Logger.t(TAG).e("onDetectStop --》 -- ");
+                }
+            });
+```
+
+### Stop Pressure Measurement
+
+###### Prerequisite
+
+The device must support the pressure (stress) function.
+
+###### Interface
+
+```java
+    /***
+     * <ul>
+     *     <li style="color:#1055d2">Stop stress measurement</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">结束压力测量</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>Write operation listener</li>
+     * </ul>
+     */
+    public void stopDetectPressure(BleWriteResponse bleWriteResponse)
+```
+
+###### Parameter Description
+
+| Parameter Name   | Type             | Description               |
+| ---------------- | ---------------- | ------------------------- |
+| bleWriteResponse | BleWriteResponse | Write operation listener  |
+
+###### Example Code
+
+```java
+ VPOperateManager.getInstance().stopDetectPressure(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+                    // Write command response
+                }
+            });
+```
+
 ## Health Auxiliary Functions
 
 **Prerequisite:** The device must support health auxiliary functions. The judging condition is as follows:
@@ -14817,4 +14999,145 @@ void setQH15ComplianceEvent(EQH15ComplianceType type, IBleWriteResponse bleWrite
 | NUTRITION_GOAL     | Nutrition goal     |
 | ALL_GOALS_ACHIEVED | All goals achieved |
 | NEW_FITNESS_GOAL   | New fitness goals  |
+
+## Device Control Functions
+
+Device control related operations, including Reset, Factory Reset (Clear Data) and Power Off. All the following interfaces must be called when the device is connected.
+
+### Reset
+
+###### Interface
+
+```java
+/***
+     * <ul>
+     *     <li style="color:#1055d2">Reset the device data</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">复位数据</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>Write operation listener</li>
+     * </ul>
+     */
+    public void resetDeviceData(IBleWriteResponse bleWriteResponse)
+```
+
+###### Parameter Description
+
+| Parameter Name   | Type              | Description               |
+| ---------------- | ----------------- | ------------------------- |
+| bleWriteResponse | IBleWriteResponse | Write operation listener  |
+
+###### Example Code
+
+```java
+VPOperateManager.getInstance().resetDeviceData(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+                    // Write command response
+                }
+            });
+```
+
+### Factory Reset (Clear Data)
+
+###### Interface
+
+```java
+/***
+     * <ul>
+     *     <li style="color:#1055d2">Clear the device data</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">清除数据</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>Write operation listener</li>
+     * </ul>
+     */
+    public void clearDeviceData(IBleWriteResponse bleWriteResponse)
+```
+
+###### Parameter Description
+
+| Parameter Name   | Type              | Description               |
+| ---------------- | ----------------- | ------------------------- |
+| bleWriteResponse | IBleWriteResponse | Write operation listener  |
+
+###### Example Code
+
+```java
+VPOperateManager.getInstance().clearDeviceData(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+                    // Write command response
+                }
+            });
+```
+
+### Power Off
+
+###### Interface
+
+```java
+/***
+     * <ul>
+     *     <li style="color:#1055d2">Power off the device</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">关机</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>Write operation listener</li>
+     * </ul>
+     * @param listener
+     * <ul>
+     *     <li style="color:#1055d2">Power off result callback, 0 means fail, 1 means success</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">关机结果回调监听，0表示失败，1表示成功</li>
+     * </ul>
+     */
+    public void powerOffDevice(IBleWriteResponse bleWriteResponse, IResponseListener listener)
+```
+
+###### Parameter Description
+
+| Parameter Name   | Type              | Description                |
+| ---------------- | ----------------- | -------------------------- |
+| bleWriteResponse | IBleWriteResponse | Write operation listener   |
+| listener         | IResponseListener | Power off result listener  |
+
+###### Data Return
+
+**IResponseListener** -- Power Off Result Callback
+
+```java
+public interface IResponseListener extends IListener {
+    void response(int state);
+}
+```
+
+state: 0 means fail, 1 means success
+
+Note: The device will disconnect the Bluetooth connection after powering off, so the callback of the power off command may not be returned. The App can determine whether the power off is successful by checking the disconnection state.
+
+###### Example Code
+
+```java
+VPOperateManager.getInstance().powerOffDevice(new IBleWriteResponse() {
+                @Override
+                public void onResponse(int code) {
+                    // Write command response
+                }
+            }, new IResponseListener() {
+                @Override
+                public void response(int state) {
+                    Logger.t(TAG).e("powerOffDevice response --》 " + (state == 1 ? "success" : "fail"));
+                }
+            });
+```
 
