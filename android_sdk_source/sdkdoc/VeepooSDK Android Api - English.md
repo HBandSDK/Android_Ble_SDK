@@ -44,6 +44,7 @@
 | 1.3.8 | 1.Added GPS ephemeris related flow and interfaces<br/>2.Improved the callback descriptions for reading sports mode data in Sports function | 2026.08.27 |
 | 1.3.9 | Instructions for Integrating the New Logging Module | 2026.09.15 |
 | 1.4.0 | 1. Added Start/Stop APIs for Pressure (Stress) Measurement<br />2. Added device control functions: Reset, Power Off, Factory Reset (Clear Data) | 2026.09.18 |
+| 1.4.1 | Added JH76 customized SN code function (Read/Set/Modify/Delete) | 2026.09.23 |
 ## Import SDK
 ### Add Dependency
 
@@ -14999,6 +15000,161 @@ void setQH15ComplianceEvent(EQH15ComplianceType type, IBleWriteResponse bleWrite
 | NUTRITION_GOAL     | Nutrition goal     |
 | ALL_GOALS_ACHIEVED | All goals achieved |
 | NEW_FITNESS_GOAL   | New fitness goals  |
+
+### JH76 SN Code Setting
+
+JH76 customized function, **device support is required (JH76 customization)**. There is no need to call an interface to check whether the device supports this function.
+
+#### Read SN Code-readJH76SNCode
+
+Read the SN code currently set on the device. If the value length returned by the device is 0, it means no SN code has been set.
+
+###### Prerequisite
+
+Device is connected
+
+###### Interface
+
+```kotlin
+readJH76SNCode(listener, bleWriteResponse)
+```
+
+###### Parameter Description
+
+| Parameter        | Type                    | Description                    |
+| ---------------- | ----------------------- | ------------------------------ |
+| listener         | IJH76SNCodeReadListener | SN code read callback listener |
+| bleWriteResponse | IBleWriteResponse       | BLE write response             |
+
+###### Return Data
+
+**IJH76SNCodeReadListener**
+
+```kotlin
+/**
+ * Read SN code result
+ *
+ * @param data SN code read result (isSet + SN code content)
+ */
+fun onJH76SNCodeRead(data: JH76SNCodeData)
+```
+
+**JH76SNCodeData** -- SN code read result
+
+| Parameter | Type    | Description                                             |
+| --------- | ------- | ------------------------------------------------------- |
+| isSet     | boolean | Whether the SN code has been set                        |
+| snCode    | String  | The SN code content (empty if not set)                  |
+
+#### Set SN Code-setJH76SNCode
+
+Set the device SN code. The SN code can only be digits, fixed at 10 digits, and cannot be all 0s. If the conditions are not met, the corresponding error code is returned directly and no command is sent.
+
+###### Prerequisite
+
+Device is connected
+
+###### Interface
+
+```kotlin
+setJH76SNCode(snCode, listener, bleWriteResponse)
+```
+
+###### Parameter Description
+
+| Parameter        | Type                   | Description                                                   |
+| ---------------- | ---------------------- | ------------------------------------------------------------- |
+| snCode           | String                 | SN code (digits only, fixed 10 digits)                        |
+| listener         | IJH76SNCodeOptListener | Result callback listener, returns EJH76SNCodeError (0: success) |
+| bleWriteResponse | IBleWriteResponse      | BLE write response                                            |
+
+#### Modify SN Code-modifyJH76SNCode
+
+Modify the device SN code. Shares the same command as Set and overwrites directly. The SN code requirements are the same as Set.
+
+###### Interface
+
+```kotlin
+modifyJH76SNCode(snCode, listener, bleWriteResponse)
+```
+
+###### Parameter Description
+
+Same as Set SN Code-setJH76SNCode
+
+#### Delete SN Code-deleteJH76SNCode
+
+Delete the device SN code. The SN code value field sends 10 zeros.
+
+###### Interface
+
+```kotlin
+deleteJH76SNCode(listener, bleWriteResponse)
+```
+
+###### Parameter Description
+
+| Parameter        | Type                   | Description                                                     |
+| ---------------- | ---------------------- | --------------------------------------------------------------- |
+| listener         | IJH76SNCodeOptListener | Result callback listener, returns EJH76SNCodeError (0: success) |
+| bleWriteResponse | IBleWriteResponse      | BLE write response                                              |
+
+###### Return Data
+
+**IJH76SNCodeOptListener**
+
+```kotlin
+/**
+ * Set/Modify/Delete SN code result
+ *
+ * @param error Result error code (0: success, non-0: failure)
+ */
+fun onJH76SNCodeOptResult(error: EJH76SNCodeError)
+```
+
+**EJH76SNCodeError** -- Result error code for Set/Modify/Delete
+
+| Enum Value     | Error Code | Description                                    |
+| -------------- | ---------- | ---------------------------------------------- |
+| SUCCESS        | 0          | Success                                        |
+| DEVICE_FAILED  | 1000       | Device returned failure                        |
+| INVALID_FORMAT | 1001       | Format error: SN code can only contain digits  |
+| INVALID_LENGTH | 1002       | Length error: SN code is fixed at 10 digits    |
+| ALL_ZERO       | 1003       | SN code cannot be all 0s                       |
+
+###### Sample Code
+
+```kotlin
+/// Read
+VPOperateManager.getInstance().readJH76SNCode({ data ->
+    if (data.isSet) {
+        resultLabel.text = "Query result: ${data.snCode}"
+    } else {
+        resultLabel.text = "SN code not set"
+    }
+}, bleWriteResponse)
+```
+
+```kotlin
+/// Set
+VPOperateManager.getInstance().setJH76SNCode("1234567890", { error ->
+    resultLabel.text = if (error == EJH76SNCodeError.SUCCESS) "Set successfully" else "Set failed: " + error.des
+}, bleWriteResponse)
+```
+
+```kotlin
+/// Modify
+VPOperateManager.getInstance().modifyJH76SNCode("1234567890", { error ->
+    resultLabel.text = if (error == EJH76SNCodeError.SUCCESS) "Modified successfully" else "Modify failed: " + error.des
+}, bleWriteResponse)
+```
+
+```kotlin
+/// Delete
+VPOperateManager.getInstance().deleteJH76SNCode({ error ->
+    resultLabel.text = if (error == EJH76SNCodeError.SUCCESS) "Deleted successfully" else "Delete failed: " + error.des
+}, bleWriteResponse)
+```
 
 ## Device Control Functions
 
