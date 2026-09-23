@@ -44,6 +44,7 @@
 | 1.3.8 | 1.新增gps星历相关流程和接口<br/>2.完善运动功能-读取运动模式数据相关回调说明 | 2026.08.27 |
 | 1.3.9 | 新增日志模块接入说明 | 2026.09.15 |
 | 1.4.0 | 1.新增压力测量开始/结束接口<br />2.新增设备控制功能：复位、关机、恢复出厂设置（清除数据） | 2026.09.18 |
+| 1.4.1 | 新增JH76定制SN码设置功能（读取/设置/修改/删除） | 2026.09.23 |
 
 ## 导入SDK
 添加依赖
@@ -15241,6 +15242,161 @@ void setQH15ComplianceEvent(EQH15ComplianceType type, IBleWriteResponse bleWrite
 | NUTRITION_GOAL     | 营养目标       |
 | ALL_GOALS_ACHIEVED | 所有目标已达成 |
 | NEW_FITNESS_GOAL   | 新的健身目标   |
+
+### JH76 SN码设置
+
+JH76定制功能，**需要设备支持（JH76定制）**，无需调用接口判断设备是否支持此功能。
+
+#### 读取SN码-readJH76SNCode
+
+读取设备当前设置的SN码。设备回复的值域长度为0时表示未设置过SN码。
+
+###### 前提
+
+设备已连接
+
+###### 接口
+
+```kotlin
+readJH76SNCode(listener, bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                    | 备注              |
+| ---------------- | ----------------------- | ----------------- |
+| listener         | IJH76SNCodeReadListener | SN码读取回调监听  |
+| bleWriteResponse | IBleWriteResponse       | 写入操作的监听    |
+
+###### 返回数据
+
+**IJH76SNCodeReadListener**
+
+```kotlin
+/**
+ * 读取SN码结果
+ *
+ * @param data SN码读取结果（是否已设置 + SN码内容）
+ */
+fun onJH76SNCodeRead(data: JH76SNCodeData)
+```
+
+**JH76SNCodeData** -- SN码读取结果
+
+| 参数名  | 类型    | 备注                             |
+| ------- | ------- | -------------------------------- |
+| isSet   | boolean | 是否已设置SN码                   |
+| snCode  | String  | 已设置的SN码内容（未设置时为空） |
+
+#### 设置SN码-setJH76SNCode
+
+设置设备SN码。SN码只能为数字，固定10位，不能全为0，不符合条件时直接返回对应错误码，不发送指令。
+
+###### 前提
+
+设备已连接
+
+###### 接口
+
+```kotlin
+setJH76SNCode(snCode, listener, bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                   | 备注                                            |
+| ---------------- | ---------------------- | ----------------------------------------------- |
+| snCode           | String                 | SN码（只能为数字，固定 10 位）                  |
+| listener         | IJH76SNCodeOptListener | 结果回调监听，返回 EJH76SNCodeError（0成功）    |
+| bleWriteResponse | IBleWriteResponse      | 写入操作的监听                                  |
+
+#### 修改SN码-modifyJH76SNCode
+
+修改设备SN码，与设置共用同一指令，直接覆盖下发。SN码要求同设置。
+
+###### 接口
+
+```kotlin
+modifyJH76SNCode(snCode, listener, bleWriteResponse)
+```
+
+###### 参数解释
+
+同设置SN码-setJH76SNCode
+
+#### 删除SN码-deleteJH76SNCode
+
+删除设备SN码，SN码值域下发10个0。
+
+###### 接口
+
+```kotlin
+deleteJH76SNCode(listener, bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                   | 备注                                         |
+| ---------------- | ---------------------- | -------------------------------------------- |
+| listener         | IJH76SNCodeOptListener | 结果回调监听，返回 EJH76SNCodeError（0成功） |
+| bleWriteResponse | IBleWriteResponse      | 写入操作的监听                               |
+
+###### 返回数据
+
+**IJH76SNCodeOptListener**
+
+```kotlin
+/**
+ * 设置/修改/删除SN码结果
+ *
+ * @param error 结果错误码（0 成功，非 0 失败）
+ */
+fun onJH76SNCodeOptResult(error: EJH76SNCodeError)
+```
+
+**EJH76SNCodeError** -- 设置/修改/删除的结果错误码
+
+| 枚举值         | 错误码 | 备注                            |
+| -------------- | ------ | ------------------------------- |
+| SUCCESS        | 0      | 成功                            |
+| DEVICE_FAILED  | 1000   | 设备返回失败                    |
+| INVALID_FORMAT | 1001   | 格式错误：SN码只能为数字        |
+| INVALID_LENGTH | 1002   | 长度错误：SN码固定 10 位        |
+| ALL_ZERO       | 1003   | SN码不能全为 0                  |
+
+###### 示例代码
+
+```kotlin
+/// 读取
+VPOperateManager.getInstance().readJH76SNCode({ data ->
+    if (data.isSet) {
+        resultLabel.text = "查询结果：${data.snCode}"
+    } else {
+        resultLabel.text = "未设置SN码"
+    }
+}, bleWriteResponse)
+```
+
+```kotlin
+/// 设置
+VPOperateManager.getInstance().setJH76SNCode("1234567890", { error ->
+    resultLabel.text = if (error == EJH76SNCodeError.SUCCESS) "设置成功" else "设置失败：" + error.des
+}, bleWriteResponse)
+```
+
+```kotlin
+/// 修改
+VPOperateManager.getInstance().modifyJH76SNCode("1234567890", { error ->
+    resultLabel.text = if (error == EJH76SNCodeError.SUCCESS) "修改成功" else "修改失败：" + error.des
+}, bleWriteResponse)
+```
+
+```kotlin
+/// 删除
+VPOperateManager.getInstance().deleteJH76SNCode({ error ->
+    resultLabel.text = if (error == EJH76SNCodeError.SUCCESS) "删除成功" else "删除失败：" + error.des
+}, bleWriteResponse)
+```
 
 ## 设备控制功能
 
