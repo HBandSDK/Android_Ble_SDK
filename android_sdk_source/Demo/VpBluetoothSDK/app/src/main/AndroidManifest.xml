@@ -214,6 +214,10 @@
             android:configChanges="keyboardHidden"
             android:exported="false" />
         <activity
+            android:name=".activity.v2.custom.JH76SNCodeActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+        <activity
             android:name=".activity.v2.other.GNSSOptActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
@@ -303,6 +307,14 @@
             android:exported="false" />
         <activity
             android:name=".activity.v2.health.GSRDetectActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+        <activity
+            android:name=".activity.v2.health.PressureDetectActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+        <activity
+            android:name=".activity.v2.other.DeviceControlActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
         <activity

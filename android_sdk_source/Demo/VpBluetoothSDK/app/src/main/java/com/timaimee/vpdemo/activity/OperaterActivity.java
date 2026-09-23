@@ -106,6 +106,8 @@ import com.veepoo.protocol.listener.data.IMetDetectListener;
 import com.veepoo.protocol.listener.data.IQX17DataAcquisitionStateListener;
 import com.veepoo.protocol.listener.data.IG08ProjectPPGLightCallBack;
 import com.veepoo.protocol.listener.data.IGsrDetectListener;
+import com.veepoo.protocol.listener.data.IPressureDetectListener;
+import com.veepoo.protocol.model.enums.PressureDetectState;
 import com.veepoo.protocol.listener.data.IHRVOriginDataListener;
 import com.veepoo.protocol.listener.data.IHeartDataListener;
 import com.veepoo.protocol.listener.data.IHeartWaringDataListener;
@@ -3543,6 +3545,43 @@ public class OperaterActivity extends Activity implements AdapterView.OnItemClic
                 @Override
                 public void onResponse(int code) {
 
+                }
+            });
+        } else if (oprater.equals(PRESSURE_DETECT_START)) {
+            VPOperateManager.getInstance().startDetectPressure(writeResponse, new IPressureDetectListener() {
+                @Override
+                public void onDetecting(int progress) {
+                    Logger.t(TAG).i("压力测量中: " + progress + "%");
+                }
+
+                @Override
+                public void onDetectSuccess(int pressure) {
+                    Logger.t(TAG).i("压力测量成功, 压力值: " + pressure + " [0,100]");
+                }
+
+                @Override
+                public void onDetectFailed(@NonNull PressureDetectState detectState) {
+                    Logger.t(TAG).i("压力测量失败: " + detectState.getDes());
+                }
+
+                @Override
+                public void onDetectStop() {
+                    Logger.t(TAG).i("压力测量已停止");
+                }
+            });
+        } else if (oprater.equals(PRESSURE_DETECT_STOP)) {
+            VPOperateManager.getInstance().stopDetectPressure(writeResponse);
+        } else if (oprater.equals(RESET_DEVICE_DATA)) {
+            VPOperateManager.getInstance().resetDeviceData(writeResponse);
+            Toast.makeText(mContext, "已发送复位指令", Toast.LENGTH_SHORT).show();
+        } else if (oprater.equals(POWER_OFF_DEVICE)) {
+            VPOperateManager.getInstance().powerOffDevice(writeResponse, new IResponseListener() {
+                @Override
+                public void response(int state) {
+                    // 0=失败，1=成功；设备关机后会主动断开，回调可能不返回
+                    String message = (state == 1) ? "关机成功" : ("关机失败, state=" + state);
+                    Logger.t(TAG).i(message);
+                    sendMsg(message, 1);
                 }
             });
         } else if (oprater.equals(ZT163_DEVICE_ALWAYS_OFF_SCREEN)) {

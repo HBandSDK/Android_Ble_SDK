@@ -242,6 +242,7 @@ public class HealthDataReadOptActivity extends BaseVPBLETestActivity implements 
     private String getShortOriginDataInfo(OriginData3 data3){
         return  "["+data3.getPackageNumber()+"/"+data3.getAllPackage()+"] " + data3.getmTime().getDateAndClockForDb()
                 + ": 心率=" + data3.getRateValue()
+                + ": ppg=" + Arrays.toString(data3.getPpgs())
                 + " , 步数=" + data3.getStepValue()
                 + " , 高压=" + data3.getHighValue()
                 + " , 低压=" + data3.getLowValue()

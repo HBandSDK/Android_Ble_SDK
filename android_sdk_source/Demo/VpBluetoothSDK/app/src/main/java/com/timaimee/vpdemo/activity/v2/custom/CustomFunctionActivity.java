@@ -60,6 +60,7 @@ public class CustomFunctionActivity extends BaseActivity implements AdapterView.
             case DeviceMenu.Custom.G08W_HEALTH_ALARM_INTERVAL -> startActivity(new Intent(this, G08WHealthAlarmIntervalActivity.class));
             case DeviceMenu.Custom.G15_QR_CODE -> startActivity(new Intent(this, G15QRCodeActivity.class));
             case DeviceMenu.Custom.JH58_PPG -> startActivity(new Intent(this, JH58PPGOptTestActivity.class));
+            case DeviceMenu.Custom.JH76_SN_CODE -> startActivity(new Intent(this, JH76SNCodeActivity.class));
         }
 
     }

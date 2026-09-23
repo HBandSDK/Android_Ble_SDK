@@ -77,6 +77,21 @@ public class OtherFunctionActivity extends BaseActivity implements AdapterView.O
             case DeviceMenu.Other.MAGNETIC ->   startActivity(new Intent(this, MagneticTherapyActivity.class));
             case DeviceMenu.Other.AI_FUNCTION ->   startActivity(new Intent(this, AIFunActivity.class));
             case DeviceMenu.Other.GPS_EPHEMERIS -> startActivity(new Intent(this, GpsEphemerisActivity.class));
+            case DeviceMenu.Other.RESET_DEVICE -> {
+                Intent resetIntent = new Intent(this, DeviceControlActivity.class);
+                resetIntent.putExtra(DeviceControlActivity.EXTRA_MODE, DeviceControlActivity.MODE_RESET);
+                startActivity(resetIntent);
+            }
+            case DeviceMenu.Other.POWER_OFF -> {
+                Intent powerOffIntent = new Intent(this, DeviceControlActivity.class);
+                powerOffIntent.putExtra(DeviceControlActivity.EXTRA_MODE, DeviceControlActivity.MODE_POWER_OFF);
+                startActivity(powerOffIntent);
+            }
+            case DeviceMenu.Other.FACTORY_RESET -> {
+                Intent factoryResetIntent = new Intent(this, DeviceControlActivity.class);
+                factoryResetIntent.putExtra(DeviceControlActivity.EXTRA_MODE, DeviceControlActivity.MODE_FACTORY_RESET);
+                startActivity(factoryResetIntent);
+            }
         }
 
     }

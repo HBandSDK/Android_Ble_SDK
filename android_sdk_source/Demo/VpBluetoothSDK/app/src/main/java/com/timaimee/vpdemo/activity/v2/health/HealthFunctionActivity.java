@@ -71,6 +71,7 @@ public class HealthFunctionActivity extends BaseActivity implements AdapterView.
             case DeviceMenu.Health.GSR -> startActivity(new Intent(this, GSRDetectActivity.class));
             case DeviceMenu.Health.ECG -> startActivity(new Intent(this, EcgDetectActivity.class));
             case DeviceMenu.Health.ECG_MULTI -> startActivity(new Intent(this, EcgMultiLeadDetectActivity.class));
+            case DeviceMenu.Health.PRESSURE -> startActivity(new Intent(this, PressureDetectActivity.class));
             case DeviceMenu.Health.HRV -> startActivity(new Intent(this, HrvActivity.class));
             case DeviceMenu.Health.Step -> startActivity(new Intent(this, StepActivity.class));
             case DeviceMenu.Health.Fatigue -> FunctionTestActivity.Companion.start(this, function);
