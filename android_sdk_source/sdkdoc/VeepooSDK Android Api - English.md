@@ -45,6 +45,7 @@
 | 1.3.9 | Instructions for Integrating the New Logging Module | 2026.09.15 |
 | 1.4.0 | 1. Added Start/Stop APIs for Pressure (Stress) Measurement<br />2. Added device control functions: Reset, Power Off, Factory Reset (Clear Data) | 2026.09.18 |
 | 1.4.1 | Added JH76 customized SN code function (Read/Set/Modify/Delete) | 2026.09.23 |
+| 1.4.2 | Added YM23PRO customized wear status report and test status functions | 2026.09.24 |
 ## Import SDK
 ### Add Dependency
 
@@ -15153,6 +15154,224 @@ VPOperateManager.getInstance().modifyJH76SNCode("1234567890", { error ->
 /// Delete
 VPOperateManager.getInstance().deleteJH76SNCode({ error ->
     resultLabel.text = if (error == EJH76SNCodeError.SUCCESS) "Deleted successfully" else "Delete failed: " + error.des
+}, bleWriteResponse)
+```
+
+### YM23PRO Wear Status Report and Test Status
+
+YM23PRO customized function, **device support is required (YM23PRO customization)**. There is no need to call an interface to check whether the device supports this function. The A7 flag is not used. It contains two groups of interfaces: Wear Status Report (Open/Close/Set Listener) and Test Status. Note: **the test status can only be sent after the wear status report is opened successfully**.
+
+> Notes:
+> 1. After the wear status report is enabled, the device first replies with an ACK (no wear/heart rate data attached); then the first wear detection result is pushed to the App via active report, and reports again whenever the wear state changes; when the test status is Testing or Repairing and the wear passes, the device reports the wear state and heart rate once per second.
+> 2. After the Bluetooth connection is disconnected, the states of both functions are cleared automatically and the enabling command must be sent again.
+> 3. It is recommended to enable the wear status report before sending the test status.
+
+#### Open Wear Status Report-openYM23ProWearReport
+
+Enable the wear status report function of the device.
+
+###### Prerequisite
+
+Device is connected
+
+###### Interface
+
+```kotlin
+openYM23ProWearReport(listener, bleWriteResponse)
+```
+
+###### Parameter Description
+
+| Parameter        | Type                       | Description                                                              |
+| ---------------- | -------------------------- | ------------------------------------------------------------------------ |
+| listener         | IYM23ProWearReportListener | Wear status report callback listener                                     |
+| bleWriteResponse | IBleWriteResponse          | BLE write response                                                       |
+
+#### Close Wear Status Report-closeYM23ProWearReport
+
+Disable the wear status report function of the device. The device stops the active report after closing.
+
+###### Prerequisite
+
+Device is connected
+
+###### Interface
+
+```kotlin
+closeYM23ProWearReport(listener, bleWriteResponse)
+```
+
+###### Parameter Description
+
+| Parameter        | Type                       | Description                          |
+| ---------------- | -------------------------- | ------------------------------------ |
+| listener         | IYM23ProWearReportListener | Wear status report callback listener |
+| bleWriteResponse | IBleWriteResponse          | BLE write response                   |
+
+###### Return Data
+
+**IYM23ProWearReportListener**
+
+```kotlin
+/**
+ * Reply of opening the wear status report
+ *
+ * @param status Device response status
+ */
+fun onYM23ProWearReportOpenResult(status: EYM23ProOptStatus)
+
+/**
+ * Reply of closing the wear status report
+ *
+ * @param status Device response status
+ */
+fun onYM23ProWearReportCloseResult(status: EYM23ProOptStatus)
+
+/**
+ * Device active report: wear state change or per-second timed report
+ *
+ * @param data Report data (report type + wear state + heart rate)
+ */
+fun onYM23ProWearReport(data: YM23ProWearReportData)
+```
+
+**YM23ProWearReportData** -- Wear status report data
+
+| Parameter  | Type               | Description                                                    |
+| ---------- | ------------------ | -------------------------------------------------------------- |
+| reportType | EYM23ProReportType | Report type                                                    |
+| wearState  | EYM23ProWearState  | Wear state                                                     |
+| heartRate  | int                | The latest detected heart rate in bpm, 0 when no valid value   |
+
+**EYM23ProOptStatus** -- Device response status
+
+| Enum Value | Description                  |
+| ---------- | ---------------------------- |
+| UNSUPPORT  | The protocol is not supported |
+| SUCCESS    | Success                      |
+| FAILED     | Failure                      |
+
+**EYM23ProReportType** -- Active report type
+
+| Enum Value   | Description                                                     |
+| ------------ | ---------------------------------------------------------------- |
+| WEAR_CHANGE  | Wear state change report (first detection result and subsequent changes) |
+| TIMED_REPORT | Per-second timed report (only when the test status is Testing/Repairing) |
+
+**EYM23ProWearState** -- Wear state
+
+| Enum Value | Description  |
+| ---------- | ------------ |
+| WEARED     | Wear passed  |
+| NOT_WEAR   | Not worn     |
+
+#### Set Wear Status Report Listener-setYM23ProWearReportListener
+
+Register the wear status report listener independently to receive the active reports from the device. The listener passed in when calling Open/Close is also registered automatically, so there is no need to call this interface repeatedly.
+
+###### Interface
+
+```kotlin
+setYM23ProWearReportListener(listener)
+```
+
+###### Parameter Description
+
+| Parameter | Type                       | Description                          |
+| --------- | -------------------------- | ------------------------------------ |
+| listener  | IYM23ProWearReportListener | Wear status report callback listener |
+
+#### Send Test Status-setYM23ProTestStatus
+
+Send the test status. There are 7 states in total, and the device displays the corresponding status icon and text synchronously. Testing/Repairing are in-progress states that trigger the per-second report of the wear status module; sending Idle exits the test UI.
+
+###### Prerequisite
+
+Device is connected AND the wear status report has been opened successfully (protocol requirement, to be guaranteed by the caller; the SDK does not block it internally)
+
+###### Interface
+
+```kotlin
+setYM23ProTestStatus(testStatus, listener, bleWriteResponse)
+```
+
+###### Parameter Description
+
+| Parameter        | Type                       | Description                  |
+| ---------------- | -------------------------- | ---------------------------- |
+| testStatus       | EYM23ProTestStatus         | Test status                  |
+| listener         | IYM23ProTestStatusListener | Test status callback listener |
+| bleWriteResponse | IBleWriteResponse          | BLE write response           |
+
+###### Return Data
+
+**IYM23ProTestStatusListener**
+
+```kotlin
+/**
+ * Reply of sending the test status
+ *
+ * @param status     Device response status
+ * @param testStatus The actual current test status of the device, which can be used to confirm whether the status takes effect
+ */
+fun onYM23ProTestStatusResult(status: EYM23ProOptStatus, testStatus: EYM23ProTestStatus)
+```
+
+**EYM23ProTestStatus** -- Test status
+
+| Enum Value   | Tag  | Text Displayed on Device        |
+| ------------ | ---- | -------------------------------- |
+| IDLE         | 0x00 | Idle/Exit the test UI            |
+| TESTING      | 0x01 | Testing, please keep still       |
+| REPAIRING    | 0x02 | Repairing, please keep still     |
+| TEST_DONE    | 0x03 | Test completed, check the APP    |
+| REPAIR_DONE  | 0x04 | Repair completed, check the APP  |
+| TEST_PAUSE   | 0x05 | Test paused                      |
+| REPAIR_PAUSE | 0x06 | Repair paused                    |
+
+###### Sample Code
+
+```kotlin
+/// Open wear status report
+VPOperateManager.getInstance().openYM23ProWearReport(object : IYM23ProWearReportListener {
+    override fun onYM23ProWearReportOpenResult(status: EYM23ProOptStatus) {
+        resultLabel.text = if (status == EYM23ProOptStatus.SUCCESS) "Opened" else "Open failed: $status"
+    }
+
+    override fun onYM23ProWearReportCloseResult(status: EYM23ProOptStatus) {
+        resultLabel.text = if (status == EYM23ProOptStatus.SUCCESS) "Closed" else "Close failed: $status"
+    }
+
+    override fun onYM23ProWearReport(data: YM23ProWearReportData) {
+        resultLabel.text = "Wear report: $data"
+    }
+}, bleWriteResponse)
+```
+
+```kotlin
+/// Close wear status report
+VPOperateManager.getInstance().closeYM23ProWearReport({ status ->
+    resultLabel.text = if (status == EYM23ProOptStatus.SUCCESS) "Closed" else "Close failed"
+}, bleWriteResponse)
+```
+
+```kotlin
+/// Register the wear status report listener independently (optional)
+VPOperateManager.getInstance().setYM23ProWearReportListener(object : IYM23ProWearReportListener {
+    override fun onYM23ProWearReportOpenResult(status: EYM23ProOptStatus) {}
+
+    override fun onYM23ProWearReportCloseResult(status: EYM23ProOptStatus) {}
+
+    override fun onYM23ProWearReport(data: YM23ProWearReportData) {
+        resultLabel.text = "Wear report: $data"
+    }
+})
+```
+
+```kotlin
+/// Send test status (must be called after the wear status report is opened successfully)
+VPOperateManager.getInstance().setYM23ProTestStatus(EYM23ProTestStatus.TESTING, { status, testStatus ->
+    resultLabel.text = if (status == EYM23ProOptStatus.SUCCESS) "Sent, device status: $testStatus" else "Send failed: $status"
 }, bleWriteResponse)
 ```
 

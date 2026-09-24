@@ -45,6 +45,7 @@
 | 1.3.9 | 新增日志模块接入说明 | 2026.09.15 |
 | 1.4.0 | 1.新增压力测量开始/结束接口<br />2.新增设备控制功能：复位、关机、恢复出厂设置（清除数据） | 2026.09.18 |
 | 1.4.1 | 新增JH76定制SN码设置功能（读取/设置/修改/删除） | 2026.09.23 |
+| 1.4.2 | 新增YM23PRO定制佩戴状态上报与测试状态功能 | 2026.09.24 |
 
 ## 导入SDK
 添加依赖
@@ -15395,6 +15396,224 @@ VPOperateManager.getInstance().modifyJH76SNCode("1234567890", { error ->
 /// 删除
 VPOperateManager.getInstance().deleteJH76SNCode({ error ->
     resultLabel.text = if (error == EJH76SNCodeError.SUCCESS) "删除成功" else "删除失败：" + error.des
+}, bleWriteResponse)
+```
+
+### YM23PRO佩戴状态上报与测试状态
+
+YM23PRO(魅客)定制功能，**需要设备支持（YM23PRO定制）**，无需调用接口判断设备是否支持此功能，不使用A7标志位。包含两组接口：佩戴状态上报（开启/关闭/设置监听）与测试状态下发。注意：**只有在佩戴状态上报开启成功后才允许下发测试状态**。
+
+> 说明：
+> 1. 开启佩戴状态上报后，设备先回复开启应答（仅ACK，不携带数据）；之后第一次佩戴检测出结果通过主动上报推送给App，后续佩戴状态有变更时再上报；当测试状态处于检测中/修复中且佩戴通过时，设备每秒上报一次佩戴状态与心率。
+> 2. 蓝牙断开后，两个功能的状态自动清除，需重新下发开启指令。
+> 3. 推荐先开启佩戴状态上报，再下发测试状态。
+
+#### 开启佩戴状态上报-openYM23ProWearReport
+
+开启设备的佩戴状态上报功能。
+
+###### 前提
+
+设备已连接
+
+###### 接口
+
+```kotlin
+openYM23ProWearReport(listener, bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                       | 备注                                                         |
+| ---------------- | -------------------------- | ------------------------------------------------------------ |
+| listener         | IYM23ProWearReportListener | 佩戴状态上报回调监听                                          |
+| bleWriteResponse | IBleWriteResponse          | 写入操作的监听                                               |
+
+#### 关闭佩戴状态上报-closeYM23ProWearReport
+
+关闭设备的佩戴状态上报功能，关闭后设备停止主动上报。
+
+###### 前提
+
+设备已连接
+
+###### 接口
+
+```kotlin
+closeYM23ProWearReport(listener, bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                       | 备注               |
+| ---------------- | -------------------------- | ------------------ |
+| listener         | IYM23ProWearReportListener | 佩戴状态上报回调监听 |
+| bleWriteResponse | IBleWriteResponse          | 写入操作的监听     |
+
+###### 返回数据
+
+**IYM23ProWearReportListener**
+
+```kotlin
+/**
+ * 开启佩戴状态上报的应答
+ *
+ * @param status 设备应答状态
+ */
+fun onYM23ProWearReportOpenResult(status: EYM23ProOptStatus)
+
+/**
+ * 关闭佩戴状态上报的应答
+ *
+ * @param status 设备应答状态
+ */
+fun onYM23ProWearReportCloseResult(status: EYM23ProOptStatus)
+
+/**
+ * 设备主动上报：佩戴状态变更或每秒定时上报
+ *
+ * @param data 上报数据（上报类型 + 佩戴状态 + 心率）
+ */
+fun onYM23ProWearReport(data: YM23ProWearReportData)
+```
+
+**YM23ProWearReportData** -- 佩戴状态上报数据
+
+| 参数名     | 类型                | 备注                                       |
+| ---------- | ------------------- | ------------------------------------------ |
+| reportType | EYM23ProReportType  | 上报类型                                   |
+| wearState  | EYM23ProWearState   | 佩戴状态                                   |
+| heartRate  | int                 | 最近一次检测到的心率值，单位bpm，无有效值为0 |
+
+**EYM23ProOptStatus** -- 设备应答状态
+
+| 枚举值    | 备注           |
+| --------- | -------------- |
+| UNSUPPORT | 不支持该协议   |
+| SUCCESS   | 成功           |
+| FAILED    | 失败           |
+
+**EYM23ProReportType** -- 主动上报类型
+
+| 枚举值       | 备注                                                    |
+| ------------ | ------------------------------------------------------- |
+| WEAR_CHANGE  | 佩戴状态变更上报（首次检测结果及后续变更）              |
+| TIMED_REPORT | 每秒定时上报（仅当测试状态处于检测中/修复中时）         |
+
+**EYM23ProWearState** -- 佩戴状态
+
+| 枚举值   | 备注     |
+| -------- | -------- |
+| WEARED   | 佩戴通过 |
+| NOT_WEAR | 未佩戴   |
+
+#### 设置佩戴状态上报监听-setYM23ProWearReportListener
+
+独立注册佩戴状态上报监听，用于接收设备的主动上报。调用开启/关闭接口时也会自动注册传入的监听，无需重复调用本接口。
+
+###### 接口
+
+```kotlin
+setYM23ProWearReportListener(listener)
+```
+
+###### 参数解释
+
+| 参数名   | 类型                       | 备注                 |
+| -------- | -------------------------- | -------------------- |
+| listener | IYM23ProWearReportListener | 佩戴状态上报回调监听 |
+
+#### 下发测试状态-setYM23ProTestStatus
+
+下发测试状态，共7种状态，设备端同步显示状态图标与文字。其中检测中/修复中为进行中状态，会触发佩戴状态模块的每秒上报；下发空闲即退出测试界面。
+
+###### 前提
+
+设备已连接，且**佩戴状态上报已开启成功**（协议约定，由调用方自行保证，SDK内部不做拦截）
+
+###### 接口
+
+```kotlin
+setYM23ProTestStatus(testStatus, listener, bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                       | 备注                                     |
+| ---------------- | -------------------------- | ---------------------------------------- |
+| testStatus       | EYM23ProTestStatus         | 测试状态                                 |
+| listener         | IYM23ProTestStatusListener | 测试状态下发回调监听                     |
+| bleWriteResponse | IBleWriteResponse          | 写入操作的监听                           |
+
+###### 返回数据
+
+**IYM23ProTestStatusListener**
+
+```kotlin
+/**
+ * 下发测试状态的应答
+ *
+ * @param status     设备应答状态
+ * @param testStatus 设备当前实际所处的测试状态，可通过该值确认状态是否生效
+ */
+fun onYM23ProTestStatusResult(status: EYM23ProOptStatus, testStatus: EYM23ProTestStatus)
+```
+
+**EYM23ProTestStatus** -- 测试状态
+
+| 枚举值       | 状态值 | 设备端显示文字       |
+| ------------ | ------ | -------------------- |
+| IDLE         | 0x00   | 空闲/退出测试界面    |
+| TESTING      | 0x01   | 检测中，请保持静止   |
+| REPAIRING    | 0x02   | 修复中，请保持静止   |
+| TEST_DONE    | 0x03   | 检测完成，请查看APP  |
+| REPAIR_DONE  | 0x04   | 修复完成，请查看APP  |
+| TEST_PAUSE   | 0x05   | 检测暂停             |
+| REPAIR_PAUSE | 0x06   | 修复暂停             |
+
+###### 示例代码
+
+```kotlin
+/// 开启佩戴状态上报
+VPOperateManager.getInstance().openYM23ProWearReport(object : IYM23ProWearReportListener {
+    override fun onYM23ProWearReportOpenResult(status: EYM23ProOptStatus) {
+        resultLabel.text = if (status == EYM23ProOptStatus.SUCCESS) "开启成功" else "开启失败：$status"
+    }
+
+    override fun onYM23ProWearReportCloseResult(status: EYM23ProOptStatus) {
+        resultLabel.text = if (status == EYM23ProOptStatus.SUCCESS) "关闭成功" else "关闭失败：$status"
+    }
+
+    override fun onYM23ProWearReport(data: YM23ProWearReportData) {
+        resultLabel.text = "佩戴上报：$data"
+    }
+}, bleWriteResponse)
+```
+
+```kotlin
+/// 关闭佩戴状态上报
+VPOperateManager.getInstance().closeYM23ProWearReport({ status ->
+    resultLabel.text = if (status == EYM23ProOptStatus.SUCCESS) "关闭成功" else "关闭失败"
+}, bleWriteResponse)
+```
+
+```kotlin
+/// 独立注册佩戴状态上报监听（可选）
+VPOperateManager.getInstance().setYM23ProWearReportListener(object : IYM23ProWearReportListener {
+    override fun onYM23ProWearReportOpenResult(status: EYM23ProOptStatus) {}
+
+    override fun onYM23ProWearReportCloseResult(status: EYM23ProOptStatus) {}
+
+    override fun onYM23ProWearReport(data: YM23ProWearReportData) {
+        resultLabel.text = "佩戴上报：$data"
+    }
+})
+```
+
+```kotlin
+/// 下发测试状态（需在开启佩戴状态上报成功后调用）
+VPOperateManager.getInstance().setYM23ProTestStatus(EYM23ProTestStatus.TESTING, { status, testStatus ->
+    resultLabel.text = if (status == EYM23ProOptStatus.SUCCESS) "下发成功，设备状态：$testStatus" else "下发失败：$status"
 }, bleWriteResponse)
 ```
 
