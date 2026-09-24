@@ -99,6 +99,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         if (!checkCommonUI()) return;
         sb.append("\n").append(msg);
         tvTestInfo.setText(sb.toString());
+        scrollToBottom();
     }
 
     // 添加 红色大号字体
@@ -113,6 +114,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 0, spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         sb.append(spannable);
         tvTestInfo.setText(sb);
+        scrollToBottom();
     }
 
     // 添加 蓝色中号字体
@@ -127,6 +129,16 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 0, spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         sb.append(spannable);
         tvTestInfo.setText(sb);
+        scrollToBottom();
+    }
+
+    /**
+     * 日志追加后自动滚动到底部，方便查看最新消息
+     */
+    private void scrollToBottom() {
+        if (svTestInfo != null) {
+            svTestInfo.post(() -> svTestInfo.fullScroll(View.FOCUS_DOWN));
+        }
     }
 
 

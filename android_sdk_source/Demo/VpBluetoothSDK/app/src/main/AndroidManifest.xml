@@ -218,6 +218,10 @@
             android:configChanges="keyboardHidden"
             android:exported="false" />
         <activity
+            android:name=".activity.v2.custom.YM23ProTestActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+        <activity
             android:name=".activity.v2.other.GNSSOptActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />
