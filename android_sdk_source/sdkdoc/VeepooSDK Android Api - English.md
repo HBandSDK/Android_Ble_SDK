@@ -46,6 +46,7 @@
 | 1.4.0 | 1. Added Start/Stop APIs for Pressure (Stress) Measurement<br />2. Added device control functions: Reset, Power Off, Factory Reset (Clear Data) | 2026.09.18 |
 | 1.4.1 | Added JH76 customized SN code function (Read/Set/Modify/Delete) | 2026.09.23 |
 | 1.4.2 | Added YM23PRO customized wear status report and test status functions | 2026.09.24 |
+| 1.4.3 | Added QH15 custom family guardian feature interfaces | 2026.09.29 |
 ## Import SDK
 ### Add Dependency
 
@@ -15373,6 +15374,322 @@ VPOperateManager.getInstance().setYM23ProWearReportListener(object : IYM23ProWea
 VPOperateManager.getInstance().setYM23ProTestStatus(EYM23ProTestStatus.TESTING, { status, testStatus ->
     resultLabel.text = if (status == EYM23ProOptStatus.SUCCESS) "Sent, device status: $testStatus" else "Send failed: $status"
 }, bleWriteResponse)
+```
+
+### QH15 Family Guardian
+
+Prerequisite: The device must support the family guardian feature. The condition is as follows:
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportSafetyProtection
+```
+
+Note: All the following interfaces can only be called when the device supports the family guardian feature.
+
+#### Set Safety Protection State
+
+###### Prerequisite
+
+Device is connected, and the QH15 family guardian listener has been registered (see Register Safety Protection Listener). It is recommended that the APP has been granted fine location permission and the system location switch is on.
+
+###### Interface
+
+Java
+
+```
+ /***
+     * <ul>
+     * <li style="color:#1055d2">QH15 family guardian: set the safety protection state (unified open/close interface)</li>
+     * <li><br/></li>
+     * <li style="color:#555555">Set the safety protection state (unified open/close interface); the result is returned via IQH15SafetyProtectionListener.onQH15SafetyProtectionSetResult</li>
+     * </ul>
+     * @param isOpen
+     * <ul>
+     * <li>true to enable, false to disable</li>
+     * <li>true to enable, false to disable</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     * <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     * <li>Listener for the write operation</li>
+     * </ul>
+     */
+    public void setQH15SafetyProtection(boolean isOpen, IBleWriteResponse bleWriteResponse)
+```
+
+###### Parameter Description
+
+| **Parameter Name**  | **Type**          | **Description**                  |
+| ------------------- | ----------------- | -------------------------------- |
+| isOpen              | boolean           | true to enable, false to disable |
+| bleWriteResponse    | IBleWriteResponse | Listener for the write operation |
+
+###### Data Return
+
+**EQH15SetProtectionFuncAckState** -- Ack result of setting the protection state (returned via IQH15SafetyProtectionListener.onQH15SafetyProtectionSetResult)
+
+Java
+
+```
+public enum EQH15SetProtectionFuncAckState {
+    // Success
+    SUCCESS,
+    // Watch battery too low to enable
+    LOW_BATTERY,
+    // Location module malfunction
+    LOCATION_MALFUNCTION
+}
+```
+
+Code Example
+
+Java
+
+```
+// Enable the guardian
+VPOperateManager.getInstance().setQH15SafetyProtection(true, writeResponse);
+// Disable the guardian
+VPOperateManager.getInstance().setQH15SafetyProtection(false, writeResponse);
+```
+
+#### Register Safety Protection Listener
+
+###### Prerequisite
+
+None (overwriting registration, only one global instance; register once during device connection initialization)
+
+###### Interface
+
+Java
+
+```
+ /***
+     * <ul>
+     * <li style="color:#1055d2">QH15 family guardian: register the safety protection listener</li>
+     * <li><br/></li>
+     * <li style="color:#555555">Register the safety protection listener (including the ack callback of APP setting and the state change notification from watch-side operations)</li>
+     * </ul>
+     * @param listener
+     * <ul>
+     * <li>the listener of safety protection state</li>
+     * <li>Safety protection state listener</li>
+     * </ul>
+     */
+    public void addQH15SafetyProtectionListener(IQH15SafetyProtectionListener listener)
+```
+
+###### Parameter Description
+
+| **Parameter Name** | **Type**                      | **Description**                              |
+| ------------------ | ----------------------------- | -------------------------------------------- |
+| listener           | IQH15SafetyProtectionListener | QH15 family guardian state callback listener |
+
+###### Data Return
+
+**IQH15SafetyProtectionListener** -- QH15 family guardian state listener
+
+Java
+
+```
+public interface IQH15SafetyProtectionListener extends IListener {
+    /**
+     * Ack result of setting the safety protection state (device response after the APP sends the enable/disable command)
+     * @param ackState Ack result (success / low battery / location malfunction)
+     */
+    void onQH15SafetyProtectionSetResult(EQH15SetProtectionFuncAckState ackState);
+
+    /**
+     * Device-side safety protection state change notification (triggered by watch-side operations)
+     * Note: if the watch has already enabled the guardian, do NOT send the enable command again; just sync the local state and UI
+     * @param isOpen    true to enable, false to disable
+     * @param timestamp Timestamp in seconds
+     */
+    void onQH15SafetyProtectionStateChanged(boolean isOpen, long timestamp);
+}
+```
+
+Code Example
+
+Java
+
+```
+VPOperateManager.getInstance().addQH15SafetyProtectionListener(new IQH15SafetyProtectionListener() {
+            @Override
+            public void onQH15SafetyProtectionSetResult(EQH15SetProtectionFuncAckState ackState) {
+                // Result: SUCCESS / LOW_BATTERY (watch battery too low) / LOCATION_MALFUNCTION (location module malfunction)
+            }
+
+            @Override
+            public void onQH15SafetyProtectionStateChanged(boolean isOpen, long timestamp) {
+                // Watch-side manual switch, just sync the local state, do not send the enable command again
+            }
+        });
+```
+
+#### Register GNSS Location Listener
+
+###### Prerequisite
+
+None (overwriting registration, only one global instance; register once during device connection initialization)
+
+###### Interface
+
+Java
+
+```
+ /***
+     * <ul>
+     * <li style="color:#1055d2">QH15 family guardian: register the GNSS real-time location listener (including device request REQ and device push PUSH, distinguished by type)</li>
+     * <li><br/></li>
+     * <li style="color:#555555">Register the GNSS real-time location listener (including device request REQ and device push PUSH, distinguished by type)</li>
+     * </ul>
+     * @param listener
+     * <ul>
+     * <li>the listener of GNSS real-time location data</li>
+     * <li>GNSS real-time location data listener</li>
+     * </ul>
+     */
+    public void addQH15GnssLocationListener(IQH15GnssLocationListener listener)
+```
+
+###### Parameter Description
+
+| **Parameter Name** | **Type**                  | **Description**                              |
+| ------------------ | ------------------------- | -------------------------------------------- |
+| listener           | IQH15GnssLocationListener | GNSS real-time location data callback listener |
+
+###### Data Return
+
+**IQH15GnssLocationListener** -- GNSS real-time location data listener
+
+Java
+
+```
+public interface IQH15GnssLocationListener extends IListener {
+    /**
+     * GNSS real-time location data notification
+     * @param type  EQH15SPType.REQ: the device requests the APP to provide location (after the APP obtains the system location, call pushQH15GnssLocationData to push it back);
+     *              EQH15SPType.PUSH: the device pushes real-time location data (just display it directly)
+     * @param model Location data (null when the frame data is incomplete)
+     */
+    void onQH15GnssLocation(EQH15SPType type, QH15SecurityProtectionModel model);
+}
+```
+
+**EQH15SPType** -- GNSS real-time location data notification type
+
+Java
+
+```
+public enum EQH15SPType {
+    // Request real-time location (the device requests the APP to provide location; after the APP obtains the location, call pushQH15GnssLocationData to push it back)
+    REQ,
+    // Push real-time location data (the device actively pushes real-time location, just display it directly)
+    PUSH
+}
+```
+
+**QH15SecurityProtectionModel** -- Safety protection location data
+
+Java
+
+```
+public class QH15SecurityProtectionModel {
+    // Bluetooth signal, range -128~0; the larger the value, the closer the distance and the stronger the signal. The device decides whether to adopt the APP coordinates based on this, default -128
+    private int rssi;
+    // Latitude (actual value, protocol value = actual value x 100000, 5 decimal places)
+    private double latitude;
+    // Longitude (actual value, protocol value = actual value x 100000, 5 decimal places)
+    private double longitude;
+    // GNSS state (a valid value is required when pushing)
+    private EQH15SecurityProtectionState gnssState;
+    // Altitude in centimeters, fill in 0 if not supported by hardware
+    private int altitude;
+}
+```
+
+**EQH15SecurityProtectionState** -- GNSS state
+
+Java
+
+```
+public enum EQH15SecurityProtectionState {
+    // No command
+    NONE,
+    // Effective location
+    EFFECTIVE_LOCATION,
+    // Invalid location
+    INVALID_LOCATION,
+    // Poor signal
+    POOR_SIGNAL,
+    // No permission
+    NO_PERMISSION
+}
+```
+
+Code Example
+
+Java
+
+```
+VPOperateManager.getInstance().addQH15GnssLocationListener(new IQH15GnssLocationListener() {
+            @Override
+            public void onQH15GnssLocation(EQH15SPType type, QH15SecurityProtectionModel model) {
+                if (type == EQH15SPType.REQ) {
+                    // Device asks for location: obtain the current location and call pushQH15GnssLocationData to push it back
+                } else if (type == EQH15SPType.PUSH) {
+                    // Device pushes real-time location, refresh UI when model.gnssState==EFFECTIVE_LOCATION and coordinates are non-zero
+                }
+            }
+        });
+```
+
+#### Assistance Information Configuration (Improves Device Positioning Speed and Accuracy)
+
+###### Prerequisite
+
+Device is connected
+
+###### Interface
+
+Java
+
+```
+ /***
+     * <ul>
+     * <li style="color:#1055d2">QH15 family guardian: push the location data to the device (assistance information configuration, which can improve the device positioning speed and accuracy)</li>
+     * <li><br/></li>
+     * <li style="color:#555555">Assistance information configuration (can improve the device positioning speed and accuracy). Typical flow: receive EQH15SPType.REQ -> APP obtains the current location -> build QH15SecurityProtectionModel and call this interface to push it back</li>
+     * </ul>
+     * @param model
+     * <ul>
+     * <li>the location data model, gnssState must be a valid value</li>
+     * <li>Location data model (gnssState must be a valid value)</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     * <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     * <li>Listener for the write operation</li>
+     * </ul>
+     */
+    public void pushQH15GnssLocationData(QH15SecurityProtectionModel model, IBleWriteResponse bleWriteResponse)
+```
+
+###### Parameter Description
+
+| **Parameter Name** | **Type**                    | **Description**                                   |
+| ------------------ | --------------------------- | ------------------------------------------------- |
+| model              | QH15SecurityProtectionModel | Location data model (gnssState must be a valid value) |
+| bleWriteResponse   | IBleWriteResponse           | Listener for the write operation                  |
+
+Code Example
+
+Java
+
+```
+// Device requests location -> push it back after the APP obtains the location
+QH15SecurityProtectionModel model = new QH15SecurityProtectionModel(-128, 22.54900, 113.94521, EQH15SecurityProtectionState.EFFECTIVE_LOCATION, 0);
+VPOperateManager.getInstance().pushQH15GnssLocationData(model, writeResponse);
 ```
 
 ## Device Control Functions

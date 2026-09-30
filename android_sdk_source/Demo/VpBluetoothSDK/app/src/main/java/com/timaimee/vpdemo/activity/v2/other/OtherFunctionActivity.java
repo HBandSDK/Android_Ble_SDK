@@ -65,7 +65,6 @@ public class OtherFunctionActivity extends BaseActivity implements AdapterView.O
             case DeviceMenu.Other.IMG_TXT_PUSH -> startActivity(new Intent(this, TextImagePushActivity.class));
             case DeviceMenu.Other.WORLD_CLOCK -> startActivity(new Intent(this, WorldClockActivity.class));
             case DeviceMenu.Other.WEATHER -> startActivity(new Intent(this, WeatherActivity.class));
-            case DeviceMenu.Other.GNSS ->  startActivity(new Intent(this, GNSSOptActivity.class));
             case DeviceMenu.Other.PHOTOGRAPH,
                  DeviceMenu.Other.CHECK_WEAR,
                  DeviceMenu.Other.HEALTH_LIGHT,

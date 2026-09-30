@@ -34,7 +34,7 @@ public interface DeviceMenu {
     }
 
     String[] CustomMenu = {Custom.TCM, Custom.PSAIM, Custom.ZT163_DEVICE_ALWAYS_OFF_SCREEN, Custom.G15_IMG, Custom.QX17_DATA_ACQUISITION,
-        Custom.G08W_HEALTH_ALARM_INTERVAL, Custom.G15_QR_CODE, Custom.JH58_PPG, Custom.JH76_SN_CODE, Custom.YM23PRO_WEAR_TEST};
+        Custom.G08W_HEALTH_ALARM_INTERVAL, Custom.G15_QR_CODE, Custom.JH58_PPG, Custom.JH76_SN_CODE, Custom.YM23PRO_WEAR_TEST, Custom.QH15_SAFETY_PROTECTION};
 
     interface Custom {
         String TCM = "秋果中医诊断";
@@ -47,10 +47,11 @@ public interface DeviceMenu {
         String JH58_PPG = "JH58PPG相关";
         String JH76_SN_CODE = "JH76 SN码设置";
         String YM23PRO_WEAR_TEST = "YM23PRO佩戴上报与测试状态";
+        String QH15_SAFETY_PROTECTION = "QH15亲情守护";
     }
 
     String[] OtherMenu = {Other.CONTACT, Other.ALARM, Other.MUSIC, Other.MESSAGE_PUSH, Other.IMG_TXT_PUSH, Other.WORLD_CLOCK,
-            Other.WEATHER, Other.GNSS, Other.PHOTOGRAPH, Other.LANGUAGE_BATTER, Other.CHECK_WEAR, Other.DEVICE_ANTI_LOSS, Other.DEVICE_4G,
+            Other.WEATHER, Other.PHOTOGRAPH, Other.LANGUAGE_BATTER, Other.CHECK_WEAR, Other.DEVICE_ANTI_LOSS, Other.DEVICE_4G,
             Other.LOW_POWER, Other.DEVICE_4G_READ_IMEI, Other.MAGNETIC, Other.HEALTH_LIGHT,Other.AI_FUNCTION, Other.GPS_EPHEMERIS,
             Other.RESET_DEVICE, Other.POWER_OFF, Other.FACTORY_RESET};
 
@@ -62,7 +63,6 @@ public interface DeviceMenu {
         String IMG_TXT_PUSH = "图文推送\uD83D\uDDBC\uFE0F\uD83D\uDCC4";
         String WORLD_CLOCK = "世界时钟⏰️";
         String WEATHER = "☀️⛈️❄️☔️\uD83C\uDF0A\uD83C\uDF2A\uD83C\uDF08 ☃天气";
-        String GNSS = "GNSS运动🏃‍♀️";
         String PHOTOGRAPH = "拍照📷";
         String LANGUAGE_BATTER = "语言&电量🔋";
         String CHECK_WEAR = "佩戴检测⌚️";

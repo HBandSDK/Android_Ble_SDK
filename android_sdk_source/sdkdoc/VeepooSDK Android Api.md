@@ -46,6 +46,7 @@
 | 1.4.0 | 1.新增压力测量开始/结束接口<br />2.新增设备控制功能：复位、关机、恢复出厂设置（清除数据） | 2026.09.18 |
 | 1.4.1 | 新增JH76定制SN码设置功能（读取/设置/修改/删除） | 2026.09.23 |
 | 1.4.2 | 新增YM23PRO定制佩戴状态上报与测试状态功能 | 2026.09.24 |
+| 1.4.3 | 新增QH15定制亲情守护功能接口 | 2026.09.29 |
 
 ## 导入SDK
 添加依赖
@@ -15616,6 +15617,296 @@ VPOperateManager.getInstance().setYM23ProTestStatus(EYM23ProTestStatus.TESTING, 
     resultLabel.text = if (status == EYM23ProOptStatus.SUCCESS) "下发成功，设备状态：$testStatus" else "下发失败：$status"
 }, bleWriteResponse)
 ```
+
+### QH15亲情守护
+
+前提：需设备支持亲情守护功能，判断条件如下：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportSafetyProtection
+```
+
+注：以下所有接口都需在满足设备支持亲情守护功能才能调用
+
+#### 设置安全守护状态
+
+###### 前提
+
+设备已连接，且已注册QH15亲情守护监听（见 注册安全守护状态监听）；APP侧建议先确认已授予精确定位权限并打开系统定位开关。
+
+###### 接口
+
+```java
+ /***
+     * <ul>
+     *     <li style="color:#1055d2">QH15 family guardian: set the safety protection state (unified open/close interface)</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">QH15亲情守护：设置安全守护状态（开启/关闭合一接口），设置结果通过 IQH15SafetyProtectionListener.onQH15SafetyProtectionSetResult 回调获取</li>
+     * </ul>
+     * @param isOpen
+     * <ul>
+     *    <li>true to enable, false to disable</li>
+     *    <li>true:开启 false:关闭</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     */
+    public void setQH15SafetyProtection(boolean isOpen, IBleWriteResponse bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型              | 描述                 |
+| ---------------- | ----------------- | -------------------- |
+| isOpen           | boolean           | true:开启 false:关闭 |
+| bleWriteResponse | IBleWriteResponse | 写入操作的监听       |
+
+###### 数据返回
+
+**EQH15SetProtectionFuncAckState** -- 设置守护状态应答结果（通过 IQH15SafetyProtectionListener.onQH15SafetyProtectionSetResult 回调）
+
+```java
+public enum EQH15SetProtectionFuncAckState {
+    //成功
+    SUCCESS,
+    //手表电量过低无法开启
+    LOW_BATTERY,
+    //定位模块异常
+    LOCATION_MALFUNCTION
+}
+```
+
+**示例代码**
+
+```java
+// 开启守护
+VPOperateManager.getInstance().setQH15SafetyProtection(true, writeResponse);
+// 结束守护
+VPOperateManager.getInstance().setQH15SafetyProtection(false, writeResponse);
+```
+
+#### 注册安全守护状态监听
+
+###### 前提
+
+无（覆盖式注册，全局仅一份实例，建议在设备连接初始化时注册一次）
+
+###### 接口
+
+```java
+ /***
+     * <ul>
+     *     <li style="color:#1055d2">QH15 family guardian: register the safety protection listener</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">QH15亲情守护：设置安全守护状态监听（含APP设置结果的应答回调与手表端操作的状态变化通知）</li>
+     * </ul>
+     * @param listener
+     * <ul>
+     *    <li>the listener of safety protection state</li>
+     *    <li>安全守护状态监听类</li>
+     * </ul>
+     */
+    public void addQH15SafetyProtectionListener(IQH15SafetyProtectionListener listener)
+```
+
+###### 参数解释
+
+| 参数名   | 类型                          | 描述                     |
+| -------- | ----------------------------- | ------------------------ |
+| listener | IQH15SafetyProtectionListener | QH15亲情守护状态回调监听 |
+
+###### 数据返回
+
+**IQH15SafetyProtectionListener** -- QH15亲情守护状态监听
+
+```java
+public interface IQH15SafetyProtectionListener extends IListener {
+    /**
+     * 设置安全守护状态的应答结果（APP下发开启/关闭指令后设备的应答）
+     * @param ackState 应答结果(成功/手表电量过低无法开启/定位模块异常)
+     */
+    void onQH15SafetyProtectionSetResult(EQH15SetProtectionFuncAckState ackState);
+
+    /**
+     * 设备端安全守护状态变化通知（手表端操作触发）
+     * 注意：手表端已开启时APP不要再重复下发开启，只同步本地状态与UI
+     * @param isOpen    true:开启 false:关闭
+     * @param timestamp 秒级时间戳
+     */
+    void onQH15SafetyProtectionStateChanged(boolean isOpen, long timestamp);
+}
+```
+
+**示例代码**
+
+```java
+VPOperateManager.getInstance().addQH15SafetyProtectionListener(new IQH15SafetyProtectionListener() {
+            @Override
+            public void onQH15SafetyProtectionSetResult(EQH15SetProtectionFuncAckState ackState) {
+                // 设置结果：SUCCESS成功 / LOW_BATTERY手表电量过低 / LOCATION_MALFUNCTION定位模块异常
+            }
+
+            @Override
+            public void onQH15SafetyProtectionStateChanged(boolean isOpen, long timestamp) {
+                // 手表端手动开关，同步本地状态即可，不要重复下发开启
+            }
+        });
+```
+
+#### 注册GNSS实时位置数据监听
+
+###### 前提
+
+无（覆盖式注册，全局仅一份实例，建议在设备连接初始化时注册一次）
+
+###### 接口
+
+```java
+ /***
+     * <ul>
+     *     <li style="color:#1055d2">QH15 family guardian: register the GNSS real-time location listener (including device request REQ and device push PUSH, distinguished by type)</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">QH15亲情守护：监听GNSS实时位置数据（含设备请求实时位置 REQ 与设备推送实时位置 PUSH，通过 type 区分）</li>
+     * </ul>
+     * @param listener
+     * <ul>
+     *    <li>the listener of GNSS real-time location data</li>
+     *    <li>GNSS实时位置数据监听类</li>
+     * </ul>
+     */
+    public void addQH15GnssLocationListener(IQH15GnssLocationListener listener)
+```
+
+###### 参数解释
+
+| 参数名   | 类型                      | 描述                     |
+| -------- | ------------------------- | ------------------------ |
+| listener | IQH15GnssLocationListener | GNSS实时位置数据回调监听 |
+
+###### 数据返回
+
+**IQH15GnssLocationListener** -- GNSS实时位置数据监听
+
+```java
+public interface IQH15GnssLocationListener extends IListener {
+    /**
+     * GNSS实时位置数据通知
+     * @param type  EQH15SPType.REQ: 设备请求APP提供位置（APP取到系统定位后调用 pushQH15GnssLocationData 回推）；
+     *              EQH15SPType.PUSH: 设备推送实时位置数据（直接展示即可）
+     * @param model 位置数据（帧数据不完整时为null）
+     */
+    void onQH15GnssLocation(EQH15SPType type, QH15SecurityProtectionModel model);
+}
+```
+
+**EQH15SPType** -- GNSS实时位置数据通知类型
+
+```java
+public enum EQH15SPType {
+    //请求获取实时位置（设备请求APP提供位置，APP取到定位后需调用 pushQH15GnssLocationData 回推）
+    REQ,
+    //推送实时位置数据（设备主动推送实时位置，直接展示即可）
+    PUSH
+}
+```
+
+**QH15SecurityProtectionModel** -- 安全守护位置数据
+
+```java
+public class QH15SecurityProtectionModel {
+    //蓝牙信号，范围 -128~0，值越大代表距离越近、信号越强，设备据此判断是否采纳APP的经纬度信息，默认-128
+    private int rssi;
+    //纬度（实际值，协议值 = 实际值 x 100000，保留小数点后5位）
+    private double latitude;
+    //经度（实际值，协议值 = 实际值 x 100000，保留小数点后5位）
+    private double longitude;
+    //GNSS状态（下发时必填有效值）
+    private EQH15SecurityProtectionState gnssState;
+    //海拔，单位厘米(cm)，硬件不支持填0
+    private int altitude;
+}
+```
+
+**EQH15SecurityProtectionState** -- GNSS状态
+
+```java
+public enum EQH15SecurityProtectionState {
+    //无指令
+    NONE,
+    //有效定位
+    EFFECTIVE_LOCATION,
+    //无效定位
+    INVALID_LOCATION,
+    //信号差
+    POOR_SIGNAL,
+    //无权限
+    NO_PERMISSION
+}
+```
+
+**示例代码**
+
+```java
+VPOperateManager.getInstance().addQH15GnssLocationListener(new IQH15GnssLocationListener() {
+            @Override
+            public void onQH15GnssLocation(EQH15SPType type, QH15SecurityProtectionModel model) {
+                if (type == EQH15SPType.REQ) {
+                    // 设备索取位置：获取当前定位后调用 pushQH15GnssLocationData 回推
+                } else if (type == EQH15SPType.PUSH) {
+                    // 设备推送实时位置，model.gnssState==EFFECTIVE_LOCATION且坐标非0时刷新UI
+                }
+            }
+        });
+```
+
+#### 辅助信息配置（可提升设备定位速度与精准度）
+
+###### 前提
+
+设备已连接
+
+###### 接口
+
+```java
+ /***
+     * <ul>
+     *     <li style="color:#1055d2">QH15 family guardian: push the location data to the device (assistance information configuration, which can improve the device positioning speed and accuracy)</li>
+     *     <li><br/></li>
+     *     <li style="color:#555555">QH15亲情守护：辅助信息配置，（可提升设备定位速度与精准度）。典型流程：收到 EQH15SPType.REQ -> APP获取当前定位 -> 组 QH15SecurityProtectionModel 调用本接口回推</li>
+     * </ul>
+     * @param model
+     * <ul>
+     *    <li>the location data model, gnssState must be a valid value</li>
+     *    <li>位置数据模型（gnssState 必填有效值）</li>
+     * </ul>
+     * @param bleWriteResponse
+     * <ul>
+     *    <li>the response of write oprate,if reponse code equals Code.REQUEST_SUCCESS  means write cmd success,otherwise means write cmd fail</li>
+     *    <li>写入操作的监听</li>
+     * </ul>
+     */
+    public void pushQH15GnssLocationData(QH15SecurityProtectionModel model, IBleWriteResponse bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                        | 描述                                 |
+| ---------------- | --------------------------- | ------------------------------------ |
+| model            | QH15SecurityProtectionModel | 位置数据模型（gnssState 必填有效值） |
+| bleWriteResponse | IBleWriteResponse           | 写入操作的监听                       |
+
+**示例代码**
+
+```java
+// 设备请求位置 -> APP定位后回推
+QH15SecurityProtectionModel model = new QH15SecurityProtectionModel(-128, 22.54900, 113.94521, EQH15SecurityProtectionState.EFFECTIVE_LOCATION, 0);
+VPOperateManager.getInstance().pushQH15GnssLocationData(model, writeResponse);
+```
+
+
 
 ## 设备控制功能
 

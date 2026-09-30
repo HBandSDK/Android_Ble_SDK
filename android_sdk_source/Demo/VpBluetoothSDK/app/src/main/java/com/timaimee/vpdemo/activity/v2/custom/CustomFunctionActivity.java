@@ -10,6 +10,7 @@ import com.timaimee.vpdemo.R;
 import com.timaimee.vpdemo.activity.QX17DataAcquisitionActivity;
 import com.timaimee.vpdemo.activity.v2.BaseActivity;
 import com.timaimee.vpdemo.activity.v2.DeviceMenu;
+import com.timaimee.vpdemo.activity.v2.other.GNSSOptActivity;
 import com.timaimee.vpdemo.adapter.FunctionAdapter;
 
 public class CustomFunctionActivity extends BaseActivity implements AdapterView.OnItemClickListener {
@@ -62,6 +63,7 @@ public class CustomFunctionActivity extends BaseActivity implements AdapterView.
             case DeviceMenu.Custom.JH58_PPG -> startActivity(new Intent(this, JH58PPGOptTestActivity.class));
             case DeviceMenu.Custom.JH76_SN_CODE -> startActivity(new Intent(this, JH76SNCodeActivity.class));
             case DeviceMenu.Custom.YM23PRO_WEAR_TEST -> startActivity(new Intent(this, YM23ProTestActivity.class));
+            case DeviceMenu.Custom.QH15_SAFETY_PROTECTION -> startActivity(new Intent(this, GNSSOptActivity.class));
         }
 
     }
