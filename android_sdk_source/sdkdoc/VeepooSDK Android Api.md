@@ -47,6 +47,7 @@
 | 1.4.1 | 新增JH76定制SN码设置功能（读取/设置/修改/删除） | 2026.09.23 |
 | 1.4.2 | 新增YM23PRO定制佩戴状态上报与测试状态功能 | 2026.09.24 |
 | 1.4.3 | 新增QH15定制亲情守护功能接口 | 2026.09.29 |
+| 1.4.4 | 新增JH151定制ECG单导测量时长功能（设置/读取） | 2026.10.22 |
 
 ## 导入SDK
 添加依赖
@@ -15615,6 +15616,94 @@ VPOperateManager.getInstance().setYM23ProWearReportListener(object : IYM23ProWea
 /// 下发测试状态（需在开启佩戴状态上报成功后调用）
 VPOperateManager.getInstance().setYM23ProTestStatus(EYM23ProTestStatus.TESTING, { status, testStatus ->
     resultLabel.text = if (status == EYM23ProOptStatus.SUCCESS) "下发成功，设备状态：$testStatus" else "下发失败：$status"
+}, bleWriteResponse)
+```
+
+### JH151 ECG单导测量时长
+
+JH151定制功能，**需要设备支持**，无需调用接口判断设备是否支持此功能。
+
+单导测量时长为ECG单导测量的倒计时初值，单位秒（如 30/60/180）。
+
+
+#### 设置ECG单导测量时长
+
+设置设备ECG单导测量时长。。
+
+###### 前提
+
+设备已连接
+
+###### 接口
+
+```kotlin
+setJH151ECGSingleLeadTestDuration(duration, listener, bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                              | 备注                                    |
+| ---------------- | --------------------------------- | --------------------------------------- |
+| duration         | int                               | 单导测量时长（单位秒，范围 0~65535）    |
+| listener         | IECGSingleLeadTestDurationListener | 结果回调监听                            |
+| bleWriteResponse | IBleWriteResponse                 | 写入操作的监听                          |
+
+#### 读取ECG单导测量时长
+
+读取设备当前的ECG单导测量时长。
+
+###### 前提
+
+设备已连接
+
+###### 接口
+
+```kotlin
+readJH151ECGSingleLeadTestDuration(listener, bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                              | 备注           |
+| ---------------- | --------------------------------- | -------------- |
+| listener         | IECGSingleLeadTestDurationListener | 结果回调监听   |
+| bleWriteResponse | IBleWriteResponse                 | 写入操作的监听 |
+
+###### 返回数据
+
+**IECGSingleLeadTestDurationListener**
+
+```kotlin
+/**
+ * 设置/读取ECG单导测量时长结果
+ *
+ * @param success  是否成功
+ * @param duration 设备回显/当前的单导测量时长（单位秒）
+ */
+fun onECGSingleLeadTestDurationResult(success: Boolean, duration: Int)
+```
+
+###### 示例代码
+
+```kotlin
+/// 设置单导测量时长为30s
+VPOperateManager.getInstance().setJH151ECGSingleLeadTestDuration(30, { success, duration ->
+    if (success) {
+        resultLabel.text = "设置成功，当前时长=$duration s"
+    } else {
+        resultLabel.text = "设置失败"
+    }
+}, bleWriteResponse)
+```
+
+```kotlin
+/// 读取单导测量时长
+VPOperateManager.getInstance().readJH151ECGSingleLeadTestDuration({ success, duration ->
+    if (success) {
+        resultLabel.text = "当前时长=$duration s"
+    } else {
+        resultLabel.text = "读取失败"
+    }
 }, bleWriteResponse)
 ```
 

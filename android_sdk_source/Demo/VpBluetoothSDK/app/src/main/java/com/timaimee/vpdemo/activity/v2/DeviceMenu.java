@@ -34,7 +34,7 @@ public interface DeviceMenu {
     }
 
     String[] CustomMenu = {Custom.TCM, Custom.PSAIM, Custom.ZT163_DEVICE_ALWAYS_OFF_SCREEN, Custom.G15_IMG, Custom.QX17_DATA_ACQUISITION,
-        Custom.G08W_HEALTH_ALARM_INTERVAL, Custom.G15_QR_CODE, Custom.JH58_PPG, Custom.JH76_SN_CODE, Custom.YM23PRO_WEAR_TEST, Custom.QH15_SAFETY_PROTECTION};
+        Custom.G08W_HEALTH_ALARM_INTERVAL, Custom.G15_QR_CODE, Custom.JH58_PPG, Custom.JH76_SN_CODE, Custom.YM23PRO_WEAR_TEST, Custom.QH15_SAFETY_PROTECTION, Custom.JH151_ECG_SINGLE_LEAD_DURATION};
 
     interface Custom {
         String TCM = "秋果中医诊断";
@@ -48,6 +48,7 @@ public interface DeviceMenu {
         String JH76_SN_CODE = "JH76 SN码设置";
         String YM23PRO_WEAR_TEST = "YM23PRO佩戴上报与测试状态";
         String QH15_SAFETY_PROTECTION = "QH15亲情守护";
+        String JH151_ECG_SINGLE_LEAD_DURATION = "JH151 ECG单导测量时长";
     }
 
     String[] OtherMenu = {Other.CONTACT, Other.ALARM, Other.MUSIC, Other.MESSAGE_PUSH, Other.IMG_TXT_PUSH, Other.WORLD_CLOCK,

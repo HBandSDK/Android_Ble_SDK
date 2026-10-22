@@ -47,6 +47,7 @@
 | 1.4.1 | Added JH76 customized SN code function (Read/Set/Modify/Delete) | 2026.09.23 |
 | 1.4.2 | Added YM23PRO customized wear status report and test status functions | 2026.09.24 |
 | 1.4.3 | Added QH15 custom family guardian feature interfaces | 2026.09.29 |
+| 1.4.4 | Added JH151 customized ECG single-lead test duration function (Set/Read) | 2026.10.22 |
 ## Import SDK
 ### Add Dependency
 
@@ -15373,6 +15374,94 @@ VPOperateManager.getInstance().setYM23ProWearReportListener(object : IYM23ProWea
 /// Send test status (must be called after the wear status report is opened successfully)
 VPOperateManager.getInstance().setYM23ProTestStatus(EYM23ProTestStatus.TESTING, { status, testStatus ->
     resultLabel.text = if (status == EYM23ProOptStatus.SUCCESS) "Sent, device status: $testStatus" else "Send failed: $status"
+}, bleWriteResponse)
+```
+
+### JH151 ECG Single-Lead Test Duration
+
+JH151 customized function, **device support is required**. There is no need to call an interface to check whether the device supports this function.
+
+The single-lead test duration is the countdown initial value of the ECG single-lead measurement, in seconds, (e.g. 30/60/180).
+
+
+#### Set ECG Single-Lead Test Duration
+
+Set the ECG single-lead test duration on the device. If the duration is out of range (0~65535), the callback returns failure directly and no command is sent.
+
+###### Prerequisite
+
+Device is connected
+
+###### Interface
+
+```kotlin
+setJH151ECGSingleLeadTestDuration(duration, listener, bleWriteResponse)
+```
+
+###### Parameter Description
+
+| Parameter        | Type                               | Description                                        |
+| ---------------- | ---------------------------------- | -------------------------------------------------- |
+| duration         | int                                | Single-lead test duration (in seconds, 0~65535)    |
+| listener         | IECGSingleLeadTestDurationListener | Result callback listener                           |
+| bleWriteResponse | IBleWriteResponse                  | BLE write response                                 |
+
+#### Read ECG Single-Lead Test Duration
+
+Read the current ECG single-lead test duration on the device.
+
+###### Prerequisite
+
+Device is connected
+
+###### Interface
+
+```kotlin
+readJH151ECGSingleLeadTestDuration(listener, bleWriteResponse)
+```
+
+###### Parameter Description
+
+| Parameter        | Type                               | Description             |
+| ---------------- | ---------------------------------- | ----------------------- |
+| listener         | IECGSingleLeadTestDurationListener | Result callback listener |
+| bleWriteResponse | IBleWriteResponse                  | BLE write response      |
+
+###### Return Data
+
+**IECGSingleLeadTestDurationListener**
+
+```kotlin
+/**
+ * Set/Read ECG single-lead test duration result
+ *
+ * @param success  Whether the operation succeeded
+ * @param duration The echoed/current single-lead test duration (in seconds)
+ */
+fun onECGSingleLeadTestDurationResult(success: Boolean, duration: Int)
+```
+
+###### Example Code
+
+```kotlin
+/// Set the single-lead test duration to 30s
+VPOperateManager.getInstance().setJH151ECGSingleLeadTestDuration(30, { success, duration ->
+    if (success) {
+        resultLabel.text = "Set successfully, current duration=$duration s"
+    } else {
+        resultLabel.text = "Set failed"
+    }
+}, bleWriteResponse)
+```
+
+```kotlin
+/// Read the single-lead test duration
+VPOperateManager.getInstance().readJH151ECGSingleLeadTestDuration({ success, duration ->
+    if (success) {
+        resultLabel.text = "Current duration=$duration s"
+    } else {
+        resultLabel.text = "Read failed"
+    }
 }, bleWriteResponse)
 ```
 
