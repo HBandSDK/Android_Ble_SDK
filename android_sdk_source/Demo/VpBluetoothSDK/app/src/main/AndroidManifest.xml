@@ -226,6 +226,14 @@
             android:configChanges="keyboardHidden"
             android:exported="false" />
         <activity
+            android:name=".activity.v2.other.WearHandConfigActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+        <activity
+            android:name=".activity.v2.other.MotorLevelActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+        <activity
             android:name=".activity.v2.other.GNSSOptActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />

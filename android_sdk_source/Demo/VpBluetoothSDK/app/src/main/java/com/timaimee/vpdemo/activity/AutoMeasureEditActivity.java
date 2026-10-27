@@ -21,6 +21,8 @@ import com.veepoo.protocol.VPOperateManager;
 import com.veepoo.protocol.listener.base.IBleWriteResponse;
 import com.veepoo.protocol.listener.data.IAutoMeasureSettingDataListener;
 import com.veepoo.protocol.model.datas.AutoMeasureData;
+import com.veepoo.protocol.model.enums.EAutoMeasureType;
+import com.veepoo.protocol.model.enums.ESensitivity;
 
 import java.util.List;
 import java.util.Locale;
@@ -30,9 +32,13 @@ public class AutoMeasureEditActivity extends AppCompatActivity implements View.O
     TextView tvAutoMeasureType;
     TextView tvStepUnitSet;
     TextView tvSupportInfo;
+    TextView tvLowOxygen;
     EditText etInterval;
+    TextView tvSensitivity;
+    Button btnSensitivityLow, btnSensitivityStandard, btnSensitivityHigh;
     Button btnStartTimePicker, btnEndTimePicker, btnSetting;
     SwitchView svStatus;
+    SwitchView svLowOxygen;
 
     private int startMinutes, endMinutes;
 
@@ -50,11 +56,20 @@ public class AutoMeasureEditActivity extends AppCompatActivity implements View.O
         btnStartTimePicker = findViewById(R.id.btnStartTimePicker);
         btnEndTimePicker = findViewById(R.id.btnEndTimePicker);
         svStatus = findViewById(R.id.svStatus);
+        tvLowOxygen = findViewById(R.id.tvLowOxygen);
+        svLowOxygen = findViewById(R.id.svLowOxygen);
+        tvSensitivity = findViewById(R.id.tvSensitivity);
+        btnSensitivityLow = findViewById(R.id.btnSensitivityLow);
+        btnSensitivityStandard = findViewById(R.id.btnSensitivityStandard);
+        btnSensitivityHigh = findViewById(R.id.btnSensitivityHigh);
         btnSetting = findViewById(R.id.btnSetting);
 
         btnSetting.setOnClickListener(this);
         btnEndTimePicker.setOnClickListener(this);
         btnStartTimePicker.setOnClickListener(this);
+        btnSensitivityLow.setOnClickListener(this);
+        btnSensitivityStandard.setOnClickListener(this);
+        btnSensitivityHigh.setOnClickListener(this);
         initData();
     }
 
@@ -79,12 +94,35 @@ public class AutoMeasureEditActivity extends AppCompatActivity implements View.O
                     ;
             tvSupportInfo.setText(supportInfo);
             svStatus.setOpened(selectData.isSwitchOpen());
+            //低氧提醒开关显示逻辑：仅血氧测量项且设备支持(lowOxygenAlertSwitch>=0)时显示，否则隐藏
+            //不挂OnStateChangedListener(自定义监听不调toggleSwitch会导致点击卡在中间态)，与svStatus一致：点击时视图自行切换，保存时读isOpened()
+            boolean showLowOxygen = selectData.getFunType() == EAutoMeasureType.BLOOD_OXYGEN
+                    && selectData.getLowOxygenAlertSwitch() >= 0;
+            tvLowOxygen.setVisibility(showLowOxygen ? View.VISIBLE : View.GONE);
+            svLowOxygen.setVisibility(showLowOxygen ? View.VISIBLE : View.GONE);
+            if (showLowOxygen) {
+                svLowOxygen.setOpened(selectData.getLowOxygenAlertSwitch() == 1);
+            }
+            //灵敏度设置行显示逻辑：设备返回过灵敏度(非UNSUPPORT)才显示；点击直接更新数据对象，保存时随包下发
+            boolean showSensitivity = selectData.getSensitivity() != ESensitivity.UNSUPPORT;
+            tvSensitivity.setVisibility(showSensitivity ? View.VISIBLE : View.GONE);
+            if (showSensitivity) {
+                refreshSensitivityUI();
+            }
             startMinutes = selectData.getCurrentStartMinute();
             endMinutes = selectData.getCurrentEndMinute();
             btnStartTimePicker.setText(String.format(Locale.US, "%02d:%02d", startMinutes/60, startMinutes%60));
             btnEndTimePicker.setText(String.format(Locale.US, "%02d:%02d", endMinutes/60, endMinutes%60));
             etInterval.setEnabled(selectData.isIntervalModify());
         }
+    }
+
+    /**根据selectData当前灵敏度刷新三个档位按钮的选中态(选中的高亮，未选中的半透明)*/
+    private void refreshSensitivityUI() {
+        ESensitivity cur = selectData.getSensitivity();
+        btnSensitivityLow.setAlpha(cur == ESensitivity.LOW ? 1f : 0.4f);
+        btnSensitivityStandard.setAlpha(cur == ESensitivity.STANDARD ? 1f : 0.4f);
+        btnSensitivityHigh.setAlpha(cur == ESensitivity.HIGH ? 1f : 0.4f);
     }
 
     @Override
@@ -113,6 +151,18 @@ public class AutoMeasureEditActivity extends AppCompatActivity implements View.O
             }, endMinutes / 60, endMinutes % 60, true).show();
         }
 
+        // 灵敏度档位：点击即更新数据对象，点「设置」时随包下发
+        else if (v.getId() == R.id.btnSensitivityLow) {
+            selectData.setSensitivity(ESensitivity.LOW);
+            refreshSensitivityUI();
+        } else if (v.getId() == R.id.btnSensitivityStandard) {
+            selectData.setSensitivity(ESensitivity.STANDARD);
+            refreshSensitivityUI();
+        } else if (v.getId() == R.id.btnSensitivityHigh) {
+            selectData.setSensitivity(ESensitivity.HIGH);
+            refreshSensitivityUI();
+        }
+
         // 保存设置
         else if (v.getId() == R.id.btnSetting) {
             // 修复：时间范围判断逻辑
@@ -135,14 +185,18 @@ public class AutoMeasureEditActivity extends AppCompatActivity implements View.O
                 return;
             }
             int interval = Integer.parseInt(intervalStr);
-            if (interval < selectData.getStepUnit() || interval % selectData.getStepUnit() != 0 ) {
-                showMsg("间隔不能小于：" + selectData.getStepUnit() + "分钟，且为"+selectData.getStepUnit()+"的整数倍");
-                return;
-            }
+            //if (interval < selectData.getStepUnit() || interval % selectData.getStepUnit() != 0 ) {
+            //    showMsg("间隔不能小于：" + selectData.getStepUnit() + "分钟，且为"+selectData.getStepUnit()+"的整数倍");
+            //    return;
+            //}
             selectData.setCurrentStartMinute(startMinutes);
             selectData.setCurrentEndMinute(endMinutes);
             selectData.setMeasureInterval(interval);
             selectData.setSwitchOpen(svStatus.isOpened());
+            //低氧提醒开关随血氧测量项一起下发；其他测量项保持-1(不下发)
+            if (selectData.getFunType() == EAutoMeasureType.BLOOD_OXYGEN && selectData.getLowOxygenAlertSwitch() >= 0) {
+                selectData.setLowOxygenAlertSwitch(svLowOxygen.isOpened() ? 1 : 0);
+            }
 
             VPOperateManager.getInstance().setAutoMeasureSettingData(new IBleWriteResponse() {
                 @Override
@@ -185,6 +239,8 @@ public class AutoMeasureEditActivity extends AppCompatActivity implements View.O
                 return "HRV";
             case BLOOD_COMPOSITION:
                 return "血液成分";
+            case FALL_DETECTION:
+                return "跌倒提醒";
         }
         return "UNKNOWN";
     }

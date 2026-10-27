@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/btnRead"
+        style="@style/vpButton"
+        app:layout_constraintTop_toBottomOf="@id/vTitle"
+        android:layout_marginTop="10dp"
+        android:text="读取佩戴手位"/>
+
+    <Button
+        android:id="@+id/btnLeftHand"
+        style="@style/vpButton"
+        app:layout_constraintTop_toBottomOf="@id/btnRead"
+        android:layout_marginTop="10dp"
+        android:text="设置佩戴手位-左手"/>
+
+    <Button
+        android:id="@+id/btnRightHand"
+        style="@style/vpButton"
+        app:layout_constraintTop_toBottomOf="@id/btnLeftHand"
+        android:text="设置佩戴手位-右手"/>
+
+    <ScrollView
+        android:id="@+id/svTestInfo"
+        android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnRightHand"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/text_info_bg"
+        android:layout_height="0dp">
+        <TextView
+            android:id="@+id/tvTestInfo"
+            android:padding="10dp"
+            android:textSize="14dp"
+            android:textColor="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

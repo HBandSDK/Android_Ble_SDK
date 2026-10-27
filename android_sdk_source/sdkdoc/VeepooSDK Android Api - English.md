@@ -48,6 +48,7 @@
 | 1.4.2 | Added YM23PRO customized wear status report and test status functions | 2026.09.24 |
 | 1.4.3 | Added QH15 custom family guardian feature interfaces | 2026.09.29 |
 | 1.4.4 | Added JH151 customized ECG single-lead test duration function (Set/Read) | 2026.10.22 |
+| 1.4.5 | 1. Added Wear Hand configuration function (Set/Read)<br />2. Added Vibration Intensity control function (Set/Read/Device report listener)<br />3. Auto measurement setting adds low-oxygen alert switch (blood oxygen measurement only)<br />4. Auto measurement adds Fall Detection measurement type (FALL_DETECTION) and sensitivity setting (Low/Standard/High) | 2026.10.27 |
 ## Import SDK
 ### Add Dependency
 
@@ -10440,6 +10441,12 @@ var currentStartMinute = 0
 
 // Current test slot - end (minutes)
 var currentEndMinute = 0
+
+// Current sensitivity: only supported by some measurement items on some devices; UNSUPPORT means not returned by the device (unsupported), see the ESensitivity enum for others
+var sensitivity = ESensitivity.UNSUPPORT
+
+// Low-oxygen alert switch: only for blood oxygen; -1 not returned (unsupported) / 0 off (default) / 1 on; the switch is saved across power cycles; the alert is paused when blood oxygen auto measurement is off and resumed when turned back on
+var lowOxygenAlertSwitch = -1
 ```
 
 **EAutoMeasureType** - Automatic measurement type enum
@@ -10454,7 +10461,8 @@ enum class EAutoMeasureType(val value: Int) {
     BODY_TEMPERATURE(5),
     LORENZ(6),
     HRV(7),
-    BLOOD_COMPOSITION(8);
+    BLOOD_COMPOSITION(8),
+    FALL_DETECTION(9);
 
     companion object {
         fun fromValue(value: Int): EAutoMeasureType? {
@@ -10500,6 +10508,22 @@ Same as in [Reading Device Manual Measurement Data]
 
 ```
 VPOperateManager.getInstance().setAutoMeasureSettingData(bleWriteResponse, measureData, settingDataListener)
+```
+
+Note: The **low-oxygen alert switch (supported by some devices)** is an auxiliary switch of blood oxygen auto measurement. When reading automatic measurement settings, a `lowOxygenAlertSwitch` value >= 0 of the blood oxygen item indicates the device supports this feature (-1 means unsupported); when setting, set `lowOxygenAlertSwitch` to 0 (off) or 1 (on) in the blood oxygen `AutoMeasureData` and call `setAutoMeasureSettingData` to send it. Other measurement items do not need it (keep -1).
+
+Note: **Sensitivity (supported by some devices)** is an optional attribute of automatic measurement. When reading automatic measurement settings, a `sensitivity` value other than `UNSUPPORT` indicates the device supports this feature; when setting, set `sensitivity` of the corresponding measurement item to `ESensitivity.LOW` / `ESensitivity.STANDARD` / `ESensitivity.HIGH` and call `setAutoMeasureSettingData` to send it. Unsupported measurement items keep `UNSUPPORT` (not sent).
+
+**ESensitivity** - Sensitivity enum
+
+```kotlin
+enum class ESensitivity(val value: Int) {
+    UNSUPPORT(-1),  // Not returned by the device / unsupported
+    NONE(0),        // Reserved
+    LOW(1),         // Low sensitivity
+    STANDARD(2),    // Standard sensitivity
+    HIGH(3);        // High sensitivity
+}
 ```
 
 
@@ -12300,6 +12324,218 @@ readHealthLightStatus(IBleWriteResponse bleWriteResponse)
 | Parameter name   | Type              | Describe                       |
 | ---------------- | ----------------- | ------------------------------ |
 | bleWriteResponse | IBleWriteResponse | Listening for write operations |
+
+
+
+## Wear Hand Function
+
+Before using the wear hand function, it is necessary to determine whether the device supports it.
+
+Condition：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportWearHand()
+```
+
+Note: The wear hand position tells the device whether it is worn on the left or right hand, so the device can optimize its measurement algorithms accordingly. 
+
+#### Set wear hand configuration
+
+###### Prerequisites
+
+The device is connected and supports the wear hand function.
+
+###### interface
+
+```kotlin
+setWearHandConfig(EWearHandMode wearMode, IWearHandConfigListener listener, IBleWriteResponse bleWriteResponse)
+```
+
+###### Parameter Explanation
+
+| Parameter name   | Type                    | Describe                        |
+| ---------------- | ----------------------- | ------------------------------- |
+| wearMode         | EWearHandMode           | The wear hand position          |
+| listener         | IWearHandConfigListener | Listener for the operation      |
+| bleWriteResponse | IBleWriteResponse       | Listening for write operations  |
+
+**EWearHandMode** --- The enum of wear hand position
+
+| Parameter name | Describe                    |
+| -------------- | --------------------------- |
+| NONE           | Not supported (reserved)    |
+| LEFT_HAND      | Left hand (default)         |
+| RIGHT_HAND     | Right hand                  |
+
+#### Read wear hand configuration
+
+###### interface
+
+```kotlin
+readWearHandConfig(IWearHandConfigListener listener, IBleWriteResponse bleWriteResponse)
+```
+
+###### Parameter Explanation
+
+| Parameter name   | Type                    | Describe                        |
+| ---------------- | ----------------------- | ------------------------------- |
+| listener         | IWearHandConfigListener | Listener for the operation      |
+| bleWriteResponse | IBleWriteResponse       | Listening for write operations  |
+
+###### Returned Data
+
+**IWearHandConfigListener** -- Listener for the wear hand configuration
+
+```kotlin
+interface IWearHandConfigListener {
+    /**
+     * Callback for the set/read/active report result of the wear hand configuration
+     *
+     * @param data The configuration result data
+     */
+    fun onWearHandConfigResult(data: WearHandConfigData)
+}
+```
+
+**WearHandConfigData** -- The configuration result data
+
+| Parameter name | Type          | Describe                                                           |
+| -------------- | ------------- | ------------------------------------------------------------------ |
+| cmd            | int           | Data type: 0 setting response / 1 reading response / 2 active report (reserved) |
+| success        | boolean       | Whether the operation succeeded                                    |
+| wearMode       | EWearHandMode | The currently effective wear hand position                         |
+
+###### Example Code
+
+```kotlin
+//Set the wear hand position to right hand
+VPOperateManager.getInstance().setWearHandConfig(EWearHandMode.RIGHT_HAND, object : IWearHandConfigListener {
+    override fun onWearHandConfigResult(data: WearHandConfigData) {
+        //data.success is the operation result, data.wearMode is the currently effective wear hand position
+    }
+}, bleWriteResponse)
+
+//Read the current wear hand position
+VPOperateManager.getInstance().readWearHandConfig(object : IWearHandConfigListener {
+    override fun onWearHandConfigResult(data: WearHandConfigData) {
+    }
+}, bleWriteResponse)
+```
+
+
+
+## Vibration Intensity Function
+
+Before using the vibration intensity function, it is necessary to determine whether the device supports it.
+
+Condition：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportMotor()
+```
+
+#### Set vibration intensity
+
+###### Prerequisites
+
+The device is connected and supports the vibration intensity function.
+
+###### interface
+
+```kotlin
+setMotorLevel(EMotorLevel level, IBleWriteResponse bleWriteResponse, IMotorOperateListener listener)
+```
+
+###### Parameter Explanation
+
+| Parameter name   | Type                  | Describe                        |
+| ---------------- | --------------------- | ------------------------------- |
+| level            | EMotorLevel           | The vibration intensity level   |
+| bleWriteResponse | IBleWriteResponse     | Listening for write operations  |
+| listener         | IMotorOperateListener | Listener for the operation      |
+
+**EMotorLevel** --- The enum of vibration intensity level
+
+| Parameter name | Describe |
+| -------------- | -------- |
+| WEAK           | Weak     |
+| MEDIUM         | Medium   |
+| STRONG         | Strong   |
+
+#### Read vibration intensity
+
+###### interface
+
+```kotlin
+readMotorLevel(IBleWriteResponse bleWriteResponse, IMotorOperateListener listener)
+```
+
+###### Parameter Explanation
+
+| Parameter name   | Type                  | Describe                        |
+| ---------------- | --------------------- | ------------------------------- |
+| bleWriteResponse | IBleWriteResponse     | Listening for write operations  |
+| listener         | IMotorOperateListener | Listener for the operation      |
+
+###### Returned Data
+
+**IMotorOperateListener** -- Listener for the vibration intensity operation
+
+```kotlin
+interface IMotorOperateListener {
+
+    /**
+     * Callback for reading the vibration intensity
+     */
+    fun onMotorLevelRead(data: MotorLevelData)
+
+    /**
+     * Callback for setting the vibration intensity
+     */
+    fun onMotorLevelSetting(data: MotorLevelData)
+
+    /**
+     * Active report of the current level after it is changed on the device
+     */
+    fun onMotorLevelReport(data: MotorLevelData)
+}
+```
+
+**MotorLevelData** -- The vibration intensity data
+
+| Parameter name | Type        | Describe                                                    |
+| -------------- | ----------- | ------------------------------------------------------------ |
+| level          | EMotorLevel | The vibration intensity level (weak/medium/strong)           |
+| isSuccess      | boolean     | Operation result: valid for reading/setting (true = success) |
+| isDeviceReport | boolean     | Whether it is an active report from the device               |
+
+###### Example Code
+
+```kotlin
+//Read the current vibration intensity level
+VPOperateManager.getInstance().readMotorLevel(bleWriteResponse, object : IMotorOperateListener {
+    override fun onMotorLevelRead(data: MotorLevelData) {
+    }
+
+    override fun onMotorLevelSetting(data: MotorLevelData) {
+    }
+
+    override fun onMotorLevelReport(data: MotorLevelData) {
+    }
+})
+
+//Set the vibration intensity level to strong
+VPOperateManager.getInstance().setMotorLevel(EMotorLevel.STRONG, bleWriteResponse, object : IMotorOperateListener {
+    override fun onMotorLevelRead(data: MotorLevelData) {
+    }
+
+    override fun onMotorLevelSetting(data: MotorLevelData) {
+    }
+
+    override fun onMotorLevelReport(data: MotorLevelData) {
+    }
+})
+```
 
 
 

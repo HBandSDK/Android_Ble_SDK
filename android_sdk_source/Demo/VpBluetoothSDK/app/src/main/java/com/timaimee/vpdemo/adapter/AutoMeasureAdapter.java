@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.iielse.switchbutton.SwitchView;
 import com.timaimee.vpdemo.R;
 import com.veepoo.protocol.model.datas.AutoMeasureData;
+import com.veepoo.protocol.model.enums.EAutoMeasureType;
 
 import java.util.List;
 import java.util.Locale;
@@ -21,6 +22,18 @@ import java.util.Locale;
  * Description:
  */
 public class AutoMeasureAdapter extends RecyclerView.Adapter<AutoMeasureAdapter.ViewHolder> {
+
+    /**SwitchView不接受null监听(会抛empty listener)，隐藏开关时用它占位*/
+    private static final SwitchView.OnStateChangedListener NO_OP_LISTENER = new SwitchView.OnStateChangedListener() {
+        @Override
+        public void toggleToOn(SwitchView view) {
+        }
+
+        @Override
+        public void toggleToOff(SwitchView view) {
+        }
+    };
+
     private List<AutoMeasureData> data;
     public AutoMeasureAdapter(List<AutoMeasureData> data, OnAutoMeasureOptListener listener) {
         this.data = data;
@@ -56,6 +69,8 @@ public class AutoMeasureAdapter extends RecyclerView.Adapter<AutoMeasureAdapter.
         TextView tvMeasureTime;
         TextView tvMeasureInterval;
         SwitchView sv;
+        View llLowOxygen;
+        SwitchView svLowOxygen;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -63,6 +78,8 @@ public class AutoMeasureAdapter extends RecyclerView.Adapter<AutoMeasureAdapter.
             tvMeasureTime = itemView.findViewById(R.id.tvMeasureTime);
             tvMeasureInterval = itemView.findViewById(R.id.tvMeasureInterval);
             sv = itemView.findViewById(R.id.sv);
+            llLowOxygen = itemView.findViewById(R.id.llLowOxygen);
+            svLowOxygen = itemView.findViewById(R.id.svLowOxygen);
         }
 
         private String getAutoMeasureDataName(AutoMeasureData autoMeasureData){
@@ -83,13 +100,15 @@ public class AutoMeasureAdapter extends RecyclerView.Adapter<AutoMeasureAdapter.
                     return "洛伦兹";
                 case HRV:
                     return "HRV";
-                case BLOOD_COMPOSITION:
-                    return "血液成分";
-            }
-            return "UNKNOWN";
+            case BLOOD_COMPOSITION:
+                return "血液成分";
+            case FALL_DETECTION:
+                return "跌倒提醒";
         }
+        return "UNKNOWN";
+    }
 
-        private String getMeasureTime(AutoMeasureData autoMeasureData){
+    private String getMeasureTime(AutoMeasureData autoMeasureData){
             int startTime = autoMeasureData.getCurrentStartMinute();
             int endTime = autoMeasureData.getCurrentEndMinute();
             return String.format(Locale.CHINA,"测量时间: %02d:%02d-%02d:%02d", startTime / 60,startTime % 60,endTime / 60,endTime % 60);
@@ -117,6 +136,34 @@ public class AutoMeasureAdapter extends RecyclerView.Adapter<AutoMeasureAdapter.
                     }
                 }
             });
+            //低氧提醒开关：仅血氧测量项且设备支持(lowOxygenAlertSwitch>=0)时显示，否则隐藏
+            boolean showLowOxygen = autoMeasureData.getFunType() == EAutoMeasureType.BLOOD_OXYGEN
+                    && autoMeasureData.getLowOxygenAlertSwitch() >= 0;
+            llLowOxygen.setVisibility(showLowOxygen ? View.VISIBLE : View.GONE);
+            if (showLowOxygen) {
+                svLowOxygen.setOpened(autoMeasureData.getLowOxygenAlertSwitch() == 1);
+                //切换时更新数据并复用主开关的下发通道
+                svLowOxygen.setOnStateChangedListener(new SwitchView.OnStateChangedListener() {
+                    @Override
+                    public void toggleToOn(SwitchView view) {
+                        autoMeasureData.setLowOxygenAlertSwitch(1);
+                        if (listener != null) {
+                            listener.onToggleChanged(autoMeasureData);
+                        }
+                    }
+
+                    @Override
+                    public void toggleToOff(SwitchView view) {
+                        autoMeasureData.setLowOxygenAlertSwitch(0);
+                        if (listener != null) {
+                            listener.onToggleChanged(autoMeasureData);
+                        }
+                    }
+                });
+            } else {
+                //SwitchView.setListener(null)会抛IllegalArgumentException，用no-op监听占位
+                svLowOxygen.setOnStateChangedListener(NO_OP_LISTENER);
+            }
         }
     }
 

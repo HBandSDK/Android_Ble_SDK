@@ -48,6 +48,7 @@
 | 1.4.2 | 新增YM23PRO定制佩戴状态上报与测试状态功能 | 2026.09.24 |
 | 1.4.3 | 新增QH15定制亲情守护功能接口 | 2026.09.29 |
 | 1.4.4 | 新增JH151定制ECG单导测量时长功能（设置/读取） | 2026.10.22 |
+| 1.4.5 | 1.新增左右手佩戴配置功能（设置/读取）<br />2.新增振动强度控制功能（设置/读取/设备上报监听）<br />3.自动测量设置增加低氧提醒开关（仅血氧测量项）<br />4.自动测量新增跌倒提醒测量类型（FALL_DETECTION）与灵敏度设置（低/标准/高） | 2026.10.27 |
 
 ## 导入SDK
 添加依赖
@@ -10786,6 +10787,12 @@ readAutoMeasureSettingData(bleWriteResponse, settingDataListener)
 
     //    当前的测试时间段-结束
     var currentEndMinute = 0
+
+    //    当前灵敏度：仅部分设备的部分测量项支持；UNSUPPORT表示设备未返回(不支持)，其余见 ESensitivity 枚举
+    var sensitivity = ESensitivity.UNSUPPORT
+
+    //    低氧提醒开关：仅用于血氧；-1未返回(设备不支持)/0关闭(默认)/1开启；开关掉电保存，血氧监测关闭时暂停提醒，重开后恢复
+    var lowOxygenAlertSwitch = -1
 ```
 
 **EAutoMeasureType** -- 自动测量 类型枚举类
@@ -10800,7 +10807,8 @@ enum class EAutoMeasureType(val value: Int) {
     BODY_TEMPERATURE(5),
     LORENZ(6),
     HRV(7),
-    BLOOD_COMPOSITION(8);
+    BLOOD_COMPOSITION(8),
+    FALL_DETECTION(9);
 
     companion object {
         fun fromValue(value: Int): EAutoMeasureType? {
@@ -10850,6 +10858,21 @@ setAutoMeasureSettingData(bleWriteResponse, measureData, settingDataListener)
 VPOperateManager.getInstance().setAutoMeasureSettingData(bleWriteResponse, measureData, settingDataListener)
 ```
 
+注：**低氧提醒开关（部分设备支持）** 为血氧自动测量的附属开关。读取自动测量设置时，血氧项数据的 `lowOxygenAlertSwitch` 值 >= 0 表示设备支持该功能（-1 表示不支持）；设置时，在血氧的 `AutoMeasureData` 中将 `lowOxygenAlertSwitch` 置为 0（关闭）或 1（开启）后调用 `setAutoMeasureSettingData` 下发即可，其他测量项无需设置（保持 -1）。
+
+注：**灵敏度（部分设备支持）** 为自动测量的可选属性。读取自动测量设置时，测量项数据的 `sensitivity` 值不为 `UNSUPPORT` 表示设备支持该功能；设置时，将对应测量项的 `sensitivity` 置为 `ESensitivity.LOW`（低灵敏度）/ `ESensitivity.STANDARD`（标准灵敏度）/ `ESensitivity.HIGH`（高灵敏度）后调用 `setAutoMeasureSettingData` 下发即可，未支持的测量项保持 `UNSUPPORT`（不下发）。
+
+**ESensitivity** -- 灵敏度枚举类
+
+```kotlin
+enum class ESensitivity(val value: Int) {
+    UNSUPPORT(-1),  // 设备未返回/不支持
+    NONE(0),        // 预留
+    LOW(1),         // 低灵敏度
+    STANDARD(2),    // 标准灵敏度
+    HIGH(3);        // 高灵敏度
+}
+```
 
 
 
@@ -12525,6 +12548,218 @@ readHealthLightStatus(IBleWriteResponse bleWriteResponse)
 | 参数名           | 类型              | 备注         |
 | ---------------- | ----------------- | ------------ |
 | bleWriteResponse | IBleWriteResponse | 写入操作监听 |
+
+
+
+## 左右手佩戴功能
+
+在使用左右手佩戴功能之前，需判断设备是否支持该功能
+
+判断条件：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportWearHand()
+```
+
+注：佩戴手位用于告知设备当前佩戴在左手还是右手，设备会根据佩戴手位优化测量算法；
+
+#### 设置左右手佩戴配置
+
+###### 前提
+
+设备已连接且支持左右手佩戴功能
+
+###### 接口
+
+```kotlin
+setWearHandConfig(EWearHandMode wearMode, IWearHandConfigListener listener, IBleWriteResponse bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                    | 备注         |
+| ---------------- | ----------------------- | ------------ |
+| wearMode         | EWearHandMode           | 佩戴手位     |
+| listener         | IWearHandConfigListener | 操作结果监听 |
+| bleWriteResponse | IBleWriteResponse       | 写入操作监听 |
+
+**EWearHandMode** --- 佩戴手位类型
+
+| 参数名     | 备注           |
+| ---------- | -------------- |
+| NONE       | 不支持（预留） |
+| LEFT_HAND  | 左手（默认）   |
+| RIGHT_HAND | 右手           |
+
+#### 读取左右手佩戴配置
+
+###### 接口
+
+```kotlin
+readWearHandConfig(IWearHandConfigListener listener, IBleWriteResponse bleWriteResponse)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                    | 备注         |
+| ---------------- | ----------------------- | ------------ |
+| listener         | IWearHandConfigListener | 操作结果监听 |
+| bleWriteResponse | IBleWriteResponse       | 写入操作监听 |
+
+###### 数据返回
+
+**IWearHandConfigListener** -- 左右手佩戴配置操作监听
+
+```kotlin
+interface IWearHandConfigListener {
+    /**
+     * 设置/读取/设备主动上报的配置结果回调
+     *
+     * @param data 配置结果数据
+     */
+    fun onWearHandConfigResult(data: WearHandConfigData)
+}
+```
+
+**WearHandConfigData** -- 配置结果数据
+
+| 参数名   | 类型          | 备注                                                    |
+| -------- | ------------- | ------------------------------------------------------- |
+| cmd      | int           | 数据类型：0设置应答 / 1读取应答 / 2设备主动上报（预留）  |
+| success  | boolean       | 操作是否成功                                            |
+| wearMode | EWearHandMode | 当前生效的佩戴手位                                      |
+
+###### 示例代码
+
+```kotlin
+//设置佩戴手位为右手
+VPOperateManager.getInstance().setWearHandConfig(EWearHandMode.RIGHT_HAND, object : IWearHandConfigListener {
+    override fun onWearHandConfigResult(data: WearHandConfigData) {
+        //data.success 为操作结果，data.wearMode 为当前生效的佩戴手位
+    }
+}, bleWriteResponse)
+
+//读取当前佩戴手位
+VPOperateManager.getInstance().readWearHandConfig(object : IWearHandConfigListener {
+    override fun onWearHandConfigResult(data: WearHandConfigData) {
+    }
+}, bleWriteResponse)
+```
+
+
+
+## 振动强度功能
+
+在使用振动强度功能之前，需判断设备是否支持该功能
+
+判断条件：
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportMotor()
+```
+
+#### 设置振动强度
+
+###### 前提
+
+设备已连接且支持振动强度功能
+
+###### 接口
+
+```kotlin
+setMotorLevel(EMotorLevel level, IBleWriteResponse bleWriteResponse, IMotorOperateListener listener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                  | 备注         |
+| ---------------- | --------------------- | ------------ |
+| level            | EMotorLevel           | 振动强度档位 |
+| bleWriteResponse | IBleWriteResponse     | 写入操作监听 |
+| listener         | IMotorOperateListener | 操作结果监听 |
+
+**EMotorLevel** --- 振动强度档位
+
+| 参数名 | 备注 |
+| ------ | ---- |
+| WEAK   | 弱   |
+| MEDIUM | 中   |
+| STRONG | 强   |
+
+#### 读取振动强度
+
+###### 接口
+
+```kotlin
+readMotorLevel(IBleWriteResponse bleWriteResponse, IMotorOperateListener listener)
+```
+
+###### 参数解释
+
+| 参数名           | 类型                  | 备注         |
+| ---------------- | --------------------- | ------------ |
+| bleWriteResponse | IBleWriteResponse     | 写入操作监听 |
+| listener         | IMotorOperateListener | 操作结果监听 |
+
+###### 数据返回
+
+**IMotorOperateListener** -- 振动强度操作监听
+
+```kotlin
+interface IMotorOperateListener {
+
+    /**
+     * 读取振动强度回调
+     */
+    fun onMotorLevelRead(data: MotorLevelData)
+
+    /**
+     * 设置振动强度回调
+     */
+    fun onMotorLevelSetting(data: MotorLevelData)
+
+    /**
+     * 设备端修改后主动上报当前档位
+     */
+    fun onMotorLevelReport(data: MotorLevelData)
+}
+```
+
+**MotorLevelData** -- 振动强度数据
+
+| 参数名         | 类型        | 备注                                    |
+| -------------- | ----------- | --------------------------------------- |
+| level          | EMotorLevel | 振动强度档位（弱/中/强）                |
+| isSuccess      | boolean     | 操作结果：读取/设置时有效（true=成功）  |
+| isDeviceReport | boolean     | 是否设备端主动上报                      |
+
+###### 示例代码
+
+```kotlin
+//读取当前振动强度档位
+VPOperateManager.getInstance().readMotorLevel(bleWriteResponse, object : IMotorOperateListener {
+    override fun onMotorLevelRead(data: MotorLevelData) {
+    }
+
+    override fun onMotorLevelSetting(data: MotorLevelData) {
+    }
+
+    override fun onMotorLevelReport(data: MotorLevelData) {
+    }
+})
+
+//设置振动强度档位为强
+VPOperateManager.getInstance().setMotorLevel(EMotorLevel.STRONG, bleWriteResponse, object : IMotorOperateListener {
+    override fun onMotorLevelRead(data: MotorLevelData) {
+    }
+
+    override fun onMotorLevelSetting(data: MotorLevelData) {
+    }
+
+    override fun onMotorLevelReport(data: MotorLevelData) {
+    }
+})
+```
 
 
 

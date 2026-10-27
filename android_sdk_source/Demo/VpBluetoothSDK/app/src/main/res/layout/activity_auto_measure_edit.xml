@@ -155,13 +155,101 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
+    <TextView
+        android:id="@+id/tvLowOxygen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="低氧提醒(仅血氧):"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="#000FFF"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSupportInfo" />
+
+    <com.github.iielse.switchbutton.SwitchView
+        android:id="@+id/svLowOxygen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:isOpened="false"
+        android:layout_marginEnd="10dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/tvLowOxygen"
+        app:layout_constraintBottom_toBottomOf="@id/tvLowOxygen"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSensitivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="灵敏度:"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="#000FFF"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvLowOxygen" />
+
+    <LinearLayout
+        android:id="@+id/llSensitivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintTop_toTopOf="@id/tvSensitivity"
+        app:layout_constraintBottom_toBottomOf="@id/tvSensitivity"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/btnSensitivityLow"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginEnd="6dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:minWidth="0dp"
+            android:textColor="@color/black"
+            android:text="低"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btnSensitivityStandard"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginEnd="6dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textColor="@color/black"
+            android:minWidth="0dp"
+            android:text="标准"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btnSensitivityHigh"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:minWidth="0dp"
+            android:textColor="@color/black"
+            android:text="高"
+            android:textSize="14sp" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/btnSetting"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="20dp"
         android:text="设置"
-        app:layout_constraintTop_toBottomOf="@id/tvSupportInfo"
+        app:layout_constraintTop_toBottomOf="@id/tvSensitivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
