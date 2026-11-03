@@ -330,6 +330,10 @@
             android:configChanges="keyboardHidden"
             android:exported="false" />
         <activity
+            android:name=".activity.v2.health.SleepActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+        <activity
             android:name=".activity.v2.other.DeviceControlActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />

@@ -63,9 +63,7 @@ public class HealthFunctionActivity extends BaseActivity implements AdapterView.
             case DeviceMenu.Health.BloodComponent -> startActivity(new Intent(this, BloodComponentActivity.class));
             case DeviceMenu.Health.BodyComponent -> startActivity(new Intent(this, BodyComponentActivity.class));
             case DeviceMenu.Health.BodyTemperature -> startActivity(new Intent(this, BodyTemperatureActivity.class));
-            case DeviceMenu.Health.Sleep -> {
-
-            }
+            case DeviceMenu.Health.Sleep -> startActivity(new Intent(this, SleepActivity.class));
             case DeviceMenu.Health.Female -> startActivity(new Intent(this, FemaleActivity.class));
             case DeviceMenu.Health.MiniCheckUp -> startActivity(new Intent(this, MiniCheckupActivity.class));
             case DeviceMenu.Health.GSR -> startActivity(new Intent(this, GSRDetectActivity.class));
