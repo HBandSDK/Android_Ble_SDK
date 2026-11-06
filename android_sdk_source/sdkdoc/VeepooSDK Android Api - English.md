@@ -49,6 +49,7 @@
 | 1.4.3 | Added QH15 custom family guardian feature interfaces | 2026.09.29 |
 | 1.4.4 | Added JH151 customized ECG single-lead test duration function (Set/Read) | 2026.10.22 |
 | 1.4.5 | 1. Added Wear Hand configuration function (Set/Read)<br />2. Added Vibration Intensity control function (Set/Read/Device report listener)<br />3. Auto measurement setting adds low-oxygen alert switch (blood oxygen measurement only)<br />4. Auto measurement adds Fall Detection measurement type (FALL_DETECTION) and sensitivity setting (Low/Standard/High) | 2026.10.27 |
+| 1.4.6 | 1.Added ZT79 Game Clock Setting Function | 2003.11.06 |
 ## Import SDK
 ### Add Dependency
 
@@ -16016,6 +16017,363 @@ Java
 QH15SecurityProtectionModel model = new QH15SecurityProtectionModel(-128, 22.54900, 113.94521, EQH15SecurityProtectionState.EFFECTIVE_LOCATION, 0);
 VPOperateManager.getInstance().pushQH15GnssLocationData(model, writeResponse);
 ```
+
+
+
+### ZT79 Game Clock Control Functions
+
+Prerequisite: The device must support game control functionality; the criteria are as follows:
+
+```
+VpSpGetUtil.getVpSpVariInstance(applicationContext).isSupportGameClock
+```
+
+Note: All of the following APIs can only be called if the device supports game control functionality.
+
+#### Read game control list
+
+###### Interface
+
+```java
+/**
+ * 读取游戏控制信息（推荐用法：显式传入宿主侧总开关状态）。
+ * <p>
+ * Read game control info with an explicit host-side main switch (recommended).
+ * <p>
+ * 对应 iOS：{@code veepooSDK_ZT79ReadGameClock:clockArr:result:}。
+ * Same as iOS {@code veepooSDK_ZT79ReadGameClock}.
+ *
+ * @param mainSwitch       宿主侧已知的总开关状态，null 表示从未同步过
+ *                         host-known main switch, null when never synced
+ * @param gameClockList    宿主侧当前持有的时段列表，首次同步传空集合
+ *                         host-side clock list, empty on first sync
+ * @param listener         操作监听 / operation listener
+ * @param bleWriteResponse 指令写入回调 / write callback
+ */
+public void readZT79GameClocks(Boolean mainSwitch, List<GameClockBean> gameClockList, IGameClockOptListener listener, IBleWriteResponse bleWriteResponse)
+```
+
+###### Parameter Description
+
+| Parameter Name   | Type                  | Description                                    |
+| ---------------- | --------------------- | ---------------------------------------------- |
+| mainSwitch       | Boolean               | host-known main switch, null when never synced |
+| gameClockList    | List<GameClockBean>   | host-side clock list, empty on first sync      |
+| listener         | IGameClockOptListener | peration listener                              |
+| bleWriteResponse | IBleWriteResponse     | write callback                                 |
+
+###### Data Return
+
+IGameClockOptListener
+
+```java
+/**
+ * 游戏控制（ZT79 定制）操作监听。
+ *
+ * Game control (ZT79 customization) operation listener.
+ *
+ * 三种读取结果对应 iOS 的 `VPGameClockReadState`：
+ * ```
+ * FullData(0) → onGameTimePlanningRead(...)
+ * Synced(1)   → onGameClockNotNeed2Update()
+ * Empty(2)    → onGameClockEmpty()
+ * ```
+ *
+ * 注意：这三个方法互斥，一次读取只会回调其中一个。
+ * Note: these three are mutually exclusive — exactly one of them fires per read request.
+ */
+interface IGameClockOptListener {
+
+    /**
+     * 删除结果。
+     * Delete result.
+     *
+     * @param isSuccess true 删除成功 / true when the device accepted the deletion
+     */
+    fun onDeleteResult(isSuccess: Boolean)
+
+    /**
+     * 设置结果（总开关 / 时段增改均回调此方法）。
+     * Set result, shared by the main switch and clock add/edit requests.
+     *
+     * @param isSuccess true 设置成功 / true when the device accepted the setting
+     */
+    fun onSettingResult(isSuccess: Boolean)
+
+    /**
+     * 读取到设备侧全量数据（iOS: FullData）。
+     * Device returned the full clock list (iOS: FullData).
+     *
+     * @param crc      设备侧 CRC（16 位）/ device-side 16bit CRC
+     * @param isOpen   设备侧总开关状态 / device-side main switch
+     * @param dataList 设备侧全量时段列表，已按 id 顺序解析 / full clock list parsed from device
+     */
+    fun onGameTimePlanningRead(
+        crc: Int,
+        isOpen: Boolean,
+        dataList: MutableList<GameClockBean>
+    )
+
+    /**
+     * 设备侧数据与宿主传入的一致，无需更新（iOS: Synced）。
+     * Device data matches the host one, nothing to update (iOS: Synced).
+     *
+     * 此时请沿用例入参中宿主自己维护的列表。
+     * Keep using the host-owned list passed into the read request.
+     */
+    fun onGameClockNotNeed2Update()
+
+    /**
+     * 设备侧无任何时段数据，仅回传总开关（iOS: Empty）。
+     * The device holds no clock data, only the main switch was returned (iOS: Empty).
+     */
+    fun onGameClockEmpty()
+
+}
+```
+
+GameClockBean 
+
+```java
+/**
+ * 时段 id：1~10（从 1 开始）
+ * <p>Clock id, 1..10.
+ */
+private int clockId = MIN_CLOCK_ID;
+
+/**
+ * 时段类型，决定其余字段的有效性
+ * <p>Clock type, decides which other fields are meaningful.
+ */
+private EGameClockType clockType = EGameClockType.WEEKLY_REPEAT;
+
+/**
+ * 年（真实年份，例如 2026），仅单次/临时有效
+ * <p>Year (real year, e.g. 2026), only for SINGLE / TEMPORARY.
+ */
+private int year;
+
+/**
+ * 月 1~12，仅单次/临时有效
+ * <p>Month 1..12, only for SINGLE / TEMPORARY.
+ */
+private int month;
+
+/**
+ * 日 1~31，仅单次/临时有效
+ * <p>Day 1..31, only for SINGLE / TEMPORARY.
+ */
+private int day;
+
+/**
+ * 重复星期位掩码：bit0~bit6 对应周一~周日，0x7F 表示每天，0 表示不重复
+ * <p>Repeat weekday mask, bit0..bit6 = Mon..Sun, 0x7F = every day, 0 = no repeat.
+ */
+private int repeatWeekMask = EGameClockWeekday.EVERY_DAY.getBit();
+
+/**
+ * 开始-时 0~23 / start hour
+ */
+private int startHour;
+
+/**
+ * 开始-分 0~59 / start minute
+ */
+private int startMinute;
+
+/**
+ * 开始-秒 0~59 / start second
+ */
+private int startSecond;
+
+/**
+ * 持续时长，单位分钟，不小于 {@link #MIN_DURATION_MINUTES}
+ * <p>Duration in minutes, must be &gt;= {@link #MIN_DURATION_MINUTES}.
+ * <p>
+ * 直接存时长而不是“结束时间”，避免跨零点时 endHour 变成 24 这类脏值。
+ * Storing duration instead of end time avoids dirty values like endHour = 24 across midnight.
+ */
+private int duration = MIN_DURATION_MINUTES;
+
+/**
+ * 开关状态，true 开 / false 关
+ * <p>Switch state, true = on.
+ */
+private boolean open = true;
+```
+
+
+
+#### Set the master switch for game controls
+
+###### Interface
+
+```java
+/**
+ * 设置游戏控制总开关。
+ * <p>
+ * Set the game control main switch.
+ * <p>
+ * 对应 iOS：{@code veepooSDK_ZT79SetGameClockMainSwitch:temporary:crcClockArr:callBack:}。
+ * <p>
+ * 推荐时序：先更新宿主侧状态 → 下发 → 失败回滚（SDK 不回滚，由宿主负责）。
+ * Recommended flow: update the host state first, then send; roll back on failure.
+ *
+ * @param mainSwitch       目标总开关状态，true 开 / false 关
+ *                         target switch state, true = on
+ * @param gameClockList    操作生效后的全量时段列表（用于 CRC 校验，不会被修改）
+ *                         full clock list after the operation, used for CRC only
+ * @param listener         操作监听，结果回调 {@link IGameClockOptListener#onSettingResult(boolean)}
+ *                         listener, result via onSettingResult
+ * @param bleWriteResponse 指令写入回调 / write callback
+ */
+public void setZT79GameClockMainSwitch(boolean mainSwitch, List<GameClockBean> gameClockList, IGameClockOptListener listener, IBleWriteResponse bleWriteResponse)
+```
+
+###### Parameter Description
+
+| Parameter Name   | Type                  | Description                                            |
+| ---------------- | --------------------- | ------------------------------------------------------ |
+| mainSwitch       | Boolean               | target switch state, true = on                         |
+| gameClockList    | List<GameClockBean>   | full clock list after the operation, used for CRC only |
+| listener         | IGameClockOptListener | listener, result via onSettingResult                   |
+| bleWriteResponse | IBleWriteResponse     | write callback                                         |
+
+#### Configure (Add/Modify) Game Controls
+
+##### Single setting
+
+###### Interface
+
+```java
+/**
+ * 添加 / 修改单个游戏时段。
+ * <p>
+ * Add or edit a single game clock.
+ * <p>
+ * 对应 iOS：{@code veepooSDK_ZT79SetGameClocks:mainSwitch:crcClockArr:callBack:}（单条）。
+ * <p>
+ * 推荐时序：先更新宿主侧列表 → 下发 → 失败回滚。
+ * Recommended flow: update the host list first, then send; roll back on failure.
+ *
+ * @param mainSwitch       操作生效后的总开关状态 / main switch after the operation
+ * @param editBean         本次设置的时段 / clock to set
+ * @param gameClockList    操作生效后的全量时段列表（需包含 editBean，用于 CRC 校验）
+ *                         full clock list after the operation, must contain editBean
+ * @param listener         操作监听，结果回调 {@link IGameClockOptListener#onSettingResult(boolean)}
+ * @param bleWriteResponse 指令写入回调 / write callback
+ */
+public void setZT79GameClocks(boolean mainSwitch, GameClockBean editBean, List<GameClockBean> gameClockList, IGameClockOptListener listener, IBleWriteResponse bleWriteResponse) 
+```
+
+###### Parameter Description
+
+| Parameter Name   | Type                  | Description                                                  |
+| ---------------- | --------------------- | ------------------------------------------------------------ |
+| mainSwitch       | Boolean               | main switch after the operation                              |
+| editBean         | GameClockBean         | clock to set                                                 |
+| gameClockList    | List<GameClockBean>   | ull clock list after the operation, must contain editBean    |
+| listener         | IGameClockOptListener | listener, result via onSettingResult{@link IGameClockOptListener#onSettingResult(boolean)} |
+| bleWriteResponse | IBleWriteResponse     | write callback                                               |
+
+##### Batch Settings
+
+###### Interface
+
+```java
+/**
+ * Batch Settings
+ * <p>
+ * Add or edit several game clocks in one request (batch, same as iOS {@code setArr}).
+ * <p>
+ * 多包自动分包下发（每包 16 字节内容），条数上限由设备的 10 条时段限制决定。
+ * Content is split into 16-byte packages automatically; the 10-clock device limit applies.
+ *
+ * @param mainSwitch       操作生效后的总开关状态 / main switch after the operation
+ * @param setList          本次提交的时段列表（至少 1 条）/ clocks to set, at least one
+ * @param gameClockList    操作生效后的全量时段列表（需包含 setList，用于 CRC 校验）
+ *                         full clock list after the operation, must contain setList
+ * @param listener         操作监听，结果回调 {@link IGameClockOptListener#onSettingResult(boolean)}
+ * @param bleWriteResponse 指令写入回调 / write callback
+ */
+public void setZT79GameClocks(boolean mainSwitch, List<GameClockBean> setList, List<GameClockBean> gameClockList, IGameClockOptListener listener, IBleWriteResponse bleWriteResponse) 
+```
+
+###### Parameter Description
+
+| Parameter Name   | Type                  | Description                                                  |
+| ---------------- | --------------------- | ------------------------------------------------------------ |
+| mainSwitch       | Boolean               | main switch after the operation                              |
+| setList          | GameClockBean         | clocks to set, at least one                                  |
+| gameClockList    | List<GameClockBean>   | full clock list after the operation, must contain setList    |
+| listener         | IGameClockOptListener | listener, result via onSettingResult{@link IGameClockOptListener#onSettingResult(boolean)} |
+| bleWriteResponse | IBleWriteResponse     | write callback                                               |
+
+#### Delete game clock
+
+##### Single Delete 
+
+###### Interface
+
+```java
+/**
+ * 删除单个游戏时段（按 bean 里的 clockId 删除）。
+ * <p>
+ * Delete a single game clock by its clockId.
+ * <p>
+ * 对应 iOS：{@code veepooSDK_ZT79DeleteGameClocksWithIDs:mainSwitch:crcClockArr:callBack:}（单 id）。
+ *
+ * @param mainSwitch       操作生效后的总开关状态 / main switch after the operation
+ * @param deleteBean       待删除的时段 / clock to delete
+ * @param gameClockList    删除后剩余的全量时段列表（用于 CRC 校验）
+ *                         remaining clock list after deletion, used for CRC only
+ * @param listener         操作监听，结果回调 {@link IGameClockOptListener#onDeleteResult(boolean)}
+ * @param bleWriteResponse 指令写入回调 / write callback
+ */
+public void deleteZT79GameClock(boolean mainSwitch, GameClockBean deleteBean, List<GameClockBean> gameClockList, IGameClockOptListener listener, IBleWriteResponse bleWriteResponse) 
+```
+
+###### Parameter Description
+
+| Parameter Name   | Type                  | Description                                                  |
+| ---------------- | --------------------- | ------------------------------------------------------------ |
+| mainSwitch       | Boolean               | main switch after the operation                              |
+| deleteBean       | GameClockBean         | clock to delete                                              |
+| gameClockList    | List<GameClockBean>   | remaining clock list after deletion, used for CRC only       |
+| listener         | IGameClockOptListener | listener {@link IGameClockOptListener#onDeleteResult(boolean)} |
+| bleWriteResponse | IBleWriteResponse     | write callback                                               |
+
+##### Batch Detete
+
+###### Interface
+
+```java
+/**
+ * 按 id 批量删除游戏时段。
+ * <p>
+ * Delete game clocks by ids (batch).
+ * <p>
+ * 对应 iOS：{@code veepooSDK_ZT79DeleteGameClocksWithIDs:mainSwitch:crcClockArr:callBack:}。
+ *
+ * @param mainSwitch       操作生效后的总开关状态 / main switch after the operation
+ * @param deleteIDs        待删除的 clockId 列表（1~10）/ ids to delete
+ * @param gameClockList    删除后剩余的全量时段列表（用于 CRC 校验；即使仍包含待删除 id 也会被自动过滤）
+ *                         remaining clock list after deletion; ids still present are filtered out
+ * @param listener         操作监听，结果回调 {@link IGameClockOptListener#onDeleteResult(boolean)}
+ * @param bleWriteResponse 指令写入回调 / write callback
+ */
+public void deleteZT79GameClockWithIDs(boolean mainSwitch, List<Integer> deleteIDs, List<GameClockBean> gameClockList, IGameClockOptListener listener, IBleWriteResponse bleWriteResponse) 
+```
+
+###### Parameter Description
+
+| Parameter Name   | Type                  | Description                                                  |
+| ---------------- | --------------------- | ------------------------------------------------------------ |
+| mainSwitch       | Boolean               | main switch after the operation                              |
+| deleteIDs        | List<Integer>         | （1~10）/ ids to delete                                      |
+| gameClockList    | List<GameClockBean>   | remaining clock list after deletion; ids still present are filtered out |
+| listener         | IGameClockOptListener | listener {@link IGameClockOptListener#onDeleteResult(boolean)} |
+| bleWriteResponse | IBleWriteResponse     | write callback                                               |
 
 ## Device Control Functions
 
