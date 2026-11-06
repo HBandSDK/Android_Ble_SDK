@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    列表条目「正在编辑」态：浅蓝底 + 2dp 主色描边，与普通白底卡片拉开明显差异。
+    Selected (being edited) item: light blue fill with a 2dp primary stroke.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#E1E9FF" />
+    <corners android:radius="10dp" />
+    <stroke
+        android:width="2dp"
+        android:color="#3F51B5" />
+</shape>

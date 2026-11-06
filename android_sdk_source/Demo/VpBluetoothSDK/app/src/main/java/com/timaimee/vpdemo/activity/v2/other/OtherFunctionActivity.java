@@ -76,6 +76,7 @@ public class OtherFunctionActivity extends BaseActivity implements AdapterView.O
             case DeviceMenu.Other.MAGNETIC ->   startActivity(new Intent(this, MagneticTherapyActivity.class));
             case DeviceMenu.Other.WEAR_HAND ->   startActivity(new Intent(this, WearHandConfigActivity.class));
             case DeviceMenu.Other.MOTOR_LEVEL ->   startActivity(new Intent(this, MotorLevelActivity.class));
+            case DeviceMenu.Other.GAME_CLOCK ->   startActivity(new Intent(this, GameClockActivity.class));
             case DeviceMenu.Other.AI_FUNCTION ->   startActivity(new Intent(this, AIFunActivity.class));
             case DeviceMenu.Other.GPS_EPHEMERIS -> startActivity(new Intent(this, GpsEphemerisActivity.class));
             case DeviceMenu.Other.RESET_DEVICE -> {

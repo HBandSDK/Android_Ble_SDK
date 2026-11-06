@@ -15,13 +15,11 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -196,6 +194,32 @@ public class CollapseCardLogView extends CardView {
         ViewGroup.LayoutParams params = svTestInfo.getLayoutParams();
         params.height = mLogScrollViewHeight;
         svTestInfo.setLayoutParams(params);
+    }
+
+    /**
+     * 显示 / 隐藏内置日志区域。
+     * <p>
+     * 隐藏后本控件退化为「纯折叠卡片」，适合只用来收纳表单的场景；
+     * 日志区域的上下外边距会一起被移除，内容会自动上移贴齐标题栏。
+     * <p>
+     * Show or hide the built-in log console. When hidden the view behaves as a
+     * plain collapsible card, which is handy for form-only panels.
+     *
+     * @param visible true 显示日志区域 / show the console
+     */
+    public void setLogAreaVisible(boolean visible) {
+        if (svTestInfo == null) {
+            return;
+        }
+        svTestInfo.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    /**
+     * 日志区域是否可见
+     * <p>Whether the log console is visible.
+     */
+    public boolean isLogAreaVisible() {
+        return svTestInfo != null && svTestInfo.getVisibility() == View.VISIBLE;
     }
 
     @Override

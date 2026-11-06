@@ -54,7 +54,7 @@ public interface DeviceMenu {
     String[] OtherMenu = {Other.CONTACT, Other.ALARM, Other.MUSIC, Other.MESSAGE_PUSH, Other.IMG_TXT_PUSH, Other.WORLD_CLOCK,
             Other.WEATHER, Other.PHOTOGRAPH, Other.LANGUAGE_BATTER, Other.CHECK_WEAR, Other.DEVICE_ANTI_LOSS, Other.DEVICE_4G,
             Other.LOW_POWER, Other.DEVICE_4G_READ_IMEI, Other.MAGNETIC, Other.HEALTH_LIGHT,Other.AI_FUNCTION, Other.GPS_EPHEMERIS,Other.WEAR_HAND,Other.MOTOR_LEVEL,
-            Other.RESET_DEVICE, Other.POWER_OFF, Other.FACTORY_RESET};
+            Other.GAME_CLOCK, Other.RESET_DEVICE, Other.POWER_OFF, Other.FACTORY_RESET};
 
     interface Other {
         String CONTACT = "️联系人☎️";
@@ -75,6 +75,7 @@ public interface DeviceMenu {
         String HEALTH_LIGHT = "健康灯💡✨";
         String WEAR_HAND = "左右手佩戴🤚";
         String MOTOR_LEVEL = "震动强度📳";
+        String GAME_CLOCK = "游戏控制🎮";
         String AI_FUNCTION = "AI功能🤖";
         String GPS_EPHEMERIS = "GPS星历🛰️";
         String RESET_DEVICE = "复位🔄";

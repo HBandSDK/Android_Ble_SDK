@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    游戏控制页面布局。
+
+    结构（自上而下）：
+      ① 状态栏     ：总开关 + 读取 / 清空，始终可见，高度固定
+      ② 时段配置卡 ：可折叠卡片，收起后不占空间（内部日志区域已隐藏）
+      ③ 列表标题栏 ：条数统计 + 新增入口
+      ④ 时段列表   ：自适应剩余高度，配置卡/日志卡收起时会自动变高
+      ⑤ 运行日志卡 ：可折叠，展开时 220dp 独立滚动
+
+    配置卡与日志卡互斥展开（代码里控制），保证列表区始终留得下足够空间。
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F2F3F5"
+    android:fitsSystemWindows="true">
+
+    <include
+        android:id="@+id/vTitle"
+        layout="@layout/layout_title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- ==================== ① 状态栏：总开关 + 全局操作 ==================== -->
+    <LinearLayout
+        android:id="@+id/layoutStatusBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:orientation="vertical"
+        android:paddingStart="14dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="14dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vTitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="🎮 游戏控制总开关"
+                android:textColor="#212121"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvMainSwitchState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_game_clock_state"
+                android:paddingStart="8dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="2dp"
+                android:text="未同步"
+                android:textColor="#9E9E9E"
+                android:textSize="12sp" />
+
+            <com.github.iielse.switchbutton.SwitchView
+                android:id="@+id/svMainSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnRead"
+                style="@style/BlackButton"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:text="读取设备数据"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btnDeleteAll"
+                style="@style/BlackButton"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="清空全部时段"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- ==================== ② 时段配置卡（可折叠） ==================== -->
+    <com.timaimee.vpdemo.utils.CollapseCardLogView
+        android:id="@+id/ccvConfig"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="10dp"
+        app:collapseDefaultExpand="false"
+        app:collapseLogHeight="1dp"
+        app:collapseSubTitle="新增模式 · 点击展开填写"
+        app:collapseTitle="⚙️ 时段配置"
+        app:collapseTitleColor="#E53935"
+        app:collapseTitleSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutStatusBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 类型 + ID -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="类型"
+                    android:textColor="#616161"
+                    android:textSize="14sp" />
+
+                <Spinner
+                    android:id="@+id/spClockType"
+                    android:layout_width="0dp"
+                    android:layout_height="38dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/date_time_btn_bg"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="4dp"
+                    android:spinnerMode="dropdown" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="ID"
+                    android:textColor="#616161"
+                    android:textSize="14sp" />
+
+                <!-- ID 由代码按 1~10 自动分配，不可编辑，从根上杜绝重复 id -->
+                <!-- The id is auto-assigned from 1~10 and is read-only by design -->
+                <TextView
+                    android:id="@+id/tvFormId"
+                    android:layout_width="52dp"
+                    android:layout_height="38dp"
+                    android:layout_marginStart="6dp"
+                    android:background="@drawable/bg_game_clock_state"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textColor="#3F51B5"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="自动"
+                    android:textColor="#9E9E9E"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <!-- 重复星期 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="星期"
+                    android:textColor="#616161"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:id="@+id/llWeekdays"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal" />
+            </LinearLayout>
+
+            <!-- 日期 / 时间 / 时长 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="时间"
+                    android:textColor="#616161"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/btnDate"
+                    style="@style/BlackButton"
+                    android:layout_width="0dp"
+                    android:layout_height="38dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:text="2026-01-01"
+                    android:textSize="13sp" />
+
+                <Button
+                    android:id="@+id/btnTime"
+                    style="@style/BlackButton"
+                    android:layout_width="0dp"
+                    android:layout_height="38dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:text="12:00"
+                    android:textSize="13sp" />
+
+                <EditText
+                    android:id="@+id/etDuration"
+                    style="@style/ProtocolEditText"
+                    android:layout_width="48dp"
+                    android:layout_height="38dp"
+                    android:layout_marginStart="6dp"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:text="30"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:text="分"
+                    android:textColor="#757575"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- 开启状态 + 编辑模式提示 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/cbClockOpen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="时段已开启"
+                    android:textColor="#424242"
+                    android:textSize="14sp" />
+
+                <!-- 模式提示胶囊：新增=橙色、编辑=蓝色，一眼能看出当前在干什么 -->
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/tvEditHint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_game_clock_hint_new"
+                    android:paddingStart="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="3dp"
+                    android:text="🆕 新增模式"
+                    android:textColor="#E65100"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- 保存 / 重置 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnSaveClock"
+                    style="@style/BlackButton"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="保存并下发"
+                    android:textSize="15sp" />
+
+                <Button
+                    android:id="@+id/btnResetForm"
+                    style="@style/BlackButton"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:text="重置表单"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.timaimee.vpdemo.utils.CollapseCardLogView>
+
+    <!-- ==================== ③ 列表标题栏 ==================== -->
+    <LinearLayout
+        android:id="@+id/layoutListHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="14dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ccvConfig">
+
+        <TextView
+            android:id="@+id/tvListHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="时段列表 0/10"
+            android:textColor="#212121"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="点击编辑 · 右滑删除"
+            android:textColor="#9E9E9E"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/btnAddClock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingStart="10dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="6dp"
+            android:text="＋ 新增"
+            android:textColor="#3F51B5"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- ==================== ④ 时段列表（自适应高度） ==================== -->
+    <com.yanzhenjie.recyclerview.SwipeRecyclerView
+        android:id="@+id/rvGameClock"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="10dp"
+        android:clipToPadding="false"
+        android:paddingBottom="6dp"
+        app:layout_constraintBottom_toTopOf="@id/ccvLog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutListHeader" />
+
+    <TextView
+        android:id="@+id/tvListEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:lineSpacingExtra="4dp"
+        android:text="暂无时段\n点击右上角「＋ 新增」创建第一条"
+        android:textColor="#B0BEC5"
+        android:textSize="13sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/rvGameClock"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/rvGameClock" />
+
+    <!-- ==================== ⑤ 运行日志卡（可折叠） ==================== -->
+    <com.timaimee.vpdemo.utils.CollapseCardLogView
+        android:id="@+id/ccvLog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="8dp"
+        app:collapseDefaultExpand="true"
+        app:collapseLogHeight="180dp"
+        app:collapseSubTitle="就绪，等待操作"
+        app:collapseTitle="📋 运行日志"
+        app:collapseTitleColor="#1976D2"
+        app:collapseTitleSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

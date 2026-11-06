@@ -364,6 +364,10 @@
             android:name=".activity.v2.other.TextAlarmActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.v2.other.GameClockActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+        <activity
             android:name=".activity.v2.other.OtherFunctionActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />

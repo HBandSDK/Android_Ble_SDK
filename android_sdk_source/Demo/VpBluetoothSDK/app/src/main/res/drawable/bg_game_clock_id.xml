@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 普通条目的 id 徽章：中性灰，让选中/新增态的彩色徽章更突出 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="#B0BEC5" />
+</shape>
