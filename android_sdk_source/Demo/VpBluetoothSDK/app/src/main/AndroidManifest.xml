@@ -354,6 +354,10 @@
             android:configChanges="keyboardHidden"
             android:exported="false" />
         <activity
+            android:name=".activity.v2.custom.CustomDataOptActivity"
+            android:configChanges="keyboardHidden"
+            android:exported="false" />
+        <activity
             android:name=".activity.v2.custom.PSAIMHealthDataActivity"
             android:configChanges="keyboardHidden"
             android:exported="false" />

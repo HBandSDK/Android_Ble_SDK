@@ -65,6 +65,7 @@ public class CustomFunctionActivity extends BaseActivity implements AdapterView.
             case DeviceMenu.Custom.YM23PRO_WEAR_TEST -> startActivity(new Intent(this, YM23ProTestActivity.class));
             case DeviceMenu.Custom.QH15_SAFETY_PROTECTION -> startActivity(new Intent(this, GNSSOptActivity.class));
             case DeviceMenu.Custom.JH151_ECG_SINGLE_LEAD_DURATION -> startActivity(new Intent(this, JH151ECGSingleLeadDurationActivity.class));
+            case DeviceMenu.Custom.CUSTOM_PASSTHROUGH -> startActivity(new Intent(this, CustomDataOptActivity.class));
         }
 
     }

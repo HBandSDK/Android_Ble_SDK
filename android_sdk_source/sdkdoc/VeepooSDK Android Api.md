@@ -50,6 +50,7 @@
 | 1.4.4 | 新增JH151定制ECG单导测量时长功能（设置/读取） | 2026.10.22 |
 | 1.4.5 | 1.新增左右手佩戴配置功能（设置/读取）<br />2.新增振动强度控制功能（设置/读取/设备上报监听）<br />3.自动测量设置增加低氧提醒开关（仅血氧测量项）<br />4.自动测量新增跌倒提醒测量类型（FALL_DETECTION）与灵敏度设置（低/标准/高） | 2026.10.27 |
 | 1.4.6 | 1.新增ZT79游戏功能 | 2026.11.06 |
+| 1.4.7 | 1.新增自定义指令功能 | 2026.11.12 |
 
 ## 导入SDK
 添加依赖
@@ -16524,7 +16525,7 @@ public void setZT79GameClocks(boolean mainSwitch, List<GameClockBean> setList, L
 
 #### 删除游戏控制
 
-#### 单个删除
+##### 单个删除
 
 ###### 接口
 
@@ -16556,7 +16557,7 @@ public void deleteZT79GameClock(boolean mainSwitch, GameClockBean deleteBean, Li
 | listener         | IGameClockOptListener | 操作监听                                   |
 | bleWriteResponse | IBleWriteResponse     | 写入操作的监听                             |
 
-#### 批量删除
+##### 批量删除
 
 ###### 接口
 
@@ -16587,6 +16588,213 @@ public void deleteZT79GameClockWithIDs(boolean mainSwitch, List<Integer> deleteI
 | gameClockList    | List<GameClockBean>   | 删除后剩余的全量时段列表（用于 CRC 校验）  |
 | listener         | IGameClockOptListener | 操作监听                                   |
 | bleWriteResponse | IBleWriteResponse     | 写入操作的监听                             |
+
+
+
+### 自定义协议数据
+
+**前提**
+
+客户定制功能专用：用于宿主 App 与嵌入式约定的私有协议数据透传，常规应用无需使用。
+数据格式（每个包）：0x04(固定包头) + 协议编号(2字节) + 自定义内容，协议编号与内容格式由客户与嵌入式约定。
+设备上报的自定义协议数据按来源通道回调：标准数据通道走 ICustomDataOptListener#onPassthroughData，ADC 通道走  ICustomDataOptListener#onAdcData，数据均原样返回（含包头 0x04 + 协议编号）。
+
+注意：SDK 只校验包头与长度，不做内容解析；发送接口入参为分包列表，逐包校验（每包长度 ≥ 2、以 0x04 开头、单包 ≤ 设备MTU，保底20字节，含包头），任一包校验失败则整批拦截不发送；多包由 SDK 内部按 0.03s 间隔逐包下发，分包（协议的总包数/包号字段）仍需 App 按约定协议自行组包；设备未连接或处于 DFU/资源传输模式时数据不会发送；SDK 无超时重试机制，建议 App 自行添加超时兜底（如 10 秒未收到应答按失败处理）。
+
+#### 获取当前设备支持的发送单包数据长度
+
+###### 接口
+
+```java
+/**
+ * 获取客户自定义透传协议单条指令支持的最大长度
+ * Get the max length of a single command of the customer custom pass-through protocol
+ * <p>
+ * 中科平台默认 20 个字节，其他平台为当前 MTU 支持值
+ * ZK platform: 20 bytes by default; other platforms: the value supported by the current MTU
+ *
+ * @return 单条指令最大长度（字节）/ the max length of a single command in bytes
+ */
+public int getCustomPassthroughMaxLength() 
+```
+
+#### 设置自定义数据操作监听
+
+###### 接口
+
+```java
+/**
+ * 设置客户自定义透传协议(0x04)监听
+ * Set the listener of the customer custom pass-through protocol(0x04)
+ *
+ * @param listener 监听器，可为空 / the listener, may be null
+ */
+public void setCustomDataOptListener(ICustomDataOptListener listener) {....}
+
+/**
+  * 移除客户自定义透传协议(0x04)监听
+  * Remove the listener of the customer custom pass-through protocol(0x04)
+  */
+public void removeCustomDataOptListener()
+```
+
+**ICustomDataOptListener**：客户自定义数据操作监听
+
+```java
+**
+ * 客户自定义透传协议(0x04)监听
+ * <p>
+ * 说明：SDK 只做 0x04 协议头的校验与数据透传，不做业务解析；
+ * 具体的指令/数据字段解析由客户（App 侧）自行实现。
+ * <p>
+ * Notice: the SDK only checks the 0x04 head and passes the data through,
+ * the business parsing (command / data fields) should be implemented by the customer in the App.
+ */
+public interface ICustomDataOptListener extends IListener {
+
+    /**
+     * 没有错误
+     * No error
+     */
+    int ERROR_NONE = 0;
+
+    /**
+     * 设备未连接
+     * The device is not connected
+     */
+    int ERROR_NOT_CONNECTED = 1;
+
+    /**
+     * 指令列表为空
+     * The command list is empty
+     */
+    int ERROR_CMD_LIST_EMPTY = 2;
+
+    /**
+     * 单条指令为空
+     * The command is empty
+     */
+    int ERROR_CMD_EMPTY = 3;
+
+    /**
+     * 指令协议头不是 0x04
+     * The head of the command is not 0x04
+     */
+    int ERROR_CMD_HEAD_INVALID = 4;
+
+    /**
+     * 单条指令长度超过上限
+     * The length of the command exceeds the limit
+     */
+    int ERROR_CMD_TOO_LONG = 5;
+
+    /**
+     * 指令写入设备失败
+     * Writing the command to the device failed
+     */
+    int ERROR_WRITE_FAILED = 6;
+
+    /**
+     * 收到设备上报的 0x04 数据（原样回调，不含任何解析）
+     * Receive the 0x04 data reported by the device, the raw data is passed through without parsing
+     *
+     * @param data 设备上报的原始数据，data[0] 固定为 0x04 / raw data reported by the device, data[0] is 0x04
+     */
+    void onPassthroughData(byte[] data);
+
+    /**
+     * 收到 ADC（光电原始）数据上报（原样回调）
+     * Receive the ADC (raw photo-electric) data reported by the device, passed through without parsing
+     *
+     * @param data ADC 通道上报的原始数据 / raw data reported by the ADC channel
+     */
+    void onAdcData(byte[] data);
+
+    /**
+     * 发送/校验失败回调
+     * Callback of sending / checking failure
+     *
+     * @param errorCode 错误码，见本接口的 ERROR 常量 / error code, see the ERROR constants of this interface
+     * @param errorMsg  错误描述 / the error description
+     */
+    void onError(int errorCode, String errorMsg);
+
+    /**
+     * 全部指令发送成功回调
+     * Callback when all the commands have been sent successfully
+     * <p>
+     * 说明：本次下发的所有指令都写入成功时才会回调；只要有一条写入失败则不会回调。
+     * Notice: this callback is invoked only when every command of this sending is written successfully,
+     * it will not be invoked if any command fails to be written.
+     */
+    void onSendComplete();
+}
+```
+
+#### 设置ADC通知监听自定义数据
+
+###### 接口
+
+```java
+/**
+ * 使能/关闭客户自定义透传ADC数据Notify通知
+ * Enable or disable custom passthrough ADC data notifications for clients
+ * <p>
+ * 开启流程：先取消BP_READ_UUID特征的Notify订阅，再重新订阅；
+ * 订阅成功后，当收到该特征上报数据，且数据首字节等于自定义透传协议头(0x04)时，
+ * 会将原始数据回调至 {@link ICustomDataOptListener#onAdcData(byte[])}。
+ * <p>
+ * 关闭流程：直接取消BP_READ_UUID特征的Notify订阅，停止接收透传上报数据。
+ * <p>
+ * Enable flow: Unsubscribe Notify of BP_READ_UUID characteristic first, then re-subscribe.
+ * After subscription succeeds, if the reported data from this characteristic starts with custom pass-through header(0x04),
+ * the raw byte array will be forwarded to {@link ICustomDataOptListener#onAdcData(byte[])}.
+ * <p>
+ * Disable flow: Directly unsubscribe Notify of BP_READ_UUID characteristic to stop receiving pass-through report data.
+ *
+ * @param isOpen      true=开启ADC透传Notify通知，false=关闭ADC透传Notify通知 / true: enable ADC pass-through notify, false: disable ADC pass-through notify
+ * @param bleResponse 订阅/取消订阅操作结果回调 / response callback for subscribe or unsubscribe notify operation
+ */
+public void setCustomADCDataNotify(boolean isOpen, BleResponse bleResponse)
+```
+
+###### 参数解释
+
+| 参数名      | 类型        | 备注                                                    |
+| ----------- | ----------- | ------------------------------------------------------- |
+| isOpen      | boolean     | true=开启ADC透传Notify通知，false=关闭ADC透传Notify通知 |
+| bleResponse | BleResponse | 订阅/取消订阅操作结果回调                               |
+
+#### 发送自定义数据
+
+###### 接口
+
+```java
+/**
+ * 发送客户自定义透传协议(0x04)指令
+ * Send the commands of the customer custom pass-through protocol(0x04)
+ * <p>
+ * SDK 不负责协议组装，只校验每条指令的协议头是否为 0x04、长度是否超过单条上限；
+ * 校验通过的指令进入发送队列，按 30ms 间隔逐条写入设备，写入结果通过 bleWriteResponse 回调，
+ * 校验/写入失败通过 {@link ICustomDataOptListener#onError(int, String)} 回调错误码。
+ * <p>
+ * The SDK does not assemble the protocol. It only checks whether the head of each command is 0x04
+ * and whether the length exceeds the single command limit. The valid commands are written one by one
+ * with an interval of 30ms, the write result is delivered by bleWriteResponse, and the checking / writing
+ * failure is delivered by {@link ICustomDataOptListener#onError(int, String)} with an error code.
+ *
+ * @param bleWriteResponse 写入结果回调 / write result callback
+ * @param cmdList          客户组装好的指令列表 / the commands assembled by the customer
+ */
+public void sendCustomData(IBleWriteResponse bleWriteResponse, List<byte[]> cmdList) 
+```
+
+###### 参数解释
+
+| 参数名           | 类型              | 备注                 |
+| ---------------- | ----------------- | -------------------- |
+| cmdList          | List<byte[]>      | 客户组装好的指令列表 |
+| bleWriteResponse | IBleWriteResponse | 写入操作的监听       |
 
 
 
